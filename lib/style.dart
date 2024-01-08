@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 var theme = ThemeData(
+    fontFamily: 'GmarketSansTTFMedium',
     splashColor: Colors.transparent, //클릭했을 때 애니매이션 없애는 코드
     highlightColor: Colors.transparent, //클릭했을 때 애니매이션 없애는 코드
     hoverColor: Colors.transparent,
