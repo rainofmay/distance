@@ -33,9 +33,6 @@ class _MyRoomState extends State<MyRoom> {
               onPressed: () {
                 Navigator.push(
                     context,
-                    //다른 페이지로 이동할 때 원래 페이지의 배경이나 bottomNavigationBar를 유지하려면
-                    //Navigator를 통해 페이지를 이동할 때 MaterialPageRoute가 아닌 PageRouteBuilder를 사용하여 직접 페이지를 만들고 설정
-
                     PageRouteBuilder(
                       pageBuilder: (_, __, ___) => Schedule(),
                       transitionsBuilder: (_, animation, __, child) {
@@ -87,12 +84,6 @@ class _MyRoomState extends State<MyRoom> {
   }
 }
 
-////상태 관리
-// class Store1 extends ChangeNotifier {
-//   bool isExpanded = false;
-//   changeExpanded () {
-//     isExpanded = !isExpanded;
-//   }
-// }
+
 
 

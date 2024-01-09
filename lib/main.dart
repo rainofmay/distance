@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
@@ -6,14 +5,18 @@ import 'package:mobile/pages/groupstudy.dart';
 import 'package:mobile/pages/messenger.dart';
 import 'package:mobile/pages/store.dart';
 import 'package:mobile/pages/etc.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
-
+import 'package:mobile/widgets/bottom_bar.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MyApp(),
-      theme: mainstyle.theme));
+  runApp(ChangeNotifierProvider(
+    create: (context) => Store1(),
+    child: MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: MyApp(),
+          theme: mainstyle.theme),
+  ),
+  );
 }
 
 class MyApp extends StatefulWidget {
@@ -24,27 +27,27 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  int selectedIndex = 0;
   final List screens = [MyRoom(), GroupStudy(), Messenger(), Store(), Etc()];
+
+  int bottomIndex = 0;
+
+  setBottomIndex(int index) {
+    setState(() {
+      bottomIndex = index;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
-      body: screens[selectedIndex],
-      bottomNavigationBar: BottomNavigationBar(
-          onTap: (index) => setState(() => selectedIndex = index),
-          currentIndex: selectedIndex,
-          items: [
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.house_fill), label: '내 방',),
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.person_crop_rectangle_fill), label: '그룹스터디',),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.chat_bubble_2_fill), label: '메신저'),
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.gift_fill), label: '스토어'),
-            BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '더보기'),
-          ]),
+        // appBar: AppBar(),
+        body: screens[bottomIndex],
+        bottomNavigationBar: CustomBottomNavagationBar(setBottomIndex: setBottomIndex,),
     );
   }
+}
+
+class Store1 extends ChangeNotifier {
+
 }

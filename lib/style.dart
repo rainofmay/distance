@@ -16,13 +16,13 @@ var theme = ThemeData(
           fontWeight: FontWeight.w100,
           height: 2.2,
           letterSpacing: 1.5,
-          fontFamily: 'GmarketSansTTFLight'),
+          fontFamily: 'GmarketSansTTFMedium'),
       unselectedLabelStyle: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.normal,
           height: 2.2,
           letterSpacing: 1.5,
-          fontFamily: 'GmarketSansTTFLight'),
+          fontFamily: 'GmarketSansTTFMedium'),
       selectedIconTheme: IconThemeData(size: 16),
       unselectedIconTheme: IconThemeData(size: 16),
     ));

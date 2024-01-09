@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/widgets/bottom_bar.dart';
+import 'package:mobile/main.dart';
+import 'package:provider/provider.dart';
 
 class Memo extends StatefulWidget {
   // final VoidCallback closeContainer;
 
-  const Memo({
-    super.key,
-  });
+  const Memo({super.key});
 
   @override
   State<Memo> createState() => _MemoState();
@@ -14,7 +15,7 @@ class Memo extends StatefulWidget {
 
 class _MemoState extends State<Memo> {
   TextEditingController introduceController = TextEditingController();
-  bool isEditmode = true;
+  // bool isEditmode = true;
 
   @override
   Widget build(BuildContext context) {
