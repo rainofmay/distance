@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
 import 'package:mobile/pages/groupstudy.dart';
-import 'package:mobile/pages/messenger.dart';
+import 'package:mobile/pages/mate.dart';
 import 'package:mobile/pages/store.dart';
 import 'package:mobile/pages/etc.dart';
 import 'package:mobile/widgets/bottom_bar.dart';
@@ -27,27 +27,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final List screens = [MyRoom(), GroupStudy(), Messenger(), Store(), Etc()];
-
-  int bottomIndex = 0;
-
-  setBottomIndex(int index) {
-    setState(() {
-      bottomIndex = index;
-    });
-  }
-
+  final List screens = [MyRoom(), GroupStudy(), Mate(), Store(), Etc()];
 
   @override
   Widget build(BuildContext context) {
+    // var a = context.watch<Store1>().bottomIndex;
     return Scaffold(
         // appBar: AppBar(),
-        body: screens[bottomIndex],
-        bottomNavigationBar: CustomBottomNavagationBar(setBottomIndex: setBottomIndex,),
+        body: screens[context.watch<Store1>().bottomIndex],
+        bottomNavigationBar: CustomBottomNavagationBar(),
     );
   }
 }
 
 class Store1 extends ChangeNotifier {
-
+  int bottomIndex = 0;
+  setBottomIndex(int index) {
+    bottomIndex = index;
+    notifyListeners();
+  }
 }

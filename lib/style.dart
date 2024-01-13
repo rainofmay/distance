@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 
 var theme = ThemeData(
+    // sliderTheme: SliderThemeData(
+    //     inactiveTickMarkColor: Colors.black,
+    //     activeTickMarkColor: Colors.white,
+    //     valueIndicatorColor: Colors.black,
+    //     trackHeight: 12,
+    //     activeTrackColor: Colors.blue,
+    //     thumbColor: Colors.white,
+    //     thumbShape: RoundSliderThumbShape(enabledThumbRadius: 10)
+    // ),
+
     fontFamily: 'GmarketSansTTFMedium',
     splashColor: Colors.transparent, //클릭했을 때 애니매이션 없애는 코드
     highlightColor: Colors.transparent, //클릭했을 때 애니매이션 없애는 코드

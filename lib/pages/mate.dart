@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Messenger extends StatefulWidget {
-  const Messenger({super.key});
+class Mate extends StatefulWidget {
+  const Mate({super.key});
 
   @override
-  State<Messenger> createState() => _MessengerState();
+  State<Mate> createState() => _MateState();
 }
 
-class _MessengerState extends State<Messenger> {
+class _MateState extends State<Mate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class _MessengerState extends State<Messenger> {
         backgroundColor: Colors.blue,
         elevation: 0,
         centerTitle: true,
-        title: Text('메신저'),
+        title: Text('메이트'),
       ),
       body: Center(child: Text('CLED MATE',style: TextStyle(fontSize: 40))),
     );
