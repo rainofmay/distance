@@ -21,7 +21,7 @@ class _MusicSettingState extends State<MusicSetting> {
             children: [
               Text(
                 '음악 설정',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
               ),
               // 세부 설정
               Column(
