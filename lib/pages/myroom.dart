@@ -33,17 +33,17 @@ class _MyRoomState extends State<MyRoom> {
                     context,
                     PageRouteBuilder(
                       pageBuilder: (_, __, ___) => Schedule(),
-                      // transitionsBuilder: (_, animation, __, child) {
-                      //   return SlideTransition(
-                      //     position: Tween<Offset>(
-                      //             begin: const Offset(0.1, 1.0),
-                      //             end: Offset.zero)
-                      //         .animate(animation),
-                      //     child: child,
-                      //   );
-                      // },
-                      // transitionDuration: Duration(milliseconds: 140),
-                      // reverseTransitionDuration: Duration(milliseconds: 140),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0),
+                                  end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 140),
+                      reverseTransitionDuration: Duration(milliseconds: 140),
                     )
                 );
               },

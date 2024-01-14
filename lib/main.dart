@@ -9,13 +9,14 @@ import 'package:mobile/widgets/bottom_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (context) => Store1(),
-    child: MaterialApp(
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Store1(),
+      child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: MyApp(),
           theme: mainstyle.theme),
-  ),
+    ),
   );
 }
 
@@ -33,15 +34,16 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     // var a = context.watch<Store1>().bottomIndex;
     return Scaffold(
-        // appBar: AppBar(),
-        body: screens[context.watch<Store1>().bottomIndex],
-        bottomNavigationBar: CustomBottomNavagationBar(),
+      // appBar: AppBar(),
+      body: screens[context.watch<Store1>().bottomIndex],
+      bottomNavigationBar: CustomBottomNavagationBar(),
     );
   }
 }
 
 class Store1 extends ChangeNotifier {
   int bottomIndex = 0;
+
   setBottomIndex(int index) {
     bottomIndex = index;
     notifyListeners();

@@ -20,7 +20,7 @@ class Schedule extends StatelessWidget {
           Navigator.of(context).pop();
         });
       } return Text('To-do');}),
-      bottomNavigationBar: CustomBottomNavagationBar(),
+      // bottomNavigationBar: CustomBottomNavagationBar(),
     );
   }
 }

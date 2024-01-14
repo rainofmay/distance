@@ -4,14 +4,15 @@ import 'package:just_audio/just_audio.dart';
 
 class MusicVolume extends StatefulWidget {
   final String kindOfMusic;
-
-  const MusicVolume({super.key, required this.kindOfMusic});
+  final String assetimage;
+  const MusicVolume({super.key, required this.kindOfMusic, required this.assetimage});
 
   @override
   State<MusicVolume> createState() => _MusicVolumeState();
 }
 
 class _MusicVolumeState extends State<MusicVolume> {
+
   late AudioPlayer _audioPlayer;
   late bool _isPlaying;
   double _volume = 0.3;
@@ -49,43 +50,53 @@ class _MusicVolumeState extends State<MusicVolume> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        margin: EdgeInsets.only(top: 20, left: 15),
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: Container(
+        margin: EdgeInsets.only(top:20, left: 15),
         child: SliderTheme(
           data: SliderThemeData(
             trackHeight: 3,
             thumbColor: Colors.white,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
+            overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
             activeTrackColor: Color(0xff0029F5),
+
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ListTile(
-                leading: Image(
-                  image: AssetImage('assets/images/musictest.png'), width: 16, height: 16,
-                ),
-                title: Text(
-                  widget.kindOfMusic,
-                  style: TextStyle(fontSize: 14),
-                ),
+              Row(
+                children: [
+                  Image(image: AssetImage(widget.assetimage), width: 13, height: 13,),
+                  SizedBox(width: 10,),
+                  Text(widget.kindOfMusic, style: TextStyle(fontSize: 13),),
+                ],
               ),
-              ListTile(
-                leading: IconButton(
-                  icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
-                  iconSize: 20.0,
-                  onPressed: _playPause,
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [Slider(
-                    value: _volume,
-                    onChanged: _adjustVolume,
-                  ),]
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                    splashColor: Colors.transparent,
+                    highlightColor: Colors.transparent,
+                    hoverColor: Colors.transparent,
+                    icon: Icon(_isPlaying ? Icons.pause : Icons.play_arrow),
+                    iconSize: 14.0,
+                    onPressed: _playPause,
+                  ),
+                  Expanded(
+
+                    child: Slider(
+                      value: _volume,
+                      onChanged: _adjustVolume,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
         ),
+      ),
     );
   }
 }

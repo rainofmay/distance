@@ -11,16 +11,11 @@ class MusicSetting extends StatefulWidget {
 class _MusicSettingState extends State<MusicSetting> {
   @override
   Widget build(BuildContext context) {
-
-    Size screenSize = MediaQuery.of(context).size;
-
     return Dialog(
       backgroundColor: Colors.white,
         shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(10)),),
       child: Container(
-          width: 450,
-          height: 800,
           padding: EdgeInsets.all(15),
           child: Column(
             children: [
@@ -99,40 +94,41 @@ class _MusicSettingState extends State<MusicSetting> {
                       ),
                       Container(
                         margin: EdgeInsets.only(top: 15),
-                        height: 260,
+                        height: 270,
                         child: SingleChildScrollView(
                           scrollDirection: Axis.vertical,
                           child: Column(
                             children: [
-                              MusicVolume(kindOfMusic: '메인 음악'),
-                              MusicVolume(kindOfMusic: '여우비'),
-                              MusicVolume(kindOfMusic: '소나기'),
+                              MusicVolume(kindOfMusic: '메인 음악', assetimage : 'assets/images/raindrop.png'),
+                              MusicVolume(kindOfMusic: '여우비', assetimage : 'assets/images/raindrop.png'),
+                              MusicVolume(kindOfMusic: '소나기', assetimage : 'assets/images/raindrop.png'),
+                              MusicVolume(kindOfMusic: '풀벌레 우는 소리', assetimage : 'assets/images/raindrop.png'),
                             ],
                           ),
                         ),
                       ),
+                      Container(
+                        alignment: Alignment.center,
+                        // height: 30,
+                        margin: EdgeInsets.only(top:20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              child: Text('Cancel', style: TextStyle(color: Colors.black)),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 닫히는 버튼
+                              },
+                            ),
+                            TextButton(
+                              child: Text('Ok', style: TextStyle(color: Color(0xff0029F5)),),
+                              onPressed: () {},
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                  Container(
-                    alignment: Alignment.center,
-                    margin: EdgeInsets.only(top: screenSize.height*0.1),
-                    height: 30,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        TextButton(
-                          child: Text('Cancel'),
-                          onPressed: () {
-                            Navigator.of(context).pop(); // 닫히는 버튼
-                          },
-                        ),
-                        TextButton(
-                          child: Text('Ok'),
-                          onPressed: () {},
-                        ),
-                      ],
-                    ),
-                  )
                 ],
               ),
             ],

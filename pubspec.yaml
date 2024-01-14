@@ -27,6 +27,7 @@ flutter:
 
     - assets/images/test.png
     - assets/images/musictest.png
+    - assets/images/raindrop.png
 
   fonts:
     - family: GmarketSansTTFLight
