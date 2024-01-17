@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/globalPlayer.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
 import 'package:mobile/pages/groupstudy.dart';
@@ -10,8 +11,11 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => Store1(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
+        ChangeNotifierProvider(create: (context) => Store1()),
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           home: MyApp(),

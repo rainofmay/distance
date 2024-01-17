@@ -9,6 +9,7 @@ class MusicSetting extends StatefulWidget {
 }
 
 class _MusicSettingState extends State<MusicSetting> {
+  bool isMusicOn = true;
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -29,10 +30,20 @@ class _MusicSettingState extends State<MusicSetting> {
                 children: [
                   Container(
                     margin: EdgeInsets.only(top: 30),
-                    child: Text(
-                      '#메인 뮤직',
-                      style: TextStyle(
-                          fontSize: 14, fontWeight: FontWeight.normal,),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // 양 끝에 배치
+                      children: [
+                        Text(
+                          '#메인 뮤직',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.normal,),
+                        ),
+                        Switch(value: isMusicOn, onChanged: (value) {
+                          setState(() {
+                            isMusicOn = !isMusicOn;
+                          });
+                        })
+                      ],
                     ),
                   ),
                   SingleChildScrollView(
@@ -122,7 +133,9 @@ class _MusicSettingState extends State<MusicSetting> {
                             ),
                             TextButton(
                               child: Text('Ok', style: TextStyle(color: Color(0xff0029F5)),),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).pop(); // 닫히는 버튼
+                              },
                             ),
                           ],
                         ),
