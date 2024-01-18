@@ -2,8 +2,8 @@ import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
-import 'package:mobile/pages/myroom_schedule.dart';
 import 'package:mobile/pages/myroom_music.dart';
+import 'package:mobile/pages/myroom_schedule.dart';
 
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});

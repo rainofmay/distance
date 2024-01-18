@@ -13,22 +13,24 @@ dependencies:
   provider: ^6.0.1
   cupertino_icons: ^1.0.6
   just_audio: ^0.9.36
-  http: ^0.13.4
+  http: ^1.2.0
+  table_calendar: ^3.0.9
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
 
 
 flutter:
   assets:
     - assets/
-
     - assets/images/test.png
+    - assets/images/test2.jpg
     - assets/images/musictest.png
     - assets/images/raindrop.png
+    - assets/audios/defaultMain.mp3
 
   fonts:
     - family: GmarketSansTTFLight
