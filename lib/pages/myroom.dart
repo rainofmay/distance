@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/myroom_schedule.dart';
-
+import 'package:mobile/pages/myroom_background.dart';
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});
 
@@ -55,7 +55,7 @@ class _MyRoomState extends State<MyRoom> {
                   barrierDismissible: false, // 바깥 터치해도 닫히는지
                   context: context,
                   builder: (context) {
-                    return MusicSetting();
+                    return MusicSetting(); // MusicSetting 클래스의 인스턴스를 반환
                   });
             },
             icon: Icon(
@@ -65,7 +65,13 @@ class _MyRoomState extends State<MyRoom> {
             ),
           ),
           ActionButton(
-            onPressed: () {},
+            onPressed: () {
+              showDialog(
+                barrierDismissible: false, // 바깥 터치해도 닫히는지
+                context: context,
+                builder: (context) {
+                  return BackgroundSetting(); // MusicSetting 클래스의 인스턴스를 반환
+                });},
             icon: Icon(
               Icons.photo_camera_back,
               size: 20,
