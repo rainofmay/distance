@@ -2,9 +2,8 @@ import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
-import 'package:mobile/pages/myroom_schedule.dart';
 import 'package:mobile/pages/myroom_music.dart';
-import 'calendar.dart';
+import 'package:mobile/pages/myroom_schedule.dart';
 
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});
@@ -28,22 +27,22 @@ class _MyRoomState extends State<MyRoom> {
         distance: 60,
         sub: [
           ActionButton(
-    // ActionBUtton : 커스터마이징된 버튼
-    onPressed: () {
-    Navigator.push(
-    context,
-    PageRouteBuilder(
-    pageBuilder: (_, __, ___) => Schedule(),
-    transitionsBuilder: (_, animation, __, child) {
-    return SlideTransition(
-    position: Tween<Offset>(
-    begin: const Offset(0.0, 1.0),
-    end: Offset.zero)
-        .animate(animation),
-    child: child,
-    );
-    },
-    transitionDuration: Duration(milliseconds: 140),
+              // ActionBUtton : 커스터마이징된 버튼
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (_, __, ___) => Schedule(),
+                      transitionsBuilder: (_, animation, __, child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0),
+                                  end: Offset.zero)
+                              .animate(animation),
+                          child: child,
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 140),
                       reverseTransitionDuration: Duration(milliseconds: 140),
                     )
                 );
@@ -66,12 +65,7 @@ class _MyRoomState extends State<MyRoom> {
             ),
           ),
           ActionButton(
-            onPressed: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(builder: (context) => TableCalendarScreen()),
-    );
-    },
+            onPressed: () {},
             icon: Icon(
               Icons.photo_camera_back,
               size: 20,

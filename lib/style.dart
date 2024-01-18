@@ -7,10 +7,10 @@ var theme = ThemeData(
     hoverColor: Colors.transparent,
     focusColor: Colors.transparent,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xff333F50),
+      backgroundColor: Color(0xff282828),
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Color(0xffFFC000),
-      unselectedItemColor: Colors.white,
+      selectedItemColor: Colors.white,
+      unselectedItemColor: Color(0xff777777),
       selectedLabelStyle: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w100,

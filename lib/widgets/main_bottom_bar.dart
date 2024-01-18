@@ -3,15 +3,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:mobile/main.dart';
 import 'package:provider/provider.dart';
 
-class CustomBottomNavagationBar extends StatefulWidget {
+class MainBottomNavagationBar extends StatefulWidget {
   // final Function setBottomIndex;
-  const CustomBottomNavagationBar({super.key});
+  const MainBottomNavagationBar({super.key});
 
   @override
-  State<CustomBottomNavagationBar> createState() => _BottomBarState();
+  State<MainBottomNavagationBar> createState() => _BottomBarState();
 }
 
-class _BottomBarState extends State<CustomBottomNavagationBar> {
+class _BottomBarState extends State<MainBottomNavagationBar> {
 
   @override
   Widget build(BuildContext context) {

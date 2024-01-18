@@ -6,7 +6,7 @@ import 'package:mobile/pages/groupstudy.dart';
 import 'package:mobile/pages/mate.dart';
 import 'package:mobile/pages/store.dart';
 import 'package:mobile/pages/etc.dart';
-import 'package:mobile/widgets/bottom_bar.dart';
+import 'package:mobile/widgets/main_bottom_bar.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -40,7 +40,7 @@ class _MyAppState extends State<MyApp> {
     return Scaffold(
       // appBar: AppBar(),
       body: screens[context.watch<Store1>().bottomIndex],
-      bottomNavigationBar: CustomBottomNavagationBar(),
+      bottomNavigationBar: MainBottomNavagationBar(),
     );
   }
 }
