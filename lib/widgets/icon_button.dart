@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class CustomIconButton extends StatefulWidget {
   final String imageUrl;
   final int id;
-  final Function(int) onButtonPressed;
+  final void Function() onButtonPressed; // 수정된 부분
 
-  CustomIconButton({required this.imageUrl, required this.id, required this.onButtonPressed});
+  CustomIconButton({super.key, required this.imageUrl, required this.id, required this.onButtonPressed});
 
   @override
   _CustomIconButtonState createState() => _CustomIconButtonState();
@@ -19,9 +19,6 @@ class _CustomIconButtonState extends State<CustomIconButton> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          //코드 추가 필요할 듯
-
-          widget.onButtonPressed(widget.id); // 클릭된 버튼의 ID를 전달
           print(widget.id);
         });
       },
@@ -46,7 +43,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
             child: Image(
               image: AssetImage(widget.imageUrl),
               width: 150,
-              height: 340,
+              height: 290,
               fit: BoxFit.cover,
             ),
           ),

@@ -9,7 +9,7 @@ class MusicSetting extends StatefulWidget {
 }
 
 class _MusicSettingState extends State<MusicSetting> {
-  bool isMusicOn = true;
+  bool isMusicOn = false;
   @override
   Widget build(BuildContext context) {
     return Dialog(

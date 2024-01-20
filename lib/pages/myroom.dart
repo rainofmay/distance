@@ -5,6 +5,8 @@ import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/myroom_schedule.dart';
 import 'package:mobile/pages/myroom_background.dart';
+
+import '../util/backgroundProvider.dart';
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});
 
@@ -15,12 +17,16 @@ class MyRoom extends StatefulWidget {
 class _MyRoomState extends State<MyRoom> {
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = Provider.of<BackgroundProvider>(context);
+
     return Scaffold(
       body: Container(
           decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage('assets/images/test.png'),
+          image: AssetImage(
+            backgroundProvider.selectedImageURL
+          ),
         ),
       )),
       floatingActionButton: ExpandableFab(

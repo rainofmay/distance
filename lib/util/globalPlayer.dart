@@ -14,7 +14,7 @@ class GlobalAudioPlayer with ChangeNotifier {
   void _init() async {
     // 오디오 파일을 로드하고 루프 모드로 설정
     try {
-      await _audioPlayer.setAsset('assets/audio/defaultMain.mp3');
+      await _audioPlayer.setAsset('assets/audios/defaultMain.mp3');
       _audioPlayer.setLoopMode(LoopMode.one);
       // 필요하다면 여기서 재생을 시작할 수 있습니다.
     } catch (e) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/backgroundProvider.dart';
 import 'package:mobile/util/globalPlayer.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
@@ -15,6 +16,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => Store1()),
+        ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

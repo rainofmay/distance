@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../util/backgroundProvider.dart';
 import '../widgets/icon_button.dart';
 
 class BackgroundSetting extends StatefulWidget {
@@ -10,13 +11,40 @@ class BackgroundSetting extends StatefulWidget {
 }
 
 class _BackgroundSettingState extends State<BackgroundSetting> {
-  int selectedButtonId = -1; // 선택된 버튼의 ID
+  final backgroundProvider = Provider.of<BackgroundProvider>(context);
 
-  void handleButtonPressed(int id) {
+  int selectedCategoryIndex = -1; // 선택된 버튼의 ID
+  int selectedIndex = -1;
+  List<String> categories = ['Cafe', 'Jazz Bar', 'Nature']; // 카테고리 목록
+  List<List<String>> images = [
+    // 각 카테고리에 대한 이미지 목록
+    [
+      'assets/images/cafe1.jpeg',
+      'assets/images/cafe2.jpeg',
+      'assets/images/cafe3.jpeg',
+    ],
+    [
+      'assets/images/jazz1.jpeg',
+      'assets/images/jazz2.jpeg',
+      'assets/images/jazz3.jpeg',
+    ],
+    [
+      'assets/images/nature1.jpeg',
+      'assets/images/nature2.jpeg',
+      'assets/images/nature3.jpeg',
+    ],
+  ];
+
+  void handleButtonPressed(int categoryindex, int index) {
     // 클릭된 버튼의 ID를 저장하고 다른 버튼들을 비활성화
     setState(() {
-      selectedButtonId = id;
+      selectedCategoryIndex = categoryindex;
+      selectedIndex = index;
     });
+    Provider.of<BackgroundProvider>(context, listen: false).selectedImageURL =
+    backgroundProvider.imageURLs[selectedCategoryIndex][selectedIndex];
+    Provider.of<BackgroundProvider>(context, listen: false).selectedIndex =
+        selectedIndex;
   }
 
   @override
@@ -34,89 +62,82 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               '배경 설정',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            // 세부 설정
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(top: 30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    // 양 끝에 배치
-                    children: [
-                      Text(
-                        '#테마 설정',
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.normal,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      CustomIconButton(
-                        imageUrl: 'assets/images/musictest.png',
-                        id: 1,
-                        onButtonPressed: handleButtonPressed,
-                      ),
-                      CustomIconButton(
-                        imageUrl: 'assets/images/musictest.png',
-                        id: 2,
-                        onButtonPressed: handleButtonPressed,
-                      ),
-                      CustomIconButton(
-                        imageUrl: 'assets/images/musictest.png',
-                        id: 3,
-                        onButtonPressed: handleButtonPressed,
-                      ),
-                      CustomIconButton(
-                        imageUrl: 'assets/images/musictest.png',
-                        id: 4,
-                        onButtonPressed: handleButtonPressed,
-                      ),
-                      CustomIconButton(
-                        imageUrl: 'assets/images/musictest.png',
-                        id: 5,
-                        onButtonPressed: handleButtonPressed,
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.center,
-                  // height: 30,
-                  margin: EdgeInsets.only(top: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        child: Text('Cancel',
-                            style: TextStyle(color: Colors.black)),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // 닫히는 버튼
-                        },
-                      ),
-                      TextButton(
-                        child: Text(
-                          'Ok',
-                          style: TextStyle(color: Color(0xff0029F5)),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // 닫히는 버튼
-                        },
-                      ),
-                    ],
-                  ),
-                )
-              ],
+            // 카테고리 선택 페이지
+            Expanded(
+              child: ListView.builder(
+                scrollDirection: Axis.vertical, // 세로 스크롤 설정
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  return buildCategoryPage(index);
+                },
+              ),
             ),
+            // 확인 및 취소 버튼
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                    child:
+                        Text('Cancel', style: TextStyle(color: Colors.black)),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 닫히는 버튼
+                    },
+                  ),
+                  TextButton(
+                    child:
+                        Text('Ok', style: TextStyle(color: Color(0xff0029F5))),
+                    onPressed: () {
+                      Navigator.of(context).pop(); // 닫히는 버튼
+                    },
+                  ),
+                ],
+              ),
+            )
           ],
         ),
       ),
+    );
+  }
+
+  // 카테고리 선택 페이지 구성
+  Widget buildCategoryPage(int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '#${categories[index]}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              images[index].length,
+              (imageIndex) {
+                return CustomIconButton(
+                  imageUrl: images[index][imageIndex],
+                  id: index * 100 + imageIndex, // 고유한 ID 생성
+                  onButtonPressed: ()=> handleButtonPressed(index, imageIndex),
+                );
+              },
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
