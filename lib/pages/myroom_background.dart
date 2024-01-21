@@ -6,13 +6,12 @@ import '../widgets/icon_button.dart';
 class BackgroundSetting extends StatefulWidget {
   const BackgroundSetting({super.key});
 
+
   @override
   State<BackgroundSetting> createState() => _BackgroundSettingState();
 }
 
 class _BackgroundSettingState extends State<BackgroundSetting> {
-  final backgroundProvider = Provider.of<BackgroundProvider>(context);
-
   int selectedCategoryIndex = -1; // 선택된 버튼의 ID
   int selectedIndex = -1;
   List<String> categories = ['Cafe', 'Jazz Bar', 'Nature']; // 카테고리 목록
@@ -41,14 +40,13 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       selectedCategoryIndex = categoryindex;
       selectedIndex = index;
     });
-    Provider.of<BackgroundProvider>(context, listen: false).selectedImageURL =
-    backgroundProvider.imageURLs[selectedCategoryIndex][selectedIndex];
-    Provider.of<BackgroundProvider>(context, listen: false).selectedIndex =
-        selectedIndex;
   }
 
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = context.read<BackgroundProvider>();
+
+
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(

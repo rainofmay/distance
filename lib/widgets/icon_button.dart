@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/backgroundProvider.dart';
+import 'package:provider/provider.dart';
 
 class CustomIconButton extends StatefulWidget {
   final String imageUrl;
@@ -14,13 +16,24 @@ class CustomIconButton extends StatefulWidget {
 class _CustomIconButtonState extends State<CustomIconButton> {
   bool isSelected = false;
 
+
+
+  /*
+  *     Provider.of<BackgroundProvider>(context, listen: false).selectedImageURL =
+    backgroundProvider.imageURLs[selectedCategoryIndex][selectedIndex];
+    Provider.of<BackgroundProvider>(context, listen: false).selectedIndex =
+        selectedIndex;
+        * 더 수정해야함 ㅠ*/
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = context.read<BackgroundProvider>();
+
     return GestureDetector(
       onTap: () {
         setState(() {
           print(widget.id);
         });
+
       },
       child: Container(
         margin: EdgeInsets.all(8.0),
