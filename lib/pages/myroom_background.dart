@@ -12,8 +12,8 @@ class BackgroundSetting extends StatefulWidget {
 }
 
 class _BackgroundSettingState extends State<BackgroundSetting> {
-  int selectedCategoryIndex = -1; // 선택된 버튼의 ID
-  int selectedIndex = -1;
+  int selectedCategoryIndex = 0; // 선택된 버튼의 ID
+  int selectedIndex = 0;
   List<String> categories = ['Cafe', 'Jazz Bar', 'Nature']; // 카테고리 목록
   List<List<String>> images = [
     // 각 카테고리에 대한 이미지 목록
@@ -36,10 +36,13 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   void handleButtonPressed(int categoryindex, int index) {
     // 클릭된 버튼의 ID를 저장하고 다른 버튼들을 비활성화
+    //=> 이제 provider를 통해서 가져와야 하는데..
     setState(() {
       selectedCategoryIndex = categoryindex;
       selectedIndex = index;
     });
+    print(categoryindex);
+    print(index);
   }
 
   @override
@@ -128,8 +131,10 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               (imageIndex) {
                 return CustomIconButton(
                   imageUrl: images[index][imageIndex],
-                  id: index * 100 + imageIndex, // 고유한 ID 생성
-                  onButtonPressed: ()=> handleButtonPressed(index, imageIndex),
+                  id: index * 100 + imageIndex,
+                  onButtonPressed: () {handleButtonPressed(index, imageIndex);},
+                  selectedCategoryIndex: index,
+                  selectedIndex: imageIndex, // 값 전달
                 );
               },
             ),

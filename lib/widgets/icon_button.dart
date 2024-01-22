@@ -5,9 +5,18 @@ import 'package:provider/provider.dart';
 class CustomIconButton extends StatefulWidget {
   final String imageUrl;
   final int id;
-  final void Function() onButtonPressed; // 수정된 부분
+  final void Function() onButtonPressed;
+  final int selectedCategoryIndex;
+  final int selectedIndex; // 새로운 매개변수 추가
 
-  CustomIconButton({super.key, required this.imageUrl, required this.id, required this.onButtonPressed});
+  CustomIconButton({
+    super.key,
+    required this.imageUrl,
+    required this.id,
+    required this.onButtonPressed,
+    required this.selectedCategoryIndex,
+    required this.selectedIndex, // 생성자에 추가
+  });
 
   @override
   _CustomIconButtonState createState() => _CustomIconButtonState();
@@ -16,14 +25,6 @@ class CustomIconButton extends StatefulWidget {
 class _CustomIconButtonState extends State<CustomIconButton> {
   bool isSelected = false;
 
-
-
-  /*
-  *     Provider.of<BackgroundProvider>(context, listen: false).selectedImageURL =
-    backgroundProvider.imageURLs[selectedCategoryIndex][selectedIndex];
-    Provider.of<BackgroundProvider>(context, listen: false).selectedIndex =
-        selectedIndex;
-        * 더 수정해야함 ㅠ*/
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = context.read<BackgroundProvider>();
@@ -31,9 +32,12 @@ class _CustomIconButtonState extends State<CustomIconButton> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          print(widget.id);
+          // 사용 예시: widget.selectedCategoryIndex, widget.selectedIndex
+          backgroundProvider.selectedIndex = widget.selectedIndex;
+          backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
+          print(widget.selectedCategoryIndex);
+          print(widget.selectedIndex);
         });
-
       },
       child: Container(
         margin: EdgeInsets.all(8.0),
