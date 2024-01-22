@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 
 var theme = ThemeData(
     fontFamily: 'GmarketSansTTFMedium',
@@ -7,10 +8,10 @@ var theme = ThemeData(
     hoverColor: Colors.transparent,
     focusColor: Colors.transparent,
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
-      backgroundColor: Color(0xff282828),
+      backgroundColor: DARK,
       type: BottomNavigationBarType.fixed,
       selectedItemColor: Colors.white,
-      unselectedItemColor: Color(0xff777777),
+      unselectedItemColor: DARK_UNSELECTED,
       selectedLabelStyle: TextStyle(
           fontSize: 9,
           fontWeight: FontWeight.w100,

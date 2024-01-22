@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 
 class ExpandableFab extends StatefulWidget {
@@ -74,9 +75,9 @@ class _ExpandableFabState extends State<ExpandableFab>
             onPressed: toggle,
             child: Icon(
               CupertinoIcons.cube,
-              color: Colors.white,
+              color: WHITE,
             ),
-            backgroundColor: Color(0xff333F50),
+            backgroundColor: DARK,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)))),
       ),
@@ -95,7 +96,7 @@ class _ExpandableFabState extends State<ExpandableFab>
               CupertinoIcons.cube_fill,
               color: Colors.greenAccent,
             ),
-            backgroundColor: Color(0xff333F50),
+            backgroundColor: DARK,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50)))),
       ),
