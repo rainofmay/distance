@@ -5,9 +5,10 @@ import 'package:mobile/const/colors.dart';
 class Calendar extends StatefulWidget {
   final OnDaySelected onDaySelected;
   final DateTime selectedDate;
+  final DateTime focusedDate;
 
   const Calendar(
-      {super.key, required this.onDaySelected, required this.selectedDate});
+      {super.key, required this.onDaySelected, required this.selectedDate, required this.focusedDate});
 
   @override
   State<Calendar> createState() => _CalendarState();
@@ -17,6 +18,9 @@ class _CalendarState extends State<Calendar> {
   @override
   Widget build(BuildContext context) {
     return TableCalendar(
+      locale: 'ko_kr',
+      focusedDay: widget.focusedDate,
+      // focusedDay: DateTime.now(),
       onDaySelected: widget.onDaySelected,
       selectedDayPredicate: (date) =>
           date.year == widget.selectedDate.year &&
@@ -24,29 +28,37 @@ class _CalendarState extends State<Calendar> {
           date.day == widget.selectedDate.day,
       firstDay: DateTime(1900, 1, 1),
       lastDay: DateTime(2999, 1, 1),
-      focusedDay: DateTime.now(),
       headerStyle: HeaderStyle(
         titleCentered: true,
-        formatButtonVisible: false, // 달력 크기 선택 옵션 없애기
-        leftChevronIcon: Icon(Icons.chevron_left, color: NIGHT_MODE, size: 20,), // 왼쪽 화살표 색상
-        rightChevronIcon: Icon(Icons.chevron_right, color: NIGHT_MODE, size: 20,),
+        formatButtonVisible: false,
+        // 달력 크기 선택 옵션 없애기
+        leftChevronIcon: Icon(
+          Icons.chevron_left,
+          color: WHITE,
+          size: 18,
+        ),
+        // 왼쪽 화살표 색상
+        rightChevronIcon: Icon(
+          Icons.chevron_right,
+          color: WHITE,
+          size: 18,
+        ),
         titleTextStyle: TextStyle(
-          color: NIGHT_MODE,
+          color: WHITE,
           fontWeight: FontWeight.w100,
-          fontSize: 14.0,
+          fontSize: 13.0,
         ),
       ),
 
       //요일
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: TextStyle(
-          color: NIGHT_MODE,
-          fontSize: 13.0,
+          color: WHITE,
+          fontSize: 12.0,
         ),
-        weekendStyle:
-        TextStyle(
-          color: NIGHT_MODE,
-          fontSize: 13.0,
+        weekendStyle: TextStyle(
+          color: WHITE,
+          fontSize: 12.0,
         ),
       ),
 
@@ -65,23 +77,23 @@ class _CalendarState extends State<Calendar> {
         selectedDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0),
             border: Border.all(
-              color: KEY_COLOR,
+              color: CALENDAR_COLOR,
               width: 1.0,
             )),
         defaultTextStyle: TextStyle(
           fontWeight: FontWeight.w100,
           fontSize: 12,
-          color: NIGHT_MODE,
+          color: WHITE,
         ),
         weekendTextStyle: TextStyle(
           fontWeight: FontWeight.w100,
           fontSize: 12,
-          color: NIGHT_MODE,
+          color: WHITE,
         ),
         selectedTextStyle: TextStyle(
           fontWeight: FontWeight.w300,
           fontSize: 12,
-          color: KEY_COLOR,
+          color: CALENDAR_COLOR,
         ),
       ),
 

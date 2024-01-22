@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mobile/main.dart';
 import 'package:provider/provider.dart';
+import 'package:mobile/util/bottom_index.dart';
 
 class MainBottomNavagationBar extends StatefulWidget {
   // final Function setBottomIndex;
