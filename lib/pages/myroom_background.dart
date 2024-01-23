@@ -10,7 +10,7 @@ class BackgroundSetting extends StatefulWidget {
   @override
   State<BackgroundSetting> createState() => _BackgroundSettingState();
 }
-
+//낮, 밤마다 시간마다 배경 설정 할 수 있게 하는 법 1. 사용자 설정, 2.
 class _BackgroundSettingState extends State<BackgroundSetting> {
   int selectedCategoryIndex = 0; // 선택된 버튼의 ID
   int selectedIndex = 0;
