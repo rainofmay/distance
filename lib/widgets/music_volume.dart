@@ -67,7 +67,7 @@ class _MusicVolumeState extends State<MusicVolume> {
                           } else {
                             await globalAudioPlayer.player.play();
                           }
-                          // globalAudioPlayer.notifyListeners();
+                          globalAudioPlayer.notifyListeners();
 
                         },
                       );

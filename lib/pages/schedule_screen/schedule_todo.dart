@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/myroom_calendar.dart';
 import 'package:mobile/widgets/schedule_todo.dart';
 import 'package:mobile/util/calendar.dart';
@@ -34,6 +35,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
     DateTime.now().day,
   );
   DateTime focusedDate = DateTime.now();
+
   // 날짜 선택할 때마다 실행되는 함수
   void onDaySelected(DateTime selectedDate, DateTime focusedDate) {
     setState(() {
@@ -45,6 +47,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: WHITE,
       resizeToAvoidBottomInset: false,
       body: Container(
         decoration: BoxDecoration(
@@ -131,14 +134,41 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
               ),
 
               Container(
-                height: 30,
-                margin: EdgeInsets.only(top: 30),
-                child: Text(
-                    selectedDate.day == DateTime.now().day
-                        ? 'Today'
-                        : '${selectedDate.month}월 ${selectedDate.day}일',
-                    style: TextStyle(
-                        color: Colors.white, fontWeight: FontWeight.w100, fontSize: 14)),
+                height: 90, // Today 경계선 높이 조절
+                margin: EdgeInsets.only(top: 25),
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    ListTile(
+                      leading: IconButton(
+                          onPressed: () {
+                            context.read<CalendarProvider>().setCalendarVisible();
+                          },
+                          icon: Icon(
+                            Icons.calendar_month_outlined,
+                            size: 20,
+                          ),
+                          color: WHITE,
+                          highlightColor: Colors.transparent,
+                          splashColor: Colors.transparent),
+                      title: Text(
+                          selectedDate.day == DateTime.now().day
+                              ? 'Today'
+                              : '${selectedDate.month}월 ${selectedDate.day}일',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w100,
+                              fontSize: 15)),
+                    ),
+                    Container(
+                      height: 0.1,
+                      margin: EdgeInsets.symmetric(horizontal: 28.0),
+                      decoration: BoxDecoration(
+                          border:
+                              Border(top: BorderSide(width: 1, color: LIGHT_WHITE))),
+                    )
+                  ],
+                ),
               ),
 
               //일정(TO-do) 리스트
