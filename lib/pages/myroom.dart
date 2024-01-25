@@ -35,7 +35,8 @@ class _MyRoomState extends State<MyRoom> {
             image: AssetImage(backgroundProvider.selectedImageURL),
           ),
         )),
-        floatingTodo()
+        floatingTodo(),
+        floatingTodo(),
         //나중에 움직이는 메모 들어갈
       ]),
       floatingActionButton: ExpandableFab(
