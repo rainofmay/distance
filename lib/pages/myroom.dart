@@ -3,12 +3,9 @@ import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/myroom_schedule.dart';
-import 'package:mobile/pages/myroom_background.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/floating_todo.dart';
-import '../util/background_provider.dart';
 import 'package:mobile/pages/myroom_background.dart';
-
 import '../util/backgroundProvider.dart';
 
 class MyRoom extends StatefulWidget {
