@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/widgets/action_buttons.dart';
-import 'package:mobile/widgets/floating_todo.dart';
-import 'package:provider/provider.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/myroom_schedule.dart';
+import 'package:mobile/pages/myroom_background.dart';
+import 'package:provider/provider.dart';
+import 'package:mobile/widgets/floating_todo.dart';
+import '../util/background_provider.dart';
 import 'package:mobile/pages/myroom_background.dart';
 
 import '../util/backgroundProvider.dart';
@@ -17,33 +19,23 @@ class MyRoom extends StatefulWidget {
 }
 
 class _MyRoomState extends State<MyRoom> {
-  double positionX1 = 150;
-  double positionY1 = 300;
-  double positionX2 = 150;
-  double positionY2 = 500;
-
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = Provider.of<BackgroundProvider>(context);
 
     return Scaffold(
-      body: Stack(children: [
-        Container(
-            decoration: BoxDecoration(
-          image: DecorationImage(
-            fit: BoxFit.cover,
-            image: AssetImage(backgroundProvider.selectedImageURL),
-          ),
-        )),
-        floatingTodo(),
-        floatingTodo(),
-        //나중에 움직이는 메모 들어갈
-      ]),
+      body: Container(
+          decoration: BoxDecoration(
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage('assets/images/test.png'),
+        ),
+      )),
       floatingActionButton: ExpandableFab(
         distance: 60,
         sub: [
           ActionButton(
-              // ActionBUtton : 커스터마이징된 버튼
+            // ActionBUtton : 커스터마이징된 버튼
               onPressed: () {
                 Navigator.push(
                     context,
@@ -52,8 +44,8 @@ class _MyRoomState extends State<MyRoom> {
                       transitionsBuilder: (_, animation, __, child) {
                         return SlideTransition(
                           position: Tween<Offset>(
-                                  begin: const Offset(0.0, 1.0),
-                                  end: Offset.zero)
+                              begin: const Offset(0.0, 1.0),
+                              end: Offset.zero)
                               .animate(animation),
                           child: child,
                         );
@@ -99,3 +91,7 @@ class _MyRoomState extends State<MyRoom> {
     );
   }
 }
+
+
+
+

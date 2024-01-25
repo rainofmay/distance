@@ -6,11 +6,7 @@ class ScheduleBottomSheet extends StatefulWidget {
   // final DateTime selectedDate;
   // final int? scheduleId;
 
-  const ScheduleBottomSheet({
-    // required this.selectedDate,
-    // this.scheduleId,
-    Key? key,
-  }) : super(key: key);
+  const ScheduleBottomSheet({super.key});
 
   @override
   State<ScheduleBottomSheet> createState() => _ScheduleBottomSheetState();
@@ -37,7 +33,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                   padding: EdgeInsets.only(bottom: bottomInset),
                   child: Padding(
                     padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 16.0),
-                    child: Row(
+                    child: Column(
                       children: [
                         Expanded(
                           child: CustomTextField(

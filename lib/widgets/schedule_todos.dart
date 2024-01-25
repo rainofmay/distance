@@ -3,18 +3,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-class Todo extends StatefulWidget {
-  const Todo({super.key,});
+class Todos extends StatefulWidget {
+  const Todos({super.key});
 
   @override
-  State<Todo> createState() => _TodoState();
+  State<Todos> createState() => _TodosState();
 }
 
-class _TodoState extends State<Todo> {
+class _TodosState extends State<Todos> {
   TextEditingController introduceController = TextEditingController();
   List<Map<String, dynamic>> todoList = [];
   bool _isLoading = false;
-  String? _error; //_error가 null일 수도 있지만, null이 아니라면, String이다.
+  String? _error; //_err
 
   @override
   void initState() {
@@ -47,8 +47,8 @@ class _TodoState extends State<Todo> {
               onPressed: () {
                 if(mounted) {
                   setState(() {
-                  todoList[index]['todo'] = editController.text;
-                });
+                    todoList[index]['todo'] = editController.text;
+                  });
                 }
                 Navigator.of(context).pop();
               },
@@ -116,7 +116,7 @@ class _TodoState extends State<Todo> {
   Widget build(BuildContext context) {
     return _isLoading ? Center(child: CircularProgressIndicator())
         : Column(
-              children: [
+      children: [
         SizedBox(
           height: 200,
           // Column은 세로로 무한한 확장. ListView도 세로로 무한한 확장. => shrinkWrap은 필요한 공간만 차지하도록 설정
@@ -125,11 +125,19 @@ class _TodoState extends State<Todo> {
             itemCount: todoList.length,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: Checkbox(
-                  value: todoList[index]['completed'],
-                  onChanged: (bool? value) {
-                    _toggleTodo(index);
-                  },
+                leading: ListView(
+                  children: [Checkbox(
+                    value: todoList[index]['completed'],
+                    onChanged: (bool? value) {
+                      _toggleTodo(index);
+                    },
+                    shape: CircleBorder(side: BorderSide(width: 3.0)), // 두께??
+                  ), Container(
+                    decoration: BoxDecoration(
+                      border: Border(left: BorderSide(width: 1, color: Colors.deepPurple)
+                      )
+                    ),
+                  ),],
                 ),
                 title: GestureDetector(
                   onTap: () {
@@ -144,14 +152,10 @@ class _TodoState extends State<Todo> {
                     ),
                   ),
                 ),
-                trailing: IconButton(
-                  icon: Icon(Icons.delete, color: Colors.red[300],),
-                  onPressed: () => _deleteTodo(index),
-                ),
               );
             },
           ),
         ),
-              ],);
+      ],);
   }
 }

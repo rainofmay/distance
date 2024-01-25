@@ -73,13 +73,14 @@ class _ExpandableFabState extends State<ExpandableFab>
         height: 48,
         child: FloatingActionButton(
             onPressed: toggle,
-            child: Icon(
-              CupertinoIcons.cube,
-              color: WHITE,
-            ),
             backgroundColor: DARK,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50)))),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
+          child: Icon(
+            CupertinoIcons.cube,
+            color: WHITE,
+          ),
+        ),
       ),
     );
   }
@@ -92,13 +93,14 @@ class _ExpandableFabState extends State<ExpandableFab>
         height: 48,
         child: FloatingActionButton(
             onPressed: toggle,
-            child: Icon(
-              CupertinoIcons.cube_fill,
-              color: Colors.greenAccent,
-            ),
             backgroundColor: DARK,
             shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(50)))),
+                borderRadius: BorderRadius.all(Radius.circular(50))),
+          child: Icon(
+            CupertinoIcons.cube_fill,
+            color: Colors.greenAccent,
+          ),
+        ),
       ),
     );
   }

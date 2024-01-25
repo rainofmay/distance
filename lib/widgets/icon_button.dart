@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/util/backgroundProvider.dart';
+import 'package:mobile/util/background_provider.dart';
 import 'package:provider/provider.dart';
 
 class CustomIconButton extends StatefulWidget {
@@ -19,7 +19,7 @@ class CustomIconButton extends StatefulWidget {
   });
 
   @override
-  _CustomIconButtonState createState() => _CustomIconButtonState();
+  State<CustomIconButton> createState() => _CustomIconButtonState();
 }
 
 class _CustomIconButtonState extends State<CustomIconButton> {

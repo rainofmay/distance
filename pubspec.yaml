@@ -28,11 +28,9 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/test.png
-    - assets/images/test2.jpg
-    - assets/images/musictest.png
-    - assets/images/raindrop.png
-    - assets/audios/defaultMain.mp3
+    - assets/audios/
+
+
 
   fonts:
     - family: GmarketSansTTFLight

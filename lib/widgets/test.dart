@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:mobile/widgets/main_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:mobile/util/calendar.dart';
+import 'package:provider/provider.dart';
 
 class Todo extends StatefulWidget {
   const Todo({super.key,});
@@ -150,6 +153,28 @@ class _TodoState extends State<Todo> {
                 ),
               );
             },
+          ),
+        ),
+        SizedBox(
+          child: TextFormField(
+            textAlignVertical: TextAlignVertical.center,
+            style: TextStyle(color: Colors.black, fontSize: 13),
+            maxLength: 100,
+            controller: introduceController,
+            decoration: InputDecoration(
+              prefixIcon: IconButton(onPressed: () {
+                Provider.of<CalendarProvider>(context, listen: false).setCalendarVisible();
+              }, icon: Icon(Icons.calendar_month_outlined, size: 18)),
+              suffixIcon: IconButton(onPressed: sendTodo, icon: Icon(Icons.send, size: 18)),
+              hintText: '일정을 입력해 주세요.',
+              counterText: '',
+              filled: true,
+              fillColor: Colors.grey.shade100,
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.zero,
+                  borderSide: BorderSide.none
+              ),
+            ),
           ),
         ),
               ],);
