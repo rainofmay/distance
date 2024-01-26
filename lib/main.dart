@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/backgroundProvider.dart';
 
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
@@ -11,12 +12,12 @@ import 'package:provider/provider.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/util/bottom_index.dart';
 import 'package:mobile/util/calendar.dart';
-import 'package:mobile/util/background_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
-// import 'package:mobile/util/backgroundProvider.dart';
+import 'package:mobile/util/backgroundProvider.dart';
 
 void main() async {
   //플러터 프레임워크가 준비될 때까지 대기
+  bool isRight = false;
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting();
   runApp(
