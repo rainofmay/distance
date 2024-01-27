@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../util/backgroundProvider.dart';
+import '../util/background_provider.dart';
 import '../widgets/icon_button.dart';
 
 class BackgroundSetting extends StatefulWidget {

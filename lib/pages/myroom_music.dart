@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
+import 'package:provider/provider.dart';
 
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
@@ -38,11 +40,19 @@ class _MusicSettingState extends State<MusicSetting> {
                         style: TextStyle(
                           fontSize: 14, fontWeight: FontWeight.normal,),
                       ),
-                      Switch(value: isMusicOn, onChanged: (value) {
-                        setState(() {
-                          isMusicOn = !isMusicOn;
-                        });
-                      })
+
+                      Consumer<GlobalAudioPlayer>(
+                        builder: (context, globalAudioPlayer, child) {
+                          return Switch(value: globalAudioPlayer.player.playing, onChanged: (value) async{
+                            if (globalAudioPlayer.player.playing) {
+                              await globalAudioPlayer.player.pause();
+                            } else {
+                              await globalAudioPlayer.player.play();
+                            }
+                          });
+                        },
+                      ),
+                      //
                     ],
                   ),
                 ),

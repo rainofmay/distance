@@ -6,7 +6,7 @@ import 'package:mobile/pages/myroom_schedule.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/floating_todo.dart';
 import 'package:mobile/pages/myroom_background.dart';
-import '../util/backgroundProvider.dart';
+import '../util/background_provider.dart';
 
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});
@@ -25,7 +25,7 @@ class _MyRoomState extends State<MyRoom> {
           decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.cover,
-          image: AssetImage('assets/images/test.png'),
+          image: AssetImage(backgroundProvider.selectedImageURL),
         ),
       )),
       floatingActionButton: ExpandableFab(

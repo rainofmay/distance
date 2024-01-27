@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:just_audio/just_audio.dart';
 import 'package:provider/provider.dart';
 
 import '../util/global_player.dart';
@@ -14,12 +13,7 @@ class MusicVolume extends StatefulWidget {
 }
 
 class _MusicVolumeState extends State<MusicVolume> {
-
-  late bool _isPlaying;
   double _volume = 0.5;
-
-
-
 
   void _adjustVolume(GlobalAudioPlayer gap, double value) {
     setState(() {
@@ -70,8 +64,6 @@ class _MusicVolumeState extends State<MusicVolume> {
                           } else {
                             await globalAudioPlayer.player.play();
                           }
-                          globalAudioPlayer.notifyListeners();
-
                         },
                       );
                     },
