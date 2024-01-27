@@ -18,8 +18,8 @@ class _ScheduleState extends State<Schedule> {
   int currentTab = 0;
   final List scheduleScreens = [
     ScheduleTodo(),
-    ScheduleNotification(),
     ScheduleStats(),
+    ScheduleNotification(),
     ScheduleSetting()
   ];
 
@@ -55,124 +55,114 @@ class _ScheduleState extends State<Schedule> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      MaterialButton(
-                        minWidth: 70,
-                        onPressed: () {
-                          setState(() {
-                            currentTab = 0;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.edit_calendar,
-                              color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
-                              size: 16,
-                            ),
-                            Container(height: 3),
-                            Text(
-                              '일 정',
-                              style: TextStyle(
-                                  color:
-                                      currentTab == 0 ? WHITE : DARK_UNSELECTED,
-                                  fontSize: 9,
-                                  letterSpacing: 2.2),
-                            )
-                          ],
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 0;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.edit_calendar,
+                          color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
+                          size: 16,
                         ),
-                      ),
-                      MaterialButton(
-                        minWidth: 70,
-                        onPressed: () {
-                          setState(() {
-                            currentTab = 1;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.query_stats,
-                              size: 16,
-                              color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
-                            ),
-                            Container(height: 3),
-                            Text(
-                              '통 계',
-                              style: TextStyle(
-                                  color:
-                                      currentTab == 1 ? WHITE : DARK_UNSELECTED,
-                                  fontSize: 9,
-                                  letterSpacing: 2.2),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                        Container(height: 3),
+                        Text(
+                          '일 정',
+                          style: TextStyle(
+                              color:
+                                  currentTab == 0 ? WHITE : DARK_UNSELECTED,
+                              fontSize: 9,
+                              letterSpacing: 2.2),
+                        )
+                      ],
+                    ),
                   ),
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    // mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      MaterialButton(
-                        minWidth: 70,
-                        onPressed: () {
-                          setState(() {
-                            currentTab = 2;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.notifications,
+                  MaterialButton(
+                    minWidth: 70,
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 1;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(
+                          Icons.query_stats,
+                          size: 16,
+                          color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
+                        ),
+                        Container(height: 3),
+                        Text(
+                          '통 계',
+                          style: TextStyle(
+                              color:
+                                  currentTab == 1 ? WHITE : DARK_UNSELECTED,
+                              fontSize: 9,
+                              letterSpacing: 2.2),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(width: 30,),
+                  MaterialButton(
+                    minWidth: 70,
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 2;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(
+                          Icons.notifications,
+                          color: currentTab == 2 ? WHITE : DARK_UNSELECTED,
+                          size: 16,
+                        ),
+                        Container(height: 3),
+                        Text(
+                          '알 림',
+                          style: TextStyle(
                               color: currentTab == 2 ? WHITE : DARK_UNSELECTED,
-                              size: 16,
-                            ),
-                            Container(height: 3),
-                            Text(
-                              '알 림',
-                              style: TextStyle(
-                                  color: currentTab == 2 ? WHITE : DARK_UNSELECTED,
-                                  fontSize: 9,
-                                  letterSpacing: 2.2
-                              ),
-                            )
-                          ],
+                              fontSize: 9,
+                              letterSpacing: 2.2
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  MaterialButton(
+                    minWidth: 40,
+                    onPressed: () {
+                      setState(() {
+                        currentTab = 3;
+                      });
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Icon(
+                          Icons.settings,
+                          color: currentTab == 3 ? WHITE : DARK_UNSELECTED,
+                          size: 16,
                         ),
-                      ),
-                      MaterialButton(
-                        minWidth: 70,
-                        onPressed: () {
-                          setState(() {
-                            currentTab = 3;
-                          });
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Icon(
-                              Icons.settings,
-                              color: currentTab == 3 ? WHITE : DARK_UNSELECTED,
-                              size: 16,
-                            ),
-                            Container(height: 3),
-                            Text(
-                              '설 정',
-                              style: TextStyle(
-                                  color:
-                                      currentTab == 3 ? WHITE : DARK_UNSELECTED,
-                                  fontSize: 9,
-                                  letterSpacing: 2.2),
-                            )
-                          ],
-                        ),
-                      ),
-                    ],
+                        Container(height: 3),
+                        Text(
+                          '설 정',
+                          style: TextStyle(
+                              color:
+                              currentTab == 3 ? WHITE : DARK_UNSELECTED,
+                              fontSize: 9,
+                              letterSpacing: 2.2),
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),

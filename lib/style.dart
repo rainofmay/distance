@@ -16,6 +16,7 @@ var theme = ThemeData(
       height: 2.2,
       letterSpacing: 1.5,
     )),
+
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: DARK,
       type: BottomNavigationBarType.fixed,
@@ -35,4 +36,17 @@ var theme = ThemeData(
           fontFamily: 'GmarketSansTTFMedium'),
       selectedIconTheme: IconThemeData(size: 16),
       unselectedIconTheme: IconThemeData(size: 16),
-    ));
+    ),
+
+  textButtonTheme: TextButtonThemeData(
+    style: ButtonStyle(
+      overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)
+    )
+  ),
+
+  iconButtonTheme: IconButtonThemeData(
+    style: ButtonStyle(
+      overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)
+    )
+  )
+);

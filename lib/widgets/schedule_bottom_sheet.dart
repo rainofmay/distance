@@ -27,7 +27,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
     return SafeArea(
               child: Container(
-                height: MediaQuery.of(context).size.height / 2 + bottomInset,
+                height: MediaQuery.of(context).size.height * 0.6 + bottomInset,
                 color: WHITE,
                 child: Padding(
                   padding: EdgeInsets.only(bottom: bottomInset),
@@ -37,33 +37,54 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                       children: [
                         Expanded(
                           child: CustomTextField(
-                            label: '시작 시간',
-                            isTime: true,
+                            label: '일정 이름',
+                            isTime: false,
                           ),
                         ),
-                        SizedBox(width: 16.0),
-                        Expanded(
-                          child: CustomTextField(
-                            label: '마감 시간',
-                            isTime: true,
-                          ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomTextField(
+                                label: '시작 시간',
+                                isTime: true,
+                              ),
+                            ),
+                            SizedBox(width: 16.0),
+                            Expanded(
+                              child: CustomTextField(
+                                label: '종료 시간',
+                                isTime: true,
+                              ),
+                            ),
+                          ],
                         ),
+
                         Expanded(
                           child: CustomTextField(
                             label: '내용',
                             isTime: false,
                           ),
                         ),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: onSavePressed,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: CALENDAR_COLOR,
-                            ),
-                            child: Text('저장'),
+                        Container(
+                          alignment: Alignment.center,
+                          // height: 30,
+                          margin: EdgeInsets.only(top:20, bottom: 20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                child: Text('Cancel', style: TextStyle(color: Colors.black)),
+                                onPressed: () {
+                                  Navigator.of(context).pop(); // 닫히는 버튼
+                                },
+                              ),
+                              TextButton(
+                                onPressed: onSavePressed,
+                                child: Text('Ok', style: TextStyle(color: Color(0xff0029F5)),),
+                              ),
+                            ],
                           ),
-                        ),
+                        )
                       ],
                     ),
     ),)));}
