@@ -12,30 +12,36 @@ class CustomTextField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: TextStyle(
-            color: CALENDAR_COLOR,
-            fontWeight: FontWeight.w600,
-          ),
-        ),
         Expanded(
             flex: isTime ? 0 : 1,
-            child: TextFormField(
-              cursorColor: Colors.grey,
-              maxLines: isTime ? 1 : null,
-              expands: !isTime,
-              keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
-              inputFormatters: isTime? [
-                FilteringTextInputFormatter.digitsOnly
-              ] : [],
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                filled: true,
-                fillColor: Colors.grey[300],
-                suffixText: isTime ? '시' : null,
-              ),
-        ))
+            child: Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: TextFormField(
+                cursorColor: Colors.grey,
+                cursorHeight: 20  ,
+                maxLines: 1,
+                // expands: !isTime,
+                keyboardType: isTime ? TextInputType.number : TextInputType.multiline,
+                inputFormatters: isTime? [
+                  FilteringTextInputFormatter.digitsOnly
+                ] : [],
+                decoration: InputDecoration(
+                  labelText: label,
+                  contentPadding:  EdgeInsets.all(0),
+                  labelStyle: TextStyle(color: Colors.grey),
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.grey)
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: CALENDAR_COLOR)
+                  ),
+                  // filled: true,
+                  // border: InputBorder.none,
+                  // fillColor: Colors.grey[300],
+                  suffixText: isTime ? '시' : null,
+                ),
+                      ),
+            ))
       ],
     );
   }
