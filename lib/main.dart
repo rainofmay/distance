@@ -22,7 +22,7 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
+        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer('assets/audios/defaultMain.mp3')),
         ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
