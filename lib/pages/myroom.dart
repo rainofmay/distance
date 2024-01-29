@@ -21,13 +21,19 @@ class _MyRoomState extends State<MyRoom> {
     final backgroundProvider = Provider.of<BackgroundProvider>(context);
 
     return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(backgroundProvider.selectedImageURL),
-        ),
-      )),
+      body: Stack(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(backgroundProvider.selectedImageURL),
+              ),
+            )),
+          // Your FloatingTodo widget
+          FloatingTodo(),
+        ],
+      ),
       floatingActionButton: ExpandableFab(
         distance: 60,
         sub: [
