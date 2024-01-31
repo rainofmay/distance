@@ -1,27 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../util/background_setting_provider.dart';
+
 
 class BackgroundSetting extends StatefulWidget {
+  const BackgroundSetting({Key? key});
+
   @override
   _BackgroundSetting createState() => _BackgroundSetting();
 }
 
-//프로바이더로 메인 설정도 다시 해야하긴 함.
-
 class _BackgroundSetting extends State<BackgroundSetting> {
-  List<Color> themeColors = [
-    Colors.blue,
-    Colors.green,
-    Colors.orange,
-    Colors.purple,
-    Colors.red,
-  ];
-
-  Color selectedColor = Colors.blue;
-  bool isSimpleWindowEnabled = false;
-  bool isAudioSpectrumEnabled = false;
-
   @override
   Widget build(BuildContext context) {
+    var appState = Provider.of<AppState>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Widget'),
@@ -33,12 +26,10 @@ class _BackgroundSetting extends State<BackgroundSetting> {
           children: [
             Text('테마 색상 선택:'),
             Row(
-              children: themeColors.map((color) {
+              children: appState.themeColors.map((color) {
                 return GestureDetector(
                   onTap: () {
-                    setState(() {
-                      selectedColor = color;
-                    });
+                    appState.updateSelectedColor(color);
                   },
                   child: Container(
                     width: 30,
@@ -46,7 +37,7 @@ class _BackgroundSetting extends State<BackgroundSetting> {
                     margin: EdgeInsets.symmetric(horizontal: 8),
                     decoration: BoxDecoration(
                       color: color,
-                      border: selectedColor == color
+                      border: appState.selectedColor == color
                           ? Border.all(color: Colors.black, width: 2)
                           : null,
                       borderRadius: BorderRadius.circular(15),
@@ -60,11 +51,9 @@ class _BackgroundSetting extends State<BackgroundSetting> {
               children: [
                 Text('간이 윈도우:'),
                 Switch(
-                  value: isSimpleWindowEnabled,
+                  value: appState.isSimpleWindowEnabled,
                   onChanged: (value) {
-                    setState(() {
-                      isSimpleWindowEnabled = value;
-                    });
+                    appState.updateSimpleWindowEnabled(value);
                   },
                 ),
               ],
@@ -74,11 +63,9 @@ class _BackgroundSetting extends State<BackgroundSetting> {
               children: [
                 Text('오디오 스펙트럼:'),
                 Switch(
-                  value: isAudioSpectrumEnabled,
+                  value: appState.isAudioSpectrumEnabled,
                   onChanged: (value) {
-                    setState(() {
-                      isAudioSpectrumEnabled = value;
-                    });
+                    appState.updateAudioSpectrumEnabled(value);
                   },
                 ),
               ],
