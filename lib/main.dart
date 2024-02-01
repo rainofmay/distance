@@ -13,12 +13,18 @@ import 'package:mobile/util/global_player.dart';
 import 'package:mobile/util/bottom_index.dart';
 import 'package:mobile/util/calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   //플러터 프레임워크가 준비될 때까지 대기
   bool isRight = false;
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await initializeDateFormatting();
+
   runApp(
     MultiProvider(
       providers: [
