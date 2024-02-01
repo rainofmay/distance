@@ -3,17 +3,17 @@ import 'package:provider/provider.dart';
 import '../util/background_setting_provider.dart';
 
 
-class BackgroundSetting extends StatefulWidget {
-  const BackgroundSetting({Key? key});
+class BackgroundSettingSecond extends StatefulWidget {
+  const BackgroundSettingSecond({Key? key});
 
   @override
-  _BackgroundSetting createState() => _BackgroundSetting();
+  _BackgroundSettingSecond createState() => _BackgroundSettingSecond();
 }
 
-class _BackgroundSetting extends State<BackgroundSetting> {
+class _BackgroundSettingSecond extends State<BackgroundSettingSecond> {
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<AppState>(context);
+    var appState = Provider.of<BackgroundSettingProvider>(context);
 
     return Scaffold(
       appBar: AppBar(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/background_provider.dart';
+import 'package:mobile/util/background_setting_provider.dart';
 
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
@@ -32,6 +33,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
+        ChangeNotifierProvider(create: (context)=> BackgroundSettingProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

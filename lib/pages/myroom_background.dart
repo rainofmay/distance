@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../util/background_provider.dart';
 import '../widgets/icon_button.dart';
+import 'myroom_background_setting.dart';
 
 class BackgroundSetting extends StatefulWidget {
   const BackgroundSetting({super.key});
@@ -14,6 +15,7 @@ class BackgroundSetting extends StatefulWidget {
 class _BackgroundSettingState extends State<BackgroundSetting> {
   int selectedCategoryIndex = 0; // 선택된 버튼의 ID
   int selectedIndex = 0;
+  bool isSettingOn = false;
   List<String> categories = ['Cafe', 'Jazz Bar', 'Nature']; // 카테고리 목록
   List<List<String>> images = [
     // 각 카테고리에 대한 이미지 목록
@@ -45,10 +47,14 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     print(index);
   }
 
+  void handleSettingButtonPressed() {
+    setState(() {
+      isSettingOn = !isSettingOn;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final backgroundProvider = context.read<BackgroundProvider>();
-
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -63,8 +69,9 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               '배경 설정',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
+            IconButton(onPressed: handleSettingButtonPressed, icon: Icon(Icons.settings)),
             // 카테고리 선택 페이지
-            Expanded(
+            isSettingOn ? Expanded(
               child: ListView.builder(
                 scrollDirection: Axis.vertical, // 세로 스크롤 설정
                 itemCount: categories.length,
@@ -72,7 +79,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   return buildCategoryPage(index);
                 },
               ),
-            ),
+            ): BackgroundSettingSecond(),
             // 확인 및 취소 버튼
             Container(
               alignment: Alignment.center,
