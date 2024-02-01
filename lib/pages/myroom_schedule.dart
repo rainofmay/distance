@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
 import 'package:mobile/pages/schedule_screen/schedule_stats.dart';

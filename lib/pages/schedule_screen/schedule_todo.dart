@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/myroom_calendar.dart';
-import 'package:mobile/widgets/schedule_todo.dart';
+import 'package:mobile/widgets/schedule_todos.dart';
 import 'package:mobile/util/calendar.dart';
 import 'package:provider/provider.dart';
 
@@ -110,23 +109,23 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                     AnimatedContainer(
                       duration: Duration(milliseconds: 200),
                       height:
-                          context.watch<CalendarProvider>().isCalendarVisible
-                              ? 250
-                              : 0,
+                      context.watch<CalendarProvider>().isCalendarVisible
+                          ? 250
+                          : 0,
                       child: Container(
                         padding: EdgeInsets.only(
                             top: 25, bottom: 10, left: 30, right: 30),
                         // margin: EdgeInsets.only(top:10, bottom: 10),
                         child:
-                            context.watch<CalendarProvider>().isCalendarVisible
-                                ? SingleChildScrollView(
-                                    child: Calendar(
-                                      focusedDate: focusedDate,
-                                      selectedDate: selectedDate,
-                                      onDaySelected: onDaySelected,
-                                    ),
-                                  )
-                                : null,
+                        context.watch<CalendarProvider>().isCalendarVisible
+                            ? SingleChildScrollView(
+                          child: Calendar(
+                            focusedDate: focusedDate,
+                            selectedDate: selectedDate,
+                            onDaySelected: onDaySelected,
+                          ),
+                        )
+                            : null,
                       ),
                     ),
                   ],
@@ -165,7 +164,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                       margin: EdgeInsets.symmetric(horizontal: 28.0),
                       decoration: BoxDecoration(
                           border:
-                              Border(top: BorderSide(width: 1, color: LIGHT_WHITE))),
+                          Border(top: BorderSide(width: 1, color: LIGHT_WHITE))),
                     )
                   ],
                 ),
@@ -176,7 +175,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                 margin: EdgeInsets.only(top: 10),
                 child: SingleChildScrollView(
                   scrollDirection: Axis.vertical,
-                  child: Todo(),
+                  // child: Todos(selectedDate : selectedDate),
                 ),
               ),
             ],
