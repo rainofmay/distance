@@ -15,6 +15,7 @@ import 'package:mobile/util/background_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:mobile/util/background_setting_provider.dart';
 
 Future<void> main() async {
   //플러터 프레임워크가 준비될 때까지 대기
@@ -31,6 +32,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
+        ChangeNotifierProvider(create: (context)=> BackgroundSettingProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,

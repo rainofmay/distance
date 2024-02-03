@@ -57,8 +57,8 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
         ),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // 뒤로 가기
               Container(
                 height: 20,
                 alignment: Alignment.topLeft,
@@ -74,12 +74,11 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                   },
                 ),
               ),
+
               // 달력 큰제목
-              Expanded(
-                // 아래 TextField 에러 사라짐.
-                child: ListView(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+              SingleChildScrollView(
+                child: Column(
+                  // physics: NeverScrollableScrollPhysics(),
                   children: [
                     Container(
                       alignment: Alignment.topRight,
@@ -160,22 +159,19 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                               fontSize: 15)),
                     ),
                     Container(
-                      height: 0.1,
-                      margin: EdgeInsets.symmetric(horizontal: 28.0),
+                      margin: EdgeInsets.symmetric(horizontal: 28.0), // 실선 가로길이
                       decoration: BoxDecoration(
                           border:
                           Border(top: BorderSide(width: 1, color: LIGHT_WHITE))),
-                    )
+                    ),
                   ],
                 ),
               ),
-
-              //일정(TO-do) 리스트
-              Container(
-                margin: EdgeInsets.only(top: 10),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  // child: Todos(selectedDate : selectedDate),
+              Expanded(
+                flex: 1,
+                child: Container(
+                  margin: EdgeInsets.only(top: 10),
+                  child: Todos(selectedDate : selectedDate),
                 ),
               ),
             ],

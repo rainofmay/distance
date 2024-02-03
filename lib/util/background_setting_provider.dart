@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AppState extends ChangeNotifier {
+class BackgroundSettingProvider extends ChangeNotifier {
   Color selectedColor = Colors.blue;
   bool isSimpleWindowEnabled = false;
   bool isAudioSpectrumEnabled = false;
