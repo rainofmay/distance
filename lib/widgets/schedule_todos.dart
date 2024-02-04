@@ -68,7 +68,7 @@ class _TodosState extends State<Todos> {
         }
         // 로딩 중일 때 화면
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return Container();
         }
 
         final schedules = snapshot.data!.docs.map(

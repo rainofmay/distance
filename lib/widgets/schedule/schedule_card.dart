@@ -49,8 +49,8 @@ class _ScheduleCardState extends State<ScheduleCard> {
                     },
                     );
                   },
-                activeColor: Colors.grey,
-                checkColor: Colors.white,),
+                activeColor: cardColor[widget.selectedColor][0],
+                checkColor: cardColor[widget.selectedColor][1]),
             ),
           ),
           Expanded(
@@ -58,7 +58,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
               margin: EdgeInsets.only(right: 16, left: 16, bottom: 20),
               height: 120,
               decoration: BoxDecoration(
-                color: Color(0xfE2F0D9),
+                color: cardColor[widget.selectedColor][0],
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
@@ -71,7 +71,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       children: [
                         Text(
                           widget.scheduleName,
-                          style: TextStyle(fontSize: 15, color: Colors.white),
+                          style: TextStyle(fontSize: 15, color: cardColor[widget.selectedColor][1]),
                         ),
                         Text(
                           '${widget.startTime}~${widget.endTime}',
@@ -84,14 +84,14 @@ class _ScheduleCardState extends State<ScheduleCard> {
                         alignment: Alignment.topLeft,
                         child: Text(
                           '# ${widget.memo}',
-                          style: TextStyle(fontSize: 12, color: Colors.white),
+                          style: TextStyle(fontSize: 12, color: cardColor[widget.selectedColor][1]),
                         )),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: IconButton(
                           onPressed: () {},
                           icon: Icon(Icons.more_horiz_rounded),
-                          color: Colors.white),
+                          color: cardColor[widget.selectedColor][1]),
                     ),
                   ],
                 ),
