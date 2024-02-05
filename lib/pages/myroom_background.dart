@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../util/background_provider.dart';
 import '../widgets/icon_button.dart';
-import 'myroom_background_setting.dart';
+import '../widgets/myroom_background_setting.dart';
 
 class BackgroundSetting extends StatefulWidget {
   const BackgroundSetting({super.key});
@@ -53,8 +53,11 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     });
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = context.read<BackgroundProvider>();
+
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -79,7 +82,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   return buildCategoryPage(index);
                 },
               ),
-            ): BackgroundSettingSecond(),
+            ) : BackgroundSettingSecond(),
             // 확인 및 취소 버튼
             Container(
               alignment: Alignment.center,
@@ -135,7 +138,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
           child: Row(
             children: List.generate(
               images[index].length,
-              (imageIndex) {
+                  (imageIndex) {
                 return CustomIconButton(
                   imageUrl: images[index][imageIndex],
                   id: index * 100 + imageIndex,

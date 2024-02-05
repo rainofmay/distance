@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
-import 'package:mobile/widgets/schedule_form/custom_text_field.dart';
+import 'package:mobile/model/schedule_model.dart';
+import 'package:mobile/widgets/schedule/custom_text_field.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mobile/firebase_options.dart';
@@ -23,14 +25,16 @@ class ScheduleBottomSheet extends StatefulWidget {
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   // 위젯을 고유하게 식별하는 키
   final _formKey = GlobalKey<FormState>();
-  String _scheduleName= '';
+  String? _id;
+
+  String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
 
   // String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _startTime = "06:00 AM";
   String _endTime = "09:00 PM";
   String _selectedRepeat = "없음";
-  String _memo ='';
+  String _memo = '';
   List<String> repeatList = [
     "없음",
     "매일",
@@ -38,25 +42,45 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     "월",
   ];
   int _selectedColor = 0;
+  bool _isDone = false;
 
-  Future<void> addTodo() async {
-    try {
-      // 알림 여부, 색상선택 추가해야 함.
-      await firestore.collection('todo').add({
-        '이름': _scheduleName,
-        '메모': _memo,
-        '날짜': _selectedDate,
-        '시작': _startTime,
-        '종료': _endTime,
-        '공개': false,
-      });
-      print('add 성공');
-    } catch (e) {
-      print(e);
+  // 알림 여부, 색상선택 추가해야 함.
+  // Future<void> addTodo() async {
+  //   try {
+  //     await firestore.collection('todo').add({
+  //       '이름': _scheduleName,
+  //       '메모': _memo,
+  //       '날짜': _selectedDate,
+  //       '시작': _startTime,
+  //       '종료': _endTime,
+  //       '공개': false,
+  //     });
+  //     print('add 성공');
+  //   } catch (e) {
+  //     print(e);
+  //   }
+  // }
+
+  void onSavePressed() async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
     }
+
+    //스케줆 모델 생성
+    final schedule = ScheduleModel(
+        id: Uuid().v4(),
+        scheduleName: _scheduleName,
+        selectedDate: _selectedDate,
+        startTime: _startTime,
+        endTime: _endTime,
+        memo: _memo,
+        selectedColor: _selectedColor,
+        isDone: _isDone);
+
+    await firestore.collection('todo').doc(schedule.id).set(schedule.toJson());
   }
 
-  Future<void>  _getDateFromUser() async {
+  Future<void> _getDateFromUser() async {
     DateTime? pickerDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
@@ -128,7 +152,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                       },
                       onSaved: (val) {
                         setState(() {
-                          _scheduleName =  val as String;
+                          _scheduleName = val as String;
                         });
                       },
                     ),
@@ -232,32 +256,55 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                                 textAlign: TextAlign.left,
                               ),
                               SizedBox(height: 18.0),
-                              Wrap(
-                                  children: List.generate(
-                                      5,
-                                      (int index) => GestureDetector(
-                                            onTap: () {
-                                              setState(() {
-                                                _selectedColor = index;
-                                              });
-                                            },
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 8.0),
-                                              child: CircleAvatar(
-                                                radius: 18,
-                                                backgroundColor: Colors.grey,
-                                                child: _selectedColor == index
-                                                    ? Icon(
-                                                        Icons
-                                                            .bookmark_added_outlined,
-                                                        color: Colors.white,
-                                                        size: 18,
-                                                      )
-                                                    : Container(),
-                                              ),
-                                            ),
-                                          )))
+                              SizedBox(
+                                width: 400,
+                                child: GridView.builder(
+                                  scrollDirection: Axis.vertical,
+                                  shrinkWrap: true,
+                                  itemCount: cardColor.length,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 6,
+                                    //1 개의 행에 보여줄 item 개수
+                                    childAspectRatio: 2,
+                                    //item 의 가로 1, 세로 1 의 비율
+                                    mainAxisSpacing: 10,
+                                  ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        setState(() {
+                                          _selectedColor = index;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding:
+                                            const EdgeInsets.only(right: 8.0),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              border: Border.all(
+                                                  color: _selectedColor == index
+                                                      ? Colors.black
+                                                      : Color.fromRGBO(
+                                                          0, 0, 0, 0.3),
+                                                  width: _selectedColor == index ? 2 : 1)),
+                                          child: CircleAvatar(
+                                              radius: 18,
+                                              backgroundColor: cardColor[index]
+                                                  [0],
+                                              child: index == 11 ? Text('반투명', style: TextStyle(fontSize: 8, color: Colors.black),): Icon(
+                                                Icons.bookmark_added_outlined,
+                                                color: cardColor[index][1],
+                                                size: 18,
+                                              )),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
                             ],
                           ),
                         ),
@@ -279,11 +326,14 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                           ),
                           TextButton(
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
-                                _formKey.currentState!.save();  // validate()가 true 면 모든 값을 저장
-                                addTodo();
-                                Navigator.of(context).pop();
-                              }
+                              onSavePressed();
+                              // validate()가 true 면 모든 값을 저장
+                              // if (_formKey.currentState!.validate()) {
+                              //   _formKey.currentState!.save();
+                              //   addTodo();
+                              //
+                              // }
+                              Navigator.of(context).pop();
                             },
                             child: Text(
                               'Ok',
