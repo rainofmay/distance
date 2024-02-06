@@ -110,7 +110,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                       height:
                       context.watch<CalendarProvider>().isCalendarVisible
                           ? 250
-                          : 0,
+                          : 100,
                       child: Container(
                         padding: EdgeInsets.only(
                             top: 25, bottom: 10, left: 30, right: 30),
@@ -124,7 +124,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                             onDaySelected: onDaySelected,
                           ),
                         )
-                            : null,
+                            : Container(),
                       ),
                     ),
                   ],
@@ -170,7 +170,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
               Expanded(
                 flex: 1,
                 child: Container(
-                  margin: EdgeInsets.only(top: 10),
+                  margin: EdgeInsets.only(bottom: 10),
                   child: Todos(selectedDate : selectedDate),
                 ),
               ),

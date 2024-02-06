@@ -25,7 +25,6 @@ class ScheduleBottomSheet extends StatefulWidget {
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   // 위젯을 고유하게 식별하는 키
   final _formKey = GlobalKey<FormState>();
-  String? _id;
 
   String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
@@ -43,23 +42,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   ];
   int _selectedColor = 0;
   bool _isDone = false;
-
-  // 알림 여부, 색상선택 추가해야 함.
-  // Future<void> addTodo() async {
-  //   try {
-  //     await firestore.collection('todo').add({
-  //       '이름': _scheduleName,
-  //       '메모': _memo,
-  //       '날짜': _selectedDate,
-  //       '시작': _startTime,
-  //       '종료': _endTime,
-  //       '공개': false,
-  //     });
-  //     print('add 성공');
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  // }
 
   void onSavePressed() async {
     if (_formKey.currentState!.validate()) {
@@ -327,12 +309,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                           TextButton(
                             onPressed: () {
                               onSavePressed();
-                              // validate()가 true 면 모든 값을 저장
-                              // if (_formKey.currentState!.validate()) {
-                              //   _formKey.currentState!.save();
-                              //   addTodo();
-                              //
-                              // }
                               Navigator.of(context).pop();
                             },
                             child: Text(

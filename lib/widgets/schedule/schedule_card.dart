@@ -1,21 +1,30 @@
+import 'dart:js_interop';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/schedule_bottom_sheet.dart';
+import 'package:mobile/model/schedule_model.dart';
 
 class ScheduleCard extends StatefulWidget {
+  final String id;
   final String scheduleName;
   final DateTime selectedDate;
   final String startTime;
   final String endTime;
   final String memo;
   final int selectedColor;
+  final bool isDone;
 
-  const ScheduleCard({
+  ScheduleCard({
+    required this.id,
     required this.scheduleName,
     required this.selectedDate,
     required this.startTime,
     required this.endTime,
     required this.memo,
     required this.selectedColor,
+    required this.isDone,
     super.key,
   });
 
@@ -24,10 +33,24 @@ class ScheduleCard extends StatefulWidget {
 }
 
 class _ScheduleCardState extends State<ScheduleCard> {
-  bool isDone = false;
+  late bool isDone ;
+
+  @override
+  void initState() {
+    super.initState();
+    isDone = widget.isDone;
+  }
+
+  updateToggle(newValue) async{
+    setState(() {
+     isDone = newValue!;
+    });
+    await FirebaseFirestore.instance.collection('todo').doc(widget.id).update({'isDone': isDone});
+  }
 
   @override
   Widget build(BuildContext context) {
+
     return GestureDetector(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,11 +66,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
                   ),
                   value: isDone,
                   onChanged: (newValue) {
-                    // 여기에 파이어베이스 UPDATE 코드 필요.
-                    setState(() {
-                      isDone = newValue!;
-                    },
-                    );
+                    updateToggle(newValue);
                   },
                 activeColor: cardColor[widget.selectedColor][0],
                 checkColor: cardColor[widget.selectedColor][1]),
@@ -55,14 +74,14 @@ class _ScheduleCardState extends State<ScheduleCard> {
           ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 16, left: 16, bottom: 20),
-              height: 120,
+              margin: EdgeInsets.only(right: 16, left: 8, bottom: 20),
+              height: 100,
               decoration: BoxDecoration(
                 color: cardColor[widget.selectedColor][0],
                 borderRadius: BorderRadius.circular(8.0),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(12.0),
+                padding: const EdgeInsets.only(left:12, right: 12, top:10, bottom: 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
