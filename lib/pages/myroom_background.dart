@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../util/background_provider.dart';
 import '../widgets/icon_button.dart';
 import '../widgets/myroom_background_setting.dart';
 
@@ -56,8 +54,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundProvider = context.read<BackgroundProvider>();
-
 
     return Dialog(
       backgroundColor: Colors.white,
@@ -74,15 +70,15 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             ),
             IconButton(onPressed: handleSettingButtonPressed, icon: Icon(Icons.settings)),
             // 카테고리 선택 페이지
-            isSettingOn ? Expanded(
-              child: ListView.builder(
+            Expanded(
+              child: isSettingOn == true ? ListView.builder(
                 scrollDirection: Axis.vertical, // 세로 스크롤 설정
                 itemCount: categories.length,
                 itemBuilder: (context, index) {
                   return buildCategoryPage(index);
                 },
-              ),
-            ) : BackgroundSettingSecond(),
+              )
+             : BackgroundSettingSecond()),
             // 확인 및 취소 버튼
             Container(
               alignment: Alignment.center,

@@ -2,75 +2,76 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../util/background_setting_provider.dart';
 
-
 class BackgroundSettingSecond extends StatefulWidget {
-  const BackgroundSettingSecond({Key? key});
+  const BackgroundSettingSecond({Key? key}) : super(key: key);
 
   @override
-  _BackgroundSettingSecond createState() => _BackgroundSettingSecond();
+  _BackgroundSettingSecondState createState() => _BackgroundSettingSecondState();
 }
 
-class _BackgroundSettingSecond extends State<BackgroundSettingSecond> {
+class _BackgroundSettingSecondState extends State<BackgroundSettingSecond> {
   @override
   Widget build(BuildContext context) {
-    var appState = Provider.of<BackgroundSettingProvider>(context);
+    var backgroundSettingProvider = Provider.of<BackgroundSettingProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Flutter Widget'),
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('테마 색상 선택:'),
-            Row(
-              children: appState.themeColors.map((color) {
-                return GestureDetector(
-                  onTap: () {
-                    appState.updateSelectedColor(color);
-                  },
-                  child: Container(
-                    width: 30,
-                    height: 30,
-                    margin: EdgeInsets.symmetric(horizontal: 8),
-                    decoration: BoxDecoration(
-                      color: color,
-                      border: appState.selectedColor == color
-                          ? Border.all(color: Colors.black, width: 2)
-                          : null,
-                      borderRadius: BorderRadius.circular(15),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('테마 색상 선택:'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: backgroundSettingProvider.themeColors.map<Widget>((color) {
+                  return GestureDetector(
+                    onTap: () {
+                      backgroundSettingProvider.updateSelectedColor(color);
+                    },
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: color,
+                        border: backgroundSettingProvider.selectedColor == color
+                            ? Border.all(color: Colors.black, width: 2)
+                            : null,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
                     ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('간이 윈도우:'),
+                  Switch(
+                    value: backgroundSettingProvider.isSimpleWindowEnabled,
+                    onChanged: (value) {
+                      backgroundSettingProvider.updateSimpleWindowEnabled(value);
+                    },
                   ),
-                );
-              }).toList(),
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Text('간이 윈도우:'),
-                Switch(
-                  value: appState.isSimpleWindowEnabled,
-                  onChanged: (value) {
-                    appState.updateSimpleWindowEnabled(value);
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              children: [
-                Text('오디오 스펙트럼:'),
-                Switch(
-                  value: appState.isAudioSpectrumEnabled,
-                  onChanged: (value) {
-                    appState.updateAudioSpectrumEnabled(value);
-                  },
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+              SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text('오디오 스펙트럼:'),
+                  Switch(
+                    value: backgroundSettingProvider.isAudioSpectrumEnabled,
+                    onChanged: (value) {
+                      backgroundSettingProvider.updateAudioSpectrumEnabled(value);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

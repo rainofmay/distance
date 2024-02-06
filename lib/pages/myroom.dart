@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
+import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
@@ -19,7 +20,7 @@ class _MyRoomState extends State<MyRoom> {
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = Provider.of<BackgroundProvider>(context);
-
+    final backgroundSettingProvider = Provider.of<BackgroundSettingProvider>(context);
     return Scaffold(
       body: Stack(
         children: [
@@ -31,7 +32,7 @@ class _MyRoomState extends State<MyRoom> {
               ),
             )),
           // Your FloatingTodo widget
-          FloatingTodo(),
+          Container(child: backgroundSettingProvider.simpleWindowEnable ? FloatingTodo() : null)
         ],
       ),
       floatingActionButton: ExpandableFab(
