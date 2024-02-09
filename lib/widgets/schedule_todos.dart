@@ -58,10 +58,6 @@ class _TodosState extends State<Todos> {
           itemCount: schedules.length,
           itemBuilder: (context, index) {
             final schedule = schedules[index];
-            print(schedule.isDone);
-
-
-
             return Dismissible(
               key: ObjectKey(schedule.id),
               direction: DismissDirection.startToEnd,

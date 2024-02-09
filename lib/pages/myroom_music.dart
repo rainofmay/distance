@@ -115,7 +115,7 @@ class _MusicSettingState extends State<MusicSetting> {
                     ),
                     Container(
                       margin: EdgeInsets.only(top: 15),
-                      height: 270,
+                      height: MediaQuery.of(context).size.height * 0.35, // 예시로 반 화면의 높이로 설정
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Column(

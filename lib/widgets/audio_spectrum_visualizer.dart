@@ -1,6 +1,7 @@
-import 'dart:ui';
+import 'dart:async';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_visualizers/flutter_visualizers.dart';
+import 'package:just_audio/just_audio.dart';
 
 class AudioSpectrumVisualizer extends StatefulWidget {
   @override
@@ -8,6 +9,39 @@ class AudioSpectrumVisualizer extends StatefulWidget {
 }
 
 class _AudioSpectrumVisualizerState extends State<AudioSpectrumVisualizer> {
+  late AudioPlayer _audioPlayer;
+  List<double> _audioSamples = List.filled(1024, 0);
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeAudioPlayer();
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  Future<void> _initializeAudioPlayer() async {
+    _audioPlayer = AudioPlayer();
+    await _audioPlayer.setAsset('assets/audio/sample.mp3'); // 내부 저장소의 오디오 파일 경로 설정
+    _audioPlayer.play(); // 오디오 파일 재생
+    _startAudioStream();
+  }
+
+  void _startAudioStream() {
+    _timer = Timer.periodic(Duration(milliseconds: 100), (_) async {
+      final samples = await _audioPlayer.backend.getAudioData(1024); // 오디오 샘플을 가져옵니다.
+      setState(() {
+        _audioSamples = Float64List.fromList(samples).toList(); // 오디오 샘플을 리스트로 변환하여 업데이트합니다.
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,13 +51,9 @@ class _AudioSpectrumVisualizerState extends State<AudioSpectrumVisualizer> {
       body: Center(
         child: Container(
           width: double.infinity,
-          height: 200, // 높이 조절 가능
-          child: Visualizer(
-            builder: (BuildContext context, List<int>? fft) {
-              return CustomPaint(
-                painter: _VisualizerPainter(fft),
-              );
-            },
+          height: 200,
+          child: CustomPaint(
+            painter: _VisualizerPainter(_audioSamples),
           ),
         ),
       ),
@@ -32,37 +62,27 @@ class _AudioSpectrumVisualizerState extends State<AudioSpectrumVisualizer> {
 }
 
 class _VisualizerPainter extends CustomPainter {
-  final List<int>? fftData;
+  final List<double> audioSamples;
 
-  _VisualizerPainter(this.fftData);
+  _VisualizerPainter(this.audioSamples);
 
   @override
   void paint(Canvas canvas, Size size) {
-    if (fftData != null) {
-      // 보라색 그라데이션 페인트 객체 생성
-      Paint paint = Paint()
-        ..style = PaintingStyle.fill
-        ..shader = LinearGradient(
-          colors: [Colors.transparent, Colors.purple],
-          stops: [0.0, 1.0],
-          begin: Alignment.bottomCenter,
-          end: Alignment.topCenter,
-        ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    Paint paint = Paint()
+      ..color = Colors.purple
+      ..strokeWidth = 2;
 
-      // 바의 너비 계산
-      double barWidth = size.width / fftData!.length;
-
-      // FFT 데이터를 이용하여 스펙트럼 그리기
-      for (int i = 0; i < fftData!.length; i++) {
-        double barHeight = fftData![i].toDouble() / 256.0 * size.height;
-        Rect rect = Rect.fromLTWH(i * barWidth, size.height - barHeight, barWidth, barHeight);
-        canvas.drawRect(rect, paint);
-      }
+    double barWidth = size.width / audioSamples.length;
+    for (int i = 0; i < audioSamples.length; i++) {
+      double barHeight = audioSamples[i] * size.height;
+      Offset startPoint = Offset(i * barWidth, size.height);
+      Offset endPoint = Offset(i * barWidth, size.height - barHeight);
+      canvas.drawLine(startPoint, endPoint, paint);
     }
   }
 
   @override
   bool shouldRepaint(_VisualizerPainter oldDelegate) {
-    return true; // 실시간 업데이트 위해 항상 다시 그리기
+    return true;
   }
 }
