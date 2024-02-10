@@ -71,7 +71,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             IconButton(onPressed: handleSettingButtonPressed, icon: Icon(Icons.settings)),
             // 카테고리 선택 페이지
             Expanded(
-              child: isSettingOn == true ? ListView.builder(
+              child: isSettingOn == false ? ListView.builder(
                 scrollDirection: Axis.vertical, // 세로 스크롤 설정
                 itemCount: categories.length,
                 itemBuilder: (context, index) {

@@ -35,7 +35,7 @@ class _AudioSpectrumVisualizerState extends State<AudioSpectrumVisualizer> {
 
   void _startAudioStream() {
     _timer = Timer.periodic(Duration(milliseconds: 100), (_) async {
-      final samples = await _audioPlayer.backend.getAudioData(1024); // 오디오 샘플을 가져옵니다.
+      final samples =
       setState(() {
         _audioSamples = Float64List.fromList(samples).toList(); // 오디오 샘플을 리스트로 변환하여 업데이트합니다.
       });

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../pages/myroom.dart';
 import '../util/background_setting_provider.dart';
 
 class BackgroundSettingSecond extends StatefulWidget {
@@ -69,6 +70,11 @@ class _BackgroundSettingSecondState extends State<BackgroundSettingSecond> {
                     },
                   ),
                 ],
+              ),
+              Container(
+                width: 150, // 원하는 너비
+                height: 250, // 원하는 높이
+                child: MyRoom(),
               ),
             ],
           ),

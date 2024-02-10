@@ -5,6 +5,8 @@ class GlobalAudioPlayer with ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
   late String _audioURL;
 
+  //리팩토링이 필요한데, CategoryIndex 그리고,
+
   AudioPlayer get player => _audioPlayer;
 
   GlobalAudioPlayer(String audioURL) {
