@@ -24,6 +24,7 @@ class _TodosState extends State<Todos> {
 
   @override
   Widget build(BuildContext context) {
+
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('todo')
@@ -47,11 +48,9 @@ class _TodosState extends State<Todos> {
         final schedules = snapshot.data!.docs
             .map(
               (QueryDocumentSnapshot e) => ScheduleModel.fromJson(
-                  json: (e.data() as Map<String, dynamic>)),
-            )
+              json: (e.data() as Map<String, dynamic>)),
+        )
             .toList();
-
-
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,

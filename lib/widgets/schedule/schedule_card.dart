@@ -45,6 +45,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
     print('updateToggle: ${newValue}');
     setState(() {
       isDone = newValue;
+      print(widget.isDone);
     });
     await FirebaseFirestore.instance.collection('todo').doc(widget.id).update({'isDone': isDone});
   }
