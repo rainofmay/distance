@@ -1,4 +1,4 @@
-import 'dart:async';
+/*import 'dart:async';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -85,4 +85,4 @@ class _VisualizerPainter extends CustomPainter {
   bool shouldRepaint(_VisualizerPainter oldDelegate) {
     return true;
   }
-}
+}*/
