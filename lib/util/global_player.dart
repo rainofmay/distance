@@ -22,6 +22,7 @@ class GlobalAudioPlayer with ChangeNotifier {
       await _audioPlayer.setUrl(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
       _audioPlayer.setLoopMode(LoopMode.one);
     } catch (e) {
+      print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
       print("Error loading audio file: $e");
     }
 
