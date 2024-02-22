@@ -18,9 +18,12 @@ class GlobalAudioPlayer with ChangeNotifier {
 
   void _init() async {
     _audioPlayer = AudioPlayer();
+    print("audioPlayer was maked");
     try {
-      await _audioPlayer.setUrl(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
+      await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(
+          _audioURLs[_currentGroupIndex][_currentAudioIndex])));
       _audioPlayer.setLoopMode(LoopMode.one);
+      print("audioPlayer was setted");
     } catch (e) {
       print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
       print("Error loading audio file: $e");
@@ -31,12 +34,51 @@ class GlobalAudioPlayer with ChangeNotifier {
     });
   }
 
+  /*import 'package:flutter/material.dart';
+import 'package:just_audio/just_audio.dart';
+
+class GlobalAudioPlayer with ChangeNotifier {
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  late String _audioURL;
+
+  AudioPlayer get player => _audioPlayer;
+
+  GlobalAudioPlayer(String audioURL) {
+    _audioURL = audioURL;
+    _init();
+  }
+
+  void _init() async {
+    try {
+      await _audioPlayer.setAsset(_audioURL);
+      _audioPlayer.setLoopMode(LoopMode.one);
+    } catch (e) {
+      print("Error loading audio file: $e");
+    }
+
+    _audioPlayer.playerStateStream.listen((PlayerState state) {
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _audioPlayer.dispose();
+    super.dispose();
+  }
+}*/
   void play() async {
-    await _audioPlayer.play();
+    try{
+      await _audioPlayer.play();
+    }catch(e){
+      print("Error $e");
+    }
+
   }
 
   void pause() async {
     await _audioPlayer.pause();
+    print("stop");
   }
 
   void stop() async {
@@ -49,7 +91,7 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = 0;
     }
-    await _audioPlayer.setUrl(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
+    await _audioPlayer.setAsset(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
     await _audioPlayer.play();
   }
 
@@ -59,7 +101,7 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = _audioURLs[_currentGroupIndex].length - 1;
     }
-    await _audioPlayer.setUrl(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
+    await _audioPlayer.setAsset(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
     await _audioPlayer.play();
   }
 

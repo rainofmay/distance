@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 
@@ -21,7 +22,7 @@ import 'package:mobile/util/background_setting_provider.dart';
 
 Future<void> main() async {
   List<List<String>> groupedAudioURLs = [
-    ["assets/audios/defaultMain.mp3", ''],
+    ['assets/musics/defaultMain.wav', ''],
     ['', ''],
   ];
   //플러터 프레임워크가 준비될 때까지 대기
@@ -44,21 +45,21 @@ Future<void> main() async {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          home: MyApp(),
+          home: MainPage(),
           theme: mainstyle.theme),
     ),
   );
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
+class MainPage extends StatefulWidget {
+  const MainPage({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<MainPage> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MyApp> {
-  final List screens = [MyRoom(), GroupStudy(), Mate(), Store(), Etc()];
+class _MyAppState extends State<MainPage> {
+  final List screens = [MyRoom(), GroupStudy(), Mate(), Store(), LoginPage()];
 
   @override
   Widget build(BuildContext context) {
