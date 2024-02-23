@@ -82,6 +82,11 @@ class _LoginPageState extends State<LoginPage> {
                 },
                 child: Text('회원가입'),
               ),
+              SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
+              ElevatedButton(
+                onPressed: resetPasswordDialog,
+                child: Text('비밀번호 재설정'),
+              ),
             ],
           ),
         ),
@@ -105,9 +110,55 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void resetPasswordDialog() {
+    String email = '';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('비밀번호 재설정'),
+          content: TextFormField(
+            decoration: InputDecoration(labelText: '이메일'),
+            onChanged: (value) {
+              email = value;
+            },
+          ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('취소'),
+            ),
+            TextButton(
+              onPressed: () {
+                if (email.isNotEmpty) {
+                  resetPassword(email);
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text('보내기'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void resetPassword(String email) async {
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      _showDialog('비밀번호 재설정 이메일 전송', '비밀번호 재설정 이메일을 전송했습니다. 이메일을 확인해주세요.');
+    } catch (e) {
+      _showDialog('비밀번호 재설정 실패', '비밀번호 재설정 이메일 전송에 실패했습니다. 다시 시도해주세요.');
+      print(e);
+    }
+  }
+
   void _showDialog(String title, String content) {
     showDialog(
-      context: _formKey.currentContext!,
+      context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
