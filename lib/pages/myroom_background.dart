@@ -11,10 +11,16 @@ class BackgroundSetting extends StatefulWidget {
 }
 //낮, 밤마다 시간마다 배경 설정 할 수 있게 하는 법 1. 사용자 설정, 2.
 class _BackgroundSettingState extends State<BackgroundSetting> {
-  int selectedCategoryIndex = 0; // 선택된 버튼의 ID
-  int selectedIndex = 0;
+  int selectedImageCategoryIndex = 0; // 선택된 이미지 버튼의 ID
+  int selectedImageIndex = 0;
+
+  int selectedVideoCategoryIndex = 0; // 선택된 비디오 버튼의 ID
+  int selectedVideoIndex = 0;
+
   bool isSettingOn = false;
-  List<String> categories = ['Cafe', 'Jazz Bar', 'Nature']; // 카테고리 목록
+  bool isImageSetting = true;
+  List<String> imageCategories = ['Cafe', 'Jazz Bar', 'Nature'];// 카테고리 목록
+  List<String> videoCategories = ['Sea', 'Stars' ,'river'];
   List<List<String>> images = [
     // 각 카테고리에 대한 이미지 목록
     [
@@ -33,16 +39,29 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       'assets/images/nature3.jpeg',
     ],
   ];
+  List<List<String>> videos = [
+    // 각 카테고리에 대한 이미지 목록
+    [
+      'assets/videos/sea(1080p).jpeg',
+    ],
+    [
+      'assets/videos/sea(1080p).jpeg',
+    ],
+    [
+      'assets/videos/sea(1080p).jpeg',
+    ],
+  ];
 
-  void handleButtonPressed(int categoryindex, int index) {
+  void handleImageButtonPressed(int categoryindex, int index, bool isImage) {
     // 클릭된 버튼의 ID를 저장하고 다른 버튼들을 비활성화
-    //=> 이제 provider를 통해서 가져와야 하는데..
+    //교체 필요 => 영상인지 아닌지에 따라 버튼 누르는 게 달라져야함.
     setState(() {
-      selectedCategoryIndex = categoryindex;
-      selectedIndex = index;
+      selectedImageCategoryIndex = categoryindex;
+      selectedImageIndex = index;
     });
     print(categoryindex);
     print(index);
+    print('isImage : $isImage');
   }
 
   void handleSettingButtonPressed() {
@@ -68,17 +87,50 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               '배경 설정',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
             ),
-            IconButton(onPressed: handleSettingButtonPressed, icon: Icon(Icons.settings)),
+
+            Row(
+              children: [
+                IconButton(
+                  onPressed: handleSettingButtonPressed,
+                  icon: Icon(Icons.settings),
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isImageSetting = true;
+                    });
+                  },
+                  icon: Icon(Icons.photo),
+                  color: isImageSetting ? Colors.blue : Colors.grey,
+                ),
+                IconButton(
+                  onPressed: () {
+                    setState(() {
+                      isImageSetting = false;
+                    });
+                  },
+                  icon: Icon(Icons.videocam),
+                  color: isImageSetting ? Colors.grey : Colors.blue,
+                ),
+              ],
+            ),
+            //교체 필요 => 영상, 배경을 구분해둬야 함.
             // 카테고리 선택 페이지
-            Expanded(
-              child: isSettingOn == false ? ListView.builder(
-                scrollDirection: Axis.vertical, // 세로 스크롤 설정
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  return buildCategoryPage(index);
-                },
-              )
-             : BackgroundSettingSecond()),
+          Expanded(
+            child: isSettingOn == false ? (isImageSetting ? ListView.builder(
+              scrollDirection: Axis.vertical, // 세로 스크롤 설정
+              itemCount: imageCategories.length,
+              itemBuilder: (context, index) {
+                return buildImagePage(index);
+              },
+            ) : ListView.builder(
+              scrollDirection: Axis.vertical, // 세로 스크롤 설정
+              itemCount: videoCategories.length,
+              itemBuilder: (context, index) {
+                return buildVideoPage(index);
+              },
+            )) : BackgroundSettingSecond(),
+          ),
             // 확인 및 취소 버튼
             Container(
               alignment: Alignment.center,
@@ -109,8 +161,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     );
   }
 
-  // 카테고리 선택 페이지 구성
-  Widget buildCategoryPage(int index) {
+  // 카테고리당 이미지 선택 페이지 구성
+  Widget buildImagePage(int index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -120,7 +172,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                '#${categories[index]}',
+                '#${imageCategories[index]}',
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.normal,
@@ -136,11 +188,54 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               images[index].length,
                   (imageIndex) {
                 return CustomIconButton(
+                  //교체 필요 => 불러오는 방식 + 캐싱 기능 탑재
                   imageUrl: images[index][imageIndex],
                   id: index * 100 + imageIndex,
-                  onButtonPressed: () {handleButtonPressed(index, imageIndex);},
+                  onButtonPressed: () {handleImageButtonPressed(index, imageIndex, false);},
                   selectedCategoryIndex: index,
                   selectedIndex: imageIndex, // 값 전달
+                  isImage: true,
+                );
+              },
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+  Widget buildVideoPage(int index) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.only(top: 30),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                '#${videoCategories[index]}',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              videos[index].length,
+                  (videoIndex) {
+                return CustomIconButton(
+                  //교체 필요 => 불러오는 방식 + 캐싱 기능 탑재
+                  imageUrl: videos[index][videoIndex],
+                  id: index * 100 + videoIndex,
+                  onButtonPressed: () {handleImageButtonPressed(index, videoIndex, true);},
+                  selectedCategoryIndex: index,
+                  selectedIndex: videoIndex, // 값 전달
+                  isImage: false,
                 );
               },
             ),

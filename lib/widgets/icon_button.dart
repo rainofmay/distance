@@ -8,6 +8,7 @@ class CustomIconButton extends StatefulWidget {
   final void Function() onButtonPressed;
   final int selectedCategoryIndex;
   final int selectedIndex; // 새로운 매개변수 추가
+  final bool isImage;
 
   CustomIconButton({
     super.key,
@@ -15,7 +16,9 @@ class CustomIconButton extends StatefulWidget {
     required this.id,
     required this.onButtonPressed,
     required this.selectedCategoryIndex,
-    required this.selectedIndex, // 생성자에 추가
+    required this.selectedIndex,
+    required this.isImage// 생성자에 추가
+
   });
 
   @override
@@ -32,7 +35,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
     return GestureDetector(
       onTap: () {
         setState(() {
-          // 사용 예시: widget.selectedCategoryIndex, widget.selectedIndex
+          backgroundProvider.isImage = widget.isImage;
           backgroundProvider.selectedIndex = widget.selectedIndex;
           backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
           print(widget.selectedCategoryIndex);

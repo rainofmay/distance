@@ -5,12 +5,18 @@ class BackgroundProvider extends ChangeNotifier {
   int _selectedCategoryIndex = 0;
   int _selectedIndex = 0;
   String _selectedURL = 'assets/images/backgroundtext1.jpeg';
+  bool _isImage = true;
 
   int get selectedCategoryIndex => _selectedCategoryIndex;
+  int get selecteIndex => _selectedIndex;
+  bool get isImage => _isImage;
 
-  int get selectedIndex => _selectedIndex;
 
 
+  set isImage(bool isImage) {
+    //이미지인지 확인하고 이미지 아니면, 영상으로 배경을 바꿔줘야 함.
+    _isImage =  isImage;
+  }
   set selectedCategoryIndex(int id) {
     _selectedCategoryIndex = id;
     notifyListeners();
@@ -47,11 +53,12 @@ class BackgroundProvider extends ChangeNotifier {
     ],
   ];
 
+
   String get selectedImageURL {
     if (selectedCategoryIndex >= 0 &&
         selectedCategoryIndex < imageURLs.length) {
       int categoryIndex = selectedCategoryIndex;
-      int imageIndex = selectedIndex; // 기본값 또는 예외 처리
+      int imageIndex = selecteIndex; // 기본값 또는 예외 처리
 
       if (categoryIndex > 0) {
         // 현재 선택된 카테고리가 0이 아닌 경우, 현재 선택된 이미지 인덱스를 가져옴
@@ -72,6 +79,7 @@ class BackgroundProvider extends ChangeNotifier {
   BackgroundProvider() {
     loadCategoryIndex();
     loadIndex();
+    loadIsImage();
   }
 
   // SharedPreferences를 이용한 저장과 불러오기
@@ -79,7 +87,6 @@ class BackgroundProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('selectedCategoryIndex', id);
   }
-
   Future<void> loadCategoryIndex() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? savedId = prefs.getInt('selectedCategoryIndex');
@@ -96,7 +103,6 @@ class BackgroundProvider extends ChangeNotifier {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('selectedIndex', id);
   }
-
   Future<void> loadIndex() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     int? savedId = prefs.getInt('selectedIndex');
@@ -108,4 +114,23 @@ class BackgroundProvider extends ChangeNotifier {
       print("saveId is null");
     }
   }
+
+
+  Future<void> saveIsImage(bool isImg) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isImage', isImg);
+  }
+  Future<void> loadIsImage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? isImg = prefs.getBool('isImage');
+    if (isImg != null) {
+      isImage = isImg;
+      print("isImage was loaded");
+      notifyListeners();
+    } else {
+      print("isImage is null");
+    }
+  }
+
+
 }

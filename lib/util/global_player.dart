@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class GlobalAudioPlayer with ChangeNotifier {
-  late AudioPlayer _audioPlayer;
+  final AudioPlayer _audioPlayer = AudioPlayer();
   late List<List<String>> _audioURLs; // 이중 배열로 음원 그룹화
   late int _currentGroupIndex;
   late int _currentAudioIndex;
@@ -17,8 +17,7 @@ class GlobalAudioPlayer with ChangeNotifier {
   AudioPlayer get player => _audioPlayer;
 
   void _init() async {
-    _audioPlayer = AudioPlayer();
-    print("audioPlayer was maked");
+    print("global_player.dart : _init() : audioPlayer was maked");
     try {
       await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(
           _audioURLs[_currentGroupIndex][_currentAudioIndex])));
@@ -34,7 +33,8 @@ class GlobalAudioPlayer with ChangeNotifier {
     });
   }
 
-  /*import 'package:flutter/material.dart';
+  /*
+import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
 class GlobalAudioPlayer with ChangeNotifier {
