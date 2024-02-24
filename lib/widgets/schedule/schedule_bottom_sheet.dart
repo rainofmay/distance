@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/widgets/schedule/custom_text_field.dart';
+import 'package:mobile/widgets/custom_text_field.dart';
 import 'package:uuid/uuid.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:mobile/firebase_options.dart';
@@ -28,7 +28,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
 
   String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
-
+  final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
   // String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _startTime = "06:00 AM";
   String _endTime = "09:00 PM";
@@ -52,6 +52,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     final schedule = ScheduleModel(
         id: Uuid().v4(),
         scheduleName: _scheduleName,
+        timeStamp: _timeStamp,
         selectedDate: _selectedDate,
         startTime: _startTime,
         endTime: _endTime,
@@ -59,7 +60,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         selectedColor: _selectedColor,
         isDone: _isDone);
 
-    await firestore.collection('todo').doc(schedule.id).set(schedule.toJson());
+    await firestore.collection('schedule').doc(schedule.id).set(schedule.toJson());
   }
 
   Future<void> _getDateFromUser() async {

@@ -2,7 +2,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
-import 'package:mobile/widgets/schedule_bottom_sheet.dart';
+import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
 import 'package:mobile/model/schedule_model.dart';
 
 class ScheduleCard extends StatefulWidget {
@@ -46,7 +46,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
       isDone = newValue;
       print(widget.isDone);
     });
-    await FirebaseFirestore.instance.collection('todo').doc(widget.id).update({'isDone': isDone});
+    await FirebaseFirestore.instance.collection('schedule').doc(widget.id).update({'isDone': isDone});
   }
 
   @override
@@ -56,26 +56,9 @@ class _ScheduleCardState extends State<ScheduleCard> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            child: Transform.scale(
-              scale: 1.2,
-              child: Checkbox(
-                  overlayColor: MaterialStatePropertyAll(Colors.transparent),
-                  // fillColor: const MaterialStatePropertyAll(Colors.green),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(6),
-                  ),
-                  value: isDone,
-                  onChanged: (newValue) {
-                    updateToggle(newValue);
-                  },
-                activeColor: cardColor[widget.selectedColor][0],
-                checkColor: cardColor[widget.selectedColor][1]),
-            ),
-          ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 16, left: 8, bottom: 20),
+              margin: EdgeInsets.only(right: 20, left: 20, bottom: 20),
               height: 100,
               decoration: BoxDecoration(
                 color: cardColor[widget.selectedColor][0],

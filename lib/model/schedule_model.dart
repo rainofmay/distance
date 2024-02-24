@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ScheduleModel {
   final String id;
+  final Timestamp timeStamp;
   final String scheduleName;
   final DateTime selectedDate;
   final String startTime;
@@ -11,6 +14,7 @@ class ScheduleModel {
 
   ScheduleModel({
     required this.id,
+    required this.timeStamp,
     required this.scheduleName,
     required this.selectedDate,
     required this.startTime,
@@ -27,9 +31,10 @@ class ScheduleModel {
   })
       : id = json['id'],
         scheduleName = json['이름'],
-        selectedDate = DateTime.parse(json['날짜']),
+        selectedDate = DateTime.parse(json['selectedDate']),
         startTime = json['시작'],
         endTime = json['종료'],
+        timeStamp = json['timeStamp'],
         // selectedRepeat = json['반복'],
         memo = json['메모'],
         selectedColor = json['색상'],
@@ -40,7 +45,8 @@ class ScheduleModel {
     return {
       'id' : id,
       '이름' : scheduleName,
-      '날짜' : '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
+      'timeStamp' : timeStamp,
+      'selectedDate' : '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
       '시작' : startTime,
       '종료' : endTime,
       // '반복' : selectedRepeat,
