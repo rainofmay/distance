@@ -2,25 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/widgets/schedule/schedule_card.dart';
+import 'package:mobile/const/colors.dart';
+import 'package:mobile/model/todo_model.dart';
+import 'package:mobile/widgets/todo/todo_card.dart';
 
-class Todos extends StatefulWidget {
-  final selectedDate;
-
-  const Todos({super.key, required this.selectedDate});
+class TodoList extends StatefulWidget {
+  const TodoList({super.key,});
 
   @override
-  State<Todos> createState() => _TodosState();
+  State<TodoList> createState() => _TodoListState();
 }
 
-class _TodosState extends State<Todos> {
+class _TodoListState extends State<TodoList> {
   TextEditingController introduceController = TextEditingController();
   List<Map<String, dynamic>> todoList = [];
-  String? _error; //_err
-
-
-  void _deleteTodo(int index) {}
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +23,12 @@ class _TodosState extends State<Todos> {
     return StreamBuilder<QuerySnapshot>(
       stream: FirebaseFirestore.instance
           .collection('todo')
-          .where(
-            '날짜',
-            isEqualTo:
-                '${widget.selectedDate.year}${widget.selectedDate.month.toString().padLeft(2, '0')}${widget.selectedDate.day.toString().padLeft(2, '0')}',
-          )
+          .orderBy('timeStamp', descending: true)
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return Center(
-            child: Text('정보를 가져오지 못했습니다.'),
+            child: Text('과제 리스트를 가져오지 못했습니다.', style: TextStyle(color: BLACK),),
           );
         }
         // 로딩 중일 때 화면
@@ -45,39 +36,35 @@ class _TodosState extends State<Todos> {
           return Container();
         }
 
-        final schedules = snapshot.data!.docs
+        final todos = snapshot.data!.docs
             .map(
-              (QueryDocumentSnapshot e) => ScheduleModel.fromJson(
+              (QueryDocumentSnapshot e) => TodoModel.fromJson(
               json: (e.data() as Map<String, dynamic>)),
         )
             .toList();
         return ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
-          itemCount: schedules.length,
+          itemCount: todos.length,
           itemBuilder: (context, index) {
-            final schedule = schedules[index];
+            final todo = todos[index];
             return Dismissible(
-              key: ObjectKey(schedule.id),
+              key: ObjectKey(todo.id),
               direction: DismissDirection.startToEnd,
               onDismissed: (DismissDirection direction) {
                 FirebaseFirestore.instance
                     .collection('todo')
-                    .doc(schedule.id)
+                    .doc(todo.id)
                     .delete();
               },
               child: Padding(
                   padding: const EdgeInsets.only(
                       bottom: 8.0, left: 12.0, right: 12.0),
-                  child: ScheduleCard(
-                    id: schedule.id,
-                    scheduleName: schedule.scheduleName,
-                    selectedDate: schedule.selectedDate,
-                    startTime: schedule.startTime,
-                    endTime: schedule.endTime,
-                    memo: schedule.memo,
-                    selectedColor: schedule.selectedColor,
-                    isDone : schedule.isDone,
+                  child: TodoCard(
+                    id: todo.id,
+                    todoName: todo.todoName,
+                    selectedDate: todo.selectedDate,
+                    isDone : todo.isDone,
                   )),
             );
           },
