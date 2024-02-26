@@ -32,22 +32,22 @@ class ScheduleCard extends StatefulWidget {
 }
 
 class _ScheduleCardState extends State<ScheduleCard> {
-  late bool isDone ;
+  // late bool isDone ;
 
   @override
-  void initState() {
-    super.initState();
-    isDone = widget.isDone;
-  }
-
-  updateToggle(newValue) async{
-    print('updateToggle: ${newValue}');
-    setState(() {
-      isDone = newValue;
-      print(widget.isDone);
-    });
-    await FirebaseFirestore.instance.collection('schedule').doc(widget.id).update({'isDone': isDone});
-  }
+  // void initState() {
+  //   super.initState();
+  //   isDone = widget.isDone;
+  // }
+  //
+  // updateToggle(newValue) async{
+  //   print('updateToggle: ${newValue}');
+  //   setState(() {
+  //     isDone = newValue;
+  //     print(widget.isDone);
+  //   });
+  //   await FirebaseFirestore.instance.collection('schedule').doc(widget.id).update({'isDone': isDone});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +91,27 @@ class _ScheduleCardState extends State<ScheduleCard> {
                         )),
                     Container(
                       alignment: Alignment.bottomRight,
-                      child: IconButton(
-                          onPressed: () {},
+                      child: PopupMenuButton<String>(
+                          shape: RoundedRectangleBorder(
+                            side: const BorderSide(width: 1),
+                            borderRadius: BorderRadius.circular(7),
+                          ),
+                          color: BLACK,
+                          elevation: 10,
+                          tooltip: "",
+                          position: PopupMenuPosition.under,
+                          itemBuilder: (context) {
+                            return [
+                              _menuItem("다른 날짜 이동/복사"),
+                              _menuItem("수정"),
+                              _menuItem("삭제"),
+                            ];
+                          },
+                          constraints: const BoxConstraints(minWidth: 50, maxWidth: 120),
+                          splashRadius: null,
+                          enabled: true,
                           icon: Icon(Icons.more_horiz_rounded),
-                          color: cardColor[widget.selectedColor][1]),
-                    ),
+                    ),)
                   ],
                 ),
               ),
@@ -105,4 +121,23 @@ class _ScheduleCardState extends State<ScheduleCard> {
       ),
     );
   }
+}
+
+PopupMenuItem<String> _menuItem(String text) {
+  return PopupMenuItem<String>(
+    enabled: true,
+
+    /// 해당 항목 선택 시 호출
+    onTap: () {},
+
+    /// value = value에 입력한 값이 PopupMenuButton의 initialValue와 같다면
+    /// 해당 아이템 선택된 UI 효과 나타남
+    /// 만약 원하지 않는다면 Theme 에서 highlightColor: Colors.transparent 설정
+    value: text,
+    height: 40,
+    child: Text(
+      text,
+      style: const TextStyle(color: Colors.white),
+    ),
+  );
 }

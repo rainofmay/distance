@@ -36,7 +36,6 @@ class _TodoCardState extends State<TodoCard> {
     print('updateToggle: ${newValue}');
     setState(() {
       isDone = newValue;
-      print(widget.isDone);
     });
     await FirebaseFirestore.instance.collection('todo').doc(widget.id).update({'isDone': isDone});
   }
@@ -50,18 +49,24 @@ class _TodoCardState extends State<TodoCard> {
       },
       child: Container(
         margin: EdgeInsets.only(right: 20, left: 20, bottom: 20),
-        height: 100,
+        height: 30,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.0),
         ),
-        child: Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Checkbox(value: isDone, onChanged: (value) => !isDone,),
-              Text(widget.todoName, style: TextStyle(color: BLACK),),
-            ],
-          ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  Checkbox(value: isDone, onChanged: updateToggle,),
+                  Text(widget.todoName, style: TextStyle(color: BLACK),),
+                ],
+              ),
+            ),
+            IconButton(onPressed: () {}, icon: Icon(Icons.bookmark_border_rounded))
+          ],
         ),
       ),
     );

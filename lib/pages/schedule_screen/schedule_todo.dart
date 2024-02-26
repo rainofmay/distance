@@ -23,31 +23,40 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
       //     image: AssetImage('assets/images/test2.jpg'),
       //   ),
       // ),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.only(top:10, left: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text('#카테고리'),
-              SizedBox(height: 10,),
-              SizedBox(
-                height: 100,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 10,
-                    itemBuilder: (BuildContext context, int index) {
-                      return Text('${index}');
-                    }),
-              ),
-              Container(
-                height: 10,
-                color: Colors.grey[200],
-              ),
-              TodoList(),
-            ],
-          ),
+      child: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('#카테고리'),
+            SizedBox(height: 10),
+            SizedBox(
+              height: 20,
+              child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Text('${index} 번');
+                  }),
+            ),
+            Container(
+              height: 5,
+              color: Colors.grey[200],
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(onPressed: () {}, child: Text('진행')),
+                Text('|'),
+                TextButton(onPressed: () {}, child: Text('완료')),
+              ],
+            ),
+            Text('#과제 목록'),
+            SizedBox(height: 10),
+            SizedBox(
+                child: TodoList()),
+          ],
         ),
       ),
     );
