@@ -6,13 +6,15 @@ class TodoModel {
   final DateTime selectedDate;
   final Timestamp timeStamp;
   final bool isDone;
+  final List subTodoList;
 
   TodoModel({
     required this.id,
     required this.todoName,
     required this.selectedDate,
     required this.timeStamp,
-    required this.isDone
+    required this.isDone,
+    required this.subTodoList,
   });
 
 //JSON으로부터 모델을 만들어내는 생성자
@@ -23,7 +25,8 @@ class TodoModel {
         todoName = json['이름'],
         selectedDate = DateTime.parse(json['날짜']),
         timeStamp = json['timeStamp'],
-        isDone = json['완료'];
+        isDone = json['isDone'],
+        subTodoList = json['subTodoList'];
 
   Map<String, dynamic> toJson() {
     return {
@@ -31,7 +34,8 @@ class TodoModel {
       '이름' : todoName,
       '날짜' : '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
       'timeStamp' : timeStamp,
-      '완료' : isDone,
+      'isDone' : isDone,
+      'subTodoList' : subTodoList,
     };
   }
 }

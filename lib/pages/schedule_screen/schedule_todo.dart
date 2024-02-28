@@ -44,6 +44,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
               color: Colors.grey[200],
             ),
             SizedBox(height: 10),
+            Text('#과제 목록'),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
@@ -52,7 +53,6 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                 TextButton(onPressed: () {}, child: Text('완료')),
               ],
             ),
-            Text('#과제 목록'),
             SizedBox(height: 10),
             SizedBox(
                 child: TodoList()),
