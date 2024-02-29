@@ -18,26 +18,15 @@ class MyRoom extends StatefulWidget {
 }
 
 class _MyRoomState extends State<MyRoom> {
-  late VideoPlayerController _controller;
-
+  final videoUrl = Uri.parse('https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4');
   @override
   void initState() {
     super.initState();
-    final backgroundProvider = Provider.of<BackgroundProvider>(context, listen: false);
-    if (!backgroundProvider.isImage) {
-      _controller = VideoPlayerController.networkUrl(
-        'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4' as Uri,
-      )..initialize().then((_) {
-        _controller.play();
-        _controller.setLooping(true);
-        setState(() {});
-      });
-    }
   }
+
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
   }
 
@@ -58,14 +47,15 @@ class _MyRoomState extends State<MyRoom> {
                 ),
               ),
             )
-          else if (_controller.value.isInitialized)
+            //영상으로 선택되어있을 땐 이걸 튼다.
+          else if (!backgroundProvider.isImage && backgroundProvider.videoController.value.isInitialized)
             SizedBox.expand(
               child: FittedBox(
                 fit: BoxFit.cover,
                 child: SizedBox(
-                  width: _controller.value.size.width,
-                  height: _controller.value.size.height,
-                  child: VideoPlayer(_controller),
+                  width: backgroundProvider.videoController.value.size.width,
+                  height: backgroundProvider.videoController.value.size.height,
+                  child: VideoPlayer(backgroundProvider.videoController),
                 ),
               ),
             ),
@@ -131,3 +121,4 @@ class _MyRoomState extends State<MyRoom> {
     );
   }
 }
+

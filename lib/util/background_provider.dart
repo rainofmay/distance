@@ -1,22 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 
 class BackgroundProvider extends ChangeNotifier {
   int _selectedCategoryIndex = 0;
   int _selectedIndex = 0;
   String _selectedURL = 'assets/images/backgroundtext1.jpeg';
   bool _isImage = true;
+  late VideoPlayerController _videoController; // 비디오 컨트롤러 추가
 
   int get selectedCategoryIndex => _selectedCategoryIndex;
   int get selecteIndex => _selectedIndex;
   bool get isImage => _isImage;
-
-
+  VideoPlayerController get videoController => _videoController; // Getter 추가
 
   set isImage(bool isImage) {
-    //이미지인지 확인하고 이미지 아니면, 영상으로 배경을 바꿔줘야 함.
-    _isImage =  isImage;
+    _isImage = isImage;
+    if (!isImage) {
+      // 비디오를 사용할 경우 비디오를 초기화
+      initializeVideo();
+    }
+    notifyListeners();
+    saveIsImage(isImage);
   }
+  // 비디오를 초기화하는 메소드
+  void initializeVideo() {
+    final videoUrl = Uri.parse('https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4');
+    _videoController = VideoPlayerController.networkUrl(videoUrl)
+      ..initialize().then((_) {
+        _videoController.play();
+        _videoController.setLooping(true);
+        notifyListeners(); // 비디오가 초기화되었음을 알림
+      });
+  }
+
   set selectedCategoryIndex(int id) {
     _selectedCategoryIndex = id;
     notifyListeners();
@@ -114,7 +131,6 @@ class BackgroundProvider extends ChangeNotifier {
       print("saveId is null");
     }
   }
-
 
   Future<void> saveIsImage(bool isImg) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
