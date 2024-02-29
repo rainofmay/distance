@@ -24,6 +24,7 @@ dependencies:
   google_mobile_ads: ^4.0.0
   google_sign_in: ^6.2.1
   video_player: ^2.2.11
+  audioplayers: ^5.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -36,6 +37,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/audios/
+    - assets/musics/
     - assets/videos/
 
 

@@ -65,6 +65,7 @@ class _TodoListState extends State<TodoList> {
                     todoName: todo.todoName,
                     selectedDate: todo.selectedDate,
                     isDone : todo.isDone,
+                    subTodoList: [],
                   )),
             );
           },
