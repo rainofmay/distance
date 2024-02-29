@@ -1,34 +1,44 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
 
 class GlobalAudioPlayer with ChangeNotifier {
   final AudioPlayer _audioPlayer = AudioPlayer();
   late List<List<String>> _audioURLs; // 이중 배열로 음원 그룹화
   late int _currentGroupIndex;
   late int _currentAudioIndex;
+  late bool _isPlaying;
 
   GlobalAudioPlayer(List<List<String>> audioURLs) {
     _audioURLs = audioURLs;
     _currentGroupIndex = 0;
     _currentAudioIndex = 0;
+    _isPlaying = false; // 초기에는 재생 중이 아님
     _init();
   }
 
   AudioPlayer get player => _audioPlayer;
+  int get currentGroupIndex =>_currentGroupIndex;
+  int get currentAudioIndex =>_currentAudioIndex;
+  bool get isPlaying => _isPlaying;
 
   void _init() async {
     print("global_player.dart : _init() : audioPlayer was maked");
     try {
-      await _audioPlayer.setAudioSource(AudioSource.uri(Uri.parse(
-          _audioURLs[_currentGroupIndex][_currentAudioIndex])));
-      _audioPlayer.setLoopMode(LoopMode.one);
+      await _audioPlayer.setSource(
+          AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+      _audioPlayer.setReleaseMode(ReleaseMode.loop);
       print("audioPlayer was setted");
     } catch (e) {
       print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
       print("Error loading audio file: $e");
     }
 
-    _audioPlayer.playerStateStream.listen((PlayerState state) {
+    _audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
+      if (state == PlayerState.playing) {
+        _isPlaying = true;
+      } else {
+        _isPlaying = false;
+      }
       notifyListeners();
     });
   }
@@ -67,16 +77,16 @@ class GlobalAudioPlayer with ChangeNotifier {
     super.dispose();
   }
 }*/
-  void play() async {
-    try{
-      await _audioPlayer.play();
-    }catch(e){
+
+  void musicPlay() async {
+    try {
+      await _audioPlayer.play(AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+    } catch (e) {
       print("Error $e");
     }
-
   }
 
-  void pause() async {
+  void musicPause() async {
     await _audioPlayer.pause();
     print("stop");
   }
@@ -91,8 +101,9 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = 0;
     }
-    await _audioPlayer.setAsset(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
-    await _audioPlayer.play();
+    await _audioPlayer.setSource(
+        AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+    await _audioPlayer.resume();
   }
 
   void previous() async {
@@ -101,8 +112,9 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = _audioURLs[_currentGroupIndex].length - 1;
     }
-    await _audioPlayer.setAsset(_audioURLs[_currentGroupIndex][_currentAudioIndex]);
-    await _audioPlayer.play();
+    await _audioPlayer.setSource(
+        AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+    await _audioPlayer.resume();
   }
 
   void changeGroup(int index) {

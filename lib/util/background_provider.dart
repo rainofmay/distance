@@ -141,7 +141,7 @@ class BackgroundProvider extends ChangeNotifier {
     bool? isImg = prefs.getBool('isImage');
     if (isImg != null) {
       isImage = isImg;
-      print("isImage was loaded");
+      print("isImage was loaded : $isImage");
       notifyListeners();
     } else {
       print("isImage is null");

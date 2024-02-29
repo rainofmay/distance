@@ -22,7 +22,7 @@ import 'package:mobile/util/background_setting_provider.dart';
 
 Future<void> main() async {
   List<List<String>> groupedAudioURLs = [
-    ['assets/audios/defaultMain.mp3', ''],
+    ['/audios/defaultMain.mp3', ''],
     ['', ''],
   ];
   //플러터 프레임워크가 준비될 때까지 대기

@@ -55,13 +55,13 @@ class _MusicVolumeState extends State<MusicVolume> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
-                        icon: Icon(globalAudioPlayer.player.playing ? Icons.pause : Icons.play_arrow),
+                        icon: Icon(globalAudioPlayer.isPlaying ? Icons.pause : Icons.play_arrow),
                         iconSize: 14.0,
-                        onPressed: () async{
-                          if (globalAudioPlayer.player.playing) {
-                            await globalAudioPlayer.player.pause();
+                        onPressed: () {
+                          if (globalAudioPlayer.isPlaying) {
+                             globalAudioPlayer.musicPause();
                           } else {
-                            await globalAudioPlayer.player.play();
+                             globalAudioPlayer.musicPlay();
                           }
                         },
                       );

@@ -40,6 +40,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
           print(widget.selectedCategoryIndex);
           print(widget.selectedIndex);
+          print(widget.isImage);
         });
       },
       child: Container(

@@ -43,16 +43,19 @@ class _MusicSettingState extends State<MusicSetting> {
 
                       Consumer<GlobalAudioPlayer>(
                         builder: (context, globalAudioPlayer, child) {
-                          return Switch(value: globalAudioPlayer.player.playing, onChanged: (value) async{
-                            if (globalAudioPlayer.player.playing) {
-                              await globalAudioPlayer.player.pause();
-                            } else {
-                              await globalAudioPlayer.player.play();
-                            }
-                          });
+                          return Switch(
+                            value: globalAudioPlayer.isPlaying,
+                            onChanged: (value) {
+                              if (globalAudioPlayer.isPlaying) {
+                                globalAudioPlayer.musicPause();
+                              } else {
+                                globalAudioPlayer.musicPlay();
+                              }
+                            },
+                          );
                         },
                       ),
-                      //
+
                     ],
                   ),
                 ),
