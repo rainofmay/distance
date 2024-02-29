@@ -19,6 +19,7 @@ class TodoBottomSheet extends StatefulWidget {
 class _TodoBottomSheetState extends State<TodoBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   String _todoName = '';
+  final List _subTodoList = [];
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
   bool _isDone = false;
@@ -34,7 +35,8 @@ class _TodoBottomSheetState extends State<TodoBottomSheet> {
         todoName: _todoName,
         selectedDate: _selectedDate,
         timeStamp: _timeStamp,
-        isDone: _isDone);
+        isDone: _isDone,
+        subTodoList: _subTodoList);
 
     await firestore.collection('todo').doc(todo.id).set(todo.toJson());
   }

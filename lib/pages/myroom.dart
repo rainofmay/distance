@@ -11,10 +11,10 @@ import 'package:video_player/video_player.dart';
 import '../util/background_provider.dart';
 
 class MyRoom extends StatefulWidget {
-  const MyRoom({Key? key}) : super(key: key);
+  const MyRoom({super.key});
 
   @override
-  _MyRoomState createState() => _MyRoomState();
+  State<MyRoom> createState() => _MyRoomState();
 }
 
 class _MyRoomState extends State<MyRoom> {
