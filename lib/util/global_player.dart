@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -24,12 +26,12 @@ class GlobalAudioPlayer with ChangeNotifier {
   void _init() async {
     print("global_player.dart : _init() : audioPlayer was maked");
     try {
-      await _audioPlayer.setSource(
-          AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+          await _audioPlayer.setSourceUrl(
+          _audioURLs[_currentGroupIndex][_currentAudioIndex]);
       _audioPlayer.setReleaseMode(ReleaseMode.loop);
       print("audioPlayer was setted");
     } catch (e) {
-      print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
+    print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
       print("Error loading audio file: $e");
     }
 
@@ -80,7 +82,7 @@ class GlobalAudioPlayer with ChangeNotifier {
 
   void musicPlay() async {
     try {
-      await _audioPlayer.play(AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+      await _audioPlayer.play(UrlSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
     } catch (e) {
       print("Error $e");
     }
@@ -101,8 +103,8 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = 0;
     }
-    await _audioPlayer.setSource(
-        AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+    await _audioPlayer.setSourceUrl(
+        (_audioURLs[_currentGroupIndex][_currentAudioIndex]));
     await _audioPlayer.resume();
   }
 
@@ -112,8 +114,8 @@ class GlobalAudioPlayer with ChangeNotifier {
     } else {
       _currentAudioIndex = _audioURLs[_currentGroupIndex].length - 1;
     }
-    await _audioPlayer.setSource(
-        AssetSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+    await _audioPlayer.setSourceUrl(
+        (_audioURLs[_currentGroupIndex][_currentAudioIndex]));
     await _audioPlayer.resume();
   }
 

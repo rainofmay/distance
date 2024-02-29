@@ -22,7 +22,7 @@ import 'package:mobile/util/background_setting_provider.dart';
 
 Future<void> main() async {
   List<List<String>> groupedAudioURLs = [
-    ['/audios/defaultMain.mp3', ''],
+    ['https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/audio%2FdefalutMainMusic.mp3?alt=media&token=a761833c-9b4e-4a95-8934-0cd5537e53dc', ''],
     ['', ''],
   ];
   //플러터 프레임워크가 준비될 때까지 대기
