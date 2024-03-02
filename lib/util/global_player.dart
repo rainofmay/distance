@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -16,7 +14,9 @@ class GlobalAudioPlayer with ChangeNotifier {
     _currentAudioIndex = 0;
     _isPlaying = false; // 초기에는 재생 중이 아님
     _init();
+
   }
+
 
   AudioPlayer get player => _audioPlayer;
   int get currentGroupIndex =>_currentGroupIndex;
@@ -24,17 +24,7 @@ class GlobalAudioPlayer with ChangeNotifier {
   bool get isPlaying => _isPlaying;
 
   void _init() async {
-    print("global_player.dart : _init() : audioPlayer was maked");
-    try {
-          await _audioPlayer.setSourceUrl(
-          _audioURLs[_currentGroupIndex][_currentAudioIndex]);
-      _audioPlayer.setReleaseMode(ReleaseMode.loop);
-      print("audioPlayer was setted");
-    } catch (e) {
-    print('Error(Url Error) : ${_audioURLs[_currentGroupIndex][_currentAudioIndex]}');
-      print("Error loading audio file: $e");
-    }
-
+  print("@@@@@@global_player.dart : _init() : audioPlayer was maked@@@@@@");
     _audioPlayer.onPlayerStateChanged.listen((PlayerState state) {
       if (state == PlayerState.playing) {
         _isPlaying = true;
@@ -81,8 +71,11 @@ class GlobalAudioPlayer with ChangeNotifier {
 }*/
 
   void musicPlay() async {
+    String nowAudio = _audioURLs[_currentGroupIndex][_currentAudioIndex];
     try {
-      await _audioPlayer.play(UrlSource(_audioURLs[_currentGroupIndex][_currentAudioIndex]));
+      await _audioPlayer.play(AssetSource(nowAudio));
+      await _audioPlayer.setReleaseMode(ReleaseMode.loop);
+      print("Play(loop on)");
     } catch (e) {
       print("Error $e");
     }
