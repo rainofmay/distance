@@ -20,10 +20,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-  List<List<String>> groupedAudioURLs = [
-    ['audios/defaultMainMusic.mp3', ''],
-    ['', ''],
-  ];
+
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
@@ -35,11 +32,13 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
-        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer(groupedAudioURLs)),
+        ChangeNotifierProvider(create: (context) => BackgroundProvider()),
+        ChangeNotifierProvider(
+            create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
-        ChangeNotifierProvider(create: (context)=> BackgroundSettingProvider()),
+        ChangeNotifierProvider(
+            create: (context) => BackgroundSettingProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -68,4 +67,3 @@ class _MyAppState extends State<MainPage> {
     );
   }
 }
-

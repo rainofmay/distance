@@ -49,13 +49,23 @@ class _MyRoomState extends State<MyRoom> {
             )
             //영상으로 선택되어있을 땐 이걸 튼다.
           else if (!backgroundProvider.isImage && backgroundProvider.videoController.value.isInitialized)
-            SizedBox.expand(
-              child: FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  width: backgroundProvider.videoController.value.size.width,
-                  height: backgroundProvider.videoController.value.size.height,
-                  child: VideoPlayer(backgroundProvider.videoController),
+            GestureDetector(
+              onTap: () {
+                try{
+                backgroundProvider.videoController.play();
+                print("re-build후 재생");
+              }catch(e) {
+                print("error: $e");
+              }
+              },
+              child: SizedBox.expand(
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: backgroundProvider.videoController.value.size.width,
+                    height: backgroundProvider.videoController.value.size.height,
+                    child: VideoPlayer(backgroundProvider.videoController),
+                  ),
                 ),
               ),
             ),
