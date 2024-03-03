@@ -19,7 +19,7 @@ class TodoBottomSheet extends StatefulWidget {
 class _TodoBottomSheetState extends State<TodoBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   String _todoName = '';
-  final List _subTodoList = [];
+  final  List<dynamic> _subTodoList = [{"title": "하위항목 추가", "completed" : false}];
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
   bool _isDone = false;

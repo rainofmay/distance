@@ -5,7 +5,7 @@ class CustomTextField extends StatelessWidget {
   final String label;
   final FormFieldSetter? onSaved;
   final FormFieldValidator? validator;
-  final String hint;
+  final String? hint;
   final TextEditingController? controller;
   final Widget? widget;
   final int? maxiLines;
@@ -15,7 +15,7 @@ class CustomTextField extends StatelessWidget {
     required this.label,
     this.onSaved,
     this.validator,
-    required this.hint,
+    this.hint,
     this.controller,
     this.widget,
     this.maxiLines
