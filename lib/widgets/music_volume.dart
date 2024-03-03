@@ -1,11 +1,14 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 import '../util/global_player.dart';
 class MusicVolume extends StatefulWidget {
+
   final String kindOfMusic;
   final String assetimage;
-  const MusicVolume({super.key, required this.kindOfMusic, required this.assetimage});
+  final int playerIndex;
+  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.assetimage});
 
   @override
   State<MusicVolume> createState() => _MusicVolumeState();
@@ -13,12 +16,11 @@ class MusicVolume extends StatefulWidget {
 
 class _MusicVolumeState extends State<MusicVolume> {
   double _volume = 0.5;
-
-  void _adjustVolume(GlobalAudioPlayer gap, double value) {
+    void _adjustVolume(GlobalAudioPlayer gap, double value) {
     setState(() {
       _volume = value; // 상태를 업데이트합니다.
     });
-    gap.player.setVolume(value); // 오디오 플레이어의 볼륨을 설정합니다.
+    gap.player[widget.playerIndex].setVolume(value); // 오디오 플레이어의 볼륨을 설정합니다.
   }
 
   @override
@@ -55,27 +57,23 @@ class _MusicVolumeState extends State<MusicVolume> {
                         splashColor: Colors.transparent,
                         highlightColor: Colors.transparent,
                         hoverColor: Colors.transparent,
-                        icon: Icon(globalAudioPlayer.isPlaying ? Icons.pause : Icons.play_arrow),
+                        icon: Icon(globalAudioPlayer.isPlaying[widget.playerIndex] ? Icons.pause : Icons.play_arrow),
                         iconSize: 14.0,
                         onPressed: () {
-                          if (globalAudioPlayer.isPlaying) {
-                             globalAudioPlayer.musicPause();
+                          if (globalAudioPlayer.isPlaying[widget.playerIndex]) {
+                             globalAudioPlayer.musicPause(widget.playerIndex);
                           } else {
-                             globalAudioPlayer.musicPlay();
+                             globalAudioPlayer.musicPlay(widget.playerIndex);
                           }
                         },
                       );
                     },
                   ),
                   Expanded(
-                    child: Consumer<GlobalAudioPlayer>(
-                      builder: (context, globalAudioPlayer, child) {
-                        return Slider(
-                          value: _volume,
-                          onChanged: (volume) {
-                            _adjustVolume(globalAudioPlayer, volume);
-                          },
-                        );
+                    child: Slider(
+                      value: _volume,
+                      onChanged: (volume) {
+                        _adjustVolume(Provider.of<GlobalAudioPlayer>(context, listen: false), volume);
                       },
                     ),
                   ),

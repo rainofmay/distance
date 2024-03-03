@@ -18,15 +18,10 @@ import 'package:mobile/util/calendar.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
-import 'package:mobile/util/background_setting_provider.dart';
 
 Future<void> main() async {
-  List<List<String>> groupedAudioURLs = [
-    ['https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/audio%2FdefalutMainMusic.mp3?alt=media&token=a761833c-9b4e-4a95-8934-0cd5537e53dc', ''],
-    ['', ''],
-  ];
+
   //플러터 프레임워크가 준비될 때까지 대기
-  bool isRight = false;
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
   await Firebase.initializeApp(
@@ -37,11 +32,13 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer(groupedAudioURLs)),
-        ChangeNotifierProvider(create: (context)=> BackgroundProvider()),
+        ChangeNotifierProvider(create: (context) => BackgroundProvider()),
+        ChangeNotifierProvider(
+            create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
-        ChangeNotifierProvider(create: (context)=> BackgroundSettingProvider()),
+        ChangeNotifierProvider(
+            create: (context) => BackgroundSettingProvider()),
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -70,4 +67,3 @@ class _MyAppState extends State<MainPage> {
     );
   }
 }
-
