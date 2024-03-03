@@ -15,7 +15,7 @@ class TodoList extends StatefulWidget {
 
 class _TodoListState extends State<TodoList> {
   TextEditingController introduceController = TextEditingController();
-  List<Map<String, dynamic>> todoList = [];
+  // List<Map<String, dynamic>> todoList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +65,7 @@ class _TodoListState extends State<TodoList> {
                     todoName: todo.todoName,
                     selectedDate: todo.selectedDate,
                     isDone : todo.isDone,
-                    subTodoList: [],
+                    subTodoList: todo.subTodoList,
                   )),
             );
           },

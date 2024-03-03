@@ -6,7 +6,7 @@ class TodoModel {
   final DateTime selectedDate;
   final Timestamp timeStamp;
   final bool isDone;
-  final List subTodoList;
+  final  List<dynamic> subTodoList;
 
   TodoModel({
     required this.id,
