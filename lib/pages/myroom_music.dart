@@ -18,11 +18,6 @@ class _MusicSettingState extends State<MusicSetting> {
   @override
   void initState() {
     super.initState();
-
-    // main.dart에서 제공된 GlobalAudioPlayer 인스턴스 가져오기
-    GlobalAudioPlayer globalAudioPlayer =
-        Provider.of<GlobalAudioPlayer>(context, listen: false);
-
     // DUMMY_DATA 초기화
   }
 
