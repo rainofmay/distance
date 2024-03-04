@@ -35,39 +35,54 @@ class GlobalAudioPlayer with ChangeNotifier {
             playerIndex: 0,
             kindOfMusic: '메인 음악',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/defaultMainMusic.mp3'),
+            audioURL: 'audios/nature/defaultMainMusic.mp3'),
         MusicInfo(
             playerIndex: 1,
             kindOfMusic: '풀벌레 소리',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/bugSound.mp3'),
+            audioURL: 'audios/nature/bugSound.mp3'),
         MusicInfo(
             playerIndex: 2,
             kindOfMusic: '파도 소리',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/waveSound.mp3'),
+            audioURL: 'audios/nature/waveSound.mp3'),
         MusicInfo(
             playerIndex: 3,
             kindOfMusic: '바람 소리',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/windSound.mp3'),
+            audioURL: 'audios/nature/windSound.mp3'),
         MusicInfo(
             playerIndex: 4,
             kindOfMusic: '장작 소리',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/campingFireSound.mp3')
+            audioURL: 'audios/nature/campingFireSound.mp3')
       ],
       [
         MusicInfo(
             playerIndex: 0,
-            kindOfMusic: '메인 음악',
+            kindOfMusic: '카페 말하는 소리1',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/defaultMainMusic.mp3'),
+            audioURL: 'audios/cafe/cafePeopleSound.mp3'),
         MusicInfo(
-            playerIndex: 0,
-            kindOfMusic: '메인 음악',
+            playerIndex: 1,
+            kindOfMusic: '카페 말하는 소리2',
             assetImage: 'assets/images/raindrop.png',
-            audioURL: 'audios/defaultMainMusic.mp3'),
+            audioURL: 'audios/cafe/cafePeopleSound2.mp3'),
+        MusicInfo(
+            playerIndex: 2,
+            kindOfMusic: '키보드 소리1',
+            assetImage: 'assets/images/raindrop.png',
+            audioURL: 'audios/cafe/keyboardTypingSound.mp3'),
+        MusicInfo(
+            playerIndex: 3,
+            kindOfMusic: '키보드 소리2',
+            assetImage: 'assets/images/raindrop.png',
+            audioURL: 'audios/cafe/keyboardTypingSound2.mp3'),
+        MusicInfo(
+            playerIndex: 4,
+            kindOfMusic: '키보드 소리3',
+            assetImage: 'assets/images/raindrop.png',
+            audioURL: 'audios/cafe/keyboardTypingSound3.mp3'),
       ],
     ];
   }

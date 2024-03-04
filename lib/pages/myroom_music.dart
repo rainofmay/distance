@@ -78,39 +78,44 @@ class _MusicSettingState extends State<MusicSetting> {
                         children: [
                           //배열로 교체해야함
                           IconButton(
-                            onPressed: () {globalAudioPlayer.changeGroup(0);},
+                            onPressed: () {globalAudioPlayer.changeGroup(0);
+                              setState(() { });},
                             icon: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
                               child: Image(
-                                image: AssetImage('assets/images/musictest.png'),
-                                width: 70,
-                                height: 80,
+                                image: AssetImage('assets/images/natureimage2.jpeg'),
+                                width: 50,
+                                height: 50,
                               ),
                             ),
                           ),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(1);},
+                              onPressed: () {globalAudioPlayer.changeGroup(1);
+                              setState(() { });},
+                              icon: Image(
+                                image: AssetImage('assets/images/cafeImage.jpeg'),
+                                width: 50,
+                                height: 50,
+                              )),
+                          IconButton(
+                              onPressed: () {globalAudioPlayer.changeGroup(2);
+                              setState(() { });},
                               icon: Image(
                                 image: AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(2);},
+                              onPressed: () {globalAudioPlayer.changeGroup(3);
+                              setState(() {});},
                               icon: Image(
                                 image: AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(3);},
-                              icon: Image(
-                                image: AssetImage('assets/images/musictest.png'),
-                                width: 50,
-                                height: 50,
-                              )),
-                          IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(4);},
+                              onPressed: () {globalAudioPlayer.changeGroup(4);
+                              setState(() { });},
                               icon: Image(
                                 image: AssetImage('assets/images/musictest.png'),
                                 width: 50,

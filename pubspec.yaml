@@ -36,7 +36,8 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/audios/
+    - assets/audios/cafe/
+    - assets/audios/nature/
     - assets/videos/
 
 

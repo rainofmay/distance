@@ -22,6 +22,7 @@ class _MyRoomState extends State<MyRoom> {
   @override
   void initState() {
     super.initState();
+
   }
 
 
@@ -35,6 +36,10 @@ class _MyRoomState extends State<MyRoom> {
     final backgroundProvider = Provider.of<BackgroundProvider>(context);
     final backgroundSettingProvider =
     Provider.of<BackgroundSettingProvider>(context);
+    if(backgroundProvider.isImage == false) {
+      print("비디오 replay");
+      backgroundProvider.videoController.play();
+    }
     return Scaffold(
       body: Stack(
         children: [
@@ -49,23 +54,13 @@ class _MyRoomState extends State<MyRoom> {
             )
             //영상으로 선택되어있을 땐 이걸 튼다.
           else if (!backgroundProvider.isImage && backgroundProvider.videoController.value.isInitialized)
-            GestureDetector(
-              onTap: () {
-                try{
-                backgroundProvider.videoController.play();
-                print("re-build후 재생");
-              }catch(e) {
-                print("error: $e");
-              }
-              },
-              child: SizedBox.expand(
-                child: FittedBox(
-                  fit: BoxFit.cover,
-                  child: SizedBox(
-                    width: backgroundProvider.videoController.value.size.width,
-                    height: backgroundProvider.videoController.value.size.height,
-                    child: VideoPlayer(backgroundProvider.videoController),
-                  ),
+            SizedBox.expand(
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width: backgroundProvider.videoController.value.size.width,
+                  height: backgroundProvider.videoController.value.size.height,
+                  child: VideoPlayer(backgroundProvider.videoController),
                 ),
               ),
             ),

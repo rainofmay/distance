@@ -73,7 +73,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
