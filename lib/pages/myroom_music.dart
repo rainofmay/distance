@@ -3,7 +3,6 @@ import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
 import 'package:provider/provider.dart';
 
-import '../model/music_info.dart';
 
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
@@ -101,7 +100,7 @@ class _MusicSettingState extends State<MusicSetting> {
                               onPressed: () {globalAudioPlayer.changeGroup(2);
                               setState(() { });},
                               icon: Image(
-                                image: AssetImage('assets/images/musictest.png'),
+                                image: AssetImage('assets/images/classicImage.jpeg'),
                                 width: 50,
                                 height: 50,
                               )),

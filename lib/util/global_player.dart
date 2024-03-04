@@ -4,28 +4,16 @@ import 'package:flutter/material.dart';
 import '../model/music_info.dart';
 
 class GlobalAudioPlayer with ChangeNotifier {
-  List<List<String>> groupedAudioURLs = [
-    [
-      'audios/defaultMainMusic.mp3',
-      'audios/bugSound.mp3',
-      'audios/waveSound.mp3',
-      'audios/windSound.mp3',
-      'audios/campingFireSound.mp3'
-    ],
-    ['', ''],
-  ];
+
   List<AudioPlayer> audioPlayerList = List.generate(5, (_) => AudioPlayer());
   List<bool> isPlayingList = List.generate(5, (_) => false);
   bool _isAnyPlaying = false;
-
-  late List<List<String>> _audioURLs; // 이중 배열로 음원 그룹화
   late int _currentGroupIndex;
   late int _currentAudioIndex;
 
   late List<List<MusicInfo>> DUMMY_DATA;
 
   GlobalAudioPlayer() {
-    _audioURLs = groupedAudioURLs;
     _currentGroupIndex = 0;
     _currentAudioIndex = 0;
     _init();
@@ -84,6 +72,12 @@ class GlobalAudioPlayer with ChangeNotifier {
             assetImage: 'assets/images/raindrop.png',
             audioURL: 'audios/cafe/keyboardTypingSound3.mp3'),
       ],
+    [
+    MusicInfo(
+    playerIndex: 0,
+    kindOfMusic: '클래식1',
+    assetImage: 'assets/images/classicImage.jpeg',
+    audioURL: 'audios/nature/defaultMainMusic.mp3'),]
     ];
   }
 
@@ -158,7 +152,7 @@ class GlobalAudioPlayer with ChangeNotifier {
   }
 
   void changeGroup(int index) {
-    if (index >= 0 && index < _audioURLs.length) {
+    if (index >= 0 && index < DUMMY_DATA.length) {
       _currentGroupIndex = index;
       _currentAudioIndex = 0; // 그룹이 변경되면 첫 번째 음원으로 돌아감
       //그룹별 데이터의 음원 이름, 사진, 음원 파일위치 전부 플레이어에다가 집어넣어줘야함.
