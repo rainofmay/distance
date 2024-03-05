@@ -65,10 +65,9 @@ class _TodoCardState extends State<TodoCard> {
   }
 
   //하위 to-do 완료여부 업데이트
-  _updateSubToggle (newValue) async {
+  _updateSubToggle (index, newValue) async {
     setState(() {
-      _subIsDone = newValue;
-      // _subTodoList[index]['subIsDone'] = _subIsDone;
+      _subTodoList[index]["subIsDone"] = newValue;
     });
     await FirebaseFirestore.instance
         .collection('todo')
@@ -187,11 +186,13 @@ class _TodoCardState extends State<TodoCard> {
                           child: Checkbox(
                               splashRadius: 0,
                               hoverColor: Colors.transparent,
-                              value: _subIsDone,
-                              onChanged: _updateSubToggle,
+                              value: _subTodoList[index]["subIsDone"],
+                              onChanged: (value) => {
+                                _updateSubToggle(index, value)
+                                },
                               shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.circular(50), // 원하는 둥근 정도 조절
+                                    BorderRadius.circular(50),
                                 // side: BorderSide(color: Colors.red), // 선택 사항: 체크박스 테두리 설정
                               ),
                             ),
