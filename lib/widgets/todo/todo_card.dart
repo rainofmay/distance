@@ -65,7 +65,7 @@ class _TodoCardState extends State<TodoCard> {
   }
 
   //하위 to-do 완료여부 업데이트
-  _updateSubToggle (index, newValue) async {
+  _updateSubToggle(index, newValue) async {
     setState(() {
       _subTodoList[index]["subIsDone"] = newValue;
     });
@@ -182,21 +182,20 @@ class _TodoCardState extends State<TodoCard> {
                               size: 14,
                             ))
                         : Transform.scale(
-                          scale: 0.8,
-                          child: Checkbox(
+                            scale: 0.8,
+                            child: Checkbox(
                               splashRadius: 0,
                               hoverColor: Colors.transparent,
                               value: _subTodoList[index]["subIsDone"],
-                              onChanged: (value) => {
-                                _updateSubToggle(index, value)
-                                },
+                              onChanged: _isEditing && index == _editingIndex
+                                  ? null
+                                  : (value) => {_updateSubToggle(index, value)},
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(50),
+                                borderRadius: BorderRadius.circular(50),
                                 // side: BorderSide(color: Colors.red), // 선택 사항: 체크박스 테두리 설정
                               ),
                             ),
-                        ),
+                          ),
                     title: _isEditing &&
                             index == _editingIndex // 수정 모드 활성화, 인덱스 일치할 때만
                         ? TextFormField(
@@ -219,7 +218,12 @@ class _TodoCardState extends State<TodoCard> {
                                   borderSide: BorderSide.none),
                             ),
                           )
-                        : Text(_subTodoList[index]["title"]),
+                        : Text(_subTodoList[index]["title"],
+                            style: _subTodoList[index]["subIsDone"]
+                                ? TextStyle(
+                                    decoration: TextDecoration.lineThrough,
+                                    color: Colors.grey)
+                                : TextStyle(decoration: TextDecoration.none)),
                   );
                 },
               ),
