@@ -32,9 +32,9 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(
             create: (context) => GlobalAudioPlayer()),
+        ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => Store1()),
         ChangeNotifierProvider(

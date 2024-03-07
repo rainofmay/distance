@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../util/background_setting_provider.dart';
 
 class FloatingTodo extends StatefulWidget {
-  const FloatingTodo({Key? key}) : super(key: key);
+  const FloatingTodo({super.key});
 
   @override
   State<FloatingTodo> createState() => _FloatingTodoState();

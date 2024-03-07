@@ -5,6 +5,8 @@ void main() {
 }
 
 class GroupStudy extends StatelessWidget {
+  const GroupStudy({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,6 +26,8 @@ class GroupStudyScreen extends StatelessWidget {
     // Add more group study names as needed
   ];
 
+  GroupStudyScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,29 +35,42 @@ class GroupStudyScreen extends StatelessWidget {
         title: Text('그룹스터디'),
         centerTitle: true,
       ),
-      body: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 10.0,
-          mainAxisSpacing: 10.0,
-        ),
-        itemCount: groupStudyNames.length + 1, // +1 for "그룹 생성하기" 버튼
-        itemBuilder: (BuildContext context, int index) {
-          if (index == groupStudyNames.length) {
-            return AddGroupButton(onPressed: () {
-              _showCreateGroupDialog(context);
-            });
-          } else {
-            return GroupStudyCard(
-              name: groupStudyNames[index],
-              onPressed: () {
-                // 실행될 함수 호출
-                print('Pressed ${groupStudyNames[index]}');
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '현재 그룹 수: ${groupStudyNames.length}',
+              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+            ),
+          ),
+          Expanded(
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 10.0,
+                mainAxisSpacing: 10.0,
+              ),
+              itemCount: groupStudyNames.length + 1, // +1 for "그룹 생성하기" 버튼
+              itemBuilder: (BuildContext context, int index) {
+                if (index == groupStudyNames.length) {
+                  return AddGroupButton(onPressed: () {
+                    _showCreateGroupDialog(context);
+                  });
+                } else {
+                  return GroupStudyCard(
+                    name: groupStudyNames[index],
+                    onPressed: () {
+                      // 실행될 함수 호출
+                      print('Pressed ${groupStudyNames[index]}');
+                    },
+                    imageAsset: 'assets/images/backgroundtest1.jpeg',
+                  );
+                }
               },
-              imageAsset: 'assets/images/backgroundtest1.jpeg',
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -130,7 +147,7 @@ class GroupStudyCard extends StatelessWidget {
   final VoidCallback onPressed;
   final String imageAsset;
 
-  GroupStudyCard({required this.name, required this.onPressed, required this.imageAsset});
+  GroupStudyCard({super.key, required this.name, required this.onPressed, required this.imageAsset});
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +178,7 @@ class GroupStudyCard extends StatelessWidget {
 class AddGroupButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  AddGroupButton({required this.onPressed});
+  AddGroupButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

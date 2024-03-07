@@ -151,7 +151,7 @@ class _MusicSettingState extends State<MusicSetting> {
                                 return MusicVolume(
                                   playerIndex: musicInfo.playerIndex,
                                   kindOfMusic: musicInfo.kindOfMusic,
-                                  assetimage: musicInfo.assetImage,
+                                  assetImage: musicInfo.assetImage,
                                 );
                               }).toList(),
                             );

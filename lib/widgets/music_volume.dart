@@ -6,9 +6,9 @@ import '../util/global_player.dart';
 class MusicVolume extends StatefulWidget {
 
   final String kindOfMusic;
-  final String assetimage;
+  final String assetImage;
   final int playerIndex;
-  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.assetimage});
+  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.assetImage});
 
   @override
   State<MusicVolume> createState() => _MusicVolumeState();
@@ -42,7 +42,7 @@ class _MusicVolumeState extends State<MusicVolume> {
             children: [
               Row(
                 children: [
-                  Image(image: AssetImage(widget.assetimage), width: 13, height: 13),
+                  Image(image: AssetImage(widget.assetImage), width: 13, height: 13),
                   SizedBox(width: 10),
                   Text(widget.kindOfMusic, style: TextStyle(fontSize: 13)),
                 ],
@@ -61,9 +61,23 @@ class _MusicVolumeState extends State<MusicVolume> {
                         iconSize: 14.0,
                         onPressed: () {
                           if (globalAudioPlayer.isPlaying[widget.playerIndex]) {
-                             globalAudioPlayer.musicPause(widget.playerIndex);
+                              globalAudioPlayer.player[widget.playerIndex].pause();
+                              print("pause");
+
+                            //musicPause(widget.playerIndex);
                           } else {
-                             globalAudioPlayer.musicPlay(widget.playerIndex);
+                            if(globalAudioPlayer.player[widget.playerIndex].state == PlayerState.paused){
+                              globalAudioPlayer.player[widget.playerIndex].resume();
+                              print("resume");
+                              print("정보: ${globalAudioPlayer.player[widget.playerIndex]}");
+
+                              //globalAudioPlayer.resume();
+                            }else {
+                              globalAudioPlayer.musicPlay(widget.playerIndex);
+                              print("play");
+                              //globalAudioPlayer.musicPlay(index);
+                            }
+
                           }
                         },
                       );
