@@ -58,13 +58,13 @@ class _CustomIconButtonState extends State<CustomIconButton> {
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black,
-                width: 2.0,
+                width: 1.0,
               ),
             ),
             child: Image(
               image: AssetImage(widget.imageUrl),
-              width: 150,
-              height: 290,
+              width: 125,
+              height: 165,
               fit: BoxFit.cover,
             ),
           ),
