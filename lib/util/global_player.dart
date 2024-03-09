@@ -112,26 +112,6 @@ class GlobalAudioPlayer with ChangeNotifier {
 
 
   // AudioManager의 MethodChannel 정의
-  static const MethodChannel _audioManagerChannel = MethodChannel('audio_manager');
-
-  // 오디오 포커스 요청 메서드
-  Future<void> _requestAudioFocus() async {
-    try {
-      await _audioManagerChannel.invokeMethod('requestAudioFocus');
-    } on PlatformException catch (e) {
-      print("Failed to request audio focus: '${e.message}'.");
-    }
-  }
-
-  // 오디오 포커스 포기 메서드
-  Future<void> _abandonAudioFocus() async {
-    try {
-      await _audioManagerChannel.invokeMethod('abandonAudioFocus');
-    } on PlatformException catch (e) {
-      print("Failed to abandon audio focus: '${e.message}'.");
-    }
-  }
-
 
   // 모든 player가 stop 되었을 때의 로직
   bool areAllPlayersStopped() {
@@ -165,7 +145,6 @@ class GlobalAudioPlayer with ChangeNotifier {
     List<String> nowAudioGroup = DUMMY_DATA[_currentGroupIndex].map((musicInfo) => musicInfo.audioURL).toList();
     try {
       // 오디오 포커스 요청
-      await _requestAudioFocus();
 
       await player[index].play(AssetSource(nowAudioGroup[index]));
       await player[index].onPlayerStateChanged.listen((state) {
@@ -212,7 +191,6 @@ class GlobalAudioPlayer with ChangeNotifier {
   @override
   void dispose() {
     //추가 수정 필요
-    _abandonAudioFocus();
 
     for(int i=0; i<DUMMY_DATA.length; i++) {
       player[i].dispose();
