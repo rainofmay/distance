@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(GroupStudy());
-}
-
 class GroupStudy extends StatelessWidget {
   const GroupStudy({super.key});
 
@@ -21,8 +17,8 @@ class GroupStudy extends StatelessWidget {
 
 class GroupStudyScreen extends StatelessWidget {
   final List<String> groupStudyNames = [
-    'Group Study 1',
-    'Group Study 2',
+    'Coding',
+    '수능',
     // Add more group study names as needed
   ];
 
@@ -75,6 +71,7 @@ class GroupStudyScreen extends StatelessWidget {
     );
   }
 
+  //그룹 생성 Dialog
   Future<void> _showCreateGroupDialog(BuildContext context) async {
     TextEditingController nameController = TextEditingController();
     TextEditingController imageUrlController = TextEditingController();
@@ -136,6 +133,7 @@ class GroupStudyScreen extends StatelessWidget {
     );
   }
 
+  //그룹 생성 함수
   void _createGroup(String name, String imageUrl, int maxMembers, String studyTime) {
     // 그룹 생성 로직을 여기에 구현
     print('Creating group with: $name, $imageUrl, $maxMembers, $studyTime');
@@ -166,7 +164,7 @@ class GroupStudyCard extends StatelessWidget {
             Image.asset(
               imageAsset,
               fit: BoxFit.cover,
-              height: 199.0, // Adjust height as needed
+              height: 150.0, // Adjust height as needed
             ),
           ],
         ),

@@ -18,7 +18,6 @@ class MyRoom extends StatefulWidget {
 }
 
 class _MyRoomState extends State<MyRoom> {
-  final videoUrl = Uri.parse('https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4');
   @override
   void initState() {
     super.initState();

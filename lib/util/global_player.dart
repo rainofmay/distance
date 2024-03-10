@@ -79,7 +79,6 @@ class GlobalAudioPlayer with ChangeNotifier {
     _currentGroupIndex = 0;
     _currentAudioIndex = 0;
     _init();
-    musicStopAll();
   }
 
   List<AudioPlayer> get player => audioPlayerList;

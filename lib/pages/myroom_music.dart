@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
 import 'package:provider/provider.dart';
+import '../util/background_provider.dart';
 
 
 class MusicSetting extends StatefulWidget {
@@ -22,6 +23,10 @@ class _MusicSettingState extends State<MusicSetting> {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = Provider.of<BackgroundProvider>(context);
+    if(backgroundProvider.isImage == false) {
+      backgroundProvider.videoController.pause();
+    }
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -180,6 +185,9 @@ class _MusicSettingState extends State<MusicSetting> {
                             ),
                             onPressed: () {
                               Navigator.of(context).pop(); // 닫히는 버튼
+                              if(backgroundProvider.isImage == false) {
+                                backgroundProvider.videoController.play();
+                              }
                             },
                           ),
                         ],
