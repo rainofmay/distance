@@ -4,75 +4,29 @@ void main() {
   runApp(GroupStudy());
 }
 
-class GroupStudy extends StatelessWidget {
-  const GroupStudy({super.key});
+class GroupStudy extends StatefulWidget {
+  GroupStudy({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Classroom App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: GroupStudyScreen(),
-    );
-  }
+  State<GroupStudy> createState() => _GroupStudyState();
 }
 
-class GroupStudyScreen extends StatelessWidget {
+class _GroupStudyState extends State<GroupStudy>
+    with SingleTickerProviderStateMixin {
   final List<String> groupStudyNames = [
     'Group Study 1',
     'Group Study 2',
     // Add more group study names as needed
   ];
-
-  GroupStudyScreen({super.key});
+  late TabController _tabController;
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('그룹스터디'),
-        centerTitle: true,
-      ),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              '현재 그룹 수: ${groupStudyNames.length}',
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-            ),
-          ),
-          Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 10.0,
-                mainAxisSpacing: 10.0,
-              ),
-              itemCount: groupStudyNames.length + 1, // +1 for "그룹 생성하기" 버튼
-              itemBuilder: (BuildContext context, int index) {
-                if (index == groupStudyNames.length) {
-                  return AddGroupButton(onPressed: () {
-                    _showCreateGroupDialog(context);
-                  });
-                } else {
-                  return GroupStudyCard(
-                    name: groupStudyNames[index],
-                    onPressed: () {
-                      // 실행될 함수 호출
-                      print('Pressed ${groupStudyNames[index]}');
-                    },
-                    imageAsset: 'assets/images/backgroundtest1.jpeg',
-                  );
-                }
-              },
-            ),
-          ),
-        ],
-      ),
+  void initState() {
+    _tabController = TabController(
+      length: 2,
+      vsync: this, //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
     );
+    super.initState();
   }
 
   Future<void> _showCreateGroupDialog(BuildContext context) async {
@@ -136,9 +90,112 @@ class GroupStudyScreen extends StatelessWidget {
     );
   }
 
-  void _createGroup(String name, String imageUrl, int maxMembers, String studyTime) {
+  void _createGroup(
+      String name, String imageUrl, int maxMembers, String studyTime) {
     // 그룹 생성 로직을 여기에 구현
     print('Creating group with: $name, $imageUrl, $maxMembers, $studyTime');
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {},
+          icon: Icon(Icons.menu),
+        ),
+        title: Text('그룹스터디'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: Icon(Icons.search),
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TabBar(
+              tabs: [
+                Tab(
+                  height: 80,
+                  child: Text(
+                    '전체 보기',
+                  ),
+                ),
+                Tab(
+                  height: 80,
+                  child: Text(
+                    '참여 중',
+                  ),
+                ),
+              ],
+              labelColor: Colors.black,
+              unselectedLabelColor: Colors.grey,
+              overlayColor:  MaterialStatePropertyAll(
+                Colors.transparent,
+              ),
+              splashBorderRadius: BorderRadius.circular(0),
+              indicatorColor: Colors.black,
+              indicatorWeight: 1,
+              controller: _tabController,
+              // isScrollable: true,
+              onTap: (int i) {
+                //tab 전환시 동작할 함수
+              },
+              // '현재 그룹 수: ${groupStudyNames.length}',
+            ),
+          ),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                Container(
+                  color: Colors.yellow[200],
+                  alignment: Alignment.center,
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10.0,
+                      mainAxisSpacing: 10.0,
+                    ),
+                    itemCount: groupStudyNames.length + 1, // +1 for "그룹 생성하기" 버튼
+                    itemBuilder: (BuildContext context, int index) {
+                      if (index == groupStudyNames.length) {
+                        return AddGroupButton(onPressed: () {
+                          _showCreateGroupDialog(context);
+                        });
+                      } else {
+                        return GroupStudyCard(
+                          name: groupStudyNames[index],
+                          onPressed: () {
+                            // 실행될 함수 호출
+                            print('Pressed ${groupStudyNames[index]}');
+                          },
+                          imageAsset: 'assets/images/backgroundtest1.jpeg',
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Container(
+                  color: Colors.green[200],
+                  alignment: Alignment.center,
+                  child: Text(
+                    'Tab2 View',
+                    style: TextStyle(
+                      fontSize: 30,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 
@@ -147,7 +204,11 @@ class GroupStudyCard extends StatelessWidget {
   final VoidCallback onPressed;
   final String imageAsset;
 
-  GroupStudyCard({super.key, required this.name, required this.onPressed, required this.imageAsset});
+  GroupStudyCard(
+      {super.key,
+      required this.name,
+      required this.onPressed,
+      required this.imageAsset});
 
   @override
   Widget build(BuildContext context) {
