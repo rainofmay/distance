@@ -1,4 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 
 void main() {
   runApp(GroupStudy());
@@ -13,6 +16,15 @@ class GroupStudy extends StatefulWidget {
 
 class _GroupStudyState extends State<GroupStudy>
     with SingleTickerProviderStateMixin {
+  final picker = ImagePicker();
+  DateTime selectedDate = DateTime.now();
+  DateTime nowTime = DateTime.now();
+  //현재 값으로 설정한 것이지, 이게 최종 값은 아니다. 최종 값으로는 설정한 날로 해줄 것.
+  File? image;
+  List<XFile?> multiImage = [];
+  List<XFile?> images = [];
+  late int DDay;
+  String DDayString = "";
   final List<String> groupStudyNames = [
     'Group Study 1',
     'Group Study 2',
@@ -24,76 +36,164 @@ class _GroupStudyState extends State<GroupStudy>
   void initState() {
     _tabController = TabController(
       length: 2,
-      vsync: this, //vsync에 this 형태로 전달해야 애니메이션이 정상 처리됨
+      vsync: this,
+
     );
+
+
     super.initState();
   }
 
   Future<void> _showCreateGroupDialog(BuildContext context) async {
     TextEditingController nameController = TextEditingController();
-    TextEditingController imageUrlController = TextEditingController();
     TextEditingController maxMembersController = TextEditingController();
     TextEditingController studyTimeController = TextEditingController();
 
     return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("그룹 생성"),
-          content: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  controller: nameController,
-                  decoration: InputDecoration(labelText: "그룹 이름"),
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return AlertDialog(
+              title: Text("그룹 생성"),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextFormField(
+                      controller: nameController,
+                      decoration: InputDecoration(labelText: "그룹 이름"),
+                    ),
+                    SizedBox(
+                      height: 23.0, // 높이를 조절하여 간격을 만듭니다.
+                    ),
+                    Text("디데이 설정",style : TextStyle(fontSize: 18,)),
+                    SizedBox(
+                      height: 20.0, // 높이를 조절하여 간격을 만듭니다.
+                    ),
+                    SizedBox(
+                        width: 250,
+                        height: 100,
+                        child: CupertinoDatePicker(
+                            mode: CupertinoDatePickerMode.date,
+                            onDateTimeChanged: (DateTime date) {
+                              setState(() {
+                                selectedDate = date;
+                                DDay = DateTime(
+                                  nowTime.year, // DateTime 안에서 year, month, day 값을 받아온 뒤
+                                  nowTime.month,
+                                  nowTime.day,
+                                ).difference(selectedDate).inDays + 1;
+                                if(DDay >= 0) {
+                                  DDayString = '+ $DDay';
+                                }else{
+                                  DDayString = '$DDay';
+                                }
+                              });
+                              ;
+                            })),
+                    SizedBox(
+                      height: 16.0, // 높이를 조절하여 간격을 만듭니다.
+                    ),
+                    Text('D-DAY: ${selectedDate.year}.${selectedDate.month}.${selectedDate.day}', style: TextStyle(color:Colors.red),),
+                    SizedBox(
+                      height: 16.0, // 높이를 조절하여 간격을 만듭니다.
+                    ),
+                    Text('D$DDayString'),
+                    // 사진 image_picker로 수정
+                    Text("스터디룸 사진 설정",style: TextStyle(fontSize: 20),),
+
+                    image == null
+                        ? Container(
+                            margin: EdgeInsets.all(10),
+                            padding: EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 0.5,
+                                  blurRadius: 5,
+                                ),
+                              ],
+                            ),
+                            child: IconButton(
+                              onPressed: () async {
+                                final pickedFile = await picker.pickImage(
+                                    source: ImageSource.gallery);
+                                setState(() {
+                                  if (pickedFile != null) {
+                                    image = File(pickedFile.path);
+                                    print("image File Path : $image");
+                                  }
+                                });
+                              },
+                              icon: Icon(
+                                Icons.add_photo_alternate_outlined,
+                                size: 30,
+                                color: Colors.black,
+                              ),
+                            ),
+                          )
+                        : Container(
+                            width: 200,
+                            height: 300,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              image: DecorationImage(
+                                fit: BoxFit.cover,
+                                image: FileImage(File(image!.path)),
+                              ),
+                            ),
+                          ),
+                    TextFormField(
+                      controller: maxMembersController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(labelText: "최대 인원 수"),
+                    ),
+                    // 주요 공부시간대 설정
+                    TextFormField(
+                      controller: studyTimeController,
+                      decoration: InputDecoration(labelText: "주요 공부 시간"),
+                    ),
+                    // 추가로 뭘 더 들어가야 할지 설정
+                  ],
                 ),
-                TextFormField(
-                  controller: imageUrlController,
-                  decoration: InputDecoration(labelText: "사진 URL"),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    setState(() {
+                      image = null;
+                    });
+                  },
+                  child: Text("취소"),
                 ),
-                TextFormField(
-                  controller: maxMembersController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(labelText: "최대 인원 수"),
-                ),
-                TextFormField(
-                  controller: studyTimeController,
-                  decoration: InputDecoration(labelText: "주요 공부 시간"),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    // CreateGroup 함수 호출
+                    _createGroup(
+                      nameController.text,
+                      int.tryParse(maxMembersController.text) ?? 0,
+                      studyTimeController.text,
+                    );
+                  },
+                  child: Text("생성"),
                 ),
               ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("취소"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                // CreateGroup 함수 호출
-                _createGroup(
-                  nameController.text,
-                  imageUrlController.text,
-                  int.tryParse(maxMembersController.text) ?? 0,
-                  studyTimeController.text,
-                );
-              },
-              child: Text("생성"),
-            ),
-          ],
+            );
+          },
         );
       },
     );
   }
 
-  void _createGroup(
-      String name, String imageUrl, int maxMembers, String studyTime) {
+  void _createGroup(String name, int maxMembers, String studyTime) {
     // 그룹 생성 로직을 여기에 구현
-    print('Creating group with: $name, $imageUrl, $maxMembers, $studyTime');
+    print('Creating group with: $name, $maxMembers, $studyTime');
   }
 
   @override
@@ -134,18 +234,13 @@ class _GroupStudyState extends State<GroupStudy>
               ],
               labelColor: Colors.black,
               unselectedLabelColor: Colors.grey,
-              overlayColor:  MaterialStatePropertyAll(
+              overlayColor: MaterialStateProperty.all(
                 Colors.transparent,
               ),
               splashBorderRadius: BorderRadius.circular(0),
               indicatorColor: Colors.black,
               indicatorWeight: 1,
               controller: _tabController,
-              // isScrollable: true,
-              onTap: (int i) {
-                //tab 전환시 동작할 함수
-              },
-              // '현재 그룹 수: ${groupStudyNames.length}',
             ),
           ),
           Expanded(
@@ -161,7 +256,8 @@ class _GroupStudyState extends State<GroupStudy>
                       crossAxisSpacing: 10.0,
                       mainAxisSpacing: 10.0,
                     ),
-                    itemCount: groupStudyNames.length + 1, // +1 for "그룹 생성하기" 버튼
+                    itemCount: groupStudyNames.length + 1,
+                    // +1 for "그룹 생성하기" 버튼
                     itemBuilder: (BuildContext context, int index) {
                       if (index == groupStudyNames.length) {
                         return AddGroupButton(onPressed: () {
@@ -202,13 +298,16 @@ class _GroupStudyState extends State<GroupStudy>
 class GroupStudyCard extends StatelessWidget {
   final String name;
   final VoidCallback onPressed;
-  final String imageAsset;
+  final File? image;
+  final imageAsset;
 
-  GroupStudyCard(
-      {super.key,
-      required this.name,
-      required this.onPressed,
-      required this.imageAsset});
+  GroupStudyCard({
+    Key? key,
+    required this.name,
+    required this.onPressed,
+    this.image,
+    this.imageAsset,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -239,7 +338,7 @@ class GroupStudyCard extends StatelessWidget {
 class AddGroupButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  AddGroupButton({super.key, required this.onPressed});
+  AddGroupButton({Key? key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {

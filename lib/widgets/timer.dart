@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 void main() => runApp(TimerApp());
 
 class TimerApp extends StatelessWidget {
+  const TimerApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
