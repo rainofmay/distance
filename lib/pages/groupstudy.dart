@@ -220,13 +220,13 @@ class _GroupStudyState extends State<GroupStudy>
             child: TabBar(
               tabs: [
                 Tab(
-                  height: 80,
+                  height: 40,
                   child: Text(
                     '전체 보기',
                   ),
                 ),
                 Tab(
-                  height: 80,
+                  height: 40,
                   child: Text(
                     '참여 중',
                   ),
@@ -240,7 +240,9 @@ class _GroupStudyState extends State<GroupStudy>
               splashBorderRadius: BorderRadius.circular(0),
               indicatorColor: Colors.black,
               indicatorWeight: 1,
+              indicatorSize: TabBarIndicatorSize.label,
               controller: _tabController,
+              dividerColor: Colors.transparent,
             ),
           ),
           Expanded(
