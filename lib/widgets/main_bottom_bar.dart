@@ -16,8 +16,8 @@ class _MainBottomNavagationBarState extends State<MainBottomNavagationBar> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-        currentIndex:context.watch<Store1>().bottomIndex,
-        onTap: context.read<Store1>().setBottomIndex,
+        currentIndex:context.watch<BottomIndex>().bottomIndex,
+        onTap: context.read<BottomIndex>().setBottomIndex,
         items: [
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.house_fill), label: '내 방'),

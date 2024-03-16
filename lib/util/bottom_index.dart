@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class Store1 extends ChangeNotifier {
+class BottomIndex extends ChangeNotifier {
   int bottomIndex = 0;
 
   setBottomIndex(int index) {

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:mobile/pages/groupstudy_screen/classroom.dart';
 void main() {
   runApp(GroupStudy());
 }
@@ -37,10 +37,7 @@ class _GroupStudyState extends State<GroupStudy>
     _tabController = TabController(
       length: 2,
       vsync: this,
-
     );
-
-
     super.initState();
   }
 
@@ -270,6 +267,7 @@ class _GroupStudyState extends State<GroupStudy>
                           name: groupStudyNames[index],
                           onPressed: () {
                             // 실행될 함수 호출
+                            Navigator.of(context).push(MaterialPageRoute(builder: (context) => const ClassRoom()));
                             print('Pressed ${groupStudyNames[index]}');
                           },
                           imageAsset: 'assets/images/backgroundtest1.jpeg',

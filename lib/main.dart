@@ -36,7 +36,7 @@ Future<void> main() async {
             create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
-        ChangeNotifierProvider(create: (context) => Store1()),
+        ChangeNotifierProvider(create: (context) => BottomIndex()),
         ChangeNotifierProvider(
             create: (context) => BackgroundSettingProvider()),
       ],
@@ -62,7 +62,7 @@ class _MyAppState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
-      body: screens[context.watch<Store1>().bottomIndex],
+      body: screens[context.watch<BottomIndex>().bottomIndex],
       bottomNavigationBar: MainBottomNavagationBar(),
     );
   }
