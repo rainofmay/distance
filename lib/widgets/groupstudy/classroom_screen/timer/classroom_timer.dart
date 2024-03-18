@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+
+import 'package:mobile/widgets/groupstudy/classroom_screen/timer/stopwatch.dart';
+
 class ClassRoomTimer extends StatefulWidget {
   const ClassRoomTimer({super.key});
 
@@ -58,9 +61,7 @@ class _ClassRoomTimerState extends State<ClassRoomTimer>
             child: TabBarView(
               controller: _timerTabController,
               children: [
-                Container(
-                  child: Text('타이머'),
-                ),
+                CountUpTimer(),
                 Container(
                   child: Text('내 기록'),
                 ),

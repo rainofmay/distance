@@ -4,7 +4,7 @@ import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_class.dart';
 import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_home.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_timer.dart';
+import 'package:mobile/widgets/groupstudy/classroom_screen/timer/classroom_timer.dart';
 
 class ClassRoom extends StatefulWidget {
   const ClassRoom({super.key});
