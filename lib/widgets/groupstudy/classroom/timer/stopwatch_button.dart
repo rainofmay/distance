@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class StopWatchButton extends StatefulWidget {
-  final onPressedFunction ;
+  final VoidCallback onPressedFunction ;
   final String buttonName ;
   const StopWatchButton({super.key, required this.onPressedFunction, required this.buttonName});
 

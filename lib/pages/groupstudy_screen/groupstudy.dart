@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/pages/groupstudy_screen/classroom.dart';
+import 'package:mobile/widgets/groupstudy/main/group_study_card.dart';
+import 'package:mobile/widgets/groupstudy/main/add_group_button.dart';
+
 void main() {
   runApp(GroupStudy());
 }
@@ -295,82 +298,4 @@ class _GroupStudyState extends State<GroupStudy>
   }
 }
 
-class GroupStudyCard extends StatelessWidget {
-  final String name;
-  final VoidCallback onPressed;
-  final File? image;
-  final imageAsset;
 
-  GroupStudyCard({
-    Key? key,
-    required this.name,
-    required this.onPressed,
-    this.image,
-    this.imageAsset,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: EdgeInsets.all(10.0),
-      child: InkWell(
-        onTap: onPressed,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Text(
-              name,
-              style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            Image.asset(
-              imageAsset,
-              fit: BoxFit.cover,
-              height: 150.0, // Adjust height as needed
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AddGroupButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  AddGroupButton({Key? key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              spreadRadius: 3,
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Container(
-          padding: EdgeInsets.all(8.0),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            border: Border.all(color: Colors.black, width: 1.0),
-          ),
-          child: Icon(
-            Icons.add,
-            size: 40.0,
-            color: Colors.black,
-          ),
-        ),
-      ),
-    );
-  }
-}
