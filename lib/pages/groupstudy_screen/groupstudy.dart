@@ -3,12 +3,11 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/pages/groupstudy_screen/classroom.dart';
+import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/widgets/groupstudy/main/group_study_card.dart';
 import 'package:mobile/widgets/groupstudy/main/add_group_button.dart';
 
-void main() {
-  runApp(GroupStudy());
-}
+
 
 class GroupStudy extends StatefulWidget {
   GroupStudy({super.key});
@@ -196,14 +195,12 @@ class _GroupStudyState extends State<GroupStudy>
     print('Creating group with: $name, $maxMembers, $studyTime');
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.menu),
-        ),
         title: Text('그룹스터디'),
         centerTitle: true,
         actions: [
@@ -213,6 +210,7 @@ class _GroupStudyState extends State<GroupStudy>
           ),
         ],
       ),
+      drawer: CustomDrawer(),
       body: Column(
         children: [
           Padding(

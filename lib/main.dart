@@ -20,7 +20,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
-
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
@@ -32,8 +31,7 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-            create: (context) => GlobalAudioPlayer()),
+        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => BottomIndex()),
