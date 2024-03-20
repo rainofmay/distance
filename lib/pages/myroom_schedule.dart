@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/pages/schedule_screen/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
 import 'package:mobile/widgets/todo/todo_bottom_sheet.dart';
 
@@ -31,11 +32,14 @@ class _ScheduleState extends State<Schedule> {
           },),
           title: Text('Schedules', style: TextStyle(fontSize: 16, color: WHITE),),
           actions: [
-            IconButton(icon: Icon(Icons.menu, size: 16, color: WHITE,), onPressed: () {
-
-            },),
+            Builder(
+              builder: (context) { return IconButton(icon: Icon(Icons.menu, size: 16, color: WHITE,), onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },);},
+            ),
           ],
         ),
+        endDrawer: CustomDrawer(),
         body: scheduleScreens[currentTab],
         floatingActionButton: FloatingActionButton.small(
           elevation: 8.0,
