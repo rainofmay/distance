@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({super.key});
+  final Map<Icon, String> drawerMenu;
+  const CustomDrawer({super.key, required this.drawerMenu});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +16,7 @@ class CustomDrawer extends StatelessWidget {
             ),
             accountName: Text('테스트', style: TextStyle(color: Colors.black),),
             accountEmail: Text('abc123@naver.com', style: TextStyle(color: Colors.black)),
+
             onDetailsPressed: () {},
             decoration: BoxDecoration(
               color: Colors.white,
@@ -24,20 +26,13 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-
-          // ListView.builder로 변환 필요
-          ListTile(
-            leading: Icon(Icons.home, color: Colors.grey,),
-            title: Text('메뉴1'),
-            onTap: () {},
-            trailing: Icon(Icons.arrow_forward_ios),
-          ),
-          ListTile(
-            leading: Icon(Icons.home, color: Colors.grey,),
-            title: Text('메뉴2'),
-            onTap: () {},
-            trailing: Icon(Icons.arrow_forward_ios),
-          )
+      for (var entry in drawerMenu.entries.toList())
+            ListTile(
+              leading: entry.key,
+              title: Text(entry.value),
+              onTap: () {},
+              trailing: Icon(Icons.arrow_forward_ios),
+            )
         ],
       ),
     );

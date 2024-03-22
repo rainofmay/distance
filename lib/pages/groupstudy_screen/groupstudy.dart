@@ -34,6 +34,8 @@ class _GroupStudyState extends State<GroupStudy>
   ];
   late TabController _tabController;
 
+  final Map<Icon, String> _drawerMenu = {Icon(Icons.settings) : '메뉴1', Icon(Icons.home_rounded) : '메뉴2'};
+
   @override
   void initState() {
     _tabController = TabController(
@@ -210,7 +212,7 @@ class _GroupStudyState extends State<GroupStudy>
           ),
         ],
       ),
-      drawer: CustomDrawer(),
+      drawer: CustomDrawer(drawerMenu: _drawerMenu,),
       body: Column(
         children: [
           Padding(

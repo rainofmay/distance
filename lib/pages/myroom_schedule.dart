@@ -19,6 +19,7 @@ class _ScheduleState extends State<Schedule> {
     ScheduleSchedule(),
     ScheduleTodo(),
   ];
+  final Map<Icon, String> _drawerMenu = {Icon(Icons.settings) : '메뉴1', Icon(Icons.home_rounded) : '메뉴2'};
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class _ScheduleState extends State<Schedule> {
             ),
           ],
         ),
-        endDrawer: CustomDrawer(),
+        endDrawer: CustomDrawer(drawerMenu: _drawerMenu,),
         body: scheduleScreens[currentTab],
         floatingActionButton: FloatingActionButton.small(
           elevation: 8.0,
