@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:mobile/widgets/main_bottom_bar.dart';
+import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile/util/calendar.dart';

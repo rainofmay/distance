@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
 import '../util/background_provider.dart';
-
 
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
@@ -24,7 +24,7 @@ class _MusicSettingState extends State<MusicSetting> {
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = Provider.of<BackgroundProvider>(context);
-    if(backgroundProvider.isImage == false) {
+    if (backgroundProvider.isImage == false) {
       backgroundProvider.videoController.pause();
     }
     return Dialog(
@@ -82,46 +82,61 @@ class _MusicSettingState extends State<MusicSetting> {
                         children: [
                           //배열로 교체해야함
                           IconButton(
-                            onPressed: () {globalAudioPlayer.changeGroup(0);
-                              setState(() { });},
+                            onPressed: () {
+                              globalAudioPlayer.changeGroup(0);
+                              setState(() {});
+                            },
                             icon: ClipRRect(
                               borderRadius: BorderRadius.circular(18),
                               child: Image(
-                                image: AssetImage('assets/images/natureimage2.jpeg'),
+                                image: AssetImage(
+                                    'assets/images/natureimage2.jpeg'),
                                 width: 50,
                                 height: 50,
                               ),
                             ),
                           ),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(1);
-                              setState(() { });},
+                              onPressed: () {
+                                globalAudioPlayer.changeGroup(1);
+                                setState(() {});
+                              },
                               icon: Image(
-                                image: AssetImage('assets/images/cafeImage.jpeg'),
+                                image:
+                                    AssetImage('assets/images/cafeImage.jpeg'),
                                 width: 50,
                                 height: 50,
                               )),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(2);
-                              setState(() { });},
+                              onPressed: () {
+                                globalAudioPlayer.changeGroup(2);
+                                setState(() {});
+                              },
                               icon: Image(
-                                image: AssetImage('assets/images/classicImage.jpeg'),
+                                image: AssetImage(
+                                    'assets/images/classicImage.jpeg'),
                                 width: 50,
                                 height: 50,
                               )),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(3);
-                              setState(() {});},
+                              onPressed: () {
+                                globalAudioPlayer.changeGroup(3);
+                                setState(() {});
+                              },
                               icon: Image(
-                                image: AssetImage('assets/images/musictest.png'),
+                                image:
+                                    AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
                           IconButton(
-                              onPressed: () {globalAudioPlayer.changeGroup(4);
-                              setState(() { });},
+                              onPressed: () {
+                                globalAudioPlayer.changeGroup(4);
+                                setState(() {});
+                              },
                               icon: Image(
-                                image: AssetImage('assets/images/musictest.png'),
+                                image:
+                                    AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
@@ -164,35 +179,15 @@ class _MusicSettingState extends State<MusicSetting> {
                         ),
                       ),
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      // height: 30,
-                      margin: EdgeInsets.only(top: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: Text('Cancel',
-                                style: TextStyle(color: Colors.black)),
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 닫히는 버튼
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'Ok',
-                              style: TextStyle(color: Color(0xff0029F5)),
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 닫히는 버튼
-                              if(backgroundProvider.isImage == false) {
-                                backgroundProvider.videoController.play();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    )
+                    OkCancelButtons(
+                        okText: '적용',
+                        cancelText: '취소',
+                        onPressed: () {
+                          Navigator.of(context).pop(); // 닫히는 버튼
+                          if (backgroundProvider.isImage == false) {
+                            backgroundProvider.videoController.play();
+                          }
+                        }),
                   ],
                 ),
               ],

@@ -1,15 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:uuid/uuid.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:mobile/firebase_options.dart';
-import 'package:intl/date_symbol_data_local.dart';
-import 'package:mobile/widgets/myroom_calendar.dart';
 
 final firestore = FirebaseFirestore.instance;
 
@@ -29,6 +25,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
+
   // String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _startTime = "06:00 AM";
   String _endTime = "09:00 PM";
@@ -43,11 +40,11 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   int _selectedColor = 0;
   bool _isDone = false;
 
-  void onSavePressed() async {
+  void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     }
-
+    Navigator.of(context).pop();
     //스케줆 모델 생성
     final schedule = ScheduleModel(
         id: Uuid().v4(),
@@ -60,7 +57,10 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         selectedColor: _selectedColor,
         isDone: _isDone);
 
-    await firestore.collection('schedule').doc(schedule.id).set(schedule.toJson());
+    await firestore
+        .collection('schedule')
+        .doc(schedule.id)
+        .set(schedule.toJson());
   }
 
   Future<void> _getDateFromUser() async {
@@ -272,16 +272,27 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                                                       ? Colors.black
                                                       : Color.fromRGBO(
                                                           0, 0, 0, 0.3),
-                                                  width: _selectedColor == index ? 2 : 1)),
+                                                  width: _selectedColor == index
+                                                      ? 2
+                                                      : 1)),
                                           child: CircleAvatar(
                                               radius: 18,
                                               backgroundColor: cardColor[index]
                                                   [0],
-                                              child: index == 11 ? Text('반투명', style: TextStyle(fontSize: 8, color: Colors.black),): Icon(
-                                                Icons.bookmark_added_outlined,
-                                                color: cardColor[index][1],
-                                                size: 18,
-                                              )),
+                                              child: index == 11
+                                                  ? Text(
+                                                      '반투명',
+                                                      style: TextStyle(
+                                                          fontSize: 8,
+                                                          color: Colors.black),
+                                                    )
+                                                  : Icon(
+                                                      Icons
+                                                          .bookmark_added_outlined,
+                                                      color: cardColor[index]
+                                                          [1],
+                                                      size: 18,
+                                                    )),
                                         ),
                                       ),
                                     );
@@ -293,33 +304,10 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
                         ),
                       ],
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      // height: 30,
-                      margin: EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: Text('Cancel',
-                                style: TextStyle(color: Colors.black)),
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 닫히는 버튼
-                            },
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              onSavePressed();
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Ok',
-                              style: TextStyle(color: Color(0xff0029F5)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    OkCancelButtons(
+                        okText: '저장',
+                        cancelText: '취소',
+                        onPressed: _onSavePressed),
                   ],
                 ),
               ),

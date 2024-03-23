@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/myroom_background_setting.dart';
 
@@ -130,30 +131,10 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               },
             )) : BackgroundSettingSecond(),
           ),
-            // 확인 및 취소 버튼
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    child:
-                        Text('Cancel', style: TextStyle(color: Colors.black)),
-                    onPressed: () {
-                      Navigator.of(context).pop(); // 닫히는 버튼
-                    },
-                  ),
-                  TextButton(
-                    child:
-                        Text('Ok', style: TextStyle(color: Color(0xff0029F5))),
-                    onPressed: () {
-                      Navigator.of(context).pop(); // 닫히는 버튼
-                    },
-                  ),
-                ],
-              ),
-            )
+            OkCancelButtons(
+                okText: '저장',
+                cancelText: '취소',
+                onPressed: () {}),
           ],
         ),
       ),

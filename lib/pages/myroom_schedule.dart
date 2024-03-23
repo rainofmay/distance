@@ -19,7 +19,10 @@ class _ScheduleState extends State<Schedule> {
     ScheduleSchedule(),
     ScheduleTodo(),
   ];
-  final Map<Icon, String> _drawerMenu = {Icon(Icons.settings) : '메뉴1', Icon(Icons.home_rounded) : '메뉴2'};
+
+  final _notIsOpen = false;
+
+  final Map<Icon, String> _drawerMenu = {Icon(Icons.notifications) : '알림'};
 
   @override
   Widget build(BuildContext context) {

@@ -212,7 +212,6 @@ class _GroupStudyState extends State<GroupStudy>
           ),
         ],
       ),
-      drawer: CustomDrawer(drawerMenu: _drawerMenu,),
       body: Column(
         children: [
           Padding(

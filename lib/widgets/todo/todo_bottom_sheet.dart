@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/todo_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:uuid/uuid.dart';
 
 final firestore = FirebaseFirestore.instance;
@@ -19,15 +20,18 @@ class TodoBottomSheet extends StatefulWidget {
 class _TodoBottomSheetState extends State<TodoBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   String _todoName = '';
-  final  List<dynamic> _subTodoList = [{"title": "", "subIsDone" : false}];
+  final List<dynamic> _subTodoList = [
+    {"title": "", "subIsDone": false}
+  ];
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
   bool _isDone = false;
 
-  void onSavePressed() async {
+  void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
     }
+    Navigator.of(context).pop();
 
     //스케줆 모델 생성
     final todo = TodoModel(
@@ -111,33 +115,10 @@ class _TodoBottomSheetState extends State<TodoBottomSheet> {
                     SizedBox(
                       height: 8,
                     ),
-                    Container(
-                      alignment: Alignment.center,
-                      // height: 30,
-                      margin: EdgeInsets.only(top: 20, bottom: 20),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            child: Text('Cancel',
-                                style: TextStyle(color: Colors.black)),
-                            onPressed: () {
-                              Navigator.of(context).pop(); // 닫히는 버튼
-                            },
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              onSavePressed();
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              'Ok',
-                              style: TextStyle(color: Color(0xff0029F5)),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
+                    OkCancelButtons(
+                        okText: '저장',
+                        cancelText: '취소',
+                        onPressed: _onSavePressed)
                   ],
                 ),
               ),

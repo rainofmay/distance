@@ -3,14 +3,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
-
+import 'package:mobile/util/class_bottom_index.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
 import 'package:mobile/pages/groupstudy_screen/groupstudy.dart';
 import 'package:mobile/pages/mate.dart';
 import 'package:mobile/pages/store.dart';
-import 'package:mobile/pages/etc.dart';
-import 'package:mobile/widgets/main_bottom_bar.dart';
+import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/util/bottom_index.dart';
@@ -35,6 +34,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => BottomIndex()),
+        ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
         ChangeNotifierProvider(
             create: (context) => BackgroundSettingProvider()),
       ],
