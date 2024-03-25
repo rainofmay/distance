@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/pages/schedule_screen/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
 import 'package:mobile/widgets/todo/todo_bottom_sheet.dart';
@@ -27,22 +28,7 @@ class _ScheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: BLACK,
-          elevation: 10,
-          titleSpacing: -10, // title과 leading 사이의 거리
-          leading: IconButton(icon: Icon(Icons.arrow_back_ios_rounded, size: 16, color: WHITE,), onPressed: () {
-            Navigator.of(context).pop();
-          },),
-          title: Text('Schedules', style: TextStyle(fontSize: 16, color: WHITE),),
-          actions: [
-            Builder(
-              builder: (context) { return IconButton(icon: Icon(Icons.menu, size: 16, color: WHITE,), onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },);},
-            ),
-          ],
-        ),
+        appBar: CustomBackAppBar(appbarTitle:'Schedules'),
         endDrawer: CustomDrawer(drawerMenu: _drawerMenu,),
         body: scheduleScreens[currentTab],
         floatingActionButton: FloatingActionButton.small(

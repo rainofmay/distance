@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/bottomBar/class_borrom_bar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
@@ -35,34 +36,7 @@ class _ClassRoomState extends State<ClassRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: -10,
-        backgroundColor: BLACK,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 16, color: WHITE,),
-        ),
-        title: Text('들어간 그룹 이름', style: TextStyle(fontSize: 16, color: WHITE),),
-        // centerTitle: true,
-        actions: [
-          Builder(
-            builder: (context) {
-              return IconButton(
-                icon: Icon(
-                  Icons.menu,
-                  size: 16,
-                  color: WHITE,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              );
-            },
-          ),
-        ],
-      ),
+      appBar: CustomBackAppBar(appbarTitle: '들어간 그룹명'),
       endDrawer: CustomDrawer(
         drawerMenu: _scheduleDrawerMenu,
       ),
