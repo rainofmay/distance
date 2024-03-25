@@ -48,5 +48,16 @@ var theme = ThemeData(
     style: ButtonStyle(
       overlayColor: MaterialStateColor.resolveWith((states) => Colors.transparent)
     )
+  ),
+
+  tabBarTheme: TabBarTheme(
+    labelColor: Colors.black,
+    unselectedLabelColor: Colors.grey,
+    overlayColor: MaterialStateProperty.all(
+      Colors.transparent,
+    ),
+    indicatorColor: Colors.black,
+    indicatorSize: TabBarIndicatorSize.label,
+    dividerColor: Colors.transparent,
   )
 );

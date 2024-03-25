@@ -44,17 +44,9 @@ class _ClassRoomTimerState extends State<ClassRoomTimer>
                   ),
                 ),
               ],
-              labelColor: Colors.black,
-              unselectedLabelColor: Colors.grey,
-              overlayColor: MaterialStateProperty.all(
-                Colors.transparent,
-              ),
               splashBorderRadius: BorderRadius.circular(0),
-              indicatorColor: Colors.black,
               indicatorWeight: 1,
-              indicatorSize: TabBarIndicatorSize.label,
               controller: _timerTabController,
-              dividerColor: Colors.transparent,
             ),
           ),
           Expanded(

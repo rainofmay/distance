@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/myroom_calendar.dart';
 import 'package:mobile/widgets/schedule/schedule_list.dart';
 import 'package:mobile/util/calendar.dart';
@@ -39,10 +40,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                     return Text('${index} 번');
                   }),
             ),
-            Container(
-              height: 5,
-              color: Colors.grey[200],
-            ),
+           BorderLine(lineHeight: 5, lineColor: Colors.grey[200]),
             SizedBox(height: 10),
             Text('#과제 목록'),
             Row(

@@ -3,10 +3,10 @@ import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/bottomBar/class_borrom_bar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_class.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_home.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_mate.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_timer/classroom_timer.dart';
+import 'package:mobile/pages/classroom_screen/classroom_class.dart';
+import 'package:mobile/pages/classroom_screen/classroom_home.dart';
+import 'package:mobile/pages/classroom_screen/classroom_mate.dart';
+import 'package:mobile/pages/classroom_screen/classroom_timer.dart';
 import 'package:provider/provider.dart';
 
 class ClassRoom extends StatefulWidget {
@@ -36,6 +36,7 @@ class _ClassRoomState extends State<ClassRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: -10,
         backgroundColor: BLACK,
         leading: IconButton(
           onPressed: () {

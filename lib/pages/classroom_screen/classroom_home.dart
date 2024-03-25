@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../const/colors.dart';
+import '../../const/colors.dart';
 
 class ClassRoomHome extends StatelessWidget {
   const ClassRoomHome({super.key});

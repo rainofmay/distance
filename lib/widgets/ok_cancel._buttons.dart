@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 class OkCancelButtons extends StatelessWidget {
   final String okText;
   final String cancelText;
-  final onPressed;
+  final VoidCallback? onCancelPressed;
+  final VoidCallback onPressed;
 
   const OkCancelButtons(
       {super.key,
       required this.okText,
       required this.cancelText,
-      required this.onPressed});
+      required this.onPressed,
+      this.onCancelPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +26,7 @@ class OkCancelButtons extends StatelessWidget {
             child: Text(cancelText, style: TextStyle(color: Colors.black)),
             onPressed: () {
               Navigator.of(context).pop(); // 닫히는 버튼
+              onCancelPressed;
             },
           ),
           TextButton(
