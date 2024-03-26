@@ -26,10 +26,9 @@ class _ClassRoomState extends State<ClassRoom> {
   ];
 
   final Map<Icon, String> _scheduleDrawerMenu = {
-    Icon(Icons.settings): '클래스룸 설정 변경',
+    Icon(Icons.settings): '설정 변경',
     Icon(Icons.person_add_alt): '메이트 초대',
-    Icon(Icons.verified_user_rounded): '권한 부여',
-    Icon(Icons.notifications_off_rounded): '알림 끄기',
+    Icon(Icons.report_gmailerrorred_rounded): '신고하기',
     Icon(Icons.exit_to_app_rounded): '나가기'
   };
 
@@ -39,10 +38,16 @@ class _ClassRoomState extends State<ClassRoom> {
       appBar: CustomBackAppBar(appbarTitle: '들어간 그룹명'),
       endDrawer: CustomDrawer(
         drawerMenu: _scheduleDrawerMenu,
+        drawerUnderMenu: [
+          //Toggle 버튼 구현
+          IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
+          IconButton(icon: Icon(Icons.lock), onPressed: () {}),
+        ],
       ),
+
       // 지정 배경, 명언
       body: _classScreens[context.watch<ClassBottomIndex>().classBottomIndex],
-      bottomNavigationBar : ClassBottomNavagationBar(),
+      bottomNavigationBar: ClassBottomNavagationBar(),
     );
   }
 }
