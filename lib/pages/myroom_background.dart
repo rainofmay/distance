@@ -92,11 +92,12 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               children: [
                 IconButton(
                   onPressed: handleSettingButtonPressed,
-                  icon: Icon(Icons.settings),
+                  icon: isSettingOn == true ? Icon(Icons.settings,  color: Colors.blue) : Icon(Icons.settings,)
                 ),
                 IconButton(
                   onPressed: () {
                     setState(() {
+                      isSettingOn =false;
                       isImageSetting = true;
                     });
                   },
@@ -106,6 +107,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                 IconButton(
                   onPressed: () {
                     setState(() {
+                      isSettingOn =false;
                       isImageSetting = false;
                     });
                   },
