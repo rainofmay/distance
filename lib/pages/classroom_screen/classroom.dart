@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/widgets/bottomBar/class_borrom_bar.dart';
+import 'package:mobile/widgets/bottomBar/class_bottom_bar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
 import 'package:mobile/pages/classroom_screen/classroom_class.dart';
@@ -32,10 +32,19 @@ class _ClassRoomState extends State<ClassRoom> {
     Icon(Icons.exit_to_app_rounded): '나가기'
   };
 
+  _resetBottomIndex() {
+    print("test backFunction");
+    context.read<ClassBottomIndex>().setClassBottomIndex(0);
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomBackAppBar(appbarTitle: '들어간 그룹명'),
+      appBar: CustomBackAppBar(
+        appbarTitle: '들어간 그룹명',
+        backFunction: _resetBottomIndex,
+      ),
       endDrawer: CustomDrawer(
         drawerMenu: _scheduleDrawerMenu,
         drawerUnderMenu: [

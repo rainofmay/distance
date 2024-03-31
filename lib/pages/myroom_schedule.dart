@@ -28,7 +28,7 @@ class _ScheduleState extends State<Schedule> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomBackAppBar(appbarTitle:'Schedules'),
+        appBar: CustomBackAppBar(appbarTitle:'Schedules', backFunction: Navigator.of(context).pop),
         endDrawer: CustomDrawer(drawerMenu: _drawerMenu,),
         body: scheduleScreens[currentTab],
         floatingActionButton: FloatingActionButton.small(
