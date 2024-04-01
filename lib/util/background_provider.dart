@@ -10,7 +10,7 @@ class BackgroundProvider extends ChangeNotifier {
   late VideoPlayerController _videoController; // 비디오 컨트롤러 추가
 
   int get selectedCategoryIndex => _selectedCategoryIndex;
-  int get selecteIndex => _selectedIndex;
+  int get selectedIndex => _selectedIndex;
   bool get isImage => _isImage;
   VideoPlayerController get videoController => _videoController; // Getter 추가
 
@@ -25,7 +25,7 @@ class BackgroundProvider extends ChangeNotifier {
   }
   // 비디오를 초기화하는 메소드
   void initializeVideo() {
-    final videoUrl = Uri.parse('https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4');
+    final videoUrl = Uri.parse(videoURLs[selectedCategoryIndex][selectedIndex]);
     _videoController = VideoPlayerController.networkUrl(videoUrl)
       ..initialize().then((_) {
         _videoController.play();
@@ -69,13 +69,25 @@ class BackgroundProvider extends ChangeNotifier {
       'assets/images/nature3.jpeg',
     ],
   ];
-
+  List<List<String>> videoURLs = [
+    [
+      'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4',
+      'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea2(1080p).mp4?alt=media&token=6d8871d2-0b52-400e-825b-5f4e69d3be54',
+      'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea3(1080p).mp4?alt=media&token=0c630c0c-8383-4c7f-8e02-53603f5ae2ff',
+    ],
+    [
+      'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fgom1.mp4?alt=media&token=9c7f028a-b17e-4e91-b321-f14680d33a29',
+    ],
+    [
+      'https://firebasestorage.googleapis.com/v0/b/cled-180e0.appspot.com/o/video%2Fsea(1080p).mp4?alt=media&token=93b8b695-4f52-4f34-a10c-0c78f135d4d4',
+    ],
+  ];
 
   String get selectedImageURL {
     if (selectedCategoryIndex >= 0 &&
         selectedCategoryIndex < imageURLs.length) {
       int categoryIndex = selectedCategoryIndex;
-      int imageIndex = selecteIndex; // 기본값 또는 예외 처리
+      int imageIndex = selectedIndex; // 기본값 또는 예외 처리
 
       if (categoryIndex > 0) {
         // 현재 선택된 카테고리가 0이 아닌 경우, 현재 선택된 이미지 인덱스를 가져옴

@@ -4,6 +4,7 @@ import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/class_bottom_index.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
 import 'package:mobile/pages/groupstudy_screen/groupstudy.dart';
@@ -26,6 +27,11 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initializeDateFormatting();
+  await Supabase.initialize(
+      url: 'https://ivwqpnjxfbikydudezgs.supabase.co',
+      anonKey:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2d3Fwbmp4ZmJpa3lkdWRlemdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE3Nzg1NzUsImV4cCI6MjAyNzM1NDU3NX0.xv2q_V8rKlKqXk47il0V03wRcgiNuSeGusfizbsf7Ns'
+  );
 
   runApp(
     MultiProvider(
