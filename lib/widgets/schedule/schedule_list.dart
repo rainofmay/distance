@@ -19,7 +19,6 @@ class _ScheduleListState extends State<ScheduleList> {
   List<Map<String, dynamic>> scheduleList = [];
   String? _error; //_err
 
-
   void _deleteTodo(int index) {}
 
   @override
