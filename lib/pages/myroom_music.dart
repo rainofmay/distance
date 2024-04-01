@@ -159,7 +159,7 @@ class _MusicSettingState extends State<MusicSetting> {
                     Container(
                       margin: EdgeInsets.only(top: 15),
                       height: MediaQuery.of(context).size.height *
-                          0.35, // 예시로 반 화면의 높이로 설정
+                          0.40, // 예시로 반 화면의 높이로 설정
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Consumer<GlobalAudioPlayer>(
@@ -179,21 +179,23 @@ class _MusicSettingState extends State<MusicSetting> {
                         ),
                       ),
                     ),
-                    OkCancelButtons(
-                        okText: '적용',
-                        cancelText: '취소',
-                        onPressed: () {
-                          Navigator.of(context).pop(); // 닫히는 버튼
-                          if (backgroundProvider.isImage == false) {
-                            backgroundProvider.videoController.play();
-                          }
-                        }),
+
                   ],
                 ),
               ],
             ),
+            OkCancelButtons(
+                okText: '적용',
+                cancelText: '취소',
+                onPressed: () {
+                  Navigator.of(context).pop(); // 닫히는 버튼
+                  if (backgroundProvider.isImage == false) {
+                    backgroundProvider.videoController.play();
+                  }
+                }),
           ],
         ),
+
       ),
     );
   }

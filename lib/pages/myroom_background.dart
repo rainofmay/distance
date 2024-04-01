@@ -44,9 +44,11 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     // 각 카테고리에 대한 이미지 목록
     [
       'assets/videos/sea(1080p).jpeg',
+      'assets/videos/sea2(1080p).jpeg',
+      'assets/videos/sea3(1080p).jpeg'
     ],
     [
-      'assets/videos/sea(1080p).jpeg',
+      'assets/videos/gom1.jpeg',
     ],
     [
       'assets/videos/sea(1080p).jpeg',
@@ -134,9 +136,12 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             )) : BackgroundSettingSecond(),
           ),
             OkCancelButtons(
-                okText: '저장',
-                cancelText: '취소',
-                onPressed: () {}),
+              onPressed: () {
+                // 현재 화면을 pop하여 이전 화면으로 이동
+                Navigator.pop(context);
+              },
+              okText: 'OK', cancelText: '',
+            ),
           ],
         ),
       ),
