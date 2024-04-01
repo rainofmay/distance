@@ -38,13 +38,13 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           backgroundProvider.isImage = widget.isImage;
           backgroundProvider.selectedIndex = widget.selectedIndex;
           backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
-          if(!widget.isImage){
-            backgroundProvider.initializeVideo();
-          }
-          print("Custom_icon_button ${widget.selectedCategoryIndex}");
-          print("Custom_icon_button ${widget.selectedIndex}");
+          print("Custom_icon_button Category_Index: ${widget.selectedCategoryIndex}");
+          print("Custom_icon_button Index:${widget.selectedIndex}");
           print("Custom_icon_button ${widget.isImage}");
         });
+        if(!widget.isImage){
+          backgroundProvider.initializeVideo();
+        }
       },
       child: Container(
         margin: EdgeInsets.all(8.0),
