@@ -3,7 +3,6 @@ import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
-import '../util/background_provider.dart';
 
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
@@ -23,10 +22,6 @@ class _MusicSettingState extends State<MusicSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final backgroundProvider = Provider.of<BackgroundProvider>(context);
-    if (backgroundProvider.isImage == false) {
-      backgroundProvider.videoController.pause();
-    }
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -189,9 +184,6 @@ class _MusicSettingState extends State<MusicSetting> {
                 cancelText: '취소',
                 onPressed: () {
                   Navigator.of(context).pop(); // 닫히는 버튼
-                  if (backgroundProvider.isImage == false) {
-                    backgroundProvider.videoController.play();
-                  }
                 }),
           ],
         ),

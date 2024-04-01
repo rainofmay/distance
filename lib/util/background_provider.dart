@@ -19,6 +19,8 @@ class BackgroundProvider extends ChangeNotifier {
     if (!isImage) {
       // 비디오를 사용할 경우 비디오를 초기화
       initializeVideo();
+    }else {
+      _videoController?.pause();
     }
     notifyListeners();
     saveIsImage(isImage);
@@ -31,6 +33,7 @@ class BackgroundProvider extends ChangeNotifier {
         _videoController.play();
         _videoController.setLooping(true);
         notifyListeners(); // 비디오가 초기화되었음을 알림
+        print("initializeVideo Success.");
       });
   }
 

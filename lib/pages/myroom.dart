@@ -36,8 +36,7 @@ class _MyRoomState extends State<MyRoom> {
     final backgroundSettingProvider =
     Provider.of<BackgroundSettingProvider>(context);
     if(backgroundProvider.isImage == false) {
-      print("비디오 replay");
-      backgroundProvider.videoController.play();
+      print("비디오 replay in building");
     }
     return Scaffold(
       body: Stack(

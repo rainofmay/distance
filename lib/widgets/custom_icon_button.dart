@@ -38,9 +38,12 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           backgroundProvider.isImage = widget.isImage;
           backgroundProvider.selectedIndex = widget.selectedIndex;
           backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
-          print(widget.selectedCategoryIndex);
-          print(widget.selectedIndex);
-          print(widget.isImage);
+          if(!widget.isImage){
+            backgroundProvider.initializeVideo();
+          }
+          print("Custom_icon_button ${widget.selectedCategoryIndex}");
+          print("Custom_icon_button ${widget.selectedIndex}");
+          print("Custom_icon_button ${widget.isImage}");
         });
       },
       child: Container(

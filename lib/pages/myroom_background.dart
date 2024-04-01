@@ -62,8 +62,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       selectedImageCategoryIndex = categoryindex;
       selectedImageIndex = index;
     });
-    print(categoryindex);
-    print(index);
+    print("handleImageButtonPressed: $categoryindex");
+    print("handleImageButtonPressed: $index");
     print('isImage : $isImage');
   }
 
