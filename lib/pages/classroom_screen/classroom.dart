@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/widgets/bottomBar/class_borrom_bar.dart';
+import 'package:mobile/widgets/bottomBar/class_bottom_bar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
 import 'package:mobile/pages/classroom_screen/classroom_class.dart';
@@ -25,17 +26,28 @@ class _ClassRoomState extends State<ClassRoom> {
     ClassRoomTimer()
   ];
 
-  final Map<Icon, String> _scheduleDrawerMenu = {
-    Icon(Icons.settings): '설정 변경',
-    Icon(Icons.person_add_alt): '메이트 초대',
-    Icon(Icons.report_gmailerrorred_rounded): '신고하기',
-    Icon(Icons.exit_to_app_rounded): '나가기'
+  final Map<Map<Icon, String>, dynamic> _scheduleDrawerMenu = {
+    {Icon(Icons.settings): '설정 변경'} : Report(),
+    {Icon(Icons.person_add_alt): '메이트 초대'} : Report(),
+    {Icon(Icons.report_gmailerrorred_rounded): '신고하기'} : Report(),
+    {Icon(Icons.exit_to_app_rounded): '나가기'} : Report(),
   };
+
+  _resetBottomIndex() {
+    context.read<ClassBottomIndex>().setClassBottomIndex(0);
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomBackAppBar(appbarTitle: '들어간 그룹명'),
+      appBar: CustomBackAppBar(
+        appbarTitle: '들어간 그룹명',
+        backFunction: _resetBottomIndex,
+        backgroundColor: BLACK,
+        contentColor: WHITE,
+        isEndDrawer: true,
+      ),
       endDrawer: CustomDrawer(
         drawerMenu: _scheduleDrawerMenu,
         drawerUnderMenu: [

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/pages/schedule_screen/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
@@ -23,13 +24,21 @@ class _ScheduleState extends State<Schedule> {
 
   final _notIsOpen = false;
 
-  final Map<Icon, String> _drawerMenu = {Icon(Icons.notifications) : '알림'};
+  final Map<Map<Icon, String>, dynamic> _drawerMenu = {{Icon(Icons.notifications): '알림'} : Report()};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomBackAppBar(appbarTitle:'Schedules'),
-        endDrawer: CustomDrawer(drawerMenu: _drawerMenu,),
+        appBar: CustomBackAppBar(
+          appbarTitle: 'Schedules',
+          backFunction: Navigator.of(context).pop,
+          backgroundColor: BLACK,
+          contentColor: WHITE,
+          isEndDrawer: true,
+        ),
+        endDrawer: CustomDrawer(
+          drawerMenu: _drawerMenu,
+        ),
         body: scheduleScreens[currentTab],
         floatingActionButton: FloatingActionButton.small(
           elevation: 8.0,
@@ -42,8 +51,9 @@ class _ScheduleState extends State<Schedule> {
           ),
           onPressed: () {
             showModalBottomSheet(
-              context:context,
-              builder: (_) => currentTab == 0 ? ScheduleBottomSheet() : TodoBottomSheet(),
+              context: context,
+              builder: (_) =>
+                  currentTab == 0 ? ScheduleBottomSheet() : TodoBottomSheet(),
               isDismissible: true,
             );
           },
@@ -78,15 +88,16 @@ class _ScheduleState extends State<Schedule> {
                         Text(
                           '일 정',
                           style: TextStyle(
-                              color:
-                                  currentTab == 0 ? WHITE : DARK_UNSELECTED,
+                              color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
                               fontSize: 9,
                               letterSpacing: 2.2),
                         )
                       ],
                     ),
                   ),
-                  Container(width: 30,),
+                  Container(
+                    width: 30,
+                  ),
                   MaterialButton(
                     minWidth: 70,
                     onPressed: () {
@@ -108,8 +119,7 @@ class _ScheduleState extends State<Schedule> {
                           style: TextStyle(
                               color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
                               fontSize: 9,
-                              letterSpacing: 2.2
-                          ),
+                              letterSpacing: 2.2),
                         )
                       ],
                     ),
