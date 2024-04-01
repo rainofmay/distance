@@ -19,8 +19,6 @@ class BackgroundProvider extends ChangeNotifier {
     if (!isImage) {
       // 비디오를 사용할 경우 비디오를 초기화
       initializeVideo();
-    }else {
-      _videoController?.pause();
     }
     notifyListeners();
     saveIsImage(isImage);
