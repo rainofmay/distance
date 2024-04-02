@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/pop_up_menu.dart';
-import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
-import 'package:mobile/model/schedule_model.dart';
 
 class ScheduleCard extends StatefulWidget {
   final String id;

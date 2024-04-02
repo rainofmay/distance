@@ -4,6 +4,7 @@ import 'package:mobile/pages/schedule_screen/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/appBar/menu_botton.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
 import 'package:mobile/widgets/todo/todo_bottom_sheet.dart';
@@ -34,7 +35,7 @@ class _ScheduleState extends State<Schedule> {
           backFunction: Navigator.of(context).pop,
           backgroundColor: BLACK,
           contentColor: WHITE,
-          isEndDrawer: true,
+          actions: [MenuButton(iconColor: WHITE)],
         ),
         endDrawer: CustomDrawer(
           drawerMenu: _drawerMenu,

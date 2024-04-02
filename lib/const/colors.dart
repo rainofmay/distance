@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 const CALENDAR_COLOR = Color(0xFF005FDA);
 final LIGHT = Color(0xffECEBEB);
-final LIGHT_WHITE = Colors.white60;
+const LIGHT_WHITE = Colors.white60;
 final DARK = Color(0xff282828);
 final DARK_UNSELECTED = Color(0xff777777);
 
 // schedule card 색상
 
-final WHITE = Colors.white;
-final BLACK = Colors.black;
+const WHITE = Colors.white;
+const BLACK = Colors.black;
 final BLUE =  Color(0xff1565C0);
 final GREEN = Color(0xff003300);
 final RED = Color(0xffC62828);

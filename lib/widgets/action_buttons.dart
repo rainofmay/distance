@@ -1,5 +1,3 @@
-import 'package:animations/animations.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 

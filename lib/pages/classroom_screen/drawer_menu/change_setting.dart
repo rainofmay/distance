@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../../const/colors.dart';
+import '../../../widgets/appBar/custom_back_appbar.dart';
 
 class ChangeSetting extends StatefulWidget {
   const ChangeSetting({super.key});
@@ -11,7 +13,13 @@ class _ChangeSettingState extends State<ChangeSetting> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Text('설정 변경')
+      appBar: CustomBackAppBar(
+        appbarTitle: '설정 변경',
+        backFunction: Navigator.of(context).pop,
+        backgroundColor: WHITE,
+        contentColor: BLACK,
+      ),
+      body: Text('설정 변경'),
     );
   }
 }

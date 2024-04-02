@@ -1,5 +1,3 @@
-import 'package:audioplayers/audioplayers.dart';
-import 'package:mobile/util/global_player.dart';
 
 class MusicInfo {
   final int playerIndex;

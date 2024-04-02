@@ -60,6 +60,8 @@ class _MateState extends State<Mate> {
 }
 
 class FriendList extends StatelessWidget {
+  const FriendList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

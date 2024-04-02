@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/appBar/menu_botton.dart';
 
 class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appbarTitle;
   final GestureTapCallback backFunction;
-  final double headerHeight = 55;
   final Color backgroundColor;
   final Color contentColor;
-  final bool isEndDrawer;
+  final List<Widget>? actions;
 
   const CustomBackAppBar(
       {super.key,
@@ -15,10 +14,11 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       required this.backFunction,
       required this.backgroundColor,
       required this.contentColor,
-      required this.isEndDrawer});
+      this.actions,
+      });
 
   @override
-  Size get preferredSize => Size.fromHeight(headerHeight);
+  Size get preferredSize => Size.fromHeight(AppBar().preferredSize.height);
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: IconButton(
         onPressed: backFunction,
         icon: Icon(
-          Icons.arrow_back_ios_new_rounded,
+          Icons.arrow_back,
           size: 16,
           color: contentColor,
         ),
@@ -43,22 +43,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: TextStyle(fontSize: 16, color: contentColor),
       ),
       // centerTitle: true,
-      actions: [
-        isEndDrawer ? Builder(
-          builder: (context) {
-            return IconButton(
-              icon: Icon(
-                Icons.menu,
-                size: 16,
-                color: contentColor,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
-              },
-            );
-          },
-        ) : Container(),
-      ],
+      actions: actions,
     );
   }
 }

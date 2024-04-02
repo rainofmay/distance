@@ -89,7 +89,6 @@ class _CreateGroupPageState extends State<CreateGroupPage>
                           dDayString = '$dDay';
                         }
                       });
-                      ;
                     })),
             SizedBox(
               height: 16.0, // 높이를 조절하여 간격을 만듭니다.
@@ -148,7 +147,7 @@ class _CreateGroupPageState extends State<CreateGroupPage>
                       borderRadius: BorderRadius.circular(5),
                       image: DecorationImage(
                         fit: BoxFit.cover,
-                        image: FileImage(File(image!.path)),
+                        image: FileImage(File(image.path)),
                       ),
                     ),
                   ),

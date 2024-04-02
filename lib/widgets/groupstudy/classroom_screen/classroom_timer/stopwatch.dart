@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_timer/stopwatch_button.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
@@ -230,7 +229,7 @@ class _CountUpTimerState extends State<CountUpTimer> {
             ),
 
             //스톱워치 조작 버튼
-            Container(
+            SizedBox(
               width: MediaQuery.of(context).size.width, // 화면 너비에 맞추기
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

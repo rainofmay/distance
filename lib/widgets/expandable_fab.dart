@@ -2,7 +2,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
-import 'package:mobile/widgets/action_buttons.dart';
 
 class ExpandableFab extends StatefulWidget {
   //변하지 않는 값은 여기에
@@ -108,10 +107,11 @@ class _ExpandableFabState extends State<ExpandableFab>
   void toggle() {
     isExpanded = !isExpanded;
     setState(() {
-      if (isExpanded)
+      if (isExpanded) {
         _controller.forward();
-      else
+      } else {
         _controller.reverse();
+      }
     });
   }
 }

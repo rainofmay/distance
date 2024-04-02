@@ -51,7 +51,6 @@ class _ReportState extends State<Report> {
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
         contentColor: BLACK,
-        isEndDrawer: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,

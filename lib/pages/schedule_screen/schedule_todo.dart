@@ -1,11 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/borderline.dart';
-import 'package:mobile/widgets/myroom_calendar.dart';
-import 'package:mobile/widgets/schedule/schedule_list.dart';
-import 'package:mobile/util/calendar.dart';
 import 'package:mobile/widgets/todo/todo_list.dart';
-import 'package:provider/provider.dart';
 
 class ScheduleTodo extends StatefulWidget {
   const ScheduleTodo({super.key});
@@ -37,7 +32,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                   scrollDirection: Axis.horizontal,
                   itemCount: 10,
                   itemBuilder: (BuildContext context, int index) {
-                    return Text('${index} 번');
+                    return Text('$index 번');
                   }),
             ),
            BorderLine(lineHeight: 5, lineColor: Colors.grey[200]),

@@ -38,7 +38,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     "월",
   ];
   int _selectedColor = 0;
-  bool _isDone = false;
+  final bool _isDone = false;
 
   void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {

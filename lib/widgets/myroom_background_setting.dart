@@ -4,7 +4,7 @@ import '../pages/myroom.dart';
 import '../util/background_setting_provider.dart';
 
 class BackgroundSettingSecond extends StatefulWidget {
-  const BackgroundSettingSecond({Key? key}) : super(key: key);
+  const BackgroundSettingSecond({super.key});
 
   @override
   _BackgroundSettingSecondState createState() => _BackgroundSettingSecondState();
@@ -71,7 +71,7 @@ class _BackgroundSettingSecondState extends State<BackgroundSettingSecond> {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 width: 150, // 원하는 너비
                 height: 250, // 원하는 높이
                 child: MyRoom(),

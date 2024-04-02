@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mobile/util/calendar.dart';
@@ -64,10 +62,10 @@ class _TodoState extends State<Todo> {
 
   void sendTodo() {
     String todo = introduceController.text;
-    final URI_TEST = Uri.https(
+    final uriTest = Uri.https(
         'study-mate-f07ad-default-rtdb.europe-west1.firebasedatabase.app',
         'kyujin-Todo.json');
-    http.post(URI_TEST, headers: {"Content-Type": "application/json"},
+    http.post(uriTest, headers: {"Content-Type": "application/json"},
         body: json.encode({"todo": todo, "completed": false}));
     setState(() {
       todoList.add({"todo": todo, "completed": false}); // to-do 리스트에 항목 추가
@@ -76,10 +74,10 @@ class _TodoState extends State<Todo> {
   }
 
   void _loadTodos() async {
-    final URI_TEST = Uri.https(
+    final uriTest = Uri.https(
         'study-mate-f07ad-default-rtdb.europe-west1.firebasedatabase.app',
         'kyujin-Todo.json');
-    final response = await http.get(URI_TEST);
+    final response = await http.get(uriTest);
     Map<String, dynamic> loadedTodoList = json.decode(response.body);
     setState(() {
       for (final item in loadedTodoList.entries) {
@@ -106,10 +104,10 @@ class _TodoState extends State<Todo> {
   }
 
   void _deleteTodo(int index) {
-    final URI_TEST = Uri.https(
+    final uriTest = Uri.https(
         'study-mate-f07ad-default-rtdb.europe-west1.firebasedatabase.app',
         'kyujin-Todo/${todoList[index]['id']}.json');
-    http.delete(URI_TEST);
+    http.delete(uriTest);
     setState(() {
       todoList.removeAt(index);
     });

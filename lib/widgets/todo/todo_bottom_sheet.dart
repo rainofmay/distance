@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/todo_model.dart';
@@ -25,7 +24,7 @@ class _TodoBottomSheetState extends State<TodoBottomSheet> {
   ];
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
-  bool _isDone = false;
+  final bool _isDone = false;
 
   void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {

@@ -19,13 +19,13 @@ class BackgroundSettingProvider extends ChangeNotifier {
 
   void updateSimpleWindowEnabled(bool value) {
     isSimpleWindowEnabled = value;
-    print('Simple Window - ${value}');
+    print('Simple Window - $value');
     notifyListeners();
   }
 
   void updateAudioSpectrumEnabled(bool value) {
     isAudioSpectrumEnabled = value;
-    print('Audio Spectrum -${value}');
+    print('Audio Spectrum -$value');
     notifyListeners();
   }
 }

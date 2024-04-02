@@ -1,6 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../model/music_info.dart';
 
@@ -146,7 +145,7 @@ class GlobalAudioPlayer with ChangeNotifier {
       // 오디오 포커스 요청
 
       await player[index].play(AssetSource(nowAudioGroup[index]));
-      await player[index].onPlayerStateChanged.listen((state) {
+      player[index].onPlayerStateChanged.listen((state) {
         if (state == PlayerState.playing) {
           // 오디오 실행중이면 실행
           print('Audio Playing');

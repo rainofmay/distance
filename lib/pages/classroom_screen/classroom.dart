@@ -4,6 +4,7 @@ import 'package:mobile/pages/classroom_screen/drawer_menu/change_setting.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/invite_mate.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/appBar/menu_botton.dart';
 import 'package:mobile/widgets/bottomBar/class_bottom_bar.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
@@ -48,7 +49,7 @@ class _ClassRoomState extends State<ClassRoom> {
         backFunction: _resetBottomIndex,
         backgroundColor: BLACK,
         contentColor: WHITE,
-        isEndDrawer: true,
+        actions: [MenuButton(iconColor: WHITE)],
       ),
       endDrawer: CustomDrawer(
         drawerMenu: _scheduleDrawerMenu,
