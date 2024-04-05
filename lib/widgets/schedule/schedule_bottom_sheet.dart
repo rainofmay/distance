@@ -21,7 +21,6 @@ class ScheduleBottomSheet extends StatefulWidget {
 class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   // 위젯을 고유하게 식별하는 키
   final _formKey = GlobalKey<FormState>();
-
   String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
   final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());

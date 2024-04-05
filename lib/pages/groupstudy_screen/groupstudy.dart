@@ -94,7 +94,7 @@ class _GroupStudyState extends State<GroupStudy>
               controller: _tabController,
             ),
           ),
-          BorderLine(lineHeight: 10),
+          BorderLine(lineHeight: 10, lineColor: Colors.transparent),
           Expanded(
             child: TabBarView(
               controller: _tabController,

@@ -54,12 +54,14 @@ class _ScheduleCardState extends State<ScheduleCard> {
         children: [
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 20, left: 20, bottom: 20),
+              margin: EdgeInsets.only(right: 30, left: 20, bottom: 20),
               height: 100,
               decoration: BoxDecoration(
-                color: cardColor[widget.selectedColor][0],
-                borderRadius: BorderRadius.circular(8.0),
-              ),
+                  color: cardColor[widget.selectedColor][0],
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border(
+                    left: BorderSide(color: Colors.indigo, width: 1.5),
+                  )),
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 12, right: 12, top: 10, bottom: 0),

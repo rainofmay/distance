@@ -26,7 +26,7 @@ class _MainBottomNavagationBarState extends State<MainBottomNavagationBar> {
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_2_fill), label: '메이트'),
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.gift_fill), label: '스토어'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: '설 정'),
+          BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '내 정보'),
         ]);
   }
 }

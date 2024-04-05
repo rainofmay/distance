@@ -66,7 +66,7 @@ class _MyAppState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
-      body: screens[context.watch<BottomIndex>().bottomIndex],
+      body: screens.elementAt(context.watch<BottomIndex>().bottomIndex),
       bottomNavigationBar: MainBottomNavagationBar(),
     );
   }

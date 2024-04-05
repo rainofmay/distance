@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
@@ -32,24 +33,7 @@ class _CreateGroupPageState extends State<CreateGroupPage>
     String dDayString = "";
 
     return Scaffold(
-      appBar: AppBar(
-        titleSpacing: -10,
-        backgroundColor: BLACK,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            size: 16,
-            color: WHITE,
-          ),
-        ),
-        title: Text(
-          '클래스룸 생성',
-          style: TextStyle(fontSize: 16, color: WHITE),
-        ),
-      ),
+      appBar: CustomBackAppBar(appbarTitle: '클래스룸 생성', backFunction: Navigator.of(context).pop, backgroundColor: WHITE, contentColor: BLACK),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +146,7 @@ class _CreateGroupPageState extends State<CreateGroupPage>
               decoration: InputDecoration(labelText: "주요 공부 시간"),
             ),
             // 추가로 뭘 더 들어가야 할지 설정
-            BorderLine(lineHeight: 10),
+            BorderLine(lineHeight: 10, lineColor: Colors.transparent),
             OkCancelButtons(
               okText: '생성',
               cancelText: '취소',

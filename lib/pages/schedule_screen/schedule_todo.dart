@@ -35,7 +35,7 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
                     return Text('$index 번');
                   }),
             ),
-           BorderLine(lineHeight: 5, lineColor: Colors.grey[200]),
+           BorderLine(lineHeight: 8, backgroundColor: Colors.grey.shade200, lineColor: Colors.transparent),
             SizedBox(height: 10),
             Text('#과제 목록'),
             Row(

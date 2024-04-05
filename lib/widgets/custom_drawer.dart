@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Map<Map<Icon, String>, dynamic> drawerMenu;
-  // final GestureTapCallback drawerMenuPressed;
   final List<IconButton>? drawerUnderMenu;
   const CustomDrawer({super.key, required this.drawerMenu, this.drawerUnderMenu});
 
@@ -39,12 +38,12 @@ class CustomDrawer extends StatelessWidget {
                     for (var val in entry.key.entries.toList())
                     ListTile(
                       leading: val.key,
-                      title: Text(val.value),
+                      title: Text(val.value, style: TextStyle(fontSize: 15),),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (c) => entry.value));
                       },
-                      trailing: Icon(Icons.arrow_forward_ios, size: 16,),
+                      trailing: Icon(Icons.arrow_forward_ios, size: 15,),
                     ),
                 ],
               ),

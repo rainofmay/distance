@@ -35,17 +35,17 @@ class _CalendarState extends State<Calendar> {
         // 달력 크기 선택 옵션 없애기
         leftChevronIcon: Icon(
           Icons.chevron_left,
-          color: WHITE,
+          color: BLACK,
           size: 18,
         ),
         // 왼쪽 화살표 색상
         rightChevronIcon: Icon(
           Icons.chevron_right,
-          color: WHITE,
+          color: BLACK,
           size: 18,
         ),
         titleTextStyle: TextStyle(
-          color: WHITE,
+          color: BLACK,
           fontWeight: FontWeight.w100,
           fontSize: 13.0,
         ),
@@ -54,11 +54,11 @@ class _CalendarState extends State<Calendar> {
       //요일
       daysOfWeekStyle: DaysOfWeekStyle(
         weekdayStyle: TextStyle(
-          color: WHITE,
+          color: BLACK,
           fontSize: 12.0,
         ),
         weekendStyle: TextStyle(
-          color: WHITE,
+          color: BLACK,
           fontSize: 12.0,
         ),
       ),
@@ -84,12 +84,12 @@ class _CalendarState extends State<Calendar> {
         defaultTextStyle: TextStyle(
           fontWeight: FontWeight.w100,
           fontSize: 12,
-          color: WHITE,
+          color: BLACK,
         ),
         weekendTextStyle: TextStyle(
           fontWeight: FontWeight.w100,
           fontSize: 12,
-          color: WHITE,
+          color: BLACK,
         ),
         selectedTextStyle: TextStyle(
           fontWeight: FontWeight.w300,

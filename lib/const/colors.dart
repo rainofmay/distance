@@ -21,19 +21,19 @@ final COLOR5 = Color(0xfffcb434);
 final COLOR6 = Color(0xff1565C0);
 final COLOR7 = Color(0xff333F50);
 final TRANSPARENT_WHITE = Color.fromRGBO(255, 255, 240, 0.1);
-
+const TRANSPARENT = Colors.transparent;
 // Background, Font
 List<List<Color>> cardColor = [
-  [WHITE, BLACK],
-  [WHITE, BLUE],
-  [WHITE, GREEN],
-  [WHITE, RED],
-  [COLOR1, BLACK],
-  [COLOR2, BLACK],
-  [COLOR3, BLACK],
-  [COLOR4, WHITE],
-  [COLOR5, WHITE],
-  [COLOR6, WHITE],
-  [COLOR7, WHITE],
-  [TRANSPARENT_WHITE, WHITE],
+  [TRANSPARENT, BLACK],
+  [TRANSPARENT, BLUE],
+  [TRANSPARENT, GREEN],
+  [TRANSPARENT, RED],
+  // [COLOR1, BLACK],
+  // [COLOR2, BLACK],
+  // [COLOR3, BLACK],
+  // [COLOR4, WHITE],
+  // [COLOR5, WHITE],
+  // [COLOR6, WHITE],
+  // [COLOR7, WHITE],
+  // [TRANSPARENT_WHITE, WHITE],
 ];

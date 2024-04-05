@@ -6,6 +6,7 @@ import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/appBar/menu_botton.dart';
 import 'package:mobile/widgets/bottomBar/class_bottom_bar.dart';
+import 'package:mobile/widgets/custom_dialog.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
 import 'package:mobile/pages/classroom_screen/classroom_class.dart';
@@ -27,13 +28,18 @@ class _ClassRoomState extends State<ClassRoom> {
     ClassRoomHome(),
     ClassRoomClass(),
     ClassRoomMate(),
-    ClassRoomTimer()
+    ClassRoomTimer(),
   ];
 
   final Map<Map<Icon, String>, dynamic> _scheduleDrawerMenu = {
-    {Icon(Icons.settings): '설정 변경'} : ChangeSetting(),
-    {Icon(Icons.person_add_alt): '메이트 초대'} : InviteMate(),
-    {Icon(Icons.report_gmailerrorred_rounded): '신고하기'} : Report(),
+    {
+      Icon(
+        Icons.settings,
+        size: 16,
+      ): '설정 변경'
+    }: ChangeSetting(),
+    {Icon(Icons.person_add_alt, size: 16): '메이트 초대'}: InviteMate(),
+    {Icon(Icons.report_gmailerrorred_rounded, size: 16): '신고하기'}: Report(),
   };
 
   _resetBottomIndex() {
@@ -55,9 +61,17 @@ class _ClassRoomState extends State<ClassRoom> {
         drawerMenu: _scheduleDrawerMenu,
         drawerUnderMenu: [
           //Toggle 버튼 구현
-          IconButton(icon: Icon(Icons.exit_to_app_rounded), onPressed: () {_customDialog(context);}),
-          IconButton(icon: Icon(Icons.notifications), onPressed: () {}),
-          IconButton(icon: Icon(Icons.lock), onPressed: () {}),
+          IconButton(
+              icon: Icon(
+                Icons.exit_to_app_rounded,
+                size: 21,
+              ),
+              onPressed: () {
+                showCustomDialog(context, '신고하시겠습니까?', '허위신고는 제재를 받을 수 있습니다.');
+              }),
+          IconButton(
+              icon: Icon(Icons.notifications, size: 21), onPressed: () {}),
+          IconButton(icon: Icon(Icons.lock, size: 21), onPressed: () {}),
         ],
       ),
 
@@ -68,20 +82,18 @@ class _ClassRoomState extends State<ClassRoom> {
   }
 }
 
-Future<void> _customDialog(BuildContext context) {
-  // 현재 화면 위에 보여줄 다이얼로그 생성
-  return showDialog<void>(
-    context: context,
-    builder: (context) {
-      // 빌더로 AlertDialog 위젯을 생성
-      return AlertDialog(
-        backgroundColor: WHITE,
-        title: const Text('클래스룸을 나가시겠습니까?',
-            style: TextStyle(color: Colors.black, fontSize: 17)),
-        actions: [
-          OkCancelButtons(okText: '나가기', cancelText: '취소', onPressed: () {})  // 클래스룸 나가는 기능 구현
-        ],
-      );
-    },
-  );
-}
+// Future<void> _customDialog(BuildContext context) {
+//   return showDialog<void>(
+//     context: context,
+//     builder: (context) {
+//       return AlertDialog(
+//         backgroundColor: WHITE,
+//         title: const Text('클래스룸을 나가시겠습니까?',
+//             style: TextStyle(color: Colors.black, fontSize: 17)),
+//         actions: [
+//           OkCancelButtons(okText: '나가기', cancelText: '취소', onPressed: () {})
+//         ],
+//       );
+//     },
+//   );
+// }
