@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
@@ -23,15 +24,15 @@ Future<void> main() async {
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
   MobileAds.instance.initialize();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  // 파이어베이스 인증
+  // await Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
   await initializeDateFormatting();
+  await dotenv.load();
   await Supabase.initialize(
-      url: 'https://ivwqpnjxfbikydudezgs.supabase.co',
-      anonKey:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml2d3Fwbmp4ZmJpa3lkdWRlemdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTE3Nzg1NzUsImV4cCI6MjAyNzM1NDU3NX0.xv2q_V8rKlKqXk47il0V03wRcgiNuSeGusfizbsf7Ns'
-  );
+      url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
 
   runApp(
     MultiProvider(

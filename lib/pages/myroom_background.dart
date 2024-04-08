@@ -140,7 +140,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                 // 현재 화면을 pop하여 이전 화면으로 이동
                 Navigator.pop(context);
               },
-              okText: 'OK', cancelText: '',
+              okText: '확인', cancelText: '',
             ),
           ],
         ),

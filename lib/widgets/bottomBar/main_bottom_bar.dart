@@ -20,10 +20,10 @@ class _MainBottomNavagationBarState extends State<MainBottomNavagationBar> {
         onTap: context.read<BottomIndex>().setBottomIndex,
         items: [
           BottomNavigationBarItem(
-            icon: Icon(CupertinoIcons.house_fill), label: '내 방'),
+            icon: Icon(CupertinoIcons.house_fill,), label: '홈',),
           BottomNavigationBarItem(
             icon: Icon(CupertinoIcons.person_crop_rectangle_fill), label: '그룹스터디'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_2_fill), label: '메이트'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person_fill), label: '메이트'),
           BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.gift_fill), label: '스토어'),
           BottomNavigationBarItem(icon: Icon(Icons.more_horiz), label: '내 정보'),

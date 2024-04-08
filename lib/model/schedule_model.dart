@@ -30,29 +30,53 @@ class ScheduleModel {
     required Map<String, dynamic> json,
   })
       : id = json['id'],
-        scheduleName = json['이름'],
-        selectedDate = DateTime.parse(json['selectedDate']),
-        startTime = json['시작'],
-        endTime = json['종료'],
-        timeStamp = json['timeStamp'],
+        scheduleName = json['schedule_name'],
+        selectedDate = DateTime.parse(json['selected_date']),
+        startTime = json['start_time'],
+        endTime = json['end_time'],
+        timeStamp = json['time_stamp'],
         // selectedRepeat = json['반복'],
-        memo = json['메모'],
-        selectedColor = json['색상'],
-        isDone = json['완료'];
+        memo = json['memo'],
+        selectedColor = json['selected_color'],
+        isDone = json['is_done'];
 
 
   Map<String, dynamic> toJson() {
     return {
       'id' : id,
-      '이름' : scheduleName,
+      'schedule_name' : scheduleName,
       'timeStamp' : timeStamp,
-      'selectedDate' : '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
-      '시작' : startTime,
-      '종료' : endTime,
+      'selected_date' : '${selectedDate.year}${selectedDate.month.toString().padLeft(2, '0')}${selectedDate.day.toString().padLeft(2, '0')}',
+      'start_time' : startTime,
+      'end_time' : endTime,
       // '반복' : selectedRepeat,
-      '메모' : memo,
-      '색상' : selectedColor,
-      '완료' : isDone,
+      'memo' : memo,
+      'selected_color' : selectedColor,
+      'is_done' : isDone,
     };
+  }
+
+  ScheduleModel copyWith ({
+    String? id,
+    String? scheduleName,
+    Timestamp? timeStamp,
+    DateTime? selectedDate,
+    String? startTime,
+    String? endTime,
+    String? memo,
+    int? selectedColor,
+    bool? isDone,
+}) {
+    return ScheduleModel(
+      id: id ?? this.id,
+      scheduleName: scheduleName ?? this.scheduleName,
+      timeStamp: timeStamp ?? this.timeStamp,
+      selectedDate: selectedDate ?? this.selectedDate,
+      startTime: startTime ?? this.startTime,
+      endTime: endTime ?? this.endTime,
+      memo : memo ?? this.memo,
+      selectedColor: selectedColor ?? this.selectedColor,
+      isDone: isDone ?? this.isDone,
+    );
   }
 }

@@ -78,6 +78,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: Icon(
             CupertinoIcons.cube,
             color: WHITE,
+            size: 30,
           ),
         ),
       ),
@@ -98,6 +99,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           child: Icon(
             CupertinoIcons.cube_fill,
             color: Colors.greenAccent,
+            size: 30,
           ),
         ),
       ),

@@ -71,7 +71,7 @@ class _MyRoomState extends State<MyRoom> {
         ],
       ),
       floatingActionButton: ExpandableFab(
-        distance: 60,
+        distance: 65,
         sub: [
           ActionButton(
             onPressed: () {

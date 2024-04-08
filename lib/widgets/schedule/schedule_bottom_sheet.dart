@@ -5,13 +5,10 @@ import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
-final firestore = FirebaseFirestore.instance;
-
 class ScheduleBottomSheet extends StatefulWidget {
-  // final DateTime selectedDate;
-  // final int? scheduleId;
   const ScheduleBottomSheet({super.key});
 
   @override
@@ -56,10 +53,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         selectedColor: _selectedColor,
         isDone: _isDone);
 
-    await firestore
-        .collection('schedule')
-        .doc(schedule.id)
-        .set(schedule.toJson());
+    final supabase = Supabase.instance.client;
+
   }
 
   Future<void> _getDateFromUser() async {

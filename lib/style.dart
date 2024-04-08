@@ -34,8 +34,8 @@ var theme = ThemeData(
           height: 2.2,
           letterSpacing: 1.5,
           fontFamily: 'GmarketSansTTFMedium'),
-      selectedIconTheme: IconThemeData(size: 16),
-      unselectedIconTheme: IconThemeData(size: 16),
+      selectedIconTheme: IconThemeData(size: 20),
+      unselectedIconTheme: IconThemeData(size: 20),
     ),
 
   textButtonTheme: TextButtonThemeData(
