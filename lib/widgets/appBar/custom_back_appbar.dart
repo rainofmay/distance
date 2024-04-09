@@ -23,7 +23,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      titleSpacing: -10,
+      titleSpacing: -5,
       backgroundColor: backgroundColor,
       shape: Border(
         bottom: BorderSide(
@@ -34,13 +34,13 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
         onPressed: backFunction,
         icon: Icon(
           Icons.arrow_back,
-          size: 16,
+          size: 24,
           color: contentColor,
         ),
       ),
       title: Text(
         appbarTitle,
-        style: TextStyle(fontSize: 16, color: contentColor),
+        style: TextStyle(fontSize: 18, color: contentColor),
       ),
       // centerTitle: true,
       actions: actions,

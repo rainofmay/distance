@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/pop_up_menu.dart';
 
-class ScheduleCard extends StatefulWidget {
+class ScheduleCard extends StatelessWidget {
   final String id;
   final String scheduleName;
   final DateTime selectedDate;
@@ -23,14 +23,7 @@ class ScheduleCard extends StatefulWidget {
     required this.isDone,
     super.key,
   });
-
-  @override
-  State<ScheduleCard> createState() => _ScheduleCardState();
-}
-
-class _ScheduleCardState extends State<ScheduleCard> {
-  final List<String> _cardItems = ["다른 날짜 이동/복사", "수정", "삭제"];
-
+  final List<String> cardItems = ["다른 날짜 이동/복사", "수정", "삭제"];
   @override
   // void initState() {
   //   super.initState();
@@ -57,7 +50,7 @@ class _ScheduleCardState extends State<ScheduleCard> {
               margin: EdgeInsets.only(right: 30, left: 20, bottom: 20),
               height: 100,
               decoration: BoxDecoration(
-                  color: cardColor[widget.selectedColor][0],
+                  color: cardColor[selectedColor][0],
                   borderRadius: BorderRadius.circular(8),
                   border: Border(
                     left: BorderSide(color: Colors.indigo, width: 1.5),
@@ -72,13 +65,13 @@ class _ScheduleCardState extends State<ScheduleCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          widget.scheduleName,
+                          scheduleName,
                           style: TextStyle(
                               fontSize: 15,
-                              color: cardColor[widget.selectedColor][1]),
+                              color: cardColor[selectedColor][1]),
                         ),
                         Text(
-                          '${widget.startTime}~${widget.endTime}',
+                          '$startTime~$endTime',
                           style: TextStyle(fontSize: 9, color: Colors.grey),
                         ),
                       ],
@@ -87,15 +80,15 @@ class _ScheduleCardState extends State<ScheduleCard> {
                         padding: EdgeInsets.only(left: 10),
                         alignment: Alignment.topLeft,
                         child: Text(
-                          '# ${widget.memo}',
+                          '# $memo',
                           style: TextStyle(
                               fontSize: 12,
-                              color: cardColor[widget.selectedColor][1]),
+                              color: cardColor[selectedColor][1]),
                         )),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: PopUpMenu(
-                        items: _cardItems,
+                        items: cardItems,
                         menuIcon: Icon(Icons.more_horiz_rounded),
                       ),
                     )

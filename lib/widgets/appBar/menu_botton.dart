@@ -11,7 +11,7 @@ class MenuButton extends StatelessWidget {
         return IconButton(
           icon: Icon(
             Icons.menu,
-            size: 16,
+            size: 24,
             color: iconColor,
           ),
           onPressed: () {

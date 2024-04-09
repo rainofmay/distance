@@ -20,7 +20,7 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   String _scheduleName = '';
   DateTime _selectedDate = DateTime.now();
-  final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
+  // final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
 
   // String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
   String _startTime = "06:00 AM";
@@ -45,7 +45,6 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
     final schedule = ScheduleModel(
         id: Uuid().v4(),
         scheduleName: _scheduleName,
-        timeStamp: _timeStamp,
         selectedDate: _selectedDate,
         startTime: _startTime,
         endTime: _endTime,
@@ -54,7 +53,8 @@ class _ScheduleBottomSheetState extends State<ScheduleBottomSheet> {
         isDone: _isDone);
 
     final supabase = Supabase.instance.client;
-
+    print(schedule.toJson());
+    try {await supabase.from('schedule').insert(schedule.toJson());} catch (e) {print('에러 $e.toString()');}
   }
 
   Future<void> _getDateFromUser() async {

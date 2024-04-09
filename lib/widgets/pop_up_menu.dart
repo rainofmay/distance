@@ -28,7 +28,7 @@ class PopUpMenu extends StatelessWidget {
         constraints: const BoxConstraints(minWidth: 50, maxWidth: 120),
         splashRadius: null,
         enabled: true,
-        icon: menuIcon,
+        icon: menuIcon
       ),);
   }
 }
@@ -48,3 +48,11 @@ PopupMenuItem<String> _menuItem(String text) {
     ),
   );
 }
+
+// child: IconButton(
+// icon: menuIcon,
+// splashColor: Colors.transparent, // 터치 효과 색상
+// highlightColor: Colors.transparent, // 강조 색상
+// onPressed: () {// 팝업 메뉴 버튼이 눌렸을 때 실행되는 콜백
+// },
+// ),

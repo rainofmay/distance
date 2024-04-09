@@ -23,16 +23,13 @@ import 'firebase_options.dart';
 Future<void> main() async {
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
 
-  // 파이어베이스 인증
-  // await Firebase.initializeApp(
-  //   options: DefaultFirebaseOptions.currentPlatform,
-  // );
   await initializeDateFormatting();
   await dotenv.load();
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
+
+  MobileAds.instance.initialize();
 
   runApp(
     MultiProvider(
