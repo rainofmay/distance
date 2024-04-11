@@ -38,7 +38,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => BottomIndex()),
-        ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
+        // ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
         ChangeNotifierProvider(
             create: (context) => BackgroundSettingProvider()),
       ],
@@ -58,7 +58,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPage> {
-  final List screens = [MyRoom(), GroupStudy(), Mate(), Store(), LoginPage()];
+  final List screens = [MyRoom(), Mate(), Store(), LoginPage()];
 
   @override
   Widget build(BuildContext context) {

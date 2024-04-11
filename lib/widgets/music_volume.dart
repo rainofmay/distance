@@ -5,9 +5,9 @@ import '../util/global_player.dart';
 class MusicVolume extends StatefulWidget {
 
   final String kindOfMusic;
-  final String assetImage;
+  final dynamic musicIcon;
   final int playerIndex;
-  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.assetImage});
+  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.musicIcon});
 
   @override
   State<MusicVolume> createState() => _MusicVolumeState();
@@ -41,7 +41,7 @@ class _MusicVolumeState extends State<MusicVolume> {
             children: [
               Row(
                 children: [
-                  Image(image: AssetImage(widget.assetImage), width: 13, height: 13),
+                  widget.musicIcon,
                   SizedBox(width: 10),
                   Text(widget.kindOfMusic, style: TextStyle(fontSize: 13)),
                 ],

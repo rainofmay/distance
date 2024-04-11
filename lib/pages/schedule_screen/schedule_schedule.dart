@@ -43,6 +43,11 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
       this.focusedDate = focusedDate;
     });
   }
+  @override
+  void initState() {
+    super.initState();
+    // 달력 미리 불러오기
+  }
 
   @override
   Widget build(BuildContext context) {

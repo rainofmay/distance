@@ -4,6 +4,9 @@ import 'package:mobile/widgets/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
 
+import '../util/background_provider.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
 
@@ -22,6 +25,9 @@ class _MusicSettingState extends State<MusicSetting> {
 
   @override
   Widget build(BuildContext context) {
+    final backgroundProvider = context.read<BackgroundProvider>();
+
+
     return Dialog(
       backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
@@ -98,7 +104,7 @@ class _MusicSettingState extends State<MusicSetting> {
                               },
                               icon: Image(
                                 image:
-                                    AssetImage('assets/images/cafeImage.jpeg'),
+                                AssetImage('assets/images/cafeImage.jpeg'),
                                 width: 50,
                                 height: 50,
                               )),
@@ -120,7 +126,7 @@ class _MusicSettingState extends State<MusicSetting> {
                               },
                               icon: Image(
                                 image:
-                                    AssetImage('assets/images/musictest.png'),
+                                AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
@@ -131,7 +137,7 @@ class _MusicSettingState extends State<MusicSetting> {
                               },
                               icon: Image(
                                 image:
-                                    AssetImage('assets/images/musictest.png'),
+                                AssetImage('assets/images/musictest.png'),
                                 width: 50,
                                 height: 50,
                               )),
@@ -161,12 +167,12 @@ class _MusicSettingState extends State<MusicSetting> {
                           builder: (context, globalAudioPlayer, child) {
                             return Column(
                               children: globalAudioPlayer.DUMMY_DATA[
-                                      globalAudioPlayer.currentGroupIndex]
+                              globalAudioPlayer.currentGroupIndex]
                                   .map((musicInfo) {
                                 return MusicVolume(
                                   playerIndex: musicInfo.playerIndex,
                                   kindOfMusic: musicInfo.kindOfMusic,
-                                  assetImage: musicInfo.assetImage,
+                                  musicIcon: musicInfo.musicIcon,
                                 );
                               }).toList(),
                             );
@@ -184,7 +190,14 @@ class _MusicSettingState extends State<MusicSetting> {
                 cancelText: '취소',
                 onPressed: () {
                   Navigator.of(context).pop(); // 닫히는 버튼
-                }),
+                  backgroundProvider.initializeVideo();
+                },
+                onCancelPressed: () {
+                  Navigator.of(context).pop(); // 닫히는 버튼
+                  backgroundProvider.initializeVideo();
+                }
+            ),
+
           ],
         ),
 
