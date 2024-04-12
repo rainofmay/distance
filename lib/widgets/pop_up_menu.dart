@@ -4,7 +4,8 @@ import 'package:mobile/const/colors.dart';
 class PopUpMenu extends StatelessWidget {
   final List<String> items;
   final Icon menuIcon;
-  PopUpMenu({super.key, required this.items, required this.menuIcon});
+  final Function(String) onItemSelected;
+  PopUpMenu({super.key, required this.items, required this.menuIcon, required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +26,7 @@ class PopUpMenu extends StatelessWidget {
               _menuItem(value)
           ];
         },
+          onSelected: onItemSelected,
         constraints: const BoxConstraints(minWidth: 50, maxWidth: 120),
         splashRadius: null,
         enabled: true,
@@ -48,11 +50,3 @@ PopupMenuItem<String> _menuItem(String text) {
     ),
   );
 }
-
-// child: IconButton(
-// icon: menuIcon,
-// splashColor: Colors.transparent, // 터치 효과 색상
-// highlightColor: Colors.transparent, // 강조 색상
-// onPressed: () {// 팝업 메뉴 버튼이 눌렸을 때 실행되는 콜백
-// },
-// ),

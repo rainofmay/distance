@@ -93,7 +93,7 @@ class _MyRoomState extends State<MyRoom> {
                 ),
               );
             },
-            icon: Icon(Icons.edit_calendar_sharp, size: 20, color: Colors.white70),
+            icon: Icon(Icons.edit_calendar_outlined, size: 20, color: Colors.white70),
           ),
           ActionButton(
             onPressed: () {

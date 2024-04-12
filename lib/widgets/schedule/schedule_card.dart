@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/widgets/pop_up_menu.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ScheduleCard extends StatelessWidget {
   final String id;
@@ -23,21 +25,23 @@ class ScheduleCard extends StatelessWidget {
     required this.isDone,
     super.key,
   });
-  final List<String> cardItems = ["다른 날짜 이동/복사", "수정", "삭제"];
-  @override
-  // void initState() {
-  //   super.initState();
-  //   isDone = widget.isDone;
-  // }
-  //
-  // updateToggle(newValue) async{
-  //   print('updateToggle: ${newValue}');
-  //   setState(() {
-  //     isDone = newValue;
-  //     print(widget.isDone);
-  //   });
-  //   await FirebaseFirestore.instance.collection('schedule').doc(widget.id).update({'isDone': isDone});
-  // }
+
+  final List<String> cardMoreOptions = ["날짜 이동", "복사", "수정", "삭제"];
+
+  void _handleMenuOptions(String item) async {
+    if (item == '날짜 이동') {
+      // 추가 동작 수행
+    } else if (item == '복사') {
+      // 수정 동작 수행
+    } else if (item == '수정') {
+      // 삭제 동작 수행
+    } else if (item == '삭제') {
+      await Supabase.instance.client.from('schedule').delete().match({
+        'id': id,
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +56,18 @@ class ScheduleCard extends StatelessWidget {
               decoration: BoxDecoration(
                   color: cardColor[selectedColor][0],
                   borderRadius: BorderRadius.circular(8),
-                  border: Border(
-                    left: BorderSide(color: Colors.indigo, width: 1.5),
-                  )),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 0,
+                      blurRadius: 2.0,
+                      offset: Offset(0, 1), // changes position of shadow
+                    ),
+                  ],
+                  // border: Border(
+                  //   left: BorderSide(color: Colors.indigo, width: 1.5),
+                  // ),
+              ),
               child: Padding(
                 padding: const EdgeInsets.only(
                     left: 12, right: 12, top: 10, bottom: 0),
@@ -77,7 +90,7 @@ class ScheduleCard extends StatelessWidget {
                       ],
                     ),
                     Container(
-                        padding: EdgeInsets.only(left: 10),
+                        padding: EdgeInsets.only(top:2, left: 10),
                         alignment: Alignment.topLeft,
                         child: Text(
                           '# $memo',
@@ -88,8 +101,9 @@ class ScheduleCard extends StatelessWidget {
                     Container(
                       alignment: Alignment.bottomRight,
                       child: PopUpMenu(
-                        items: cardItems,
+                        items: cardMoreOptions,
                         menuIcon: Icon(Icons.more_horiz_rounded),
+                        onItemSelected: _handleMenuOptions,
                       ),
                     )
                   ],

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/calendar.dart';
 import 'package:mobile/widgets/schedule/schedule_list.dart';
 import 'package:mobile/util/calendar.dart';
@@ -14,6 +15,7 @@ class ScheduleSchedule extends StatefulWidget {
 }
 
 class _ScheduleScheduleState extends State<ScheduleSchedule> {
+
   List<String> months = [
     'Jan',
     'Fab',
@@ -59,6 +61,8 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
             Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
+                //appBar로부터의 간격
+                BorderLine(lineHeight: 20, lineColor: Colors.transparent),
                 // 달력 큰제목
                 Container(
                   alignment: Alignment.topRight,
@@ -84,24 +88,34 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                 ),
                 AnimatedContainer(
                   duration: Duration(milliseconds: 200),
-                  height: context.watch<CalendarProvider>().isCalendarVisible
-                      ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 370 : 170)
-                      : 0,
-                  padding: EdgeInsets.only(left: 30, right: 30),
+                  // height: context.watch<CalendarProvider>().isCalendarVisible
+                  //     ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 420 : 170)
+                  //     : 0,
+                  padding: EdgeInsets.only(top:20, left: 30, right: 30),
                   child: context.watch<CalendarProvider>().isCalendarVisible
-                      ? SingleChildScrollView(
-                        child: Calendar(
-                          focusedDate: focusedDate,
-                          selectedDate: selectedDate,
-                          onDaySelected: onDaySelected,
-                        ),
+                      ? Calendar(
+                        focusedDate: focusedDate,
+                        selectedDate: selectedDate,
+                        onDaySelected: onDaySelected,
                       )
                       : Container(),
                 ),
-
+                // Container(
+                //   margin: EdgeInsets.only(top:8, bottom:15),
+                //   width: double.infinity,
+                //   child: Center(child: Container(
+                //     width: 50,
+                //     height: 4,
+                //       decoration: BoxDecoration(
+                //       color: Colors.grey[300],
+                //       borderRadius: BorderRadius.circular(10),
+                //     )
+                //   )),
+                // ),
                 Container(
-                  margin: EdgeInsets.only(top: 25, bottom: 25),
+                  margin: EdgeInsets.symmetric(vertical: 25),
                   child: ListTile(
+                    horizontalTitleGap: 3,
                     leading: IconButton(
                         onPressed: () {
                           context.read<CalendarProvider>().setCalendarVisible();

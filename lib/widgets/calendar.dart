@@ -24,25 +24,18 @@ class _CalendarState extends State<Calendar> {
       onVerticalDragUpdate: (details) {
         // 사용자의 세로 방향 스와이프 업데이트를 가져옴
         final double delta = details.primaryDelta ?? 0;   // details.primaryDelta 는 스와이프 시 움직인 거리값
-        if (delta > 0) {
+        if (delta > 2) {
           context.read<CalendarProvider>().setMonthFormat();
-          // setState(() {
-          //   calendarFormat = CalendarFormat.month;
-          // });
 
           print('swiped down');
-        } else if (delta < 0) {
+        } else if (delta < -2) {
           context.read<CalendarProvider>().setWeekFormat();
-          // setState(() {
-          //   calendarFormat = CalendarFormat.week;
-          // });
-
           print('swiped up');
         }
       },
       child: TableCalendar(
         calendarFormat: context.watch<CalendarProvider>().calendarFormat,
-        availableGestures: AvailableGestures.none, // AvailableGestures.all 은 상위 제스쳐를 무시하므로 none으로 설정
+        availableGestures: AvailableGestures.horizontalSwipe, // AvailableGestures.all 은 상위 제스쳐를 무시하므로 none으로 설정
         locale: 'ko_kr',
         daysOfWeekHeight: 50,
         focusedDay: widget.focusedDate,
@@ -59,7 +52,10 @@ class _CalendarState extends State<Calendar> {
           defaultBuilder: (context, day, focusedDay) {
             return Center(child: Text(day.day.toString()));
           },
-
+          // 해당 주, 또는 월에서 벗어나는 날짜
+          outsideBuilder: (context, day, focusedDay) {
+            return Center(child: Text(day.day.toString(), style: TextStyle(color: UNSELECTED)));
+          },
           selectedBuilder: (context, date, _) {
             return Container(
               decoration:  BoxDecoration(

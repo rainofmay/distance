@@ -16,27 +16,27 @@ class GlobalAudioPlayer with ChangeNotifier {
     [
       MusicInfo(
           playerIndex: 0,
-          kindOfMusic: '메인 음악',
+          kindOfMusic: '배경 음악',
           musicIcon: Icon(CupertinoIcons.music_note_2, size: 18, color: Colors.indigo[200]),
           audioURL: 'audios/nature/defaultMainMusic.mp3'),
       MusicInfo(
           playerIndex: 1,
-          kindOfMusic: '풀벌레 소리',
-          musicIcon: FaIcon(CupertinoIcons.moon_stars, size: 18, color: Colors.indigo[200]),
+          kindOfMusic: '풀벌레',
+          musicIcon: Icon(CupertinoIcons.moon_stars, size: 18, color: Colors.indigo[200]),
           audioURL: 'audios/nature/bugSound.mp3'),
       MusicInfo(
           playerIndex: 2,
-          kindOfMusic: '파도 소리',
+          kindOfMusic: '파도',
           musicIcon: Icon(Icons.waves_rounded, size: 18, color: Colors.indigo[200]),
           audioURL: 'audios/nature/waveSound.mp3'),
       MusicInfo(
           playerIndex: 3,
-          kindOfMusic: '바람 소리',
+          kindOfMusic: '바람',
           musicIcon: Icon(Icons.cloud_queue_rounded, size: 18, color: Colors.indigo[200]),
           audioURL: 'audios/nature/windSound.mp3'),
       MusicInfo(
           playerIndex: 4,
-          kindOfMusic: '장작 소리',
+          kindOfMusic: '장작',
           musicIcon: Icon(Icons.local_fire_department, size: 18, color: Colors.indigo[200]),
           audioURL: 'audios/nature/campingFireSound.mp3')
     ],

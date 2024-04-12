@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/widgets/schedule/schedule_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -40,11 +39,10 @@ class ScheduleList extends StatelessWidget {
             return Dismissible(
               key: ObjectKey(schedule.id),
               direction: DismissDirection.startToEnd,
-              onDismissed: (DismissDirection direction) {
-                FirebaseFirestore.instance
-                    .collection('schedule')
-                    .doc(schedule.id)
-                    .delete();
+              onDismissed: (DismissDirection direction) async {
+                await Supabase.instance.client.from('schedule').delete().match({
+                  'id': schedule.id,
+                });
               },
               child: Padding(
                   padding: const EdgeInsets.only(

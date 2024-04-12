@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarProvider extends ChangeNotifier {
-  bool isCalendarVisible = false;
+  bool isCalendarVisible = true;
   CalendarFormat calendarFormat = CalendarFormat.week;
 
   setCalendarVisible() {
