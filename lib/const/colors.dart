@@ -38,3 +38,7 @@ List<List<Color>> cardColor = [
   // [COLOR7, WHITE],
   // [TRANSPARENT_WHITE, WHITE],
 ];
+
+List<Color> sectionColor = [
+  COLOR1, COLOR2, COLOR3, COLOR4, COLOR5, COLOR6, COLOR7
+];

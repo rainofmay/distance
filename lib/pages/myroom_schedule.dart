@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
-import 'package:mobile/pages/schedule_screen/schedule_schedule.dart';
-import 'package:mobile/pages/schedule_screen/schedule_todo.dart';
+import 'package:mobile/pages/schedule_screen/schedule/handle_schedule.dart';
+import 'package:mobile/pages/schedule_screen/schedule/schedule_schedule.dart';
+import 'package:mobile/pages/schedule_screen/todo/handle_todo.dart';
+import 'package:mobile/pages/schedule_screen/todo/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/appBar/menu_botton.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
-import 'package:mobile/widgets/schedule/schedule_bottom_sheet.dart';
-import 'package:mobile/widgets/todo/todo_bottom_sheet.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({super.key});
@@ -25,7 +25,9 @@ class _ScheduleState extends State<Schedule> {
 
   final _notIsOpen = false;
 
-  final Map<Map<Icon, String>, dynamic> _drawerMenu = {{Icon(Icons.notifications): '알림'} : Report()};
+  final Map<Map<Icon, String>, dynamic> _drawerMenu = {
+    {Icon(Icons.notifications): '알림'}: Report()
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -46,18 +48,37 @@ class _ScheduleState extends State<Schedule> {
           backgroundColor: DARK,
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(50))),
-          child: Icon(
+          onPressed: () {
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                pageBuilder: (_, __, ___) => currentTab == 0 ? HandleSchedule() : HandleTodo(),
+                transitionsBuilder: (_, animation, __, child) {
+                  return SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.0, 1.0),
+                      end: Offset.zero,
+                    ).animate(animation),
+                    child: child,
+                  );
+                },
+                transitionDuration: Duration(milliseconds: 300),
+                reverseTransitionDuration: Duration(milliseconds: 140),
+              ),
+            );
+          },
+          child: const Icon(
             Icons.add,
             color: WHITE,
           ),
-          onPressed: () {
-            showModalBottomSheet(
-              context: context,
-              builder: (_) =>
-                  currentTab == 0 ? ScheduleBottomSheet() : TodoBottomSheet(),
-              isDismissible: true,
-            );
-          },
+          // onPressed: () {
+          //   showModalBottomSheet(
+          //     context: context,
+          //     builder: (_) =>
+          //         currentTab == 0 ? ScheduleBottomSheet() : TodoBottomSheet(),
+          //     isDismissible: true,
+          //   );
+          // },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
@@ -85,7 +106,7 @@ class _ScheduleState extends State<Schedule> {
                           color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
                           size: 16,
                         ),
-                        Container(height: 3),
+                        const SizedBox(height: 3),
                         Text(
                           '일 정',
                           style: TextStyle(
@@ -96,7 +117,7 @@ class _ScheduleState extends State<Schedule> {
                       ],
                     ),
                   ),
-                  Container(
+                  const SizedBox(
                     width: 30,
                   ),
                   MaterialButton(
@@ -114,7 +135,7 @@ class _ScheduleState extends State<Schedule> {
                           color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
                           size: 16,
                         ),
-                        Container(height: 3),
+                        const SizedBox(height: 3),
                         Text(
                           '할 일',
                           style: TextStyle(

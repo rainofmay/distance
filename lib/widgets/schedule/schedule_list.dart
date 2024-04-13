@@ -31,8 +31,8 @@ class ScheduleList extends StatelessWidget {
         final schedules =snapshot.data!.map((e) => ScheduleModel.fromJson(json: e),).toList();
 
         return ListView.builder(
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
+          // scrollDirection: Axis.vertical,
+          // shrinkWrap: true,
           itemCount: schedules.length,
           itemBuilder: (context, index) {
             final schedule = schedules[index];

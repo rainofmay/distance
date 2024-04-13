@@ -50,7 +50,7 @@ class _MyRoomState extends State<MyRoom> {
                 ),
               ),
             )
-            //영상으로 선택되어있을 땐 이걸 튼다.
+          //영상으로 선택되어있을 땐 이걸 튼다.
           else if (!backgroundProvider.isImage && backgroundProvider.videoController.value.isInitialized)
             SizedBox.expand(
               child: FittedBox(
@@ -124,4 +124,3 @@ class _MyRoomState extends State<MyRoom> {
     );
   }
 }
-

@@ -7,7 +7,7 @@ class BackgroundSettingSecond extends StatefulWidget {
   const BackgroundSettingSecond({super.key});
 
   @override
-  _BackgroundSettingSecondState createState() => _BackgroundSettingSecondState();
+  State<BackgroundSettingSecond> createState() => _BackgroundSettingSecondState();
 }
 
 class _BackgroundSettingSecondState extends State<BackgroundSettingSecond> {
