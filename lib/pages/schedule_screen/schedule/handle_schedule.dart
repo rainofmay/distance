@@ -11,8 +11,10 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../model/schedule_model.dart';
-import '../../../util/calendar.dart';
+import '../../../util/calendar_provider.dart';
+import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../../../widgets/ok_cancel._buttons.dart';
 
 class HandleSchedule extends StatefulWidget {
   const HandleSchedule({super.key});
@@ -41,9 +43,10 @@ class _HandleScheduleState extends State<HandleSchedule> {
     "주",
     "월",
   ];
-  int _selectedColor = 0;
-  final bool _isDone = false;
 
+  int _selectedColor = 0;
+  int _sectionColor = 0;
+  final bool _isDone = false;
   final TextEditingController _textController = TextEditingController();
 
   @override
@@ -63,7 +66,6 @@ class _HandleScheduleState extends State<HandleSchedule> {
       // bool값 리턴
       _formKey.currentState!.save();
     }
-
     Navigator.of(context).pop();
     //스케줆 모델 생성
     final schedule = ScheduleModel(
@@ -73,6 +75,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
         startTime: _startTime,
         endTime: _endTime,
         memo: _memo,
+        sectionColor: _sectionColor,
         selectedColor: _selectedColor,
         isDone: _isDone);
 
@@ -87,30 +90,46 @@ class _HandleScheduleState extends State<HandleSchedule> {
 
   Future<void> _getDateFromUser({required bool isStartTime}) async {
     DateTime? pickerDate = await showDatePicker(
-        context: context,
-        initialDate: context.read<CalendarProvider>().selectedDate,
-        firstDate: DateTime(2010),
-        lastDate: DateTime(2999));
+      context: context,
+      // locale: const Locale('ko', 'KR'),
+      initialDate: context.read<CalendarProvider>().selectedDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2999),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+            data: ThemeData(
+              splashFactory: NoSplash.splashFactory,
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              focusColor: Colors.transparent,
+              iconButtonTheme: IconButtonThemeData(
+                style: ButtonStyle(
+                  splashFactory: NoSplash.splashFactory,
+                )
+              ),
+              colorScheme: ColorScheme.light(
+                primary: Color.fromARGB(
+                    255, 195, 221, 243), // header background color
+                onPrimary: CALENDAR_COLOR, // 선택된 날짜 색상
+                onSurface: BLACK,
+                onBackground: Colors.grey, // 위와 아래의 경계선 색상
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: BLACK,
+                ),
+              ),
+            ),
+            child: child!);
+      },
+    );
     if (pickerDate != null) {
       setState(() {
         _selectedDate = pickerDate;
       });
     } else {
       print('Error');
-    }
-
-    var pickedTime = await _showTimePicker();
-    String formatedTime = pickedTime.format(context);
-    if (pickedTime == null) {
-      print("Time canceled");
-    } else if (isStartTime == true) {
-      setState(() {
-        _startTime = formatedTime;
-      });
-    } else if (isStartTime == false) {
-      setState(() {
-        _endTime = formatedTime;
-      });
     }
   }
 
@@ -144,7 +163,10 @@ class _HandleScheduleState extends State<HandleSchedule> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomInset = MediaQuery.of(context).viewInsets.bottom;
+    _sectionColor = context
+        .read<ScheduleColorProvider>()
+        .colorIndex; // index를 선택하지 않았을 떄 default가 0이 되는 걸 막기 위함.
+
     return Scaffold(
       appBar: CustomBackAppBar(
         appbarTitle: '',
@@ -176,7 +198,11 @@ class _HandleScheduleState extends State<HandleSchedule> {
             child: SingleChildScrollView(
               child: Padding(
                 padding:
-                    EdgeInsets.only(left: 8.0, top: 16.0, bottom: bottomInset),
+                    // appBar와 body 간의 간격
+                    EdgeInsets.only(
+                  left: 8.0,
+                  top: 16.0,
+                ),
                 child: Column(
                   children: [
                     CustomTextField(
@@ -184,13 +210,28 @@ class _HandleScheduleState extends State<HandleSchedule> {
                       readOnly: false,
                       controller: _textController,
                       titleIcon: IconButton(
-                        icon: Icon(CupertinoIcons.cube_fill,
-                            color: Color(0xff081049)),
-                        onPressed: () => showDialog(context: context, builder: (context) => AlertDialog(
-                          content: SizedBox(width: 400, child: ColorSelection()),
-                        ))
-                      ),
+                          icon: Icon(CupertinoIcons.circle_filled,
+                              color: context
+                                  .watch<ScheduleColorProvider>()
+                                  .selectedSectionColor),
+                          onPressed: () => customDialog(
+                                context,
+                                '구분 색상',
+                                null,
+                                ColorSelection(),
+                                TextButton(
+                                  child: Text('확인',
+                                      style: TextStyle(color: COLOR1)),
+                                  onPressed: () {
+                                    _sectionColor = context
+                                        .read<ScheduleColorProvider>()
+                                        .colorIndex; // DB 모델에 저장
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              )),
                       hint: '일정을 입력해 주세요.',
+                      hintStyle: TextStyle(color: Colors.grey[350]),
                       maxLines: 1,
                       maxLength: 13,
                       validator: (value) {
@@ -215,11 +256,12 @@ class _HandleScheduleState extends State<HandleSchedule> {
                           ),
                           onPressed: null),
                       hint: '메모를 입력해 보세요.',
+                      hintStyle: TextStyle(color: Colors.grey[350]),
                       maxLines: 1,
-                      maxLength: 50,
+                      maxLength: 60,
                       validator: (value) {
                         if (value.toString().length > 50) {
-                          return "50자 이내로 입력하세요.";
+                          return "60자 이내로 입력하세요.";
                         }
                         return null;
                       },
@@ -342,81 +384,6 @@ class _HandleScheduleState extends State<HandleSchedule> {
                                     style: TextStyle(color: UNSELECTED),
                                   ));
                             }).toList(),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          margin: EdgeInsets.only(left: 28, bottom: 10),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "색상 선택",
-                                style: TextStyle(
-                                    fontSize: 12,
-                                    fontFamily: 'GmarketSansTTFMedium',
-                                    color: Colors.grey),
-                                textAlign: TextAlign.left,
-                              ),
-                              const SizedBox(height: 18.0),
-                              SizedBox(
-                                width: 300,
-                                child: GridView.builder(
-                                  scrollDirection: Axis.vertical,
-                                  shrinkWrap: true,
-                                  itemCount: cardColor.length,
-                                  gridDelegate:
-                                      const SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 4,
-                                    //1 개의 행에 보여줄 item 개수
-                                    childAspectRatio: 2,
-                                    //item 의 가로 1, 세로 1 의 비율
-                                    mainAxisSpacing: 10,
-                                  ),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return GestureDetector(
-                                      onTap: () {
-                                        setState(() {
-                                          _selectedColor = index;
-                                        });
-                                      },
-                                      child: Padding(
-                                        padding:
-                                            const EdgeInsets.only(right: 0.0),
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                  color: _selectedColor == index
-                                                      ? Colors.black
-                                                      : Color.fromRGBO(
-                                                          0, 0, 0, 0.3),
-                                                  width: _selectedColor == index
-                                                      ? 2
-                                                      : 1)),
-                                          child: CircleAvatar(
-                                              radius: 18,
-                                              backgroundColor: cardColor[index]
-                                                  [0],
-                                              child: Icon(
-                                                Icons.bookmark_added_outlined,
-                                                color: cardColor[index][1],
-                                                size: 18,
-                                              )),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              )
-                            ],
                           ),
                         ),
                       ],

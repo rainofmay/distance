@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ScheduleModel {
   final String id;
+
   // final Timestamp createdAt;
   final String scheduleName;
   final DateTime selectedDate;
@@ -10,6 +11,7 @@ class ScheduleModel {
 
   // final String selectedRepeat;
   final String memo;
+  final int sectionColor;
   final int selectedColor;
   final bool isDone;
 
@@ -22,6 +24,7 @@ class ScheduleModel {
       required this.endTime,
       // required this.selectedRepeat,
       required this.memo,
+      required this.sectionColor,
       required this.selectedColor,
       required this.isDone});
 
@@ -35,6 +38,7 @@ class ScheduleModel {
         // createdAt = json['created_at'],
         // selectedRepeat = json['반복'],
         memo = json['memo'],
+        sectionColor = json['section_color'],
         selectedColor = json['selected_color'],
         isDone = json['is_done'];
 
@@ -48,6 +52,7 @@ class ScheduleModel {
       'end_time': endTime,
       // '반복' : selectedRepeat,
       'memo': memo,
+      'section_color': sectionColor,
       'selected_color': selectedColor,
       'is_done': isDone
     };
@@ -60,6 +65,7 @@ class ScheduleModel {
     String? startTime,
     String? endTime,
     String? memo,
+    int? sectionColor,
     int? selectedColor,
     bool? isDone,
   }) {
@@ -71,6 +77,7 @@ class ScheduleModel {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       memo: memo ?? this.memo,
+      sectionColor: this.sectionColor,
       selectedColor: selectedColor ?? this.selectedColor,
       isDone: isDone ?? this.isDone,
     );

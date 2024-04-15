@@ -12,6 +12,7 @@ class ScheduleCard extends StatelessWidget {
   final String startTime;
   final String endTime;
   final String memo;
+  final int sectionColor;
   final int selectedColor;
   final bool isDone;
 
@@ -22,6 +23,7 @@ class ScheduleCard extends StatelessWidget {
     required this.startTime,
     required this.endTime,
     required this.memo,
+    required this.sectionColor,
     required this.selectedColor,
     required this.isDone,
     super.key,
@@ -43,48 +45,51 @@ class ScheduleCard extends StatelessWidget {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0, left: 20.0),
+            child: Container(
+              width: 5,
+              height: 90,
+              decoration: BoxDecoration(
+                  color: sectionColors[sectionColor],
+                  borderRadius: BorderRadius.circular(5)),
+            ),
+          ),
           Expanded(
             child: Container(
-              margin: EdgeInsets.only(right: 30, left: 20, bottom: 15),
+              margin: const EdgeInsets.only(right: 30, left: 5, bottom: 15),
               // height: 100,
               decoration: BoxDecoration(
-                  color: cardColor[selectedColor][0],
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.2),
-                      spreadRadius: 0,
-                      blurRadius: 2.0,
-                      offset: Offset(0, 1), // changes position of shadow
-                    ),
-                  ],
-                  // border: Border(
-                  //   left: BorderSide(color: Colors.indigo, width: 1.5),
-                  // ),
-              ),
+                  // boxShadow: [
+                  //   BoxShadow(
+                  //     color: Colors.white.withOpacity(0.5),
+                  //     spreadRadius: 0,
+                  //     blurRadius: 2.0,
+                  //     offset: Offset(0, 1),
+                  //   ),
+                  // ],
+                  ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  // 카드 안에서 텍스트의 패딩 간격
-                    left: 12, right: 12, top : 12, bottom: 0),
+                    // 카드 안에서 텍스트의 패딩 간격
+                    left: 12,
+                    right: 12,
+                    top: 12,
+                    bottom: 0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          scheduleName,
-                          style: TextStyle(
-                              fontSize: 15,
-                              color: cardColor[selectedColor][1]),
-                        ),
+                        Text(scheduleName,
+                            style: TextStyle(fontSize: 15, color: BLACK)),
                         Text(
                           '$startTime~$endTime',
                           style: TextStyle(fontSize: 9, color: Colors.grey),
@@ -92,14 +97,10 @@ class ScheduleCard extends StatelessWidget {
                       ],
                     ),
                     Container(
-                        padding: EdgeInsets.only(top:10, left: 10),
+                        padding: EdgeInsets.only(top: 10, left: 10),
                         alignment: Alignment.topLeft,
-                        child: Text(
-                          '# $memo',
-                          style: TextStyle(
-                              fontSize: 12,
-                              color: cardColor[selectedColor][1]),
-                        )),
+                        child: Text('# $memo',
+                            style: TextStyle(fontSize: 12, color: BLACK))),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: PopUpMenu(

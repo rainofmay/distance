@@ -3,7 +3,7 @@ import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/calendar.dart';
 import 'package:mobile/widgets/schedule/schedule_list.dart';
-import 'package:mobile/util/calendar.dart';
+import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -62,11 +62,11 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            BorderLine(lineHeight: 20, lineColor: Colors.transparent),
+            const BorderLine(lineHeight: 20, lineColor: Colors.transparent),
             // 달력 큰제목
             Container(
               alignment: Alignment.topRight,
-              margin: EdgeInsets.only(top: 15, right: 20),
+              margin: EdgeInsets.only(top: 15, right: 40),
               child: Text(
                 months[DateTime.now().month - 1],
                 style: TextStyle(color: BLACK, letterSpacing: 10, fontSize: 18),
@@ -74,7 +74,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
             ),
             Container(
               alignment: Alignment.topRight,
-              margin: EdgeInsets.only(top: 15, right: 22),
+              margin: EdgeInsets.only(top: 15, right: 43),
               child: Text(
                 '${DateTime.now().day}'.length == 2
                     ? '${DateTime.now().day}'
@@ -94,7 +94,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                     // height: context.watch<CalendarProvider>().isCalendarVisible
                     //     ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 420 : 170)
                     //     : 0,
-                    padding: EdgeInsets.only(top:20, left: 30, right: 30),
+                    padding: const EdgeInsets.only(top:20, left: 30, right: 30),
                     child: context.watch<CalendarProvider>().isCalendarVisible
                         ? Calendar(
                           focusedDate: focusedDate,
@@ -104,7 +104,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                         : Container(),
                   ),
                   Container(
-                    margin: EdgeInsets.symmetric(vertical: 25),
+                    margin: const EdgeInsets.symmetric(vertical: 25),
                     child: ListTile(
                       horizontalTitleGap: 3,
                       leading: IconButton(

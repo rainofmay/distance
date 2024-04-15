@@ -4,18 +4,17 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
-import 'package:mobile/util/class_bottom_index.dart';
+import 'package:mobile/util/schedule_color_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
-import 'package:mobile/pages/groupstudy_screen/groupstudy.dart';
 import 'package:mobile/pages/mate.dart';
 import 'package:mobile/pages/store.dart';
 import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/util/bottom_index.dart';
-import 'package:mobile/util/calendar.dart';
+import 'package:mobile/util/calendar_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
@@ -38,6 +37,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => BackgroundProvider()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => BottomIndex()),
+        ChangeNotifierProvider(create: (context) => ScheduleColorProvider()),
         // ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
         ChangeNotifierProvider(
             create: (context) => BackgroundSettingProvider()),

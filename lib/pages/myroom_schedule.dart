@@ -1,5 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
+import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_background_setting.dart';
+import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.dart';
 import 'package:mobile/pages/schedule_screen/schedule/handle_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/todo/handle_todo.dart';
@@ -26,7 +29,7 @@ class _ScheduleState extends State<Schedule> {
   final _notIsOpen = false;
 
   final Map<Map<Icon, String>, dynamic> _drawerMenu = {
-    {Icon(Icons.notifications): '알림'}: Report()
+    {Icon(Icons.notifications): '알림'}: ScheduleNotification(), {Icon(CupertinoIcons.photo): '배경 설정'}: ScheduleBackgroundSetting()
   };
 
   @override
@@ -37,16 +40,16 @@ class _ScheduleState extends State<Schedule> {
           backFunction: Navigator.of(context).pop,
           backgroundColor: BLACK,
           contentColor: WHITE,
-          actions: [MenuButton(iconColor: WHITE)],
+          actions: [const MenuButton(iconColor: WHITE)],
         ),
         endDrawer: CustomDrawer(
           drawerMenu: _drawerMenu,
         ),
         body: scheduleScreens[currentTab],
-        floatingActionButton: FloatingActionButton.small(
+        floatingActionButton: FloatingActionButton(
           elevation: 8.0,
           backgroundColor: DARK,
-          shape: RoundedRectangleBorder(
+          shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(50))),
           onPressed: () {
             Navigator.push(
@@ -70,20 +73,13 @@ class _ScheduleState extends State<Schedule> {
           child: const Icon(
             Icons.add,
             color: WHITE,
+            size: 30,
           ),
-          // onPressed: () {
-          //   showModalBottomSheet(
-          //     context: context,
-          //     builder: (_) =>
-          //         currentTab == 0 ? ScheduleBottomSheet() : TodoBottomSheet(),
-          //     isDismissible: true,
-          //   );
-          // },
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         bottomNavigationBar: BottomAppBar(
             color: DARK,
-            height: 56,
+            height: 60,
             // shape: CircularNotchedRectangle(),
             // notchMargin: 0,
             child: SizedBox(
@@ -104,14 +100,14 @@ class _ScheduleState extends State<Schedule> {
                         Icon(
                           Icons.edit_calendar,
                           color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
-                          size: 16,
+                          size: 18,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2),
                         Text(
                           '일 정',
                           style: TextStyle(
                               color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
-                              fontSize: 9,
+                              fontSize: 10,
                               letterSpacing: 2.2),
                         )
                       ],
@@ -121,7 +117,7 @@ class _ScheduleState extends State<Schedule> {
                     width: 30,
                   ),
                   MaterialButton(
-                    minWidth: 70,
+                    minWidth: 40,
                     onPressed: () {
                       setState(() {
                         currentTab = 1;
@@ -133,14 +129,14 @@ class _ScheduleState extends State<Schedule> {
                         Icon(
                           Icons.sticky_note_2_rounded,
                           color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
-                          size: 16,
+                          size: 18,
                         ),
-                        const SizedBox(height: 3),
+                        const SizedBox(height: 2),
                         Text(
                           '할 일',
                           style: TextStyle(
                               color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
-                              fontSize: 9,
+                              fontSize: 10,
                               letterSpacing: 2.2),
                         )
                       ],

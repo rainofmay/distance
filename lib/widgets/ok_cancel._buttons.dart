@@ -18,7 +18,7 @@ class OkCancelButtons extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       // height: 30,
-      margin: EdgeInsets.only(top: 20, bottom: 20),
+      margin: EdgeInsets.only(top: 10, bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

@@ -54,6 +54,7 @@ class ScheduleList extends StatelessWidget {
                     startTime: schedule.startTime,
                     endTime: schedule.endTime,
                     memo: schedule.memo,
+                    sectionColor: schedule.sectionColor,
                     selectedColor: schedule.selectedColor,
                     isDone : schedule.isDone,
                   )),

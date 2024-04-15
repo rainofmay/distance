@@ -7,6 +7,7 @@ class CustomTextField extends StatelessWidget {
   final FormFieldSetter? onSaved;
   final FormFieldValidator? validator;
   final String? hint;
+  final TextStyle? hintStyle;
   final TextEditingController? controller;
   final int? maxLines;
   final int? maxLength;
@@ -21,6 +22,7 @@ class CustomTextField extends StatelessWidget {
     this.onSaved,
     this.validator,
     this.hint,
+    this.hintStyle,
     this.controller,
     this.maxLines,
     this.maxLength,
@@ -56,8 +58,9 @@ class CustomTextField extends StatelessWidget {
                 inputFormatters: [],
                 decoration: InputDecoration(
                   icon: titleIcon,
-                  contentPadding: EdgeInsets.all(0),
+                  contentPadding: const EdgeInsets.all(0),
                   hintText: hint,
+                  hintStyle: hintStyle,
                   counterText: '',
                   // labelStyle: TextStyle(color: Colors.black38),
                   enabledBorder: InputBorder.none,

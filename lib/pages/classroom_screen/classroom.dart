@@ -67,7 +67,7 @@ class _ClassRoomState extends State<ClassRoom> {
                 size: 21,
               ),
               onPressed: () {
-                showCustomDialog(context, '신고하시겠습니까?', '허위신고는 제재를 받을 수 있습니다.', Container());
+                // customDialog(context, '신고하시겠습니까?', '허위신고는 제재를 받을 수 있습니다.', Container(), null);
               }),
           IconButton(
               icon: Icon(Icons.notifications, size: 21), onPressed: () {}),
