@@ -193,205 +193,203 @@ class _HandleScheduleState extends State<HandleSchedule> {
       body: SafeArea(
           child: Form(
         key: _formKey,
-        child: Container(
-            color: WHITE,
-            child: SingleChildScrollView(
-              child: Padding(
-                padding:
-                    // appBar와 body 간의 간격
-                    EdgeInsets.only(
-                  left: 8.0,
-                  top: 16.0,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding:
+                // appBar와 body 간의 간격
+                EdgeInsets.only(
+              left: 8.0,
+              top: 16.0,
+            ),
+            child: Column(
+              children: [
+                CustomTextField(
+                  textInputAction: TextInputAction.done,
+                  readOnly: false,
+                  controller: _textController,
+                  titleIcon: IconButton(
+                      icon: Icon(CupertinoIcons.circle_filled,
+                          color: context
+                              .watch<ScheduleColorProvider>()
+                              .selectedSectionColor),
+                      onPressed: () => customDialog(
+                            context,
+                            '구분 색상',
+                            null,
+                            ColorSelection(),
+                            TextButton(
+                              child: Text('확인',
+                                  style: TextStyle(color: COLOR1)),
+                              onPressed: () {
+                                _sectionColor = context
+                                    .read<ScheduleColorProvider>()
+                                    .colorIndex; // DB 모델에 저장
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          )),
+                  hint: '일정을 입력해 주세요.',
+                  hintStyle: TextStyle(color: Colors.grey[350]),
+                  maxLines: 1,
+                  maxLength: 13,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return null;
+                    }
+                    return null;
+                  },
+                  onSaved: (val) {
+                    setState(() {
+                      _scheduleName = val as String;
+                    });
+                  },
                 ),
-                child: Column(
+                CustomTextField(
+                  textInputAction: TextInputAction.done,
+                  readOnly: false,
+                  titleIcon: IconButton(
+                      icon: Icon(
+                        Icons.sticky_note_2_outlined,
+                        color: BLACK,
+                      ),
+                      onPressed: null),
+                  hint: '메모를 입력해 보세요.',
+                  hintStyle: TextStyle(color: Colors.grey[350]),
+                  maxLines: 1,
+                  maxLength: 60,
+                  validator: (value) {
+                    if (value.toString().length > 50) {
+                      return "60자 이내로 입력하세요.";
+                    }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    setState(() {
+                      _memo = value as String;
+                    });
+                  },
+                ),
+
+                // 시작 일시
+                Row(
                   children: [
-                    CustomTextField(
-                      textInputAction: TextInputAction.done,
-                      readOnly: false,
-                      controller: _textController,
-                      titleIcon: IconButton(
-                          icon: Icon(CupertinoIcons.circle_filled,
-                              color: context
-                                  .watch<ScheduleColorProvider>()
-                                  .selectedSectionColor),
-                          onPressed: () => customDialog(
-                                context,
-                                '구분 색상',
-                                null,
-                                ColorSelection(),
-                                TextButton(
-                                  child: Text('확인',
-                                      style: TextStyle(color: COLOR1)),
-                                  onPressed: () {
-                                    _sectionColor = context
-                                        .read<ScheduleColorProvider>()
-                                        .colorIndex; // DB 모델에 저장
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                              )),
-                      hint: '일정을 입력해 주세요.',
-                      hintStyle: TextStyle(color: Colors.grey[350]),
-                      maxLines: 1,
-                      maxLength: 13,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return null;
-                        }
-                        return null;
-                      },
-                      onSaved: (val) {
-                        setState(() {
-                          _scheduleName = val as String;
-                        });
-                      },
+                    Expanded(
+                      child: CustomTextField(
+                        readOnly: true,
+                        onTap: () {
+                          _getDateFromUser(isStartTime: true);
+                        },
+                        titleIcon: IconButton(
+                            icon: Icon(
+                              Icons.edit_calendar_outlined,
+                              color: BLACK,
+                            ),
+                            onPressed: null),
+                        hint: DateFormat.yMd().format(
+                            context.read<CalendarProvider>().selectedDate),
+                      ),
                     ),
-                    CustomTextField(
-                      textInputAction: TextInputAction.done,
-                      readOnly: false,
-                      titleIcon: IconButton(
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: CustomTextField(
+                        textAlign: TextAlign.right,
+                        readOnly: true,
+                        hint: _startTime,
+                        onTap: () {
+                          _getTimeFromUser(isStartTime: true);
+                        },
+                      ),
+                    )),
+                  ],
+                ),
+
+                // 종료 일시
+                Row(
+                  children: [
+                    Expanded(
+                      child: CustomTextField(
+                        readOnly: true,
+                        onTap: () {
+                          _getDateFromUser(isStartTime: false);
+                        },
+                        titleIcon: IconButton(
+                            icon: Icon(
+                              Icons.edit_calendar_outlined,
+                              color: TRANSPARENT,
+                            ),
+                            onPressed: null),
+                        hint: DateFormat.yMd().format(
+                            context.read<CalendarProvider>().selectedDate),
+                      ),
+                    ),
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: CustomTextField(
+                        textAlign: TextAlign.right,
+                        readOnly: true,
+                        hint: _endTime,
+                        onTap: () {
+                          _getTimeFromUser(isStartTime: true);
+                        },
+                      ),
+                    )),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: CustomTextField(
+                        titleIcon: IconButton(
                           icon: Icon(
-                            Icons.sticky_note_2_outlined,
+                            Icons.repeat,
                             color: BLACK,
                           ),
-                          onPressed: null),
-                      hint: '메모를 입력해 보세요.',
-                      hintStyle: TextStyle(color: Colors.grey[350]),
-                      maxLines: 1,
-                      maxLength: 60,
-                      validator: (value) {
-                        if (value.toString().length > 50) {
-                          return "60자 이내로 입력하세요.";
-                        }
-                        return null;
-                      },
-                      onSaved: (value) {
-                        setState(() {
-                          _memo = value as String;
-                        });
-                      },
+                          onPressed: null,
+                        ),
+                        readOnly: true,
+                        hint: _selectedRepeat,
+                      ),
                     ),
-
-                    // 시작 일시
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            readOnly: true,
-                            onTap: () {
-                              _getDateFromUser(isStartTime: true);
-                            },
-                            titleIcon: IconButton(
-                                icon: Icon(
-                                  Icons.edit_calendar_outlined,
-                                  color: BLACK,
-                                ),
-                                onPressed: null),
-                            hint: DateFormat.yMd().format(
-                                context.read<CalendarProvider>().selectedDate),
+                    Expanded(
+                      flex: 1,
+                      child: DropdownButton(
+                        icon: Padding(
+                          padding: const EdgeInsets.only(bottom: 10.0),
+                          child: Icon(
+                            Icons.keyboard_arrow_down,
+                            color: Colors.grey,
                           ),
                         ),
-                        Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: CustomTextField(
-                            textAlign: TextAlign.right,
-                            readOnly: true,
-                            hint: _startTime,
-                            onTap: () {
-                              _getTimeFromUser(isStartTime: true);
-                            },
-                          ),
-                        )),
-                      ],
-                    ),
-
-                    // 종료 일시
-                    Row(
-                      children: [
-                        Expanded(
-                          child: CustomTextField(
-                            readOnly: true,
-                            onTap: () {
-                              _getDateFromUser(isStartTime: false);
-                            },
-                            titleIcon: IconButton(
-                                icon: Icon(
-                                  Icons.edit_calendar_outlined,
-                                  color: TRANSPARENT,
-                                ),
-                                onPressed: null),
-                            hint: DateFormat.yMd().format(
-                                context.read<CalendarProvider>().selectedDate),
-                          ),
+                        iconSize: 24,
+                        underline: Container(
+                          height: 0,
                         ),
-                        Expanded(
-                            child: Padding(
-                          padding: const EdgeInsets.only(right: 15.0),
-                          child: CustomTextField(
-                            textAlign: TextAlign.right,
-                            readOnly: true,
-                            hint: _endTime,
-                            onTap: () {
-                              _getTimeFromUser(isStartTime: true);
-                            },
-                          ),
-                        )),
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          flex: 4,
-                          child: CustomTextField(
-                            titleIcon: IconButton(
-                              icon: Icon(
-                                Icons.repeat,
-                                color: BLACK,
-                              ),
-                              onPressed: null,
-                            ),
-                            readOnly: true,
-                            hint: _selectedRepeat,
-                          ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: DropdownButton(
-                            icon: Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            iconSize: 24,
-                            underline: Container(
-                              height: 0,
-                            ),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedRepeat = newValue!;
-                              });
-                            },
-                            items: repeatList
-                                .map<DropdownMenuItem<String>>((String? value) {
-                              return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value!,
-                                    style: TextStyle(color: UNSELECTED),
-                                  ));
-                            }).toList(),
-                          ),
-                        ),
-                      ],
+                        onChanged: (String? newValue) {
+                          setState(() {
+                            _selectedRepeat = newValue!;
+                          });
+                        },
+                        items: repeatList
+                            .map<DropdownMenuItem<String>>((String? value) {
+                          return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(
+                                value!,
+                                style: TextStyle(color: UNSELECTED),
+                              ));
+                        }).toList(),
+                      ),
                     ),
                   ],
                 ),
-              ),
-            )),
+              ],
+            ),
+          ),
+        ),
       )),
     );
   }

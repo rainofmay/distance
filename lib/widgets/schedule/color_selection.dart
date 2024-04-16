@@ -15,7 +15,7 @@ class _ColorSelectionState extends State<ColorSelection> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10),
+      margin: const EdgeInsets.only(top: 10),
       width: 240,
       height: 200,
       child: GridView.builder(

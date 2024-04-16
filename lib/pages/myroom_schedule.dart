@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_background_setting.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.dart';
 import 'package:mobile/pages/schedule_screen/schedule/handle_schedule.dart';
@@ -26,10 +25,8 @@ class _ScheduleState extends State<Schedule> {
     ScheduleTodo(),
   ];
 
-  final _notIsOpen = false;
-
   final Map<Map<Icon, String>, dynamic> _drawerMenu = {
-    {Icon(Icons.notifications): '알림'}: ScheduleNotification(), {Icon(CupertinoIcons.photo): '배경 설정'}: ScheduleBackgroundSetting()
+    {Icon(Icons.photo_outlined): '배경 설정'}: ScheduleBackgroundSetting(), {Icon(Icons.notifications_none_outlined): '알림'}: ScheduleNotification(),
   };
 
   @override
