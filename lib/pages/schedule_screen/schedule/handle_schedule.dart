@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
@@ -14,7 +13,6 @@ import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
-import '../../../widgets/ok_cancel._buttons.dart';
 
 class HandleSchedule extends StatefulWidget {
   const HandleSchedule({super.key});
@@ -26,15 +24,12 @@ class HandleSchedule extends StatefulWidget {
 class _HandleScheduleState extends State<HandleSchedule> {
   // 위젯을 고유하게 식별하는 키
   final _formKey = GlobalKey<FormState>();
+
   late String _scheduleName;
-
-  DateTime _selectedDate = DateTime.now();
-
-  // final Timestamp _timeStamp = Timestamp.fromDate(DateTime.now());
-
-  // String startTime = DateFormat("hh:mm a").format(DateTime.now()).toString();
+  DateTime _startDate = DateTime.now();
+  DateTime _endDate = DateTime.now();
   String _startTime = "06:00 AM";
-  String _endTime = "09:00 PM";
+  String _endTime = "08:00 PM";
   String _selectedRepeat = "없음";
   String _memo = '';
   List<String> repeatList = [
@@ -44,10 +39,9 @@ class _HandleScheduleState extends State<HandleSchedule> {
     "월",
   ];
 
-  int _selectedColor = 0;
   int _sectionColor = 0;
-  final bool _isDone = false;
   final TextEditingController _textController = TextEditingController();
+  bool _isTimeSet = true;
 
   @override
   void initState() {
@@ -67,17 +61,18 @@ class _HandleScheduleState extends State<HandleSchedule> {
       _formKey.currentState!.save();
     }
     Navigator.of(context).pop();
-    //스케줆 모델 생성
+
+    //스케줆 모델 INSERT
     final schedule = ScheduleModel(
-        id: Uuid().v4(),
-        scheduleName: _scheduleName,
-        selectedDate: _selectedDate,
-        startTime: _startTime,
-        endTime: _endTime,
-        memo: _memo,
-        sectionColor: _sectionColor,
-        selectedColor: _selectedColor,
-        isDone: _isDone);
+      id: Uuid().v4(),
+      scheduleName: _scheduleName,
+      startDate: _startDate,
+      endDate: _endDate,
+      startTime: _isTimeSet ? _startTime : "",
+      endTime: _isTimeSet ? _startTime : "",
+      memo: _memo,
+      sectionColor: _sectionColor,
+    );
 
     final supabase = Supabase.instance.client;
     print(schedule.toJson());
@@ -104,10 +99,9 @@ class _HandleScheduleState extends State<HandleSchedule> {
               hoverColor: Colors.transparent,
               focusColor: Colors.transparent,
               iconButtonTheme: IconButtonThemeData(
-                style: ButtonStyle(
-                  splashFactory: NoSplash.splashFactory,
-                )
-              ),
+                  style: ButtonStyle(
+                splashFactory: NoSplash.splashFactory,
+              )),
               colorScheme: ColorScheme.light(
                 primary: Color.fromARGB(
                     255, 195, 221, 243), // header background color
@@ -124,12 +118,14 @@ class _HandleScheduleState extends State<HandleSchedule> {
             child: child!);
       },
     );
-    if (pickerDate != null) {
+    if (isStartTime == true) {
       setState(() {
-        _selectedDate = pickerDate;
+        _startDate = pickerDate ?? DateTime.now();
       });
-    } else {
-      print('Error');
+    } else if (isStartTime == false) {
+      setState(() {
+        _endDate = pickerDate ?? DateTime.now();
+      });
     }
   }
 
@@ -218,8 +214,8 @@ class _HandleScheduleState extends State<HandleSchedule> {
                             null,
                             ColorSelection(),
                             TextButton(
-                              child: Text('확인',
-                                  style: TextStyle(color: COLOR1)),
+                              child:
+                                  Text('확인', style: TextStyle(color: COLOR1)),
                               onPressed: () {
                                 _sectionColor = context
                                     .read<ScheduleColorProvider>()
@@ -258,7 +254,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                   maxLines: 1,
                   maxLength: 60,
                   validator: (value) {
-                    if (value.toString().length > 50) {
+                    if (value.toString().length > 60) {
                       return "60자 이내로 입력하세요.";
                     }
                     return null;
@@ -286,21 +282,23 @@ class _HandleScheduleState extends State<HandleSchedule> {
                             ),
                             onPressed: null),
                         hint: DateFormat.yMd().format(
-                            context.read<CalendarProvider>().selectedDate),
+                            _startDate),
                       ),
                     ),
-                    Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: CustomTextField(
-                        textAlign: TextAlign.right,
-                        readOnly: true,
-                        hint: _startTime,
-                        onTap: () {
-                          _getTimeFromUser(isStartTime: true);
-                        },
-                      ),
-                    )),
+                    _isTimeSet
+                        ? Expanded(
+                            child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: CustomTextField(
+                              textAlign: TextAlign.right,
+                              readOnly: true,
+                              hint: _startTime,
+                              onTap: () {
+                                _getTimeFromUser(isStartTime: true);
+                              },
+                            ),
+                          ))
+                        : const SizedBox(),
                   ],
                 ),
 
@@ -320,23 +318,48 @@ class _HandleScheduleState extends State<HandleSchedule> {
                             ),
                             onPressed: null),
                         hint: DateFormat.yMd().format(
-                            context.read<CalendarProvider>().selectedDate),
+                            _endDate),
                       ),
                     ),
-                    Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.only(right: 15.0),
-                      child: CustomTextField(
-                        textAlign: TextAlign.right,
-                        readOnly: true,
-                        hint: _endTime,
-                        onTap: () {
-                          _getTimeFromUser(isStartTime: true);
-                        },
-                      ),
-                    )),
+                    _isTimeSet
+                        ? Expanded(
+                            child: Padding(
+                            padding: const EdgeInsets.only(right: 18.0),
+                            child: CustomTextField(
+                              textAlign: TextAlign.right,
+                              readOnly: true,
+                              hint: _endTime,
+                              onTap: () {
+                                _getTimeFromUser(isStartTime: true);
+                              },
+                            ),
+                          ))
+                        : const SizedBox(),
                   ],
                 ),
+                Padding(
+                  padding: const EdgeInsets.only(right: 13.0, bottom: 20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      const Text('Time'),
+                      const SizedBox(width: 3),
+                      Transform.scale(
+                        scale: 0.8,
+                        child: CupertinoSwitch(
+                          value: _isTimeSet,
+                          activeColor: Color(0xffC8D8FA),
+                          onChanged: (bool? value) {
+                            setState(() {
+                              _isTimeSet = value ?? false;
+                            });
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

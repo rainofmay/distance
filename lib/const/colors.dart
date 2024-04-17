@@ -11,7 +11,7 @@ const UNSELECTED = Colors.grey;
 
 const WHITE = Colors.white;
 const BLACK = Colors.black;
-const BLUE = Color(0xff1565C0);
+const BLUE = Color(0xff052d56);
 const GREEN = Color(0xff003300);
 const RED = Color(0xffC62828);
 
@@ -25,7 +25,7 @@ const COLOR7 = Color(0xfffca76a);
 const COLOR8 = Color(0xff422b20);
 const COLOR9 = Color(0xffB7CA79);
 const COLOR10 = Color(0xff148007);
-const COLOR11 = Color(0xff0081A7);
+const COLOR11 = Color(0xffC8D8FA);
 const COLOR12 = Color(0xff1AA6B7);
 const COLOR13 = Color(0xff0029ff);
 const COLOR14 = Color(0xffac19b0);

@@ -8,24 +8,22 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class ScheduleCard extends StatelessWidget {
   final String id;
   final String scheduleName;
-  final DateTime selectedDate;
+  final DateTime startDate;
+  final DateTime endDate;
   final String startTime;
   final String endTime;
   final String memo;
   final int sectionColor;
-  final int selectedColor;
-  final bool isDone;
 
   ScheduleCard({
     required this.id,
     required this.scheduleName,
-    required this.selectedDate,
+    required this.startDate,
+    required this.endDate,
     required this.startTime,
     required this.endTime,
     required this.memo,
     required this.sectionColor,
-    required this.selectedColor,
-    required this.isDone,
     super.key,
   });
 
@@ -65,7 +63,7 @@ class ScheduleCard extends StatelessWidget {
             child: Container(
               margin: const EdgeInsets.only(right: 30, left: 5, bottom: 15),
               // height: 100,
-              decoration: BoxDecoration(
+              // decoration: BoxDecoration(
                   // boxShadow: [
                   //   BoxShadow(
                   //     color: Colors.white.withOpacity(0.5),
@@ -74,7 +72,7 @@ class ScheduleCard extends StatelessWidget {
                   //     offset: Offset(0, 1),
                   //   ),
                   // ],
-                  ),
+                  // ),
               child: Padding(
                 padding: const EdgeInsets.only(
                     // 카드 안에서 텍스트의 패딩 간격

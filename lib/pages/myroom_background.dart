@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import '../widgets/custom_icon_button.dart';
-import '../widgets/myroom_background_setting.dart';
+import '../widgets/background_setting.dart';
 
 class BackgroundSetting extends StatefulWidget {
   const BackgroundSetting({super.key});

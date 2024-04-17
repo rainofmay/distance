@@ -15,7 +15,6 @@ class ScheduleSchedule extends StatefulWidget {
 }
 
 class _ScheduleScheduleState extends State<ScheduleSchedule> {
-
   List<String> months = [
     'Jan',
     'Fab',
@@ -31,18 +30,12 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
     'Dec'
   ];
 
-  // DateTime selectedDate = DateTime.utc(
-  //   DateTime.now().year,
-  //   DateTime.now().month,
-  //   DateTime.now().day,
-  // );
   DateTime focusedDate = DateTime.now();
 
   // 날짜 선택할 때마다 실행되는 함수
   void onDaySelected(DateTime selectedDate, DateTime focusedDate) {
     context.read<CalendarProvider>().setSelectedDate(selectedDate);
     setState(() {
-      // this.selectedDate = selectedDate;
       this.focusedDate = focusedDate;
     });
   }
@@ -103,48 +96,47 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                         )
                         : Container(),
                   ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(vertical: 25),
-                    child: ListTile(
-                      horizontalTitleGap: 3,
-                      leading: IconButton(
-                          onPressed: () {
-                            context.read<CalendarProvider>().setCalendarVisible();
-                          },
-                          icon: Icon(
-                            Icons.calendar_month_outlined,
-                            size: 20,
-                          ),
-                          color: BLACK,
-                          highlightColor: Colors.transparent,
-                          splashColor: Colors.transparent),
-                      title: Text(
-                          selectedDate.day == DateTime.now().day
-                              ? 'Today'
-                              : '${selectedDate.month}월 ${selectedDate.day}일',
-                          style: TextStyle(
-                              color: BLACK,
-                              fontWeight: FontWeight.w100,
-                              fontSize: 15)),
+                  GestureDetector(
+                    onVerticalDragUpdate: (details) {
+                      final double delta = details.primaryDelta ?? 0;
+                      if (delta > 2) {
+                        context.read<CalendarProvider>().setMonthFormat();
+                      } else if (delta < -2) {
+                        context.read<CalendarProvider>().setWeekFormat();
+                      }
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 25),
+                      child: ListTile(
+                        horizontalTitleGap: 3,
+                        leading: IconButton(
+                            onPressed: () {
+                              context.read<CalendarProvider>().setCalendarVisible();
+                            },
+                            icon: Icon(
+                              Icons.calendar_month_outlined,
+                              size: 20,
+                            ),
+                            color: BLACK,
+                            highlightColor: Colors.transparent,
+                            splashColor: Colors.transparent),
+                        title: Text(
+                            selectedDate.day == DateTime.now().day
+                                ? 'Today'
+                                : '${selectedDate.month}월 ${selectedDate.day}일',
+                            style: TextStyle(
+                                color: BLACK,
+                                fontWeight: FontWeight.w100,
+                                fontSize: 15)),
+                      ),
                     ),
                   ),
                   Expanded(child: ScheduleList(selectedDate: selectedDate)),
                 ],
               ),
             ),
-            // Container(
-            //   margin: EdgeInsets.only(top:8, bottom:15),
-            //   width: double.infinity,
-            //   child: Center(child: Container(
-            //     width: 50,
-            //     height: 4,
-            //       decoration: BoxDecoration(
-            //       color: Colors.grey[300],
-            //       borderRadius: BorderRadius.circular(10),
-            //     )
-            //   )),
             // ),
-        
+
           ],
         ),
       ),
