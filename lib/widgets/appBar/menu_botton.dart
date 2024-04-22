@@ -19,6 +19,6 @@ class MenuButton extends StatelessWidget {
           },
         );
       }
-    );;
+    );
   }
 }

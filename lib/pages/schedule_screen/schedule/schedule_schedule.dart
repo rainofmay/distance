@@ -5,7 +5,6 @@ import 'package:mobile/widgets/calendar.dart';
 import 'package:mobile/widgets/schedule/schedule_list.dart';
 import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class ScheduleSchedule extends StatefulWidget {
   const ScheduleSchedule({super.key});
@@ -39,11 +38,11 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
       this.focusedDate = focusedDate;
     });
   }
-  @override
-  void initState() {
-    super.initState();
-    // 달력 미리 불러오기
-  }
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,20 +58,20 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
             // 달력 큰제목
             Container(
               alignment: Alignment.topRight,
-              margin: EdgeInsets.only(top: 15, right: 40),
+              margin: const EdgeInsets.only(top: 15, right: 40),
               child: Text(
                 months[DateTime.now().month - 1],
-                style: TextStyle(color: BLACK, letterSpacing: 10, fontSize: 18),
+                style: const TextStyle(color: BLACK, letterSpacing: 10, fontSize: 18),
               ),
             ),
             Container(
               alignment: Alignment.topRight,
-              margin: EdgeInsets.only(top: 15, right: 43),
+              margin: const EdgeInsets.only(top: 15, right: 43),
               child: Text(
                 '${DateTime.now().day}'.length == 2
                     ? '${DateTime.now().day}'
                     : '0 ${DateTime.now().day}',
-                style: TextStyle(
+                style: const TextStyle(
                   color: BLACK,
                   letterSpacing: 6,
                   fontSize: 14,
@@ -83,7 +82,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
               child: Column(
                 children: [
                   AnimatedContainer(
-                    duration: Duration(milliseconds: 200),
+                    duration: const Duration(milliseconds: 200),
                     // height: context.watch<CalendarProvider>().isCalendarVisible
                     //     ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 420 : 170)
                     //     : 0,
@@ -105,15 +104,15 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                         context.read<CalendarProvider>().setWeekFormat();
                       }
                     },
-                    child: Container(
-                      margin: const EdgeInsets.only(top: 25),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20),
                       child: ListTile(
                         horizontalTitleGap: 3,
                         leading: IconButton(
                             onPressed: () {
                               context.read<CalendarProvider>().setCalendarVisible();
                             },
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.calendar_month_outlined,
                               size: 20,
                             ),
@@ -122,9 +121,9 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                             splashColor: Colors.transparent),
                         title: Text(
                             selectedDate.day == DateTime.now().day
-                                ? 'Today'
+                                ? '오늘'
                                 : '${selectedDate.month}월 ${selectedDate.day}일',
-                            style: TextStyle(
+                            style: const TextStyle(
                                 color: BLACK,
                                 fontWeight: FontWeight.w100,
                                 fontSize: 15)),

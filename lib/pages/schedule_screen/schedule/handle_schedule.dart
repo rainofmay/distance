@@ -8,7 +8,6 @@ import 'package:mobile/widgets/schedule/color_selection.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
@@ -22,14 +21,16 @@ class HandleSchedule extends StatefulWidget {
 }
 
 class _HandleScheduleState extends State<HandleSchedule> {
-  // 위젯을 고유하게 식별하는 키
   final _formKey = GlobalKey<FormState>();
 
   late String _scheduleName;
-  DateTime _startDate = DateTime.now();
-  DateTime _endDate = DateTime.now();
-  String _startTime = "06:00 AM";
-  String _endTime = "08:00 PM";
+  late DateTime _startDate = context.read<CalendarProvider>().selectedDate;
+  late DateTime _endDate = context.read<CalendarProvider>().selectedDate;
+  String _startTime = "6:00 AM";
+  String _endTime = "8:00 AM";
+  TimeOfDay _originalStartTime = TimeOfDay(hour: 6, minute: 0);
+  TimeOfDay _originalEndTime = TimeOfDay(hour: 8, minute: 0);
+
   String _selectedRepeat = "없음";
   String _memo = '';
   List<String> repeatList = [
@@ -43,10 +44,43 @@ class _HandleScheduleState extends State<HandleSchedule> {
   final TextEditingController _textController = TextEditingController();
   bool _isTimeSet = true;
 
-  @override
-  void initState() {
-    super.initState();
+  // 시작 시각과 종료 시각 비교 함수
+  bool _timeComparison(TimeOfDay start, TimeOfDay end) {
+    if (start.hour < end.hour) {
+      return true;
+    } else if (start.hour == end.hour) {
+      if (start.minute < end.minute) {
+        return true;
+      } else if (start.minute == end.minute) {
+        // AM과 PM을 비교
+        if (start.period == DayPeriod.am && end.period == DayPeriod.pm) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
+
+  // 저장 가능 여부 확인하는 함수
+  // ValueNotifier<bool> _isCompleted = ValueNotifier<bool>(false);
+  // void _storagePossible() {
+  //   if(_textController.text.isNotEmpty) {
+  //     setState(() {
+  //       _isCompleted =  ValueNotifier<bool>(true);
+  //     });
+  //   } else if (_timeComparison(_originalStartTime, _originalEndTime) == true) {
+  //     setState(() {
+  //       _isCompleted =  ValueNotifier<bool>(true);
+  //     });
+  //   } else if (_endDate.isAfter(_startDate)) {
+  //     setState(() {
+  //       _isCompleted =  ValueNotifier<bool>(true);
+  //     });
+  //   }
+  //   setState(() {
+  //     _isCompleted =  ValueNotifier<bool>(false);
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -55,41 +89,61 @@ class _HandleScheduleState extends State<HandleSchedule> {
     super.dispose();
   }
 
+
+
   void _onSavePressed() async {
-    if (_formKey.currentState!.validate()) {
-      // bool값 리턴
+    if (_formKey.currentState!.validate()) {// bool값 리턴
       _formKey.currentState!.save();
+      if (_endDate.isBefore(_startDate)) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('종료일은 시작일보다 앞설 수 없습니다.')),
+        );
+        return;
+      }
+      else if (_timeComparison(_originalStartTime, _originalEndTime) == false) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.')),
+        );
+        return;
+      }
     }
+
+    // 새로고침을 위함도 있음.
+    context.read<CalendarProvider>().setSelectedDate(_startDate);
     Navigator.of(context).pop();
 
-    //스케줆 모델 INSERT
+    //일정 추가
     final schedule = ScheduleModel(
       id: Uuid().v4(),
       scheduleName: _scheduleName,
       startDate: _startDate,
       endDate: _endDate,
       startTime: _isTimeSet ? _startTime : "",
-      endTime: _isTimeSet ? _startTime : "",
+      endTime: _isTimeSet ? _endTime : "",
+      isTimeSet: _isTimeSet,
       memo: _memo,
       sectionColor: _sectionColor,
     );
 
     final supabase = Supabase.instance.client;
-    print(schedule.toJson());
+
     try {
       await supabase.from('schedule').insert(schedule.toJson());
-    } catch (e) {
-      print('에러 $e.toString()');
+    } catch (error) {
+      print('에러 $error');
     }
   }
 
   Future<void> _getDateFromUser({required bool isStartTime}) async {
     DateTime? pickerDate = await showDatePicker(
       context: context,
+      confirmText: '확인',
+      cancelText: '취소',
+      initialEntryMode: DatePickerEntryMode.calendarOnly,
       // locale: const Locale('ko', 'KR'),
       initialDate: context.read<CalendarProvider>().selectedDate,
-      firstDate: DateTime(2020),
-      lastDate: DateTime(2999),
+      firstDate: DateTime.now().subtract(Duration(days: 365)),
+      lastDate: DateTime.now().add(Duration(days: 365*10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
             data: ThemeData(
@@ -136,10 +190,12 @@ class _HandleScheduleState extends State<HandleSchedule> {
       print("Time canceled");
     } else if (isStartTime == true) {
       setState(() {
+        _originalStartTime = pickedTime;
         _startTime = formatedTime;
       });
     } else if (isStartTime == false) {
       setState(() {
+        _originalEndTime = pickedTime;
         _endTime = formatedTime;
       });
     }
@@ -170,12 +226,16 @@ class _HandleScheduleState extends State<HandleSchedule> {
         backgroundColor: BLACK,
         contentColor: WHITE,
         actions: [
-          ValueListenableBuilder<TextEditingValue>(
+          ValueListenableBuilder(
             valueListenable: _textController,
             builder:
                 (BuildContext context, TextEditingValue value, Widget? child) {
               return TextButton(
-                onPressed: (value.text.isEmpty) ? null : () => _onSavePressed(),
+                onPressed: (value.text.isEmpty)
+                    ? null
+                    : () => {
+                          _onSavePressed(),
+                        },
                 child: Text(
                   '저장',
                   style:
@@ -281,8 +341,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                               color: BLACK,
                             ),
                             onPressed: null),
-                        hint: DateFormat.yMd().format(
-                            _startDate),
+                        hint: DateFormat.yMd().format(_startDate),
                       ),
                     ),
                     _isTimeSet
@@ -317,8 +376,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                               color: TRANSPARENT,
                             ),
                             onPressed: null),
-                        hint: DateFormat.yMd().format(
-                            _endDate),
+                        hint: DateFormat.yMd().format(_endDate),
                       ),
                     ),
                     _isTimeSet
@@ -330,7 +388,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                               readOnly: true,
                               hint: _endTime,
                               onTap: () {
-                                _getTimeFromUser(isStartTime: true);
+                                _getTimeFromUser(isStartTime: false);
                               },
                             ),
                           ))

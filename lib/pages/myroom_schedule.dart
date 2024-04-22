@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_background_setting.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.dart';

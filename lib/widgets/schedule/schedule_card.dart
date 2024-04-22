@@ -12,6 +12,7 @@ class ScheduleCard extends StatelessWidget {
   final DateTime endDate;
   final String startTime;
   final String endTime;
+  final bool isTimeSet;
   final String memo;
   final int sectionColor;
 
@@ -22,6 +23,7 @@ class ScheduleCard extends StatelessWidget {
     required this.endDate,
     required this.startTime,
     required this.endTime,
+    required this.isTimeSet,
     required this.memo,
     required this.sectionColor,
     super.key,
@@ -64,15 +66,15 @@ class ScheduleCard extends StatelessWidget {
               margin: const EdgeInsets.only(right: 30, left: 5, bottom: 15),
               // height: 100,
               // decoration: BoxDecoration(
-                  // boxShadow: [
-                  //   BoxShadow(
-                  //     color: Colors.white.withOpacity(0.5),
-                  //     spreadRadius: 0,
-                  //     blurRadius: 2.0,
-                  //     offset: Offset(0, 1),
-                  //   ),
-                  // ],
-                  // ),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Colors.white.withOpacity(0.5),
+              //     spreadRadius: 0,
+              //     blurRadius: 2.0,
+              //     offset: Offset(0, 1),
+              //   ),
+              // ],
+              // ),
               child: Padding(
                 padding: const EdgeInsets.only(
                     // 카드 안에서 텍스트의 패딩 간격
@@ -87,23 +89,36 @@ class ScheduleCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(scheduleName,
-                            style: TextStyle(fontSize: 15, color: BLACK)),
+                            style: const TextStyle(fontSize: 15, color: BLACK)),
                         Text(
-                          '$startTime~$endTime',
-                          style: TextStyle(fontSize: 9, color: Colors.grey),
+                          isTimeSet
+                              ? startDate.day != endDate.day // 시간 설정 있고, 기간일 때
+                                  ? startDate.year == endDate.year
+                                      ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
+                                      : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
+                                  : '$startTime~$endTime' // 하루일 때
+
+                              : startDate.day != endDate.day // 시간 설정 없고 기간일 때,
+                                  ? startDate.year == endDate.year
+                                      ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
+                                      : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
+                                  : '${startDate.year}/${startDate.month}/${startDate.day}',
+                          style:
+                              const TextStyle(fontSize: 9, color: Colors.grey),
                         ),
                       ],
                     ),
                     Container(
-                        padding: EdgeInsets.only(top: 10, left: 10),
+                        padding: const EdgeInsets.only(top: 10, left: 10),
                         alignment: Alignment.topLeft,
                         child: Text('# $memo',
-                            style: TextStyle(fontSize: 12, color: BLACK))),
+                            style:
+                                const TextStyle(fontSize: 12, color: BLACK))),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: PopUpMenu(
                         items: cardMoreOptions,
-                        menuIcon: Icon(Icons.more_horiz_rounded),
+                        menuIcon: const Icon(Icons.more_horiz_rounded),
                         onItemSelected: _handleMenuOptions,
                       ),
                     )

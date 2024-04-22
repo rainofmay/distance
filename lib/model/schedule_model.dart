@@ -5,7 +5,7 @@ class ScheduleModel {
   final DateTime endDate;
   final String? startTime;
   final String? endTime;
-
+  final bool isTimeSet;
   // final String selectedRepeat;
   final String memo;
   final int sectionColor;
@@ -17,6 +17,7 @@ class ScheduleModel {
     required this.endDate,
     this.startTime,
     this.endTime,
+    required this.isTimeSet,
     // required this.selectedRepeat,
     required this.memo,
     required this.sectionColor,
@@ -30,6 +31,7 @@ class ScheduleModel {
         endDate = DateTime.parse(json['end_date']),
         startTime = json['start_time'],
         endTime = json['end_time'],
+        isTimeSet = json['is_time_set'],
         memo = json['memo'],
         sectionColor = json['section_color'];
 
@@ -43,6 +45,7 @@ class ScheduleModel {
           '${endDate.year}${endDate.month.toString().padLeft(2, '0')}${endDate.day.toString().padLeft(2, '0')}',
       'start_time': startTime,
       'end_time': endTime,
+      'is_time_set': isTimeSet,
       // '반복' : selectedRepeat,
       'memo': memo,
       'section_color': sectionColor,
@@ -56,6 +59,7 @@ class ScheduleModel {
     DateTime? endDate,
     String? startTime,
     String? endTime,
+    bool? isTimeSet,
     String? memo,
     int? sectionColor,
   }) {
@@ -66,6 +70,7 @@ class ScheduleModel {
       endDate: endDate ?? this.endDate,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      isTimeSet: isTimeSet ?? this.isTimeSet,
       memo: memo ?? this.memo,
       sectionColor: this.sectionColor,
     );
