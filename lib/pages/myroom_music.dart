@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/music_volume.dart';
@@ -60,8 +61,9 @@ class _MusicSettingState extends State<MusicSetting> {
                       ),
                       Consumer<GlobalAudioPlayer>(
                         builder: (context, globalAudioPlayer, child) {
-                          return Switch(
+                          return CupertinoSwitch(
                             value: globalAudioPlayer.isAnyPlaying,
+                            activeColor: Color(0xffC8D8FA),
                             onChanged: (value) {
                               if (globalAudioPlayer.isAnyPlaying) {
                                 globalAudioPlayer.musicPauseAll();

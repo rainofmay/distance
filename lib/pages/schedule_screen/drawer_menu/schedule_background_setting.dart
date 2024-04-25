@@ -54,7 +54,7 @@ class _ScheduleBackgroundSettingState extends State<ScheduleBackgroundSetting> {
                       child: const SizedBox(
                           width: double.infinity,
                           child: Text(
-                            '테마 배경사진',
+                            '추천 배경',
                             style: TextStyle(fontSize: 17),
                           )),
                     ),
@@ -68,6 +68,18 @@ class _ScheduleBackgroundSettingState extends State<ScheduleBackgroundSetting> {
                           width: double.infinity,
                           child: Text(
                             '내 갤러리에서 가져오기',
+                            style: TextStyle(fontSize: 17),
+                          )),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15),
+                      child: SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            'Dark & Light 모드',
                             style: TextStyle(fontSize: 17),
                           )),
                     ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_background_setting.dart';
 import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.dart';
-import 'package:mobile/pages/schedule_screen/schedule/handle_schedule.dart';
+import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/todo/handle_todo.dart';
 import 'package:mobile/pages/schedule_screen/todo/schedule_todo.dart';
@@ -51,7 +51,7 @@ class _ScheduleState extends State<Schedule> {
             Navigator.push(
               context,
               PageRouteBuilder(
-                pageBuilder: (_, __, ___) => currentTab == 0 ? HandleSchedule() : HandleTodo(),
+                pageBuilder: (_, __, ___) => currentTab == 0 ?CreateSchedule() : HandleTodo(),
                 transitionsBuilder: (_, animation, __, child) {
                   return SlideTransition(
                     position: Tween<Offset>(

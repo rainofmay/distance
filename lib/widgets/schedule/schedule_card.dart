@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
+import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/widgets/pop_up_menu.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../pages/schedule_screen/schedule/modify_schedule.dart';
 
 class ScheduleCard extends StatelessWidget {
   final String id;
@@ -31,13 +35,16 @@ class ScheduleCard extends StatelessWidget {
 
   final List<String> cardMoreOptions = ["날짜 이동", "복사", "수정", "삭제"];
 
-  void _handleMenuOptions(String item) async {
+  _handleMenuOptions(BuildContext context, String item) async {
     if (item == '날짜 이동') {
       // 추가 동작 수행
     } else if (item == '복사') {
       // 수정 동작 수행
     } else if (item == '수정') {
-      // 삭제 동작 수행
+      context.read<ModifyingScheduleProvider>().setModyfingId(id);
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => ModifySchedule(), settings: RouteSettings(arguments: id)));
+
     } else if (item == '삭제') {
       await Supabase.instance.client.from('schedule').delete().match({
         'id': id,
@@ -77,7 +84,7 @@ class ScheduleCard extends StatelessWidget {
               // ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                    // 카드 안에서 텍스트의 패딩 간격
+                  // 카드 안에서 텍스트의 패딩 간격
                     left: 12,
                     right: 12,
                     top: 12,
@@ -93,18 +100,18 @@ class ScheduleCard extends StatelessWidget {
                         Text(
                           isTimeSet
                               ? startDate.day != endDate.day // 시간 설정 있고, 기간일 때
-                                  ? startDate.year == endDate.year
-                                      ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
-                                      : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
-                                  : '$startTime~$endTime' // 하루일 때
+                              ? startDate.year == endDate.year
+                              ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
+                              : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
+                              : '$startTime~$endTime' // 하루일 때
 
                               : startDate.day != endDate.day // 시간 설정 없고 기간일 때,
-                                  ? startDate.year == endDate.year
-                                      ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
-                                      : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
-                                  : '${startDate.year}/${startDate.month}/${startDate.day}',
+                              ? startDate.year == endDate.year
+                              ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
+                              : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
+                              : '${startDate.year}/${startDate.month}/${startDate.day}',
                           style:
-                              const TextStyle(fontSize: 9, color: Colors.grey),
+                          const TextStyle(fontSize: 9, color: Colors.grey),
                         ),
                       ],
                     ),
@@ -113,12 +120,12 @@ class ScheduleCard extends StatelessWidget {
                         alignment: Alignment.topLeft,
                         child: Text('# $memo',
                             style:
-                                const TextStyle(fontSize: 12, color: BLACK))),
+                            const TextStyle(fontSize: 12, color: BLACK))),
                     Container(
                       alignment: Alignment.bottomRight,
                       child: PopUpMenu(
                         items: cardMoreOptions,
-                        menuIcon: const Icon(Icons.more_horiz_rounded),
+                        menuIcon: const Icon(Icons.more_horiz),
                         onItemSelected: _handleMenuOptions,
                       ),
                     )

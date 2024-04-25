@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   final GestureTapCallback? onTap;

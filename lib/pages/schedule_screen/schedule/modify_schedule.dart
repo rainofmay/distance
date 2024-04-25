@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
@@ -13,23 +14,24 @@ import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
 
-class HandleSchedule extends StatefulWidget {
-  const HandleSchedule({super.key});
+class ModifySchedule extends StatefulWidget {
+  const ModifySchedule({super.key});
 
   @override
-  State<HandleSchedule> createState() => _HandleScheduleState();
+  State<ModifySchedule> createState() => _ModifyScheduleState();
 }
 
-class _HandleScheduleState extends State<HandleSchedule> {
+class _ModifyScheduleState extends State<ModifySchedule>
+    with SingleTickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-
   late String _scheduleName;
   late DateTime _startDate = context.read<CalendarProvider>().selectedDate;
   late DateTime _endDate = context.read<CalendarProvider>().selectedDate;
-  String _startTime = "6:00 AM";
-  String _endTime = "8:00 AM";
-  TimeOfDay _originalStartTime = TimeOfDay(hour: 6, minute: 0);
-  TimeOfDay _originalEndTime = TimeOfDay(hour: 8, minute: 0);
+
+  // late String _startTime;
+  // late String _endTime;
+  late TimeOfDay _originalStartTime = TimeOfDay(hour: 6, minute: 0);
+  late TimeOfDay _originalEndTime = TimeOfDay(hour: 8, minute: 0);
 
   String _selectedRepeat = "없음";
   String _memo = '';
@@ -41,7 +43,6 @@ class _HandleScheduleState extends State<HandleSchedule> {
   ];
 
   int _sectionColor = 0;
-  final TextEditingController _textController = TextEditingController();
   bool _isTimeSet = true;
 
   // 시작 시각과 종료 시각 비교 함수
@@ -61,26 +62,14 @@ class _HandleScheduleState extends State<HandleSchedule> {
     return false;
   }
 
-  // 저장 가능 여부 확인하는 함수
-  // ValueNotifier<bool> _isCompleted = ValueNotifier<bool>(false);
-  // void _storagePossible() {
-  //   if(_textController.text.isNotEmpty) {
-  //     setState(() {
-  //       _isCompleted =  ValueNotifier<bool>(true);
-  //     });
-  //   } else if (_timeComparison(_originalStartTime, _originalEndTime) == true) {
-  //     setState(() {
-  //       _isCompleted =  ValueNotifier<bool>(true);
-  //     });
-  //   } else if (_endDate.isAfter(_startDate)) {
-  //     setState(() {
-  //       _isCompleted =  ValueNotifier<bool>(true);
-  //     });
-  //   }
-  //   setState(() {
-  //     _isCompleted =  ValueNotifier<bool>(false);
-  //   });
-  // }
+  late TextEditingController _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _textController = TextEditingController(
+        text: context.read<ModifyingScheduleProvider>().modifyingName);
+  }
 
   @override
   void dispose() {
@@ -89,20 +78,26 @@ class _HandleScheduleState extends State<HandleSchedule> {
     super.dispose();
   }
 
-
-
   void _onSavePressed() async {
-    if (_formKey.currentState!.validate()) {// bool값 리턴
+    if (_formKey.currentState!.validate()) {
+      // bool값 리턴
       _formKey.currentState!.save();
       if (_endDate.isBefore(_startDate)) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('종료일은 시작일보다 앞설 수 없습니다.')),
+          SnackBar(
+              content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
+              duration: Duration(seconds: 1),
+              dismissDirection: DismissDirection.down),
         );
         return;
-      }
-      else if (_timeComparison(_originalStartTime, _originalEndTime) == false) {
+      } else if (_timeComparison(_originalStartTime, _originalEndTime) ==
+          false) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.')),
+          SnackBar(
+            content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.'),
+            duration: Duration(seconds: 1),
+            dismissDirection: DismissDirection.down,
+          ),
         );
         return;
       }
@@ -118,8 +113,8 @@ class _HandleScheduleState extends State<HandleSchedule> {
       scheduleName: _scheduleName,
       startDate: _startDate,
       endDate: _endDate,
-      startTime: _isTimeSet ? _startTime : "",
-      endTime: _isTimeSet ? _endTime : "",
+      // startTime: _isTimeSet ? _startTime : "",
+      // endTime: _isTimeSet ? _endTime : "",
       isTimeSet: _isTimeSet,
       memo: _memo,
       sectionColor: _sectionColor,
@@ -143,7 +138,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
       // locale: const Locale('ko', 'KR'),
       initialDate: context.read<CalendarProvider>().selectedDate,
       firstDate: DateTime.now().subtract(Duration(days: 365)),
-      lastDate: DateTime.now().add(Duration(days: 365*10)),
+      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
         return Theme(
             data: ThemeData(
@@ -191,12 +186,12 @@ class _HandleScheduleState extends State<HandleSchedule> {
     } else if (isStartTime == true) {
       setState(() {
         _originalStartTime = pickedTime;
-        _startTime = formatedTime;
+        // _startTime = formatedTime;
       });
     } else if (isStartTime == false) {
       setState(() {
         _originalEndTime = pickedTime;
-        _endTime = formatedTime;
+        // _endTime = formatedTime;
       });
     }
   }
@@ -351,7 +346,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              hint: _startTime,
+                              // hint: _startTime,
                               onTap: () {
                                 _getTimeFromUser(isStartTime: true);
                               },
@@ -386,7 +381,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              hint: _endTime,
+                              // hint: _endTime,
                               onTap: () {
                                 _getTimeFromUser(isStartTime: false);
                               },
@@ -446,9 +441,7 @@ class _HandleScheduleState extends State<HandleSchedule> {
                           ),
                         ),
                         iconSize: 24,
-                        underline: Container(
-                          height: 0,
-                        ),
+                        underline: Container(height: 0),
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedRepeat = newValue!;

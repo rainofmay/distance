@@ -4,8 +4,16 @@ import 'package:mobile/const/colors.dart';
 class PopUpMenu extends StatelessWidget {
   final List<String> items;
   final Icon menuIcon;
-  final Function(String) onItemSelected;
-  PopUpMenu({super.key, required this.items, required this.menuIcon, required this.onItemSelected});
+
+  // final String item;
+  final Function(BuildContext, String) onItemSelected;
+
+  PopUpMenu(
+      {super.key,
+      required this.items,
+      // required this.item,
+      required this.menuIcon,
+      required this.onItemSelected});
 
   @override
   Widget build(BuildContext context) {
@@ -19,27 +27,27 @@ class PopUpMenu extends StatelessWidget {
         color: BLACK,
         elevation: 10,
         tooltip: "",
+        // LongPressed 일 때 나오는 툴팁
         position: PopupMenuPosition.under,
         itemBuilder: (BuildContext context) {
-          return [
-            for (final value in items)
-              _menuItem(value)
-          ];
+          return [for (final value in items) _menuItem(context, value)];
         },
-          onSelected: onItemSelected,
+        onSelected: (item) {
+          onItemSelected(context, item);
+        },
         constraints: const BoxConstraints(minWidth: 50, maxWidth: 120),
         splashRadius: null,
         enabled: true,
-        icon: menuIcon
-      ),);
+        icon: menuIcon,
+      ),
+    );
   }
 }
 
-PopupMenuItem<String> _menuItem(String text) {
+PopupMenuItem<String> _menuItem(BuildContext context, String text) {
   return PopupMenuItem<String>(
     enabled: true,
 
-    /// 해당 항목 선택 시 호출
     onTap: () {},
 
     value: text,

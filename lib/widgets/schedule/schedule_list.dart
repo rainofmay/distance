@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/pages/schedule_screen/schedule/handle_schedule.dart';
+import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/widgets/schedule/schedule_card.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
