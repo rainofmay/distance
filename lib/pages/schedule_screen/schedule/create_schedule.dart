@@ -114,10 +114,6 @@ class _CreateScheduleState extends State<CreateSchedule> {
       }
     }
 
-    // 새로고침을 위함도 있음.
-    context.read<CalendarProvider>().setSelectedDate(_startDate);
-    Navigator.of(context).pop();
-
     //일정 추가
     final schedule = ScheduleModel(
       id: Uuid().v4(),
@@ -138,7 +134,14 @@ class _CreateScheduleState extends State<CreateSchedule> {
     } catch (error) {
       print('에러 $error');
     }
+
+    // 새로고침을 위함도 있음.
+    if (!context.mounted) return;
+    context.read<CalendarProvider>().setSelectedDate(_startDate);
+    Navigator.of(context).pop();
   }
+
+
 
   Future<void> _getDateFromUser({required bool isStartTime}) async {
     DateTime? pickerDate = await showDatePicker(

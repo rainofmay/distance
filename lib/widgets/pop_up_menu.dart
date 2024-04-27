@@ -4,15 +4,14 @@ import 'package:mobile/const/colors.dart';
 class PopUpMenu extends StatelessWidget {
   final List<String> items;
   final Icon menuIcon;
-
-  // final String item;
-  final Function(BuildContext, String) onItemSelected;
+  final String scheduleId;
+  final Function(BuildContext, String, String) onItemSelected;
 
   PopUpMenu(
       {super.key,
       required this.items,
-      // required this.item,
       required this.menuIcon,
+        required this.scheduleId,
       required this.onItemSelected});
 
   @override
@@ -33,7 +32,7 @@ class PopUpMenu extends StatelessWidget {
           return [for (final value in items) _menuItem(context, value)];
         },
         onSelected: (item) {
-          onItemSelected(context, item);
+          onItemSelected(context, item, scheduleId);
         },
         constraints: const BoxConstraints(minWidth: 50, maxWidth: 120),
         splashRadius: null,

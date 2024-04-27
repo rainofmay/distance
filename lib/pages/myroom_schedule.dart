@@ -25,7 +25,7 @@ class _ScheduleState extends State<Schedule> {
   ];
 
   final Map<Map<Icon, String>, dynamic> _drawerMenu = {
-    {Icon(Icons.photo_outlined): '배경 설정'}: ScheduleBackgroundSetting(), {Icon(Icons.notifications_none_outlined): '알림'}: ScheduleNotification(),
+    {Icon(Icons.photo_outlined): '내 달력 배경'}: ScheduleBackgroundSetting(), {Icon(Icons.notifications_none_outlined): '알림'}: ScheduleNotification(),
   };
 
   @override

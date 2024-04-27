@@ -10,10 +10,5 @@ class ScheduleColorProvider extends ChangeNotifier {
     selectedSectionColor = sectionColors[newIndex];
     notifyListeners();
   }
-
-  setSectionColor(int newSectionColor) {
-    selectedSectionColor = sectionColors[newSectionColor];
-    notifyListeners();
-  }
 }
 

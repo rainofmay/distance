@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
-import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
-import 'package:mobile/widgets/pop_up_menu.dart';
 import 'package:provider/provider.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
-
 import '../../pages/schedule_screen/schedule/modify_schedule.dart';
+import '../../util/schedule_color_provider.dart';
 
-class ScheduleCard extends StatelessWidget {
+class ScheduleCard extends StatefulWidget {
   final String id;
   final String scheduleName;
   final DateTime startDate;
@@ -33,28 +29,30 @@ class ScheduleCard extends StatelessWidget {
     super.key,
   });
 
-  final List<String> cardMoreOptions = ["날짜 이동", "복사", "수정", "삭제"];
+  @override
+  State<ScheduleCard> createState() => _ScheduleCardState();
+}
 
-  _handleMenuOptions(BuildContext context, String item) async {
-    if (item == '날짜 이동') {
-      // 추가 동작 수행
-    } else if (item == '복사') {
-      // 수정 동작 수행
-    } else if (item == '수정') {
-      context.read<ModifyingScheduleProvider>().setModyfingId(id);
-      Navigator.push(context,
-          MaterialPageRoute(builder: (context) => ModifySchedule(), settings: RouteSettings(arguments: id)));
-
-    } else if (item == '삭제') {
-      await Supabase.instance.client.from('schedule').delete().match({
-        'id': id,
-      });
-    }
-  }
-
+class _ScheduleCardState extends State<ScheduleCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque, // 빈 영역도 터치되도록
+
+      // 수정 모드 들어갈 때,
+      onTap: () async {
+        // 고유 schedule 값 인식시키기
+        await context.read<ModifyingScheduleProvider>().setModyfing(widget.id);
+
+        if (!context.mounted) return;
+        context.read<ScheduleColorProvider>().setColorIndex(widget.sectionColor);
+
+        await Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => ModifySchedule(),
+                ));
+      },
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -64,7 +62,7 @@ class ScheduleCard extends StatelessWidget {
               width: 5,
               height: 90,
               decoration: BoxDecoration(
-                  color: sectionColors[sectionColor],
+                  color: sectionColors[widget.sectionColor],
                   borderRadius: BorderRadius.circular(5)),
             ),
           ),
@@ -84,7 +82,7 @@ class ScheduleCard extends StatelessWidget {
               // ),
               child: Padding(
                 padding: const EdgeInsets.only(
-                  // 카드 안에서 텍스트의 패딩 간격
+                    // 카드 안에서 텍스트의 패딩 간격
                     left: 12,
                     right: 12,
                     top: 12,
@@ -95,40 +93,34 @@ class ScheduleCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(scheduleName,
+                        Text(widget.scheduleName,
                             style: const TextStyle(fontSize: 15, color: BLACK)),
                         Text(
-                          isTimeSet
-                              ? startDate.day != endDate.day // 시간 설정 있고, 기간일 때
-                              ? startDate.year == endDate.year
-                              ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
-                              : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
-                              : '$startTime~$endTime' // 하루일 때
+                          widget.isTimeSet
+                              ? widget.startDate.day !=
+                                      widget.endDate.day // 시간 설정 있고, 기간일 때
+                                  ? widget.startDate.year == widget.endDate.year
+                                      ? '${widget.startDate.year}/${widget.startDate.month}/${widget.startDate.day} ~ ${widget.endDate.month}/${widget.endDate.day}'
+                                      : '${widget.startDate.year}/${widget.startDate.month}/${widget.startDate.day} ~ ${widget.endDate.year}/${widget.endDate.month}/${widget.endDate.day}'
+                                  : '${widget.startTime}~${widget.endTime}' // 하루일 때
 
-                              : startDate.day != endDate.day // 시간 설정 없고 기간일 때,
-                              ? startDate.year == endDate.year
-                              ? '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.month}/${endDate.day}'
-                              : '${startDate.year}/${startDate.month}/${startDate.day} ~ ${endDate.year}/${endDate.month}/${endDate.day}'
-                              : '${startDate.year}/${startDate.month}/${startDate.day}',
+                              : widget.startDate.day !=
+                                      widget.endDate.day // 시간 설정 없고 기간일 때,
+                                  ? widget.startDate.year == widget.endDate.year
+                                      ? '${widget.startDate.year}/${widget.startDate.month}/${widget.startDate.day} ~ ${widget.endDate.month}/${widget.endDate.day}'
+                                      : '${widget.startDate.year}/${widget.startDate.month}/${widget.startDate.day} ~ ${widget.endDate.year}/${widget.endDate.month}/${widget.endDate.day}'
+                                  : '${widget.startDate.year}/${widget.startDate.month}/${widget.startDate.day}',
                           style:
-                          const TextStyle(fontSize: 9, color: Colors.grey),
+                              const TextStyle(fontSize: 9, color: Colors.grey),
                         ),
                       ],
                     ),
                     Container(
                         padding: const EdgeInsets.only(top: 10, left: 10),
                         alignment: Alignment.topLeft,
-                        child: Text('# $memo',
+                        child: Text('# ${widget.memo}',
                             style:
-                            const TextStyle(fontSize: 12, color: BLACK))),
-                    Container(
-                      alignment: Alignment.bottomRight,
-                      child: PopUpMenu(
-                        items: cardMoreOptions,
-                        menuIcon: const Icon(Icons.more_horiz),
-                        onItemSelected: _handleMenuOptions,
-                      ),
-                    )
+                                const TextStyle(fontSize: 12, color: BLACK))),
                   ],
                 ),
               ),

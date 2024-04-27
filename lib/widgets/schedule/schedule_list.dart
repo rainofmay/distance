@@ -3,12 +3,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/widgets/schedule/schedule_card.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../const/colors.dart';
+import '../../pages/schedule_screen/schedule/modify_schedule.dart';
+import '../../util/modifying_schedule_provider.dart';
+import '../pop_up_menu.dart';
 
 class ScheduleList extends StatefulWidget {
   final selectedDate;
-
-  const ScheduleList({super.key, required this.selectedDate});
+  ScheduleList({super.key, required this.selectedDate});
 
   @override
   State<ScheduleList> createState() => _ScheduleListState();
@@ -16,8 +21,11 @@ class ScheduleList extends StatefulWidget {
 
 class _ScheduleListState extends State<ScheduleList> {
   List scheduleList = []; // Drift DB에 저장하는 코드 작성 필요
+  final supabase = Supabase.instance.client;
+
   Future<List<Map<String, dynamic>>> futureData() async {
-    var future = Supabase.instance.client
+    print('재랜더링');
+    var future = await supabase
         .from('schedule')
         .select('*')
     // stream을 쓰면 lte와 gte 동시에 사용 불가
@@ -64,6 +72,7 @@ class _ScheduleListState extends State<ScheduleList> {
             !snapshot.hasData) {
           return Container();
         }
+
         final schedules =
             snapshot.data!.map((e) => ScheduleModel.fromJson(json: e)).toList();
 
@@ -94,7 +103,8 @@ class _ScheduleListState extends State<ScheduleList> {
                     isTimeSet: schedule.isTimeSet,
                     memo: schedule.memo,
                     sectionColor: schedule.sectionColor,
-                  )),
+                  )
+              ),
             );
           },
         );

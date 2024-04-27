@@ -21,20 +21,26 @@ class ModifySchedule extends StatefulWidget {
   State<ModifySchedule> createState() => _ModifyScheduleState();
 }
 
-class _ModifyScheduleState extends State<ModifySchedule>
-    with SingleTickerProviderStateMixin {
+class _ModifyScheduleState extends State<ModifySchedule> {
   final _formKey = GlobalKey<FormState>();
-  late String _scheduleName;
-  late DateTime _startDate = context.read<CalendarProvider>().selectedDate;
-  late DateTime _endDate = context.read<CalendarProvider>().selectedDate;
+  final supabase = Supabase.instance.client;
 
-  // late String _startTime;
-  // late String _endTime;
+  var _scheduleName;
+
+  late DateTime _startDate =
+      context.read<ModifyingScheduleProvider>().modifyingStartDate;
+  late DateTime _endDate =
+      context.read<ModifyingScheduleProvider>().modifyingEndDate;
+
+  late String _startTime =
+      context.read<ModifyingScheduleProvider>().modifyingStartTime;
+  late String _endTime =
+      context.read<ModifyingScheduleProvider>().modifyingEndTime;
   late TimeOfDay _originalStartTime = TimeOfDay(hour: 6, minute: 0);
   late TimeOfDay _originalEndTime = TimeOfDay(hour: 8, minute: 0);
 
   String _selectedRepeat = "없음";
-  String _memo = '';
+  late String _memo = context.read<ModifyingScheduleProvider>().modifyingMemo;
   List<String> repeatList = [
     "없음",
     "매일",
@@ -42,8 +48,10 @@ class _ModifyScheduleState extends State<ModifySchedule>
     "월",
   ];
 
-  int _sectionColor = 0;
-  bool _isTimeSet = true;
+  late int _sectionColor =
+      context.read<ModifyingScheduleProvider>().modifyingColor;
+  late bool _isTimeSet =
+      context.read<ModifyingScheduleProvider>().modifyingIsTimeSet;
 
   // 시작 시각과 종료 시각 비교 함수
   bool _timeComparison(TimeOfDay start, TimeOfDay end) {
@@ -73,7 +81,6 @@ class _ModifyScheduleState extends State<ModifySchedule>
 
   @override
   void dispose() {
-    // 텍스트에디팅컨트롤러를 제거하고, 등록된 리스너도 제거된다.
     _textController.dispose();
     super.dispose();
   }
@@ -113,8 +120,8 @@ class _ModifyScheduleState extends State<ModifySchedule>
       scheduleName: _scheduleName,
       startDate: _startDate,
       endDate: _endDate,
-      // startTime: _isTimeSet ? _startTime : "",
-      // endTime: _isTimeSet ? _endTime : "",
+      startTime: _isTimeSet ? _startTime : "",
+      endTime: _isTimeSet ? _endTime : "",
       isTimeSet: _isTimeSet,
       memo: _memo,
       sectionColor: _sectionColor,
@@ -136,7 +143,7 @@ class _ModifyScheduleState extends State<ModifySchedule>
       cancelText: '취소',
       initialEntryMode: DatePickerEntryMode.calendarOnly,
       // locale: const Locale('ko', 'KR'),
-      initialDate: context.read<CalendarProvider>().selectedDate,
+      initialDate: context.read<ModifyingScheduleProvider>().modifyingStartDate,
       firstDate: DateTime.now().subtract(Duration(days: 365)),
       lastDate: DateTime.now().add(Duration(days: 365 * 10)),
       builder: (BuildContext context, Widget? child) {
@@ -180,18 +187,19 @@ class _ModifyScheduleState extends State<ModifySchedule>
 
   Future<void> _getTimeFromUser({required bool isStartTime}) async {
     var pickedTime = await _showTimePicker();
+    if (!context.mounted) return;
     String formatedTime = pickedTime.format(context);
     if (pickedTime == null) {
       print("Time canceled");
     } else if (isStartTime == true) {
       setState(() {
         _originalStartTime = pickedTime;
-        // _startTime = formatedTime;
+        _startTime = formatedTime;
       });
     } else if (isStartTime == false) {
       setState(() {
         _originalEndTime = pickedTime;
-        // _endTime = formatedTime;
+        _endTime = formatedTime;
       });
     }
   }
@@ -210,9 +218,7 @@ class _ModifyScheduleState extends State<ModifySchedule>
 
   @override
   Widget build(BuildContext context) {
-    _sectionColor = context
-        .read<ScheduleColorProvider>()
-        .colorIndex; // index를 선택하지 않았을 떄 default가 0이 되는 걸 막기 위함.
+    // Map<String, dynamic> modifyElements = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
 
     return Scaffold(
       appBar: CustomBackAppBar(
@@ -232,12 +238,29 @@ class _ModifyScheduleState extends State<ModifySchedule>
                           _onSavePressed(),
                         },
                 child: Text(
-                  '저장',
+                  '수정',
                   style:
                       TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
                 ),
               );
             },
+          ),
+          TextButton(
+            onPressed: () async {
+              await supabase.from('schedule').delete().match({
+                'id': context
+                    .read<ModifyingScheduleProvider>()
+                    .modifyingScheduleId
+              });
+              if (!context.mounted) return;
+              context.read<CalendarProvider>().setSelectedDate(
+                  _startDate); // 재랜더링에 필요한 코드,* 일정 사라지는 애니메이션 검토
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              '삭제',
+              style: TextStyle(color: WHITE),
+            ),
           )
         ],
       ),
@@ -274,7 +297,7 @@ class _ModifyScheduleState extends State<ModifySchedule>
                               onPressed: () {
                                 _sectionColor = context
                                     .read<ScheduleColorProvider>()
-                                    .colorIndex; // DB 모델에 저장
+                                    .colorIndex;
                                 Navigator.of(context).pop();
                               },
                             ),
@@ -346,7 +369,7 @@ class _ModifyScheduleState extends State<ModifySchedule>
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              // hint: _startTime,
+                              hint: _startTime,
                               onTap: () {
                                 _getTimeFromUser(isStartTime: true);
                               },
@@ -381,7 +404,7 @@ class _ModifyScheduleState extends State<ModifySchedule>
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              // hint: _endTime,
+                              hint: _endTime,
                               onTap: () {
                                 _getTimeFromUser(isStartTime: false);
                               },
