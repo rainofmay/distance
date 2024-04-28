@@ -70,18 +70,22 @@ class _ModifyScheduleState extends State<ModifySchedule> {
     return false;
   }
 
-  late TextEditingController _textController = TextEditingController();
+  late TextEditingController _titleController = TextEditingController();
+  late TextEditingController _memoController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController(
+    _titleController = TextEditingController(
         text: context.read<ModifyingScheduleProvider>().modifyingName);
+    _memoController = TextEditingController(
+        text: context.read<ModifyingScheduleProvider>().modifyingMemo);
   }
 
   @override
   void dispose() {
-    _textController.dispose();
+    _titleController.dispose();
+    _memoController.dispose();
     super.dispose();
   }
 
@@ -110,13 +114,9 @@ class _ModifyScheduleState extends State<ModifySchedule> {
       }
     }
 
-    // 새로고침을 위함도 있음.
-    context.read<CalendarProvider>().setSelectedDate(_startDate);
-    Navigator.of(context).pop();
-
     //일정 추가
     final schedule = ScheduleModel(
-      id: Uuid().v4(),
+      id: context.read<ModifyingScheduleProvider>().modifyingScheduleId,
       scheduleName: _scheduleName,
       startDate: _startDate,
       endDate: _endDate,
@@ -127,13 +127,17 @@ class _ModifyScheduleState extends State<ModifySchedule> {
       sectionColor: _sectionColor,
     );
 
-    final supabase = Supabase.instance.client;
-
     try {
-      await supabase.from('schedule').insert(schedule.toJson());
+      await Supabase.instance.client.from('schedule').update(
+      schedule.toJson()).eq('id', schedule.id);
     } catch (error) {
       print('에러 $error');
     }
+
+    // 새로고침을 위함도 있음.
+    if (!context.mounted) return;
+    context.read<CalendarProvider>().setSelectedDate(_startDate);
+    Navigator.of(context).pop();
   }
 
   Future<void> _getDateFromUser({required bool isStartTime}) async {
@@ -228,7 +232,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
         contentColor: WHITE,
         actions: [
           ValueListenableBuilder(
-            valueListenable: _textController,
+            valueListenable: _titleController,
             builder:
                 (BuildContext context, TextEditingValue value, Widget? child) {
               return TextButton(
@@ -259,7 +263,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
             },
             child: Text(
               '삭제',
-              style: TextStyle(color: WHITE),
+              style: TextStyle(color: Color(0xffa41705), fontWeight: FontWeight.bold),
             ),
           )
         ],
@@ -280,7 +284,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                 CustomTextField(
                   textInputAction: TextInputAction.done,
                   readOnly: false,
-                  controller: _textController,
+                  controller: _titleController,
                   titleIcon: IconButton(
                       icon: Icon(CupertinoIcons.circle_filled,
                           color: context
@@ -320,6 +324,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                 ),
                 CustomTextField(
                   textInputAction: TextInputAction.done,
+                  controller: _memoController,
                   readOnly: false,
                   titleIcon: IconButton(
                       icon: Icon(
