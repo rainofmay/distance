@@ -6,9 +6,10 @@ import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
+import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
+import '../../../common_function/schedule/time_comarison.dart';
 import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
@@ -36,8 +37,8 @@ class _ModifyScheduleState extends State<ModifySchedule> {
       context.read<ModifyingScheduleProvider>().modifyingStartTime;
   late String _endTime =
       context.read<ModifyingScheduleProvider>().modifyingEndTime;
-  late TimeOfDay _originalStartTime = TimeOfDay(hour: 6, minute: 0);
-  late TimeOfDay _originalEndTime = TimeOfDay(hour: 8, minute: 0);
+  DateTime _originalStartTime = DateTime.now();
+  DateTime _originalEndTime = DateTime.now();
 
   String _selectedRepeat = "없음";
   late String _memo = context.read<ModifyingScheduleProvider>().modifyingMemo;
@@ -47,32 +48,15 @@ class _ModifyScheduleState extends State<ModifySchedule> {
     "주",
     "월",
   ];
-
+  
   late int _sectionColor =
       context.read<ModifyingScheduleProvider>().modifyingColor;
   late bool _isTimeSet =
       context.read<ModifyingScheduleProvider>().modifyingIsTimeSet;
 
-  // 시작 시각과 종료 시각 비교 함수
-  bool _timeComparison(TimeOfDay start, TimeOfDay end) {
-    if (start.hour < end.hour) {
-      return true;
-    } else if (start.hour == end.hour) {
-      if (start.minute < end.minute) {
-        return true;
-      } else if (start.minute == end.minute) {
-        // AM과 PM을 비교
-        if (start.period == DayPeriod.am && end.period == DayPeriod.pm) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
   late TextEditingController _titleController = TextEditingController();
   late TextEditingController _memoController = TextEditingController();
-
+  
   @override
   void initState() {
     super.initState();
@@ -93,7 +77,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
     if (_formKey.currentState!.validate()) {
       // bool값 리턴
       _formKey.currentState!.save();
-      if (_endDate.isBefore(_startDate)) {
+      if (_endDate.day < _startDate.day) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
               content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
@@ -101,7 +85,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
               dismissDirection: DismissDirection.down),
         );
         return;
-      } else if (_timeComparison(_originalStartTime, _originalEndTime) ==
+      } else if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
           false) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -113,7 +97,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
         return;
       }
     }
-
+    
     //일정 추가
     final schedule = ScheduleModel(
       id: context.read<ModifyingScheduleProvider>().modifyingScheduleId,
@@ -133,97 +117,93 @@ class _ModifyScheduleState extends State<ModifySchedule> {
     } catch (error) {
       print('에러 $error');
     }
-
+  
     // 새로고침을 위함도 있음.
     if (!context.mounted) return;
     context.read<CalendarProvider>().setSelectedDate(_startDate);
     Navigator.of(context).pop();
   }
-
-  Future<void> _getDateFromUser({required bool isStartTime}) async {
-    DateTime? pickerDate = await showDatePicker(
+  
+  Future<void> _getDateFromUser({required BuildContext context, required bool isStartTime}) async {
+    DateTime? pickerDate = await showOmniDateTimePicker(
       context: context,
-      confirmText: '확인',
-      cancelText: '취소',
-      initialEntryMode: DatePickerEntryMode.calendarOnly,
-      // locale: const Locale('ko', 'KR'),
-      initialDate: context.read<ModifyingScheduleProvider>().modifyingStartDate,
-      firstDate: DateTime.now().subtract(Duration(days: 365)),
-      lastDate: DateTime.now().add(Duration(days: 365 * 10)),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-            data: ThemeData(
-              splashFactory: NoSplash.splashFactory,
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              iconButtonTheme: IconButtonThemeData(
-                  style: ButtonStyle(
-                splashFactory: NoSplash.splashFactory,
-              )),
-              colorScheme: ColorScheme.light(
-                primary: Color.fromARGB(
-                    255, 195, 221, 243), // header background color
-                onPrimary: CALENDAR_COLOR, // 선택된 날짜 색상
-                onSurface: BLACK,
-                onBackground: Colors.grey, // 위와 아래의 경계선 색상
-              ),
-              textButtonTheme: TextButtonThemeData(
-                style: TextButton.styleFrom(
-                  foregroundColor: BLACK,
-                ),
-              ),
+      theme: ThemeData(
+        useMaterial3: true,
+        // colorSchemeSeed: Color(0xff222E34),
+        colorScheme: ColorScheme(
+            brightness: Brightness.dark,
+            primary: Color(0xff81CEE5),
+            // 확인, 취소버튼 색
+            onPrimary: Color(0xff222E34),
+            // 선택한 날짜
+            secondary: Colors.transparent,
+            onSecondary: Color(0xff3C6769),
+            error: Colors.redAccent,
+            onError: Colors.red,
+            background: Color(0xff222E34),
+            // 배경색
+            onBackground: Colors.transparent,
+            // 확인, 취소버튼 구분선
+            surface: Color(0xff222E34),
+            onSurface: Colors.white),
+        // 전체적인 글자색
+        splashFactory: NoSplash.splashFactory,
+        focusColor: Colors.transparent,
+        hoverColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
+      initialDate: isStartTime ? context.read<ModifyingScheduleProvider>().modifyingStartDate : context.read<ModifyingScheduleProvider>().modifyingEndDate,
+      type: _isTimeSet ? OmniDateTimePickerType.dateAndTime : OmniDateTimePickerType.date,
+      firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
+      lastDate: DateTime.now().add(
+        const Duration(days: 3652),
+      ),
+      is24HourMode: false,
+      isShowSeconds: false,
+      minutesInterval: 5,
+      // secondsInterval: 1,
+      isForce2Digits: true,
+      borderRadius: const BorderRadius.all(Radius.circular(1)),
+      constraints: const BoxConstraints(
+        maxWidth: 350,
+        maxHeight: 700,
+      ),
+      transitionBuilder: (context, anim1, anim2, child) {
+        return FadeTransition(
+          opacity: anim1.drive(
+            Tween(
+              begin: 0,
+              end: 1,
             ),
-            child: child!);
+          ),
+          child: child,
+        );
       },
+      transitionDuration: const Duration(milliseconds: 200),
+      barrierDismissible: true,
     );
     if (isStartTime == true) {
+      print('pickerdate $pickerDate');
+
       setState(() {
+        _originalStartTime = pickerDate ?? DateTime.now();
+
         _startDate = pickerDate ?? DateTime.now();
+        _startTime = DateFormat('hh:mm a').format(pickerDate!) ?? "06:00 AM";
+
       });
     } else if (isStartTime == false) {
       setState(() {
+        _originalEndTime = pickerDate ?? DateTime.now();
+
         _endDate = pickerDate ?? DateTime.now();
+        _endTime = DateFormat('hh:mm a').format(pickerDate!) ?? "08:00 AM";
       });
     }
-  }
-
-  Future<void> _getTimeFromUser({required bool isStartTime}) async {
-    var pickedTime = await _showTimePicker();
-    if (!context.mounted) return;
-    String formatedTime = pickedTime.format(context);
-    if (pickedTime == null) {
-      print("Time canceled");
-    } else if (isStartTime == true) {
-      setState(() {
-        _originalStartTime = pickedTime;
-        _startTime = formatedTime;
-      });
-    } else if (isStartTime == false) {
-      setState(() {
-        _originalEndTime = pickedTime;
-        _endTime = formatedTime;
-      });
-    }
-  }
-
-  _showTimePicker() {
-    return showTimePicker(
-        initialEntryMode: TimePickerEntryMode.input,
-        context: context,
-        initialTime: TimeOfDay(
-          hour: 6,
-          //hour: int.parse(startTime.split(":")[0]),
-          minute: 0,
-          //minute:int.parse(startTime.split(":")[1].split(" ")[0])
-        ));
   }
 
   @override
   Widget build(BuildContext context) {
-    // Map<String, dynamic> modifyElements = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-
     return Scaffold(
       appBar: CustomBackAppBar(
         appbarTitle: '',
@@ -356,7 +336,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                       child: CustomTextField(
                         readOnly: true,
                         onTap: () {
-                          _getDateFromUser(isStartTime: true);
+                          _getDateFromUser(context: context, isStartTime: true);
                         },
                         titleIcon: IconButton(
                             icon: Icon(
@@ -374,10 +354,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              hint: _startTime,
-                              onTap: () {
-                                _getTimeFromUser(isStartTime: true);
-                              },
+                              hint: _startTime == "" ? "06:00 AM" : _startTime,
                             ),
                           ))
                         : const SizedBox(),
@@ -391,7 +368,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                       child: CustomTextField(
                         readOnly: true,
                         onTap: () {
-                          _getDateFromUser(isStartTime: false);
+                          _getDateFromUser(context: context, isStartTime: false);
                         },
                         titleIcon: IconButton(
                             icon: Icon(
@@ -409,10 +386,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: CustomTextField(
                               textAlign: TextAlign.right,
                               readOnly: true,
-                              hint: _endTime,
-                              onTap: () {
-                                _getTimeFromUser(isStartTime: false);
-                              },
+                              hint: _endTime  == "" ? "08:00 AM" : _endTime,
                             ),
                           ))
                         : const SizedBox(),
@@ -429,7 +403,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                         scale: 0.8,
                         child: CupertinoSwitch(
                           value: _isTimeSet,
-                          activeColor: Color(0xffC8D8FA),
+                          activeColor:  Color(0xff81CEE5),
                           onChanged: (bool? value) {
                             setState(() {
                               _isTimeSet = value ?? false;

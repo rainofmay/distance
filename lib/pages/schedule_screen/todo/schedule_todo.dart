@@ -23,19 +23,13 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('#카테고리'),
+            Row(children: [
+              TextButton(onPressed: (){}, child: Text('완료')),
+              TextButton(onPressed: (){}, child: Text('완료')),
+              TextButton(onPressed: (){}, child: Text('중요'))
+            ]),
             const SizedBox(height: 10),
-            SizedBox(
-              height: 20,
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Text('$index 번');
-                  }),
-            ),
-           BorderLine(lineHeight: 8, backgroundColor: Colors.grey.shade200, lineColor: Colors.transparent),
+            BorderLine(lineHeight: 8, backgroundColor: Colors.grey.shade200, lineColor: Colors.transparent),
             const SizedBox(height: 10),
             const Text('#과제 목록'),
             Row(
@@ -47,8 +41,8 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
               ],
             ),
             const SizedBox(height: 10),
-            SizedBox(
-                child: TodoList()),
+            // SizedBox(
+            //     child: TodoList()),
           ],
         ),
       ),

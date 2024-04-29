@@ -20,10 +20,7 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) {
 
     return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('todo')
-          .orderBy('timeStamp', descending: true)
-          .snapshots(),
+      stream: null,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return Center(
