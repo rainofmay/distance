@@ -173,7 +173,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
       print('pickerdate $pickerDate');
 
       setState(() {
-        _originalStartTime = pickerDate ?? DateTime.now(); // 시작, 종료시각 비교를 위한 코드
+        _originalStartTime = pickerDate ?? DateTime.now(); // 시작, 종료시각 비교를 위한 변수
 
         _startDate = pickerDate ?? DateTime.now();
         _startTime = DateFormat('hh:mm a').format(pickerDate!) ?? "06:00 AM";

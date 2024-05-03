@@ -33,12 +33,12 @@ class _ModifyScheduleState extends State<ModifySchedule> {
   late DateTime _endDate =
       context.read<ModifyingScheduleProvider>().modifyingEndDate;
 
-  late String _startTime =
-      context.read<ModifyingScheduleProvider>().modifyingStartTime;
-  late String _endTime =
-      context.read<ModifyingScheduleProvider>().modifyingEndTime;
-  DateTime _originalStartTime = DateTime.now();
-  DateTime _originalEndTime = DateTime.now();
+  late String _startTime =  context.read<ModifyingScheduleProvider>().modifyingStartTime;
+  late String _endTime = context.read<ModifyingScheduleProvider>().modifyingEndTime;
+  DateTime _originalStartTime =DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 0);
+  DateTime _originalEndTime =DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
 
   String _selectedRepeat = "없음";
   late String _memo = context.read<ModifyingScheduleProvider>().modifyingMemo;
@@ -152,7 +152,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
         hoverColor: Colors.transparent,
         highlightColor: Colors.transparent,
       ),
-      initialDate: isStartTime ? context.read<ModifyingScheduleProvider>().modifyingStartDate : context.read<ModifyingScheduleProvider>().modifyingEndDate,
+      initialDate: isStartTime ? _originalStartTime : _originalEndTime,
       type: _isTimeSet ? OmniDateTimePickerType.dateAndTime : OmniDateTimePickerType.date,
       firstDate: DateTime(1600).subtract(const Duration(days: 3652)),
       lastDate: DateTime.now().add(

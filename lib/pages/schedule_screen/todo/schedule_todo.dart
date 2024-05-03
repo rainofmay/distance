@@ -24,12 +24,12 @@ class _ScheduleTodoState extends State<ScheduleTodo> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(children: [
-              TextButton(onPressed: (){}, child: Text('완료')),
+              TextButton(onPressed: (){}, child: Text('진행')),
               TextButton(onPressed: (){}, child: Text('완료')),
               TextButton(onPressed: (){}, child: Text('중요'))
             ]),
             const SizedBox(height: 10),
-            BorderLine(lineHeight: 8, backgroundColor: Colors.grey.shade200, lineColor: Colors.transparent),
+            BorderLine(lineHeight: 5, backgroundColor: Colors.grey.shade200, lineColor: Colors.transparent),
             const SizedBox(height: 10),
             const Text('#과제 목록'),
             Row(
