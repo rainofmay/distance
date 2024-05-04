@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_timer/stopwatch.dart';
+import 'package:mobile/pages/schedule_screen/timer/schedule_stopwatch.dart';
 
 class ClassRoomTimer extends StatefulWidget {
   const ClassRoomTimer({super.key});

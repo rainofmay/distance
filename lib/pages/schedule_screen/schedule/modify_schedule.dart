@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/widgets/custom_dialog.dart';
+import 'package:mobile/common_function/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
@@ -206,6 +206,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '',
         backFunction: Navigator.of(context).pop,
         backgroundColor: BLACK,
@@ -262,6 +263,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
             child: Column(
               children: [
                 CustomTextField(
+                  autofocus: false,
                   textInputAction: TextInputAction.done,
                   readOnly: false,
                   controller: _titleController,
@@ -303,6 +305,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                   },
                 ),
                 CustomTextField(
+                  autofocus: false,
                   textInputAction: TextInputAction.done,
                   controller: _memoController,
                   readOnly: false,
@@ -334,6 +337,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        autofocus: false,
                         readOnly: true,
                         onTap: () {
                           _getDateFromUser(context: context, isStartTime: true);
@@ -352,6 +356,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _startTime == "" ? "06:00 AM" : _startTime,
@@ -366,6 +371,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        autofocus: false,
                         readOnly: true,
                         onTap: () {
                           _getDateFromUser(context: context, isStartTime: false);
@@ -384,6 +390,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _endTime  == "" ? "08:00 AM" : _endTime,
@@ -421,6 +428,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                     Expanded(
                       flex: 4,
                       child: CustomTextField(
+                        autofocus: false,
                         titleIcon: IconButton(
                           icon: Icon(
                             Icons.repeat,

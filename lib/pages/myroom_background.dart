@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import '../widgets/custom_icon_button.dart';
@@ -76,73 +78,76 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(10)),
-      ),
-      child: Container(
-        padding: EdgeInsets.all(15),
-        child: Column(
-          children: [
-            Text(
-              '배경 설정',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
-            ),
+    return BackdropFilter(
+      filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+      child: Dialog(
+        backgroundColor: Colors.white.withOpacity(0.75),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8)),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(15),
+          child: Column(
+            children: [
+              Text(
+                '배경 설정',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+              ),
 
-            Row(
-              children: [
-                IconButton(
-                  onPressed: handleSettingButtonPressed,
-                  icon: isSettingOn == true ? Icon(Icons.settings,  color: Colors.blue) : Icon(Icons.settings,)
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isSettingOn =false;
-                      isImageSetting = true;
-                    });
-                  },
-                  icon: Icon(Icons.photo),
-                  color: isImageSetting ? Colors.blue : Colors.grey,
-                ),
-                IconButton(
-                  onPressed: () {
-                    setState(() {
-                      isSettingOn =false;
-                      isImageSetting = false;
-                    });
-                  },
-                  icon: Icon(Icons.videocam),
-                  color: isImageSetting ? Colors.grey : Colors.blue,
-                ),
-              ],
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: handleSettingButtonPressed,
+                    icon: isSettingOn == true ? Icon(Icons.settings,  color: Colors.blue) : Icon(Icons.settings,)
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isSettingOn =false;
+                        isImageSetting = true;
+                      });
+                    },
+                    icon: Icon(Icons.photo),
+                    color: isImageSetting ? Colors.blue : Colors.grey,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      setState(() {
+                        isSettingOn =false;
+                        isImageSetting = false;
+                      });
+                    },
+                    icon: Icon(Icons.videocam),
+                    color: isImageSetting ? Colors.grey : Colors.blue,
+                  ),
+                ],
+              ),
+              //교체 필요 => 영상, 배경을 구분해둬야 함.
+              // 카테고리 선택 페이지
+            Expanded(
+              child: isSettingOn == false ? (isImageSetting ? ListView.builder(
+                scrollDirection: Axis.vertical, // 세로 스크롤 설정
+                itemCount: imageCategories.length,
+                itemBuilder: (context, index) {
+                  return buildImagePage(index);
+                },
+              ) : ListView.builder(
+                scrollDirection: Axis.vertical, // 세로 스크롤 설정
+                itemCount: videoCategories.length,
+                itemBuilder: (context, index) {
+                  return buildVideoPage(index);
+                },
+              )) : BackgroundSettingSecond(),
             ),
-            //교체 필요 => 영상, 배경을 구분해둬야 함.
-            // 카테고리 선택 페이지
-          Expanded(
-            child: isSettingOn == false ? (isImageSetting ? ListView.builder(
-              scrollDirection: Axis.vertical, // 세로 스크롤 설정
-              itemCount: imageCategories.length,
-              itemBuilder: (context, index) {
-                return buildImagePage(index);
-              },
-            ) : ListView.builder(
-              scrollDirection: Axis.vertical, // 세로 스크롤 설정
-              itemCount: videoCategories.length,
-              itemBuilder: (context, index) {
-                return buildVideoPage(index);
-              },
-            )) : BackgroundSettingSecond(),
+              OkCancelButtons(
+                onPressed: () {
+                  // 현재 화면을 pop하여 이전 화면으로 이동
+                  Navigator.pop(context);
+                },
+                okText: '확인', cancelText: '',
+              ),
+            ],
           ),
-            OkCancelButtons(
-              onPressed: () {
-                // 현재 화면을 pop하여 이전 화면으로 이동
-                Navigator.pop(context);
-              },
-              okText: '확인', cancelText: '',
-            ),
-          ],
         ),
       ),
     );

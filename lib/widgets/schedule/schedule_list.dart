@@ -39,24 +39,6 @@ class _ScheduleListState extends State<ScheduleList> {
 
   @override
   Widget build(BuildContext context) {
-    // var stream = Supabase.instance.client
-    //     .from('schedule')
-    //     .stream(primaryKey: ['id'])
-    //     .gte('end_date',
-    //         '${widget.selectedDate.year}${widget.selectedDate.month.toString().padLeft(2, '0')}${widget.selectedDate.day.toString().padLeft(2, '0')}');
-
-    // && greaterThanOrEqual(event, 'end_date', selectedDateString)
-
-    //     .select('*')
-    //     .lte('start_date',
-    //     '${widget.selectedDate.year}${widget.selectedDate.month.toString()
-    //         .padLeft(
-    //         2, '0')}${widget.selectedDate.day.toString().padLeft(2, '0')}')
-    //
-    //     .gte('end_date',
-    //     '${widget.selectedDate.year}${widget.selectedDate.month.toString()
-    //         .padLeft(
-    //         2, '0')}${widget.selectedDate.day.toString().padLeft(2, '0')}').asStream();
 
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: futureData(),

@@ -33,7 +33,12 @@ class _CreateGroupPageState extends State<CreateGroupPage>
     String dDayString = "";
 
     return Scaffold(
-      appBar: CustomBackAppBar(appbarTitle: '클래스룸 생성', backFunction: Navigator.of(context).pop, backgroundColor: WHITE, contentColor: BLACK),
+      appBar: CustomBackAppBar(
+          isLeading: true,
+          appbarTitle: '클래스룸 생성',
+          backFunction: Navigator.of(context).pop,
+          backgroundColor: WHITE,
+          contentColor: BLACK),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

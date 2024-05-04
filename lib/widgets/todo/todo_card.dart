@@ -1,22 +1,22 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 // import 'package:uuid/uuid.dart';
-//
 // var uuid = Uuid();
 
 class TodoCard extends StatefulWidget {
   final String id;
   final String todoName;
-  final DateTime selectedDate;
+
+  // final DateTime selectedDate;
   final bool isDone;
   final List<dynamic> subTodoList;
 
   TodoCard({
     required this.id,
     required this.todoName,
-    required this.selectedDate,
+    // required this.selectedDate,
     required this.isDone,
     required this.subTodoList,
     super.key,
@@ -27,14 +27,17 @@ class TodoCard extends StatefulWidget {
 }
 
 class _TodoCardState extends State<TodoCard> {
-  // final _formKey = GlobalKey<FormState>();
+  final supabase = Supabase.instance.client;
+
   late bool _isDone; // to-do 완료 여부
   late List<dynamic> _subTodoList = [];
   late bool _subIsDone; // 하위 to-do 완료 여부
-
-  late TextEditingController _editingController; // 수정 중인 항목의 컨트롤러
   late int _editingIndex; // 수정 중인 항목의 인덱스
   late bool _isEditing; // 수정 모드 여부
+
+  late TextEditingController _editingController; // 수정 중인 항목의 컨트롤러
+
+  final FocusNode _focusNode = FocusNode(); // textformfield에 포커스 되어있는지
 
   @override
   void initState() {
@@ -53,26 +56,25 @@ class _TodoCardState extends State<TodoCard> {
   //   super.dispose();
   // }
 
+  // to-do 완료 여부 업데이트
   _updateToggle(newValue) async {
     print('updateToggle: $newValue');
     setState(() {
       _isDone = newValue;
     });
-    await FirebaseFirestore.instance
-        .collection('todo')
-        .doc(widget.id)
-        .update({'isDone': _isDone});
+    await supabase
+        .from('todo')
+        .update({'is_done': _isDone}).eq('id', widget.id);
   }
 
-  //하위 to-do 완료여부 업데이트
+  //하위 to-do 완료 여부 업데이트
   _updateSubToggle(index, newValue) async {
     setState(() {
       _subTodoList[index]["subIsDone"] = newValue;
     });
-    await FirebaseFirestore.instance
-        .collection('todo')
-        .doc(widget.id)
-        .update({'subTodoList': _subTodoList});
+    await supabase
+        .from('todo')
+        .update({'sub_todo_list': _subTodoList}).eq('id', widget.id);
   }
 
   // 하위항목 to-do 추가
@@ -81,10 +83,10 @@ class _TodoCardState extends State<TodoCard> {
       _subTodoList.insert(0, {"title": newValue, "subIsDone": boolValue});
       print(_subTodoList);
     });
-    await FirebaseFirestore.instance
-        .collection('todo')
-        .doc(widget.id)
-        .update({'subTodoList': _subTodoList});
+    await supabase
+        .from('todo')
+        .update({'sub_todo_list': _subTodoList})
+        .eq('id', widget.id);
   }
 
   // 하위항목 to-do 수정
@@ -92,10 +94,10 @@ class _TodoCardState extends State<TodoCard> {
     setState(() {
       _subTodoList[index] = {"title": editedTitle, "subIsDone": editValue};
     });
-    await FirebaseFirestore.instance
-        .collection('todo')
-        .doc(widget.id)
-        .update({'subTodoList'[index]: _subTodoList});
+    await supabase
+        .from('todo')
+        .update({'sub_todo_list'[index]: _subTodoList})
+        .eq('id', widget.id);
   }
 
   void _startEditing(index) {
@@ -199,6 +201,7 @@ class _TodoCardState extends State<TodoCard> {
                     title: _isEditing &&
                             index == _editingIndex // 수정 모드 활성화, 인덱스 일치할 때만
                         ? TextFormField(
+                            focusNode: _focusNode,
                             textInputAction: TextInputAction.done,
                             controller: _editingController,
                             onFieldSubmitted: (value) {
@@ -211,7 +214,7 @@ class _TodoCardState extends State<TodoCard> {
                             style: TextStyle(color: Colors.black, fontSize: 11),
                             maxLength: 20,
                             decoration: InputDecoration(
-                              hintText: '하위항목 추가.',
+                              hintText: '하위항목 추가',
                               counterText: '',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.zero,

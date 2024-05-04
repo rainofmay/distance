@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/appBar/menu_botton.dart';
 
 class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appbarTitle;
-  final GestureTapCallback backFunction;
+  final GestureTapCallback? backFunction;
+  final bool isLeading;
   final Color backgroundColor;
   final Color contentColor;
   final List<Widget>? actions;
@@ -11,7 +11,8 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomBackAppBar(
       {super.key,
       required this.appbarTitle,
-      required this.backFunction,
+      this.backFunction,
+        required this.isLeading,
       required this.backgroundColor,
       required this.contentColor,
       this.actions,
@@ -30,14 +31,14 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: backgroundColor,
         ),
       ),
-      leading: IconButton(
+      leading: isLeading ? IconButton(
         onPressed: backFunction,
         icon: Icon(
           Icons.arrow_back,
           size: 24,
           color: contentColor,
         ),
-      ),
+      ) : Container(),
       title: Text(
         appbarTitle,
         style: TextStyle(fontSize: 18, color: contentColor),

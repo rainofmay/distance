@@ -14,6 +14,7 @@ class _ChangeSettingState extends State<ChangeSetting> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '설정 변경',
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,

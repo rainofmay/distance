@@ -6,7 +6,7 @@ import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/appBar/menu_botton.dart';
 import 'package:mobile/widgets/bottomBar/class_bottom_bar.dart';
-import 'package:mobile/widgets/custom_dialog.dart';
+import 'package:mobile/common_function/custom_dialog.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 import 'package:mobile/util/class_bottom_index.dart';
 import 'package:mobile/pages/classroom_screen/classroom_class.dart';
@@ -51,6 +51,7 @@ class _ClassRoomState extends State<ClassRoom> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '들어간 그룹명',
         backFunction: _resetBottomIndex,
         backgroundColor: BLACK,

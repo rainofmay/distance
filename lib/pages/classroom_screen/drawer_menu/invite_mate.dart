@@ -9,6 +9,7 @@ class InviteMate extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '메이트 초대',
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,

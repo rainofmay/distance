@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/widgets/custom_dialog.dart';
+import 'package:mobile/common_function/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
@@ -99,7 +99,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
     try {
       await supabase.from('schedule').insert(schedule.toJson());
     } catch (error) {
-      print('에러 $error');
+      print('schedule insert 에러 $error');
     }
 
     // 새로고침을 위함도 있음.
@@ -196,6 +196,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
 
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '',
         backFunction: Navigator.of(context).pop,
         backgroundColor: BLACK,
@@ -235,6 +236,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
             child: Column(
               children: [
                 CustomTextField(
+                  autofocus: false,
                   textInputAction: TextInputAction.done,
                   readOnly: false,
                   controller: _textController,
@@ -276,6 +278,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                   },
                 ),
                 CustomTextField(
+                  autofocus: false,
                   textInputAction: TextInputAction.done,
                   readOnly: false,
                   titleIcon: IconButton(
@@ -306,6 +309,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        autofocus: false,
                         readOnly: true,
                         onTap: () {
                           _getDateFromUser(context: context, isStartTime: true);
@@ -324,6 +328,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _startTime,
@@ -338,6 +343,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                   children: [
                     Expanded(
                       child: CustomTextField(
+                        autofocus: false,
                         readOnly: true,
                         onTap: () {
                           _getDateFromUser(context: context, isStartTime: false);
@@ -356,6 +362,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _endTime,
@@ -394,6 +401,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                     Expanded(
                       flex: 4,
                       child: CustomTextField(
+                        autofocus: false,
                         titleIcon: IconButton(
                           icon: Icon(
                             Icons.repeat,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/groupstudy/classroom_screen/classroom_timer/stopwatch_button.dart';
+import 'package:mobile/pages/schedule_screen/timer/stopwatch_button.dart';
 import 'package:stop_watch_timer/stop_watch_timer.dart';
 
 class CountUpTimer extends StatefulWidget {

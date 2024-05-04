@@ -13,6 +13,7 @@ class CustomTextField extends StatelessWidget {
   final bool readOnly;
   final TextAlign? textAlign;
   final TextInputAction? textInputAction;
+  final bool autofocus;
 
   const CustomTextField({
     super.key,
@@ -28,6 +29,7 @@ class CustomTextField extends StatelessWidget {
     required this.readOnly,
     this.textAlign,
     this.textInputAction,
+    required this.autofocus
   });
 
   @override
@@ -45,6 +47,7 @@ class CustomTextField extends StatelessWidget {
                 textInputAction: textInputAction,
                 textAlign: textAlign ?? TextAlign.left,
                 onTap: onTap,
+                autofocus: autofocus,
                 autovalidateMode: AutovalidateMode.always,
                 readOnly: readOnly,
                 controller: controller,

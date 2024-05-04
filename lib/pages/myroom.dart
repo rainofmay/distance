@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/widgets/action_buttons.dart';
@@ -105,7 +106,7 @@ class _MyRoomState extends State<MyRoom> {
                 },
               );
             },
-            icon: Icon(Icons.music_note_outlined, size: 20, color: Colors.white70),
+            icon: Icon(CupertinoIcons.music_note_2, size: 20, color: Colors.white70),
           ),
           ActionButton(
             onPressed: () {

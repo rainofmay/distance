@@ -47,6 +47,7 @@ class _ReportState extends State<Report> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: CustomBackAppBar(
+        isLeading: true,
         appbarTitle: '신고하기',
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
