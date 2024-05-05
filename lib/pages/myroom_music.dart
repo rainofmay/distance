@@ -1,15 +1,14 @@
 import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/widgets/custom_container.dart';
 import 'package:mobile/widgets/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
 
 import '../util/background_provider.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class MusicSetting extends StatefulWidget {
   const MusicSetting({super.key});
@@ -30,17 +29,18 @@ class _MusicSettingState extends State<MusicSetting> {
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = context.read<BackgroundProvider>();
-    return BackdropFilter( // blur 처리
-      filter: ImageFilter.blur(sigmaX: 2, sigmaY: 2),
-      child: Dialog(
-        backgroundColor: Colors.white.withOpacity(0.75),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        ),
-        child: Container(
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(8)),
+      ),
+      child: CustomContainer(
+          width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
-          padding: EdgeInsets.only(top:15, left:15, right: 15),
-          child: SingleChildScrollView( //가로모드에서 필요(없으면 오류 발생)
+          backgroundColor: Colors.white,
+          distance: 0,
+          widget: Padding(
+            padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
             child: Column(
               children: [
                 Text(
@@ -52,7 +52,7 @@ class _MusicSettingState extends State<MusicSetting> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.only(top: 30),
+                      margin: EdgeInsets.only(top: 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         // 양 끝에 배치
@@ -65,9 +65,8 @@ class _MusicSettingState extends State<MusicSetting> {
                                 Text(
                                   '메인 음악',
                                   style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.normal
-                                  ),
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal),
                                 ),
                               ],
                             ),
@@ -121,8 +120,8 @@ class _MusicSettingState extends State<MusicSetting> {
                                     setState(() {});
                                   },
                                   icon: Image(
-                                    image:
-                                    AssetImage('assets/images/cafeImage.jpeg'),
+                                    image: AssetImage(
+                                        'assets/images/cafeImage.jpeg'),
                                     width: 50,
                                     height: 50,
                                   )),
@@ -173,18 +172,17 @@ class _MusicSettingState extends State<MusicSetting> {
                             children: [
                               Icon(Icons.volume_up, size: 16),
                               SizedBox(width: 8),
-                              Text(
-                                '음량 설정',
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.normal)
-                              ),
+                              Text('음량 설정',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.normal)),
                             ],
                           ),
                         ),
                         Container(
                           margin: const EdgeInsets.only(top: 15, right: 10),
                           height: MediaQuery.of(context).size.height *
-                              0.40, // 예시로 반 화면의 높이로 설정
+                              0.35, // 예시로 반 화면의 높이로 설정
                           child: SingleChildScrollView(
                             // physics: NeverScrollableScrollPhysics(),
                             scrollDirection: Axis.vertical,
@@ -205,7 +203,6 @@ class _MusicSettingState extends State<MusicSetting> {
                             ),
                           ),
                         ),
-            
                       ],
                     ),
                   ],
@@ -221,14 +218,10 @@ class _MusicSettingState extends State<MusicSetting> {
                     onCancelPressed: () {
                       Navigator.of(context).pop(); // 닫히는 버튼
                       backgroundProvider.initializeVideo();
-                    }
-                ),
+                    }),
               ],
             ),
-          ),
-      
-        ),
-      ),
+          ),),
     );
   }
 }

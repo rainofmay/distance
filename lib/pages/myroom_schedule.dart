@@ -5,7 +5,6 @@ import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.d
 import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/timer/schedule_stopwatch.dart';
-import 'package:mobile/pages/schedule_screen/todo/create_todo.dart';
 import 'package:mobile/pages/schedule_screen/todo/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';

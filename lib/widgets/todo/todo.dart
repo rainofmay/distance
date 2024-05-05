@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:mobile/pages/schedule_screen/todo/modify_todo.dart';
 import 'dart:convert';
 import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';
@@ -153,7 +154,11 @@ class _TodoState extends State<Todo> {
                       ),
                       title: GestureDetector(
                         onTap: () {
-                          _editTodo(index);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ModifyTodo()),
+                          );
+                          // _editTodo(index);
                         },
                         child: Text(todoList[index]['todo'],
                             style: todoList[index]['completed']
@@ -179,40 +184,6 @@ class _TodoState extends State<Todo> {
                       ),
                     );
                   },
-                ),
-              ),
-              Form(
-                key: _formKey,
-                child: Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: TextFormField(
-                    controller: todoController,
-                    validator: (value) {
-                      if (value == null ||
-                          value.isEmpty ||
-                          value.trim().isEmpty) {
-                        return null;
-                      }
-                      return null;
-                    },
-                    onFieldSubmitted: (value) => sendTodo(),
-                    textAlignVertical: TextAlignVertical.center,
-                    style: TextStyle(color: Colors.black, fontSize: 13),
-                    maxLength: 100,
-                    textInputAction: TextInputAction.done,
-                    decoration: InputDecoration(
-                      suffixIcon: IconButton(
-                          onPressed: sendTodo,
-                          icon: Icon(Icons.send, size: 18)),
-                      hintText: '할 일을 입력해 보세요.',
-                      counterText: '',
-                      filled: true,
-                      fillColor: Colors.grey.shade100,
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.zero,
-                          borderSide: BorderSide.none),
-                    ),
-                  ),
                 ),
               ),
             ],
