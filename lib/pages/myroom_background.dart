@@ -1,7 +1,9 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
+import 'package:provider/provider.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/background_setting.dart';
 
@@ -14,15 +16,9 @@ class BackgroundSetting extends StatefulWidget {
 }
 //낮, 밤마다 시간마다 배경 설정 할 수 있게 하는 법 1. 사용자 설정, 2.
 class _BackgroundSettingState extends State<BackgroundSetting> {
-  int selectedImageCategoryIndex = 0; // 선택된 이미지 버튼의 ID
-  int selectedImageIndex = 0;
-
-  int selectedVideoCategoryIndex = 0; // 선택된 비디오 버튼의 ID
-  int selectedVideoIndex = 0;
-
   bool isSettingOn = false;
   bool isImageSetting = true;
-  List<String> imageCategories = ['Cafe', 'Jazz Bar', 'Nature'];// 카테고리 목록
+  List<String> imageCategories = ['Cafe', 'Jazz_Bar', 'Nature'];// 카테고리 목록
   List<String> videoCategories = ['Sea', 'Stars' ,'river'];
   List<List<String>> images = [
     // 각 카테고리에 대한 이미지 목록
@@ -57,17 +53,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     ],
   ];
 
-  void handleImageButtonPressed(int categoryindex, int index, bool isImage) {
-    // 클릭된 버튼의 ID를 저장하고 다른 버튼들을 비활성화
-    //교체 필요 => 영상인지 아닌지에 따라 버튼 누르는 게 달라져야함.
-    setState(() {
-      selectedImageCategoryIndex = categoryindex;
-      selectedImageIndex = index;
-    });
-    print("handleImageButtonPressed: $categoryindex");
-    print("handleImageButtonPressed: $index");
-    print('isImage : $isImage');
-  }
 
   void handleSettingButtonPressed() {
     setState(() {
@@ -78,6 +63,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
+
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
       child: Dialog(
@@ -155,6 +141,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   // 카테고리당 이미지 선택 페이지 구성
   Widget buildImagePage(int index) {
+    final backgroundProvider = context.read<BackgroundProvider>();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -183,10 +171,10 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   //교체 필요 => 불러오는 방식 + 캐싱 기능 탑재
                   imageUrl: images[index][imageIndex],
                   id: index * 100 + imageIndex,
-                  onButtonPressed: () {handleImageButtonPressed(index, imageIndex, false);},
                   selectedCategoryIndex: index,
                   selectedIndex: imageIndex, // 값 전달
                   isImage: true,
+                  isSelected: backgroundProvider.isImage && (index == backgroundProvider.selectedCategoryIndex && imageIndex == backgroundProvider.selectedIndex),
                 );
               },
             ),
@@ -196,6 +184,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     );
   }
   Widget buildVideoPage(int index) {
+    final backgroundProvider = context.read<BackgroundProvider>();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -223,11 +212,11 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                 return CustomIconButton(
                   //교체 필요 => 불러오는 방식 + 캐싱 기능 탑재
                   imageUrl: videos[index][videoIndex],
-                  id: index * 100 + videoIndex,
-                  onButtonPressed: () {handleImageButtonPressed(index, videoIndex, true);},
+                  id: index * 1000 + videoIndex,
                   selectedCategoryIndex: index,
                   selectedIndex: videoIndex, // 값 전달
                   isImage: false,
+                  isSelected: !backgroundProvider.isImage && (index == backgroundProvider.selectedCategoryIndex && videoIndex == backgroundProvider.selectedIndex),
                 );
               },
             ),

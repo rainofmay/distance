@@ -51,6 +51,8 @@ class BackgroundProvider extends ChangeNotifier {
 
   set selectedImageURL(String url) {
     _selectedURL = url;
+    notifyListeners();
+
   }
 
   List<List<String>> imageURLs = [
@@ -95,6 +97,7 @@ class BackgroundProvider extends ChangeNotifier {
         if (imageIndex >= imageURLs[categoryIndex].length) {
           // 예외 처리: 현재 선택된 이미지 인덱스가 범위를 벗어나면 기본값으로 설정
           imageIndex = 0;
+          print("background_provider get selectedImageURL : imageURL = 0으로 예외처리");
         }
       }
 

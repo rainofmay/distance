@@ -18,13 +18,11 @@ class MyRoom extends StatefulWidget {
   State<MyRoom> createState() => _MyRoomState();
 }
 
-class _MyRoomState extends State<MyRoom> {
+class _MyRoomState extends State<MyRoom>{
   @override
   void initState() {
     super.initState();
-
   }
-
 
   @override
   void dispose() {
@@ -38,6 +36,7 @@ class _MyRoomState extends State<MyRoom> {
     Provider.of<BackgroundSettingProvider>(context);
     if(backgroundProvider.isImage == false) {
       print("비디오 replay in building");
+      backgroundProvider.videoController.play();
     }
     return Scaffold(
       body: Stack(
@@ -62,7 +61,19 @@ class _MyRoomState extends State<MyRoom> {
                   child: VideoPlayer(backgroundProvider.videoController),
                 ),
               ),
+            )
+          else
+          // VideoPlayerController가 초기화되지 않았을 때 임시 이미지를 보여줌
+            Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage('assets/images/loading.gif'),
+                ),
+              ),
             ),
+
+
           //할 일들
           Container(
             child: backgroundSettingProvider.simpleWindowEnable
