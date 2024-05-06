@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../const/colors.dart';
+import '../../../model/todo_model.dart';
 import '../../../widgets/appBar/custom_back_appbar.dart';
 import '../../../widgets/borderline.dart';
 import '../../../widgets/custom_text_field.dart';
@@ -21,33 +22,49 @@ class _ModifyTodoState extends State<ModifyTodo> {
   final _formKey = GlobalKey<FormState>();
   final supabase = Supabase.instance.client;
 
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _memoController = TextEditingController();
+  late TextEditingController _titleController;
 
   @override
   void initState() {
     super.initState();
-    // _titleController = TextEditingController(
-    //     text: context.read<ModifyingScheduleProvider>().modifyingName);
-    // _memoController = TextEditingController(
-    //     text: context.read<ModifyingScheduleProvider>().modifyingMemo);
   }
 
   @override
   void dispose() {
     _titleController.dispose();
-    _memoController.dispose();
     super.dispose();
   }
 
-  void _onSavePressed() async {
-    // if (_formKey.currentState!.validate()) {
-    //   // bool값 리턴
-    //   _formKey.currentState!.save();
+  void _onSavePressed(String id, String todoName, bool isDone, bool isBookMarked) async {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+      final todo = TodoModel(
+        id: id,
+        todoName: todoName,
+        isDone: isDone,
+        isBookMarked: isBookMarked,
+      );
+
+      try {
+        await Supabase.instance.client
+            .from('todo')
+            .update(todo.toJson())
+            .eq('id', todo.id);
+      } catch (error) {
+        print('에러 $error');
+      }
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments
+        as Map<String, dynamic>; // todo.dart에서 값 받아오기
+    _titleController =
+        TextEditingController(text: args['todoName'] as String); // 텍스트필드 초기값
+
     return Scaffold(
         appBar: CustomBackAppBar(
           isLeading: true,
@@ -63,9 +80,12 @@ class _ModifyTodoState extends State<ModifyTodo> {
                 return TextButton(
                   onPressed: (value.text.isEmpty)
                       ? null
-                      : () => {
-                            _onSavePressed(),
-                          },
+                      : () => _onSavePressed(
+                            args['id'] as String,
+                            args['todoName'] as String,
+                            args['isDone'] as bool,
+                            args['isBookMarked'] as bool,
+                          ),
                   child: Text(
                     '수정',
                     style: TextStyle(
@@ -76,15 +96,9 @@ class _ModifyTodoState extends State<ModifyTodo> {
             ),
             TextButton(
               onPressed: () async {
-                // await supabase.from('schedule').delete().match({
-                //   'id': context
-                //       .read<ModifyingScheduleProvider>()
-                //       .modifyingScheduleId
-                // });
-                // if (!context.mounted) return;
-                // context.read<CalendarProvider>().setSelectedDate(
-                //     _startDate);
-                // Navigator.of(context).pop();
+                await supabase.from('todo').delete().match({'id': args['id']});
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
               },
               child: Text(
                 '삭제',
@@ -111,7 +125,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
                             textInputAction: TextInputAction.done,
                             readOnly: false,
                             controller: _titleController,
-                            hint: '할 일을 입력해 주세요.',
+                            hint: '할 일을 입력해 주세요',
                             hintStyle: TextStyle(color: Colors.grey[350]),
                             maxLines: 1,
                             maxLength: 13,
@@ -127,16 +141,22 @@ class _ModifyTodoState extends State<ModifyTodo> {
                               });
                             },
                           ),
-                          BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                          BorderLine(
+                              lineHeight: 1,
+                              lineColor: Colors.grey.withOpacity(0.1)),
                           ListTile(
                             title: Text('북마크 설정'),
-                            trailing: IconButton(icon: Icon(Icons.bookmark_border_rounded),
-                              onPressed: () {}),
+                            trailing: IconButton(
+                                icon: Icon(Icons.bookmark_border_rounded),
+                                onPressed: () {}),
                           ),
-                          BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                          BorderLine(
+                              lineHeight: 1,
+                              lineColor: Colors.grey.withOpacity(0.1)),
                           ListTile(
                             title: Text('메이트 공유'),
-                            trailing: IconButton(icon: Icon(CupertinoIcons.person_add_solid),
+                            trailing: IconButton(
+                                icon: Icon(CupertinoIcons.person_add_solid),
                                 onPressed: () {}),
                           ),
                         ]))))));

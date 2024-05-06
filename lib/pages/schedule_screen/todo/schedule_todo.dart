@@ -19,13 +19,11 @@ class _ScheduleTodoState extends State<ScheduleTodo>
   bool isDone = false;
   bool isBookMarked = false;
 
-
-
-
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _todoController = TextEditingController();
   late TabController _tabController;
   final List<dynamic> _categories = [];
+
   List<Map<String, dynamic>> todoList = [];
 
   @override

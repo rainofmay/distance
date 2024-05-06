@@ -94,7 +94,7 @@ class _MyRoomState extends State<MyRoom> {
                 ),
               );
             },
-            icon: Icon(Icons.edit_calendar_outlined, size: 20, color: Colors.white70),
+            icon: Icon(CupertinoIcons.calendar_today, size: 20, color: Colors.white70),
           ),
           ActionButton(
             onPressed: () {

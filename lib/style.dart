@@ -20,7 +20,7 @@ var theme = ThemeData(
     bottomNavigationBarTheme: BottomNavigationBarThemeData(
       backgroundColor: DARK,
       type: BottomNavigationBarType.fixed,
-      selectedItemColor: Colors.white,
+      selectedItemColor: PRIMARY_COLOR,
       unselectedItemColor: DARK_UNSELECTED,
       selectedLabelStyle: TextStyle(
           fontSize: 9,

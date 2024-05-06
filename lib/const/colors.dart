@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-const CALENDAR_COLOR = Color(0xFF005FDA);
-const LIGHT = Color(0xffECEBEB);
+const PRIMARY_COLOR = Color(0xFFECB574);
+//Color(0xFFECB574);
+const LIGHT = Color(0xff0E1A27);
 const LIGHT_WHITE = Colors.white60;
 const DARK = Color(0xff282828);
 const DARK_UNSELECTED = Color(0xff777777);
@@ -19,8 +20,8 @@ const COLOR1 = Color(0xFF005FDA); // 브랜드 컬러
 const COLOR2 = Color(0xffF56A79);
 const COLOR3 = Color(0xffFF3D9C);
 const COLOR4 = Color(0xffBB1024);
-const COLOR5 = Color(0xfff8ab1b);
-const COLOR6 = Color(0xffD4A656);
+const COLOR5 = Color(0xfff8ab1a);
+const COLOR6 = Color(0xFFECB574);
 const COLOR7 = Color(0xfffca76a);
 const COLOR8 = Color(0xff422b20);
 const COLOR9 = Color(0xffB7CA79);
