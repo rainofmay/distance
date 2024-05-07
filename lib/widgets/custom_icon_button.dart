@@ -5,20 +5,19 @@ import 'package:provider/provider.dart';
 class CustomIconButton extends StatefulWidget {
   final String imageUrl;
   final int id;
-  final void Function() onButtonPressed;
   final int selectedCategoryIndex;
   final int selectedIndex; // 새로운 매개변수 추가
   final bool isImage;
+  final bool isSelected; // 새로운 isSelected 속성
 
   CustomIconButton({
     super.key,
     required this.imageUrl,
     required this.id,
-    required this.onButtonPressed,
     required this.selectedCategoryIndex,
     required this.selectedIndex,
-    required this.isImage// 생성자에 추가
-
+    required this.isImage,// 생성자에 추가
+    required this.isSelected, // 추가된 isSelected 속성
   });
 
   @override
@@ -26,32 +25,26 @@ class CustomIconButton extends StatefulWidget {
 }
 
 class _CustomIconButtonState extends State<CustomIconButton> {
-  bool isSelected = false;
 
   @override
   Widget build(BuildContext context) {
     final backgroundProvider = context.read<BackgroundProvider>();
-
     return GestureDetector(
       onTap: () {
-        setState(() {
-          backgroundProvider.isImage = widget.isImage;
-          backgroundProvider.selectedIndex = widget.selectedIndex;
           backgroundProvider.selectedCategoryIndex = widget.selectedCategoryIndex;
+          backgroundProvider.selectedIndex = widget.selectedIndex;
+          backgroundProvider.isImage = widget.isImage;
           print("Custom_icon_button Category_Index: ${widget.selectedCategoryIndex}");
           print("Custom_icon_button Index:${widget.selectedIndex}");
           print("Custom_icon_button ${widget.isImage}");
-        });
-        if(!widget.isImage){
-          backgroundProvider.initializeVideo();
-        }
+          print("-------------------------------------");
       },
       child: Container(
         margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected ? Colors.purple : Colors.transparent,
-            width: 2.0,
+            color: widget.isSelected ? Colors.purple : Colors.transparent,
+            width: widget.isSelected ? 4.0 : 1.0
           ),
           borderRadius: BorderRadius.circular(18),
         ),

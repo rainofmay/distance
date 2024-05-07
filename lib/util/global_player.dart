@@ -45,34 +45,34 @@ class GlobalAudioPlayer with ChangeNotifier {
       MusicInfo(
           playerIndex: 0,
           kindOfMusic: '카페 말하는 소리1',
-          musicIcon: 'assets/images/raindrop.png',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/cafe/cafePeopleSound.mp3'),
       MusicInfo(
           playerIndex: 1,
           kindOfMusic: '카페 말하는 소리2',
-          musicIcon: 'assets/images/raindrop.png',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/cafe/cafePeopleSound2.mp3'),
       MusicInfo(
           playerIndex: 2,
           kindOfMusic: '키보드 소리1',
-          musicIcon: 'assets/images/raindrop.png',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/cafe/keyboardTypingSound.mp3'),
       MusicInfo(
           playerIndex: 3,
           kindOfMusic: '키보드 소리2',
-          musicIcon: 'assets/images/raindrop.png',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/cafe/keyboardTypingSound2.mp3'),
       MusicInfo(
           playerIndex: 4,
           kindOfMusic: '키보드 소리3',
-          musicIcon: 'assets/images/raindrop.png',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/cafe/keyboardTypingSound3.mp3'),
     ],
     [
       MusicInfo(
           playerIndex: 0,
           kindOfMusic: '클래식1',
-          musicIcon: 'assets/images/classicImage.jpeg',
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
           audioURL: 'audios/nature/defaultMainMusic.mp3'),]
   ];
 
