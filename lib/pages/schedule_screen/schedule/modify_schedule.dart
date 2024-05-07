@@ -244,7 +244,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
             },
             child: Text(
               '삭제',
-              style: TextStyle(color: Color(0xffa41705), fontWeight: FontWeight.bold),
+              style: TextStyle(color: Color(0xffc41b03), fontWeight: FontWeight.bold),
             ),
           )
         ],

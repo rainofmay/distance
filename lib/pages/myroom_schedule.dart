@@ -5,7 +5,6 @@ import 'package:mobile/pages/schedule_screen/drawer_menu/schedule_notification.d
 import 'package:mobile/pages/schedule_screen/schedule/create_schedule.dart';
 import 'package:mobile/pages/schedule_screen/schedule/schedule_schedule.dart';
 import 'package:mobile/pages/schedule_screen/timer/schedule_stopwatch.dart';
-import 'package:mobile/pages/schedule_screen/todo/create_todo.dart';
 import 'package:mobile/pages/schedule_screen/todo/schedule_todo.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
@@ -88,14 +87,14 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.edit_calendar,
-                          color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
+                          color: currentTab == 0 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[0],
                           style: TextStyle(
-                              color: currentTab == 0 ? WHITE : DARK_UNSELECTED,
+                              color: currentTab == 0 ? PRIMARY_COLOR : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -115,14 +114,14 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.checklist_rounded,
-                          color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
+                          color: currentTab == 1 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[1],
                           style: TextStyle(
-                              color: currentTab == 1 ? WHITE : DARK_UNSELECTED,
+                              color: currentTab == 1 ? PRIMARY_COLOR : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -142,14 +141,14 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           CupertinoIcons.timer,
-                          color: currentTab == 2 ? WHITE : DARK_UNSELECTED,
+                          color: currentTab == 2 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[2],
                           style: TextStyle(
-                              color: currentTab == 2 ? WHITE : DARK_UNSELECTED,
+                              color: currentTab == 2 ? PRIMARY_COLOR : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -169,14 +168,14 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.more_horiz,
-                          color: currentTab == 3 ? WHITE : DARK_UNSELECTED,
+                          color: currentTab == 3 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[3],
                           style: TextStyle(
-                              color: currentTab == 3 ? WHITE : DARK_UNSELECTED,
+                              color: currentTab == 3 ? PRIMARY_COLOR : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )

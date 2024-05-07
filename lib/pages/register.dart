@@ -92,6 +92,8 @@ class _RegisterPageState extends State<RegisterPage> {
           password: _password,
         );
         _showDialog('회원가입 성공', '회원가입에 성공했습니다.');
+
+        if (!context.mounted) return;
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => LoginPage()),
         );

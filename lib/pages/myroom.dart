@@ -105,7 +105,7 @@ class _MyRoomState extends State<MyRoom>{
                 ),
               );
             },
-            icon: Icon(Icons.edit_calendar_outlined, size: 20, color: Colors.white70),
+            icon: Icon(CupertinoIcons.calendar_today, size: 20, color: Colors.white70),
           ),
           ActionButton(
             onPressed: () {
@@ -117,7 +117,7 @@ class _MyRoomState extends State<MyRoom>{
                 },
               );
             },
-            icon: Icon(CupertinoIcons.music_note_2, size: 20, color: Colors.white70),
+            icon: Icon(Icons.library_music_rounded, size: 20, color: Colors.white70),
           ),
           ActionButton(
             onPressed: () {
@@ -129,7 +129,7 @@ class _MyRoomState extends State<MyRoom>{
                 },
               );
             },
-            icon: Icon(Icons.photo_camera_back, size: 20, color: Colors.white70),
+            icon: Icon(CupertinoIcons.photo_fill, size: 20, color: Colors.white70),
           ),
         ],
       ),
