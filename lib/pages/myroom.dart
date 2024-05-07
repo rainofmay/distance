@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
@@ -89,12 +90,12 @@ class _MyRoomState extends State<MyRoom> {
                       child: child,
                     );
                   },
-                  transitionDuration: Duration(milliseconds: 140),
-                  reverseTransitionDuration: Duration(milliseconds: 140),
+                  transitionDuration: const Duration(milliseconds: 140),
+                  reverseTransitionDuration: const Duration(milliseconds: 140),
                 ),
               );
             },
-            icon: Icon(CupertinoIcons.calendar_today, size: 20, color: Colors.white70),
+            icon: const Icon(Icons.note_alt_rounded, size: 20, color: LIGHT_WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -106,7 +107,7 @@ class _MyRoomState extends State<MyRoom> {
                 },
               );
             },
-            icon: Icon(Icons.library_music_rounded, size: 20, color: Colors.white70),
+            icon: const Icon(Icons.library_music_rounded, size: 20, color: LIGHT_WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -118,7 +119,7 @@ class _MyRoomState extends State<MyRoom> {
                 },
               );
             },
-            icon: Icon(CupertinoIcons.photo_fill, size: 20, color: Colors.white70),
+            icon: const Icon(CupertinoIcons.photo_fill, size: 20, color: LIGHT_WHITE),
           ),
         ],
       ),

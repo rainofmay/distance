@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/model/todo_model.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/todo/todo.dart';
@@ -176,18 +177,21 @@ class _ScheduleTodoState extends State<ScheduleTodo>
               },
               onFieldSubmitted: (value) => sendTodo(),
               textAlignVertical: TextAlignVertical.center,
-              style: TextStyle(color: Colors.black, fontSize: 13),
+              style: const TextStyle(color: Colors.black, fontSize: 13),
               maxLength: 100,
               textInputAction: TextInputAction.newline, // 다음줄로 넘어가는 키보드
               decoration: InputDecoration(
                 suffixIcon: IconButton(
+                  highlightColor: TRANSPARENT,
+                    hoverColor: TRANSPARENT,
+                    splashRadius: null,
                     onPressed: sendTodo,
-                    icon: Icon(Icons.send, size: 18)),
+                    icon: const Icon(Icons.send, size: 18)),
                 hintText: '할 일을 입력해 보세요.',
                 counterText: '',
                 filled: true,
                 fillColor: Colors.grey.shade100,
-                border: OutlineInputBorder(
+                border: const OutlineInputBorder(
                     borderRadius: BorderRadius.zero,
                     borderSide: BorderSide.none),
               ),

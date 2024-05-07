@@ -73,9 +73,9 @@ class _ExpandableFabState extends State<ExpandableFab>
         child: FloatingActionButton(
             onPressed: toggle,
             backgroundColor: DARK,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50))),
-          child: Icon(
+          child: const Icon(
             CupertinoIcons.cube,
             color: LIGHT_WHITE,
             size: 30,
@@ -94,9 +94,9 @@ class _ExpandableFabState extends State<ExpandableFab>
         child: FloatingActionButton(
             onPressed: toggle,
             backgroundColor: DARK,
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(50))),
-          child: Icon(
+          child: const Icon(
             CupertinoIcons.cube_fill,
             color: PRIMARY_COLOR,
             // Colors.greenAccent,

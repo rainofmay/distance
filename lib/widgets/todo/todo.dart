@@ -22,12 +22,9 @@ class _TodoState extends State<Todo> {
   final supabase = Supabase.instance.client;
   var stream = Supabase.instance.client.from('todo').stream(primaryKey: ['id']);
 
-  final _formKey = GlobalKey<FormState>();
   TextEditingController todoController = TextEditingController();
-  bool _isLoading = false;
+  final bool _isLoading = false;
   String? _error; //_error가 null일 수도 있지만, null이 아니라면, String이다.
-
-  bool isBookMarked = false;
 
   @override
   void initState() {

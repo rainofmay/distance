@@ -16,13 +16,12 @@ class ModifyTodo extends StatefulWidget {
 }
 
 class _ModifyTodoState extends State<ModifyTodo> {
-  late String _title; // 할일 제목, provider 저장
-  late String _memo; // 메모, provider 저장
 
   final _formKey = GlobalKey<FormState>();
   final supabase = Supabase.instance.client;
 
   late TextEditingController _titleController;
+  late bool _isBookMarked;
 
   @override
   void initState() {
@@ -58,12 +57,18 @@ class _ModifyTodoState extends State<ModifyTodo> {
     }
   }
 
+  void _setBookMark(bool value) {
+    setState(() {
+      value = !value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments
         as Map<String, dynamic>; // todo.dart에서 값 받아오기
-    _titleController =
-        TextEditingController(text: args['todoName'] as String); // 텍스트필드 초기값
+    _titleController = TextEditingController(text: args['todoName'] as String); // 텍스트필드 값(to-do 제목) 가져오기
+    _isBookMarked = args['isBookMarked'] as bool;  // 북마크 값 가져오기
 
     return Scaffold(
         appBar: CustomBackAppBar(
@@ -82,9 +87,9 @@ class _ModifyTodoState extends State<ModifyTodo> {
                       ? null
                       : () => _onSavePressed(
                             args['id'] as String,
-                            args['todoName'] as String,
+                            _titleController.text,
                             args['isDone'] as bool,
-                            args['isBookMarked'] as bool,
+                            _isBookMarked,
                           ),
                   child: Text(
                     '수정',
@@ -100,7 +105,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
                 if (!context.mounted) return;
                 Navigator.of(context).pop();
               },
-              child: Text(
+              child: const Text(
                 '삭제',
                 style: TextStyle(
                     color: Color(0xffc41b03), fontWeight: FontWeight.bold),
@@ -115,7 +120,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
                     child: Padding(
                         padding:
                             // appBar와 body 간의 간격
-                            EdgeInsets.only(
+                            const EdgeInsets.only(
                           left: 8.0,
                           top: 16.0,
                         ),
@@ -135,30 +140,38 @@ class _ModifyTodoState extends State<ModifyTodo> {
                               }
                               return null;
                             },
-                            onSaved: (val) {
-                              setState(() {
-                                _title = val as String;
-                              });
-                            },
+                            // onSaved: (val) {
+                            //   setState(() {
+                            //     _title = val as String;
+                            //   });
+                            // },
                           ),
                           BorderLine(
                               lineHeight: 1,
                               lineColor: Colors.grey.withOpacity(0.1)),
                           ListTile(
-                            title: Text('북마크 설정'),
+                            title: const Text('북마크 설정'),
                             trailing: IconButton(
-                                icon: Icon(Icons.bookmark_border_rounded),
-                                onPressed: () {}),
+                                icon: Icon(boolValue == true ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark),
+                                onPressed: () {
+                                  setState(() {
+                                    boolValue = !boolValue;
+                                  });
+                                  print(boolValue);
+                                }),
                           ),
                           BorderLine(
                               lineHeight: 1,
                               lineColor: Colors.grey.withOpacity(0.1)),
                           ListTile(
-                            title: Text('메이트 공유'),
+                            title: const Text('메이트 공유'),
                             trailing: IconButton(
-                                icon: Icon(CupertinoIcons.person_add_solid),
+                                icon: const Icon(CupertinoIcons.person_add),
                                 onPressed: () {}),
                           ),
+                          BorderLine(
+                              lineHeight: 1,
+                              lineColor: Colors.grey.withOpacity(0.1)),
                         ]))))));
   }
 }
