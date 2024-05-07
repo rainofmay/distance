@@ -23,6 +23,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
   late TextEditingController _titleController;
   late bool _isBookMarked;
 
+
   @override
   void initState() {
     super.initState();
@@ -68,7 +69,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
     final Map<String, dynamic> args = ModalRoute.of(context)!.settings.arguments
         as Map<String, dynamic>; // todo.dart에서 값 받아오기
     _titleController = TextEditingController(text: args['todoName'] as String); // 텍스트필드 값(to-do 제목) 가져오기
-    _isBookMarked = args['isBookMarked'] as bool;  // 북마크 값 가져오기
+    // boolValue = isBookMarked;
 
     return Scaffold(
         appBar: CustomBackAppBar(
@@ -89,7 +90,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
                             args['id'] as String,
                             _titleController.text,
                             args['isDone'] as bool,
-                            _isBookMarked,
+                            args['isBookMarked'] as bool,
                           ),
                   child: Text(
                     '수정',
@@ -140,26 +141,22 @@ class _ModifyTodoState extends State<ModifyTodo> {
                               }
                               return null;
                             },
-                            // onSaved: (val) {
-                            //   setState(() {
-                            //     _title = val as String;
-                            //   });
-                            // },
                           ),
-                          BorderLine(
-                              lineHeight: 1,
-                              lineColor: Colors.grey.withOpacity(0.1)),
-                          ListTile(
-                            title: const Text('북마크 설정'),
-                            trailing: IconButton(
-                                icon: Icon(boolValue == true ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark),
-                                onPressed: () {
-                                  setState(() {
-                                    boolValue = !boolValue;
-                                  });
-                                  print(boolValue);
-                                }),
-                          ),
+                          // BorderLine(
+                          //     lineHeight: 1,
+                          //     lineColor: Colors.grey.withOpacity(0.1)),
+                          // ListTile(
+                          //   title: const Text('북마크 설정'),
+                          //   trailing: IconButton(
+                          //       icon: Icon(boolValue == true ? CupertinoIcons.bookmark_fill : CupertinoIcons.bookmark),
+                          //       onPressed: () {
+                          //         print(boolValue);
+                          //         setState(() {
+                          //           boolValue = !boolValue;
+                          //         });
+                          //         print(boolValue);
+                          //       }),
+                          // ),
                           BorderLine(
                               lineHeight: 1,
                               lineColor: Colors.grey.withOpacity(0.1)),

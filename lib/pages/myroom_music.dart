@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/custom_container.dart';
@@ -77,7 +78,7 @@ class _MusicSettingState extends State<MusicSetting> {
                                 scale: 0.8,
                                 child: CupertinoSwitch(
                                   value: globalAudioPlayer.isAnyPlaying,
-                                  activeColor: Color(0xffC8D8FA),
+                                  activeColor: PRIMARY_COLOR,
                                   onChanged: (value) {
                                     if (globalAudioPlayer.isAnyPlaying) {
                                       globalAudioPlayer.musicPauseAll();

@@ -17,8 +17,6 @@ class ScheduleTodo extends StatefulWidget {
 class _ScheduleTodoState extends State<ScheduleTodo>
     with SingleTickerProviderStateMixin {
   final supabase = Supabase.instance.client;
-  bool isDone = false;
-  bool isBookMarked = false;
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _todoController = TextEditingController();
@@ -55,7 +53,7 @@ class _ScheduleTodoState extends State<ScheduleTodo>
 
 
     //supabase
-    final todo = TodoModel(id: Uuid().v4(), todoName: _todoController.text, isDone: isDone, isBookMarked: isBookMarked);
+    final todo = TodoModel(id: Uuid().v4(), todoName: _todoController.text, isDone: false, isBookMarked: false);
     try {
       await supabase.from('todo').insert(todo.toJson());
     } catch (error) {
@@ -138,25 +136,15 @@ class _ScheduleTodoState extends State<ScheduleTodo>
               Container(
                 // color: Colors.yellow[200],
                 alignment: Alignment.center,
-                child: Todo(),
+                child: Todo(column: 'is_done', columnValue: false),
               ),
               Container(
                 alignment: Alignment.center,
-                child: Text(
-                  'Tab2 View',
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
+                child: Todo(column: 'is_done', columnValue: true),
                 ),
-              ),
               Container(
                 alignment: Alignment.center,
-                child: Text(
-                  'Tab3 View',
-                  style: TextStyle(
-                    fontSize: 30,
-                  ),
-                ),
+                child: Todo(column: 'is_book_marked', columnValue: true),
               ),
             ],
           ),

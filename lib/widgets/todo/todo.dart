@@ -8,10 +8,12 @@ import '../../const/colors.dart';
 import '../../model/todo_model.dart';
 
 class Todo extends StatefulWidget {
-  // final Stream<List<Map<String, dynamic>>> stream;
+  final String column;
+  final dynamic columnValue;
   const Todo({
     super.key,
-    // required this.stream,
+    required this.column,
+    required this.columnValue,
   });
 
   @override
@@ -19,8 +21,6 @@ class Todo extends StatefulWidget {
 }
 
 class _TodoState extends State<Todo> {
-  final supabase = Supabase.instance.client;
-  var stream = Supabase.instance.client.from('todo').stream(primaryKey: ['id']);
 
   TextEditingController todoController = TextEditingController();
   final bool _isLoading = false;
@@ -128,6 +128,8 @@ class _TodoState extends State<Todo> {
 
   @override
   Widget build(BuildContext context) {
+    print('재랜더링');
+
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Column(
@@ -138,7 +140,7 @@ class _TodoState extends State<Todo> {
 
                 // streamBuilder로 데이터 불러올 때는. Model.fromJson 쓰지 않고, 서버에 저장된 테이블 column명을 써야 한다.
                 child: StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: stream,
+                  stream: Supabase.instance.client.from('todo').stream(primaryKey: ['id']).eq(widget.column, widget.columnValue),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     if (!snapshot.hasData) {
                       return const Center(
@@ -149,74 +151,86 @@ class _TodoState extends State<Todo> {
                         child: Text('데이터가 없습니다'),
                       );
                     }
+
                     final todos = snapshot.data!;
 
                     return ListView.builder(
                       shrinkWrap: true,
                       itemCount: todos.length,
                       itemBuilder: (context, index) {
+
                         final todo = todos[index];
-                        return ListTile(
-                          leading: Checkbox(
-                            splashRadius: 0,
-                            activeColor: DARK,
-                            checkColor: PRIMARY_COLOR,
-                            hoverColor: Colors.transparent,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              side: BorderSide(color: BLACK),
+
+                        return Dismissible(
+                          key: ObjectKey(todo['id']),
+                          direction: DismissDirection.startToEnd,
+                          onDismissed: (DismissDirection direction) async {
+                            await Supabase.instance.client.from('todo').delete().match({
+                              'id': todo['id'],
+                            });
+                          },
+                          child: ListTile(
+                            leading: Checkbox(
+                              splashRadius: 0,
+                              activeColor: DARK,
+                              checkColor: PRIMARY_COLOR,
+                              hoverColor: TRANSPARENT,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50),
+                                side: BorderSide(color: BLACK),
+                              ),
+                              value: todo['is_done'],
+                              onChanged: (bool? newValue) {
+                                // 성능을 위해 넣는게 맞는데.. 왜 되는지는 모르겠다.
+                                setState(() {
+                                  todo['is_done'] = newValue!;
+                                });
+                                toggleTodo(newValue!, todo['id']);
+                              },
                             ),
-                            value: todo['is_done'],
-                            onChanged: (bool? newValue) {
-                              // 성능을 위해 넣는게 맞는데.. 왜 되는지는 모르겠다.
-                              setState(() {
-                                todo['is_done'] = newValue!;
-                              });
-                              toggleTodo(newValue!, todo['id']);
-                            },
-                          ),
-                          title: GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    settings: RouteSettings(arguments: {
-                                      'todoName': todo['todo_name'],
-                                      'id': todo['id'],
-                                      'isDone' : todo['is_done'],
-                                      'isBookMarked' : todo['is_book_marked']
-                                    }),
-                                    builder: (context) => ModifyTodo()),
-                              );
-                              // _editTodo(index);
-                            },
-                            child: Text(todo['todo_name'],
-                                style: todo['is_done']
-                                    ? TextStyle(
-                                        color: UNSELECTED,
-                                        decoration: TextDecoration.lineThrough)
-                                    : TextStyle(
-                                        color: BLACK,
-                                        decoration: TextDecoration.none)),
-                          ),
-                          trailing: IconButton(
-                            splashColor: Colors.transparent,
-                            hoverColor: Colors.transparent,
-                            highlightColor: Colors.transparent,
-                            // 클릭할 때 효과
-                            icon: Icon(
-                              todo['is_book_marked'] == true
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border_rounded,
-                              color: PRIMARY_COLOR,
+                            title: GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      settings: RouteSettings(arguments: {
+                                        'todoName': todo['todo_name'],
+                                        'id': todo['id'],
+                                        'isDone' : todo['is_done'],
+                                        'isBookMarked' : todo['is_book_marked']
+                                      }),
+                                      builder: (context) => ModifyTodo()),
+                                );
+                                // _editTodo(index);
+                              },
+                              child: Text(todo['todo_name'],
+                                  style: todo['is_done']
+                                      ? TextStyle(
+                                          color: UNSELECTED,
+                                          decoration: TextDecoration.lineThrough)
+                                      : TextStyle(
+                                          color: BLACK,
+                                          decoration: TextDecoration.none)),
                             ),
-                            onPressed: () {
-                              final bool newValue = !todo['is_book_marked'];
-                              setState(() {
-                                todo['is_book_marked'] = newValue;
-                              });
-                              setBookMark(newValue, todo['id']);
-                            },
+                            trailing: IconButton(
+                              splashColor: Colors.transparent,
+                              hoverColor: Colors.transparent,
+                              highlightColor: Colors.transparent,
+                              // 클릭할 때 효과
+                              icon: Icon(
+                                todo['is_book_marked'] == true
+                                    ? Icons.bookmark
+                                    : Icons.bookmark_border_rounded,
+                                color: PRIMARY_COLOR,
+                              ),
+                              onPressed: () {
+                                final bool newValue = !todo['is_book_marked'];
+                                setState(() {
+                                  todo['is_book_marked'] = newValue;
+                                });
+                                setBookMark(newValue, todo['id']);
+                              },
+                            ),
                           ),
                         );
                       },

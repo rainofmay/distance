@@ -24,7 +24,6 @@ class _ScheduleListState extends State<ScheduleList> {
   final supabase = Supabase.instance.client;
 
   Future<List<Map<String, dynamic>>> futureData() async {
-    print('재랜더링');
     var future = await supabase
         .from('schedule')
         .select('*')
