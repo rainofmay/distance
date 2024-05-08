@@ -1,6 +1,7 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../const/colors.dart';
 import '../util/global_player.dart';
 class MusicVolume extends StatefulWidget {
 
@@ -53,9 +54,9 @@ class _MusicVolumeState extends State<MusicVolume> {
                   Consumer<GlobalAudioPlayer>(
                     builder: (context, globalAudioPlayer, child) {
                       return IconButton(
-                        splashColor: Colors.transparent,
-                        highlightColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
+                        splashColor: TRANSPARENT,
+                        highlightColor: TRANSPARENT,
+                        hoverColor: TRANSPARENT,
                         icon: Icon(globalAudioPlayer.isPlaying[widget.playerIndex] ? Icons.pause : Icons.play_arrow),
                         iconSize: 14.0,
                         onPressed: () {

@@ -54,7 +54,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const BorderLine(lineHeight: 20, lineColor: Colors.transparent),
+            const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
             // 달력 큰제목
             Container(
               alignment: Alignment.topRight,
@@ -117,8 +117,8 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                               size: 20,
                             ),
                             color: BLACK,
-                            highlightColor: Colors.transparent,
-                            splashColor: Colors.transparent),
+                            highlightColor: TRANSPARENT,
+                            splashColor: TRANSPARENT),
                         title: Text(
                             selectedDate.day == DateTime.now().day
                                 ? '오늘'

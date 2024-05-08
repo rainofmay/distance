@@ -22,7 +22,6 @@ class Todo extends StatefulWidget {
 
 class _TodoState extends State<Todo> {
 
-  TextEditingController todoController = TextEditingController();
   final bool _isLoading = false;
   String? _error; //_error가 null일 수도 있지만, null이 아니라면, String이다.
 
@@ -114,13 +113,13 @@ class _TodoState extends State<Todo> {
   //     todoList.removeAt(index);
   //   });
   // }
-  void toggleTodo(bool value, String id) async {
+  toggleTodo(bool value, String id) async {
     await Supabase.instance.client
         .from('todo')
         .update({'is_done': value}).eq('id', id);
   }
 
-  void setBookMark(bool value, String id) async {
+  setBookMark(bool value, String id) async {
     await Supabase.instance.client
         .from('todo')
         .update({'is_book_marked': value}).eq('id', id);
@@ -133,112 +132,104 @@ class _TodoState extends State<Todo> {
     return _isLoading
         ? Center(child: CircularProgressIndicator())
         : Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                // height: 200,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Expanded(
+          // height: 200,
 
-                // streamBuilder로 데이터 불러올 때는. Model.fromJson 쓰지 않고, 서버에 저장된 테이블 column명을 써야 한다.
-                child: StreamBuilder<List<Map<String, dynamic>>>(
-                  stream: Supabase.instance.client.from('todo').stream(primaryKey: ['id']).eq(widget.column, widget.columnValue),
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    if (!snapshot.hasData) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (snapshot.data!.isEmpty) {
-                      return const Center(
-                        child: Text('데이터가 없습니다'),
-                      );
-                    }
+          // streamBuilder로 데이터 불러올 때는. Model.fromJson 쓰지 않고, 서버에 저장된 테이블 column명을 써야 한다.
+          child: StreamBuilder<List<Map<String, dynamic>>>(
+            stream: Supabase.instance.client.from('todo').stream(primaryKey: ['id']).eq(widget.column, widget.columnValue),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (!snapshot.hasData) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else if (snapshot.data!.isEmpty) {
+                return const Center(
+                  child: Text('데이터가 없습니다'),
+                );
+              }
 
-                    final todos = snapshot.data!;
+              final todos = snapshot.data!;
 
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: todos.length,
-                      itemBuilder: (context, index) {
+              return ListView.builder(
+                shrinkWrap: true,
+                itemCount: todos.length,
+                itemBuilder: (context, index) {
 
-                        final todo = todos[index];
+                  final todo = todos[index];
 
-                        return Dismissible(
-                          key: ObjectKey(todo['id']),
-                          direction: DismissDirection.startToEnd,
-                          onDismissed: (DismissDirection direction) async {
-                            await Supabase.instance.client.from('todo').delete().match({
-                              'id': todo['id'],
-                            });
-                          },
-                          child: ListTile(
-                            leading: Checkbox(
-                              splashRadius: 0,
-                              activeColor: DARK,
-                              checkColor: PRIMARY_COLOR,
-                              hoverColor: TRANSPARENT,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                                side: BorderSide(color: BLACK),
-                              ),
-                              value: todo['is_done'],
-                              onChanged: (bool? newValue) {
-                                // 성능을 위해 넣는게 맞는데.. 왜 되는지는 모르겠다.
-                                setState(() {
-                                  todo['is_done'] = newValue!;
-                                });
-                                toggleTodo(newValue!, todo['id']);
-                              },
-                            ),
-                            title: GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      settings: RouteSettings(arguments: {
-                                        'todoName': todo['todo_name'],
-                                        'id': todo['id'],
-                                        'isDone' : todo['is_done'],
-                                        'isBookMarked' : todo['is_book_marked']
-                                      }),
-                                      builder: (context) => ModifyTodo()),
-                                );
-                                // _editTodo(index);
-                              },
-                              child: Text(todo['todo_name'],
-                                  style: todo['is_done']
-                                      ? TextStyle(
-                                          color: UNSELECTED,
-                                          decoration: TextDecoration.lineThrough)
-                                      : TextStyle(
-                                          color: BLACK,
-                                          decoration: TextDecoration.none)),
-                            ),
-                            trailing: IconButton(
-                              splashColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              // 클릭할 때 효과
-                              icon: Icon(
-                                todo['is_book_marked'] == true
-                                    ? Icons.bookmark
-                                    : Icons.bookmark_border_rounded,
-                                color: PRIMARY_COLOR,
-                              ),
-                              onPressed: () {
-                                final bool newValue = !todo['is_book_marked'];
-                                setState(() {
-                                  todo['is_book_marked'] = newValue;
-                                });
-                                setBookMark(newValue, todo['id']);
-                              },
-                            ),
-                          ),
-                        );
+                  return ListTile(
+                    leading: Checkbox(
+                      splashRadius: 0,
+                      activeColor: DARK,
+                      checkColor: PRIMARY_COLOR,
+                      hoverColor: TRANSPARENT,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                        side: BorderSide(color: BLACK),
+                      ),
+                      value: todo['is_done'],
+                      onChanged: (bool? newValue) async {
+                        await toggleTodo(newValue!, todo['id']);  // supabase 저장
+                        // 성능을 위해 넣는게 맞는데.. 왜 되는지는 모르겠다.
+                        setState(() {
+                          todo['is_done'] = newValue;
+                        });
+
                       },
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
+                    ),
+                    title: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              settings: RouteSettings(arguments: {
+                                'todoName': todo['todo_name'],
+                                'id': todo['id'],
+                                'isDone' : todo['is_done'],
+                                'isBookMarked' : todo['is_book_marked']
+                              }),
+                              builder: (context) => ModifyTodo()),
+                        );
+                        // _editTodo(index);
+                      },
+                      child: Text(todo['todo_name'],
+                          style: todo['is_done']
+                              ? TextStyle(
+                              color: UNSELECTED,
+                              decoration: TextDecoration.lineThrough)
+                              : TextStyle(
+                              color: BLACK,
+                              decoration: TextDecoration.none)),
+                    ),
+                    trailing: IconButton(
+                      splashColor: TRANSPARENT,
+                      hoverColor: TRANSPARENT,
+                      highlightColor: TRANSPARENT,
+                      // 클릭할 때 효과
+                      icon: Icon(
+                        todo['is_book_marked'] == true
+                            ? Icons.bookmark
+                            : Icons.bookmark_border_rounded,
+                        color: PRIMARY_COLOR,
+                      ),
+                      onPressed: () async {
+                        bool newValue = !todo['is_book_marked'];
+                        await setBookMark(newValue, todo['id']);
+                        setState(() {
+                          todo['is_book_marked'] = newValue;
+                        });
+                      },
+                    ),
+                  );
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

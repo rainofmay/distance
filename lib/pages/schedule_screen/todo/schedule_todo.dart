@@ -20,6 +20,9 @@ class _ScheduleTodoState extends State<ScheduleTodo>
 
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _todoController = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+  ScrollController _scrollController = ScrollController();
+
   late TabController _tabController;
   final List<dynamic> _categories = [];
 
@@ -31,13 +34,44 @@ class _ScheduleTodoState extends State<ScheduleTodo>
       length: 3,
       vsync: this,
     );
+
+    _scrollController.addListener(() {
+      /// 스크롤을 할 때 마다 호출
+
+      /// 스크롤 된 값
+      print('offset : ${_scrollController.offset}');
+
+      /// 스크롤에 대한 여러 정보.
+      /// 전체 길이, offset, 방향 등
+      print('position : ${_scrollController.position}');
+
+      /// 컨트롤러가 SingleChildScrollView에 연결이 됐는지 안돼는지
+      _scrollController.hasClients;
+    });
+
     super.initState();
   }
 
   @override
   void dispose() {
     _todoController.dispose();
+    FocusManager.instance.primaryFocus?.unfocus();
+    _scrollController.dispose();
     super.dispose();
+  }
+
+ _scrollToCursor() {
+    final cursorPosition = _todoController.selection.baseOffset.toDouble();
+    final scrollPosition = _scrollController.position;
+    final maxHeight = scrollPosition.maxScrollExtent;
+
+    if (cursorPosition > maxHeight) {
+      print(maxHeight);
+      _scrollController.jumpTo(maxHeight);
+    } else {
+      print(cursorPosition);
+      _scrollController.jumpTo(cursorPosition);
+    }
   }
 
   void sendTodo() async {
@@ -53,7 +87,10 @@ class _ScheduleTodoState extends State<ScheduleTodo>
 
 
     //supabase
-    final todo = TodoModel(id: Uuid().v4(), todoName: _todoController.text, isDone: false, isBookMarked: false);
+    final todo = TodoModel(id: Uuid().v4(),
+        todoName: _todoController.text,
+        isDone: false,
+        isBookMarked: false);
     try {
       await supabase.from('todo').insert(todo.toJson());
     } catch (error) {
@@ -64,129 +101,159 @@ class _ScheduleTodoState extends State<ScheduleTodo>
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Stack(
       children: [
-        SizedBox(
-          height: 70,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+        Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ListView.builder(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                itemCount: _categories.length,
-                itemBuilder: (context, index) {
-                return null;
-              },),
               SizedBox(
                 height: 70,
-                width: 70,
-                child: GestureDetector(
-                  onTap: () {
-                  },
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                    Icon(Icons.add_box_outlined, size: 35),
-                      Text('목록')
-                  ],),
-                ),
-              )
-            ],
-          ),
-        ),
-        BorderLine(lineHeight: 8, lineColor: Colors.grey.shade300),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              SizedBox(
-                width: MediaQuery.of(context).size.width * 0.5,
-              ),
-              Expanded(
-                child: TabBar(
-                  tabs: [
-                    Tab(
-                      height: 40,
-                      child: Text('진 행'),
-                    ),
-                    Tab(
-                      height: 40,
-                      child: Text('완 료'),
-                    ),
-                    Tab(
-                      height: 40,
-                      child: Text('중 요'),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _categories.length,
+                      itemBuilder: (context, index) {
+                        return null;
+                      },),
+                    SizedBox(
+                      height: 70,
+                      width: 70,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: ListView(
+                          shrinkWrap: true,
+                          children: [
+                            Icon(Icons.add_box_outlined, size: 35),
+                            Text('목록')
+                          ],),
+                      ),
                     )
                   ],
-                  splashBorderRadius: BorderRadius.circular(0),
-                  indicatorWeight: 1,
-                  indicatorSize: TabBarIndicatorSize.label,
+                ),
+              ),
+              BorderLine(lineHeight: 8, lineColor: Colors.grey.shade300),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery
+                          .of(context)
+                          .size
+                          .width * 0.5,
+                    ),
+                    Expanded(
+                      child: TabBar(
+                        tabs: [
+                          const Tab(
+                            height: 40,
+                            child: Text('진 행'),
+                          ),
+                          const Tab(
+                            height: 40,
+                            child: Text('완 료'),
+                          ),
+                          const Tab(
+                            height: 40,
+                            child: Text('중 요'),
+                          )
+                        ],
+                        splashBorderRadius: BorderRadius.circular(0),
+                        indicatorWeight: 1,
+                        indicatorSize: TabBarIndicatorSize.label,
+                        controller: _tabController,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              BorderLine(lineHeight: 10, lineColor: TRANSPARENT),
+              Expanded(
+                child: TabBarView(
                   controller: _tabController,
+                  children: [
+                    Container(
+                      // color: Colors.yellow[200],
+                      alignment: Alignment.center,
+                      child: Todo(column: 'is_done', columnValue: false),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Todo(column: 'is_done', columnValue: true),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      child: Todo(column: 'is_book_marked', columnValue: true),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
-        BorderLine(lineHeight: 10, lineColor: Colors.transparent),
-        Expanded(
-          child: TabBarView(
-            controller: _tabController,
-            children: [
               Container(
-                // color: Colors.yellow[200],
-                alignment: Alignment.center,
-                child: Todo(column: 'is_done', columnValue: false),
-              ),
-              Container(
-                alignment: Alignment.center,
-                child: Todo(column: 'is_done', columnValue: true),
+                height: 60,
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
                 ),
-              Container(
-                alignment: Alignment.center,
-                child: Todo(column: 'is_book_marked', columnValue: true),
-              ),
-            ],
-          ),
+              )
+            ]
         ),
-        Form(
-          key: _formKey,
-          child: Container(
-            margin: EdgeInsets.only(top: 15),
-            child: TextFormField(
-              controller: _todoController,
-              validator: (value) {
-                if (value == null ||
-                    value.isEmpty ||
-                    value.trim().isEmpty) {
-                  return null;
-                }
-                return null;
-              },
-              onFieldSubmitted: (value) => sendTodo(),
-              textAlignVertical: TextAlignVertical.center,
-              style: const TextStyle(color: Colors.black, fontSize: 13),
-              maxLength: 100,
-              textInputAction: TextInputAction.newline, // 다음줄로 넘어가는 키보드
-              decoration: InputDecoration(
-                suffixIcon: IconButton(
-                  highlightColor: TRANSPARENT,
-                    hoverColor: TRANSPARENT,
-                    splashRadius: null,
-                    onPressed: sendTodo,
-                    icon: const Icon(Icons.send, size: 18)),
-                hintText: '할 일을 입력해 보세요.',
-                counterText: '',
-                filled: true,
-                fillColor: Colors.grey.shade100,
-                border: const OutlineInputBorder(
-                    borderRadius: BorderRadius.zero,
-                    borderSide: BorderSide.none),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: -15,
+          child: SingleChildScrollView(
+            controller: _scrollController,
+            child: Form(
+              key: _formKey,
+              child: Container(
+                height: 75,
+                margin: const EdgeInsets.only(top: 15),
+                child: TextFormField(
+                  controller: _todoController,
+                  focusNode: _focusNode,
+                  onChanged: (value) => _scrollToCursor,
+                  onTapOutside: (event) => FocusManager.instance.primaryFocus?.unfocus(),
+                  //바깥 터치했을 떄 키보드 감추기
+                  maxLines: null,
+                  maxLength: 100,
+                  validator: (value) {
+                    if (value == null ||
+                        value.isEmpty ||
+                        value
+                            .trim()
+                            .isEmpty) {
+                      return null;
+                    }
+                    return null;
+                  },
+                  onFieldSubmitted: (value) => sendTodo(),
+                  textAlignVertical: TextAlignVertical.center,
+                  style: const TextStyle(color: BLACK, fontSize: 13),
+                  textInputAction: TextInputAction.newline,
+                  // 다음줄로 넘어가는 키보드
+                  decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                        highlightColor: TRANSPARENT,
+                        hoverColor: TRANSPARENT,
+                        splashRadius: null,
+                        onPressed: sendTodo,
+                        icon: const Icon(Icons.send, size: 18)),
+                    hintText: '할 일을 입력해 보세요.',
+                    counterText: '',
+                    filled: true,
+                    fillColor: Colors.grey.shade100,
+                    border: const OutlineInputBorder(
+                        borderRadius: BorderRadius.zero,
+                        borderSide: BorderSide.none),
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ],
+      ]
     );
   }
 }

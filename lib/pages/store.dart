@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../const/colors.dart';
+
 class Store extends StatefulWidget {
   const Store({super.key});
 
@@ -32,7 +34,7 @@ class _StoreState extends State<Store> {
             width: 1,
           ),
         ),
-        backgroundColor: Colors.transparent,
+        backgroundColor: TRANSPARENT,
         elevation: 0,
         // centerTitle: true,
         title: Text('스토어'),

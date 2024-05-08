@@ -5,6 +5,7 @@ import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/widgets/custom_container.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
+import '../const/colors.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/background_setting.dart';
 
@@ -67,7 +68,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
       child: Dialog(
-        backgroundColor: Colors.transparent,
+        backgroundColor: TRANSPARENT,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),

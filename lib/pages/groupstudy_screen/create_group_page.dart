@@ -151,7 +151,7 @@ class _CreateGroupPageState extends State<CreateGroupPage>
               decoration: InputDecoration(labelText: "주요 공부 시간"),
             ),
             // 추가로 뭘 더 들어가야 할지 설정
-            BorderLine(lineHeight: 10, lineColor: Colors.transparent),
+            BorderLine(lineHeight: 10, lineColor: TRANSPARENT),
             OkCancelButtons(
               okText: '생성',
               cancelText: '취소',

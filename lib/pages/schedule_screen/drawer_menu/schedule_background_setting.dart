@@ -27,7 +27,7 @@ class _ScheduleBackgroundSettingState extends State<ScheduleBackgroundSetting> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const BorderLine(lineHeight: 20, lineColor: Colors.transparent),
+              const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
               // 미리보기 그림.
               Center(
                   child: ClipRRect(
@@ -39,7 +39,7 @@ class _ScheduleBackgroundSettingState extends State<ScheduleBackgroundSetting> {
                                     fit: BoxFit.cover,
                                   ),
                   )),
-              const BorderLine(lineHeight: 10, lineColor: Colors.transparent),
+              const BorderLine(lineHeight: 10, lineColor: TRANSPARENT),
               const Text('미리보기', style: TextStyle(fontSize: 15)),
             ],
           ),

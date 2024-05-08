@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../const/colors.dart';
+
 class CustomIconButton extends StatefulWidget {
   final String imageUrl;
   final int id;
@@ -43,7 +45,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
         margin: EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           border: Border.all(
-            color: widget.isSelected ? Colors.purple : Colors.transparent,
+            color: widget.isSelected ? Colors.purple : TRANSPARENT,
             width: widget.isSelected ? 4.0 : 1.0
           ),
           borderRadius: BorderRadius.circular(18),

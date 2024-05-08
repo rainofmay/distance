@@ -31,7 +31,7 @@ class _MusicSettingState extends State<MusicSetting> {
   Widget build(BuildContext context) {
     final backgroundProvider = context.read<BackgroundProvider>();
     return Dialog(
-      backgroundColor: Colors.transparent,
+      backgroundColor: TRANSPARENT,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(8)),
       ),
@@ -208,7 +208,7 @@ class _MusicSettingState extends State<MusicSetting> {
                     ),
                   ],
                 ),
-                BorderLine(lineHeight: 15, lineColor: Colors.transparent),
+                BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
                 OkCancelButtons(
                     okText: '적용',
                     cancelText: '취소',

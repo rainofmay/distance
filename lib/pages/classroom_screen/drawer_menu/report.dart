@@ -73,7 +73,7 @@ class _ReportState extends State<Report> {
                     activeColor: Colors.red[800],
                     checkColor: WHITE,
                     splashRadius: 0,
-                    hoverColor: Colors.transparent,
+                    hoverColor: TRANSPARENT,
 
                   ),
                   title: Text(_reportList[index]),

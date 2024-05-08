@@ -136,21 +136,21 @@ class _ModifyScheduleState extends State<ModifySchedule> {
             // 확인, 취소버튼 색
             onPrimary: Color(0xff222E34),
             // 선택한 날짜
-            secondary: Colors.transparent,
+            secondary: TRANSPARENT,
             onSecondary: Color(0xff3C6769),
             error: Colors.redAccent,
             onError: Colors.red,
             background: Color(0xff222E34),
             // 배경색
-            onBackground: Colors.transparent,
+            onBackground: TRANSPARENT,
             // 확인, 취소버튼 구분선
             surface: Color(0xff222E34),
             onSurface: Colors.white),
         // 전체적인 글자색
         splashFactory: NoSplash.splashFactory,
-        focusColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        highlightColor: Colors.transparent,
+        focusColor: TRANSPARENT,
+        hoverColor: TRANSPARENT,
+        highlightColor: TRANSPARENT,
       ),
       initialDate: isStartTime ? _originalStartTime : _originalEndTime,
       type: _isTimeSet ? OmniDateTimePickerType.dateAndTime : OmniDateTimePickerType.date,

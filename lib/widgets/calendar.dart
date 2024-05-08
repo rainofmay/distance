@@ -130,11 +130,11 @@ class _CalendarState extends State<Calendar> {
           isTodayHighlighted: false,
           defaultDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0),
-            color: Colors.transparent,
+            color: TRANSPARENT,
           ),
           weekendDecoration: BoxDecoration(
             borderRadius: BorderRadius.circular(6.0),
-            color: Colors.transparent,
+            color: TRANSPARENT,
           ),
 
           defaultTextStyle: TextStyle(
