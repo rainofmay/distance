@@ -28,15 +28,15 @@ class CustomContainer extends StatelessWidget {
               boxShadow: [
                 BoxShadow(
                   offset: Offset(distance, distance),
-                  color: Colors.black26,
-                  blurRadius: 5,
-                  spreadRadius: 2,
+                  color: Colors.black,
+                  blurRadius: 2,
+                  spreadRadius: 1,
                 ),
                 BoxShadow(
                   offset: Offset(-distance, -distance),
-                  color: Colors.white70,
-                  blurRadius: 5,
-                  spreadRadius: 2,
+                  color: Colors.white38,
+                  blurRadius: 2,
+                  spreadRadius: 1,
                 )
               ]),
       child: widget,

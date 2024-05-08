@@ -31,11 +31,13 @@ class _MusicVolumeState extends State<MusicVolume> {
         margin: EdgeInsets.only(top: 20, left: 15),
         child: SliderTheme(
           data: SliderThemeData(
-            trackHeight: 3,
-            thumbColor: Colors.white,
+            trackHeight: 3.5,
+            thumbColor: WHITE,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
-            overlayShape: RoundSliderOverlayShape(overlayRadius: 0),
-            activeTrackColor: Color(0xff0029F5),
+            overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
+              overlayColor: PRIMARY_COLOR.withOpacity(0.2),
+            activeTrackColor: PRIMARY_COLOR,
+            inactiveTrackColor: UNSELECTED
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -43,8 +45,8 @@ class _MusicVolumeState extends State<MusicVolume> {
               Row(
                 children: [
                   widget.musicIcon,
-                  SizedBox(width: 10),
-                  Text(widget.kindOfMusic, style: TextStyle(fontSize: 13)),
+                  const SizedBox(width: 10),
+                  Text(widget.kindOfMusic, style: TextStyle(fontSize: 13, color: LIGHT_WHITE)),
                 ],
               ),
               Row(
@@ -57,7 +59,7 @@ class _MusicVolumeState extends State<MusicVolume> {
                         splashColor: TRANSPARENT,
                         highlightColor: TRANSPARENT,
                         hoverColor: TRANSPARENT,
-                        icon: Icon(globalAudioPlayer.isPlaying[widget.playerIndex] ? Icons.pause : Icons.play_arrow),
+                        icon: Icon(globalAudioPlayer.isPlaying[widget.playerIndex] ? Icons.pause : Icons.play_arrow, color: LIGHT_WHITE),
                         iconSize: 14.0,
                         onPressed: () {
                           if (globalAudioPlayer.isPlaying[widget.playerIndex]) {

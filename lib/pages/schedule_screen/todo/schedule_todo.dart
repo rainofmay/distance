@@ -75,8 +75,11 @@ class _ScheduleTodoState extends State<ScheduleTodo>
   }
 
   void sendTodo() async {
+    if (_todoController.text.trim().isEmpty) {
+      return; // 입력값이 비어 있다면 아무 작업도 수행하지 않음
+    }
+
     if (_formKey.currentState!.validate()) {
-      // 유효성 검사 통과한 경우에만 저장
       _formKey.currentState!.save();
     }
     // final String todo = _todoController.text;
@@ -218,17 +221,6 @@ class _ScheduleTodoState extends State<ScheduleTodo>
                   //바깥 터치했을 떄 키보드 감추기
                   maxLines: null,
                   maxLength: 100,
-                  validator: (value) {
-                    if (value == null ||
-                        value.isEmpty ||
-                        value
-                            .trim()
-                            .isEmpty) {
-                      return null;
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (value) => sendTodo(),
                   textAlignVertical: TextAlignVertical.center,
                   style: const TextStyle(color: BLACK, fontSize: 13),
                   textInputAction: TextInputAction.newline,

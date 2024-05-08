@@ -18,61 +18,61 @@ class GlobalAudioPlayer with ChangeNotifier {
       MusicInfo(
           playerIndex: 0,
           kindOfMusic: '배경 음악',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: LIGHT_WHITE),
           audioURL: 'audios/nature/defaultMainMusic.mp3'),
       MusicInfo(
           playerIndex: 1,
           kindOfMusic: '풀벌레',
-          musicIcon: Icon(CupertinoIcons.moon_stars, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.moon_stars, size: 18, color: LIGHT_WHITE),
           audioURL: 'audios/nature/bugSound.mp3'),
       MusicInfo(
           playerIndex: 2,
           kindOfMusic: '파도',
-          musicIcon: Icon(Icons.waves_rounded, size: 18, color: BLACK),
+          musicIcon: Icon(Icons.waves_rounded, size: 18, color: LIGHT_WHITE),
           audioURL: 'audios/nature/waveSound.mp3'),
       MusicInfo(
           playerIndex: 3,
           kindOfMusic: '바람',
-          musicIcon: Icon(Icons.cloud_queue_rounded, size: 18, color: BLACK),
+          musicIcon: Icon(Icons.cloud_queue_rounded, size: 18, color: LIGHT_WHITE),
           audioURL: 'audios/nature/windSound.mp3'),
       MusicInfo(
           playerIndex: 4,
           kindOfMusic: '장작',
-          musicIcon: Icon(Icons.local_fire_department, size: 18, color: BLACK),
+          musicIcon: Icon(Icons.local_fire_department, size: 18, color: LIGHT_WHITE),
           audioURL: 'audios/nature/campingFireSound.mp3')
     ],
     [
       MusicInfo(
           playerIndex: 0,
           kindOfMusic: '카페 말하는 소리1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/cafe/cafePeopleSound.mp3'),
       MusicInfo(
           playerIndex: 1,
           kindOfMusic: '카페 말하는 소리2',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/cafe/cafePeopleSound2.mp3'),
       MusicInfo(
           playerIndex: 2,
           kindOfMusic: '키보드 소리1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/cafe/keyboardTypingSound.mp3'),
       MusicInfo(
           playerIndex: 3,
           kindOfMusic: '키보드 소리2',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/cafe/keyboardTypingSound2.mp3'),
       MusicInfo(
           playerIndex: 4,
           kindOfMusic: '키보드 소리3',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/cafe/keyboardTypingSound3.mp3'),
     ],
     [
       MusicInfo(
           playerIndex: 0,
           kindOfMusic: '클래식1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: BLACK),
+          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
           audioURL: 'audios/nature/defaultMainMusic.mp3'),]
   ];
 

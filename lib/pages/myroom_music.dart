@@ -38,7 +38,7 @@ class _MusicSettingState extends State<MusicSetting> {
       child: CustomContainer(
           width: MediaQuery.of(context).size.width * 0.8,
           height: MediaQuery.of(context).size.height * 0.8,
-          backgroundColor: Colors.white,
+          backgroundColor: DARK_BACKGROUND,
           distance: 0,
           widget: Padding(
             padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
@@ -46,7 +46,7 @@ class _MusicSettingState extends State<MusicSetting> {
               children: [
                 Text(
                   '음악 설정',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
                 ),
                 // 세부 설정
                 Column(
@@ -61,13 +61,15 @@ class _MusicSettingState extends State<MusicSetting> {
                           const Expanded(
                             child: Row(
                               children: [
-                                Icon(CupertinoIcons.music_note_2, size: 16),
+                                Icon(CupertinoIcons.music_note_2, size: 16, color: WHITE),
                                 SizedBox(width: 8),
                                 Text(
                                   '메인 음악',
                                   style: TextStyle(
                                       fontSize: 15,
-                                      fontWeight: FontWeight.normal),
+                                      fontWeight: FontWeight.normal,
+                                    color: WHITE
+                                  ),
                                 ),
                               ],
                             ),
@@ -75,7 +77,7 @@ class _MusicSettingState extends State<MusicSetting> {
                           Consumer<GlobalAudioPlayer>(
                             builder: (context, globalAudioPlayer, child) {
                               return Transform.scale(
-                                scale: 0.8,
+                                scale: 0.7,
                                 child: CupertinoSwitch(
                                   value: globalAudioPlayer.isAnyPlaying,
                                   activeColor: PRIMARY_COLOR,
@@ -171,12 +173,14 @@ class _MusicSettingState extends State<MusicSetting> {
                           margin: const EdgeInsets.only(top: 30),
                           child: const Row(
                             children: [
-                              Icon(Icons.volume_up, size: 16),
+                              Icon(Icons.volume_up, size: 16, color: WHITE,),
                               SizedBox(width: 8),
                               Text('음량 설정',
                                   style: TextStyle(
                                       fontSize: 15,
-                                      fontWeight: FontWeight.normal)),
+                                      fontWeight: FontWeight.normal,
+                                      color: WHITE
+                                  )),
                             ],
                           ),
                         ),

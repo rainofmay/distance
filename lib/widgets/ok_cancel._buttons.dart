@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 
 class OkCancelButtons extends StatelessWidget {
   final String okText;
@@ -23,7 +24,7 @@ class OkCancelButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            child: Text(cancelText, style: TextStyle(color: Colors.black)),
+            child: Text(cancelText, style: TextStyle(color: LIGHT_WHITE)),
             onPressed: () {
               Navigator.of(context).pop(); // 닫히는 버튼
               onCancelPressed;
@@ -33,7 +34,7 @@ class OkCancelButtons extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               okText,
-              style: TextStyle(color: Color(0xff0029F5)),
+              style: TextStyle(color: PRIMARY_COLOR),
             ),
           ),
         ],

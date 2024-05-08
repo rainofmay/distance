@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
-const PRIMARY_COLOR = Color(0xFFECB574);
-const LIGHT = Color(0xff0E1A27);
+const PRIMARY_COLOR = Color(0xFFECB574);  //브랜드 컬러
+const PRIMARY_LIGHT = Color(0xffF7C667);  // 브랜드 컬러 밝은 버전
 const LIGHT_WHITE = Colors.white70;
 const DARK = Color(0xff282828);
 const DARK_UNSELECTED = Color(0xff777777);
 const UNSELECTED = Colors.grey;
-
+const DARK_BACKGROUND = Color(0xff2B2828);
 // schedule card 색상
 
 const WHITE = Colors.white;
