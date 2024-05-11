@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mobile/const/colors.dart';
 
 var theme = ThemeData(
@@ -59,5 +60,8 @@ var theme = ThemeData(
     indicatorColor: Colors.black,
     indicatorSize: TabBarIndicatorSize.label,
     dividerColor: TRANSPARENT,
-  )
+  ),
+  // appBarTheme: AppBarTheme(
+  //   systemOverlayStyle: SystemUiOverlayStyle.dark,
+  // )
 );

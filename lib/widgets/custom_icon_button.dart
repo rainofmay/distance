@@ -42,20 +42,20 @@ class _CustomIconButtonState extends State<CustomIconButton> {
           print("-------------------------------------");
       },
       child: Container(
-        margin: EdgeInsets.all(8.0),
+        margin: const EdgeInsets.all(8.0),
         decoration: BoxDecoration(
           border: Border.all(
             color: widget.isSelected ? Colors.purple : TRANSPARENT,
-            width: widget.isSelected ? 4.0 : 1.0
+            width: widget.isSelected ? 2.5 : 1.0
           ),
           borderRadius: BorderRadius.circular(18),
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(18),
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.black,
+                color: BLACK,
                 width: 1.0,
               ),
             ),

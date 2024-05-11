@@ -75,8 +75,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
         child: CustomContainer(
           width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
-          backgroundColor: Colors.white,
+          height: MediaQuery.of(context).size.height * 0.73,
+          backgroundColor: DARK_BACKGROUND,
           distance: 0.5,
           widget: Padding(
             padding: const EdgeInsets.all(15),
@@ -84,14 +84,14 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               children: [
                 Text(
                   '배경 설정',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal),
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
                 ),
 
                 Row(
                   children: [
                     IconButton(
                       onPressed: handleSettingButtonPressed,
-                      icon: isSettingOn == true ? Icon(Icons.settings,  color: Colors.blue) : Icon(Icons.settings,)
+                      icon: isSettingOn == true ? Icon(Icons.settings, color: PRIMARY_LIGHT) : Icon(Icons.settings, color: LIGHT_WHITE,)
                     ),
                     IconButton(
                       onPressed: () {
@@ -101,7 +101,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                         });
                       },
                       icon: Icon(Icons.photo),
-                      color: isImageSetting ? Colors.blue : Colors.grey,
+                      color: isImageSetting ? PRIMARY_LIGHT : LIGHT_WHITE,
                     ),
                     IconButton(
                       onPressed: () {
@@ -111,7 +111,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                         });
                       },
                       icon: Icon(Icons.videocam),
-                      color: isImageSetting ? Colors.grey : Colors.blue,
+                      color: isImageSetting ? LIGHT_WHITE : PRIMARY_LIGHT,
                     ),
                   ],
                 ),
@@ -163,7 +163,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                 '#${imageCategories[index]}',
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.normal,
+                  fontWeight: FontWeight.w100,
+                  color: WHITE,
                 ),
               ),
             ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:mobile/const/colors.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
@@ -62,6 +64,10 @@ class _MyAppState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: BLACK, // 하단 시스템UI 검정색
+    ));
+
     return Scaffold(
       // appBar: AppBar(),
       body: screens.elementAt(context.watch<BottomIndex>().bottomIndex),
