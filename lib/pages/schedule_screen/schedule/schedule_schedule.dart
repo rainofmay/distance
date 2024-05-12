@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/borderline.dart';
-import 'package:mobile/widgets/calendar.dart';
+import 'package:mobile/widgets/schedule/calendar.dart';
 import 'package:mobile/widgets/schedule/schedule_list.dart';
 import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';

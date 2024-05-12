@@ -58,7 +58,7 @@ class _ScheduleState extends State<Schedule> {
                             );
                           }));
                 },
-                icon: const Icon(CupertinoIcons.add_circled_solid), color: PRIMARY_LIGHT) : SizedBox(),
+                icon: const Icon(CupertinoIcons.add), color: PRIMARY_LIGHT) : const SizedBox(),
           ],
         ),
         endDrawer: CustomDrawer(

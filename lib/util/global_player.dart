@@ -19,7 +19,7 @@ class GlobalAudioPlayer with ChangeNotifier {
           playerIndex: 0,
           kindOfMusic: '배경 음악',
           musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/defaultMainMusic.mp3'),
+          audioURL: 'audios/nature/defaultMainMusic2.mp3'),
       MusicInfo(
           playerIndex: 1,
           kindOfMusic: '풀벌레',
@@ -73,7 +73,7 @@ class GlobalAudioPlayer with ChangeNotifier {
           playerIndex: 0,
           kindOfMusic: '클래식1',
           musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/nature/defaultMainMusic.mp3'),]
+          audioURL: 'audios/nature/defaultMainMusic3.mp3'),]
   ];
 
   GlobalAudioPlayer() {

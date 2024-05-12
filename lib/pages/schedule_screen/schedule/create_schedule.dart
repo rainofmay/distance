@@ -54,31 +54,40 @@ class _CreateScheduleState extends State<CreateSchedule> {
     super.dispose();
   }
 
+  _termsForSave () {
+    if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) == false || _endDate.day < _startDate.day || _textController.text.isEmpty) {
+      return false;
+    }
+    else {
+      return true;
+    }
+  }
+
   void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       // bool값 리턴
       _formKey.currentState!.save();
-      if (_endDate.day < _startDate.day) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
-              duration: Duration(seconds: 1),
-              dismissDirection: DismissDirection.down),
-        );
-        return;
-      } else if (timeComparison(
-              _originalStartTime, _originalEndTime, _isTimeSet) ==
-          false) {
-        print('$_originalStartTime, $_originalEndTime');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.'),
-            duration: Duration(seconds: 1),
-            dismissDirection: DismissDirection.down,
-          ),
-        );
-        return;
-      }
+      // if (_endDate.day < _startDate.day) {
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //         content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
+      //         duration: Duration(seconds: 1),
+      //         dismissDirection: DismissDirection.down),
+      //   );
+      //   return;
+      // } else if (timeComparison(
+      //         _originalStartTime, _originalEndTime, _isTimeSet) ==
+      //     false) {
+      //   print('$_originalStartTime, $_originalEndTime');
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(
+      //       content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.'),
+      //       duration: Duration(seconds: 1),
+      //       dismissDirection: DismissDirection.down,
+      //     ),
+      //   );
+      //   return;
+      // }
     }
 
     //일정 추가
@@ -207,15 +216,15 @@ class _CreateScheduleState extends State<CreateSchedule> {
             builder:
                 (BuildContext context, TextEditingValue value, Widget? child) {
               return TextButton(
-                onPressed: (value.text.isEmpty)
-                    ? null
-                    : () => {
-                          _onSavePressed(),
-                        },
+                onPressed: _termsForSave()
+                    ? () => {
+                  _onSavePressed(),
+                }
+                    : null,
                 child: Text(
                   '저장',
-                  style:
-                      TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
+                  style: TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),
+                      // TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
                 ),
               );
             },
@@ -355,6 +364,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             ),
                             onPressed: null),
                         hint: DateFormat.yMd().format(_endDate),
+                        hintStyle: _endDate.day < _startDate.day ? TextStyle(color: RED) : TextStyle(),
                       ),
                     ),
                     _isTimeSet
@@ -366,6 +376,8 @@ class _CreateScheduleState extends State<CreateSchedule> {
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _endTime,
+                              hintStyle: timeComparison(
+                                  _originalStartTime, _originalEndTime, _isTimeSet) == false ? TextStyle(color: RED) : TextStyle(),
                             ),
                           ))
                         : const SizedBox(),

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 const PRIMARY_COLOR = Color(0xFFECB574);  //브랜드 컬러
 const PRIMARY_LIGHT = Color(0xffF7C667);  // 브랜드 컬러 밝은 버전
+const COMPLEMENTARY_COLOR = Colors.purple;
+
 const LIGHT_WHITE = Colors.white70;
 const DARK = Color(0xff282828);
 const DARK_UNSELECTED = Color(0xff777777);
@@ -31,7 +33,6 @@ const COLOR13 = Color(0xff0029ff);
 const COLOR14 = Color(0xffac19b0);
 const COLOR15 = Color(0xff3c1c83);
 const COLOR16 = Color(0xff777777);
-
 
 const TRANSPARENT_WHITE = Color.fromRGBO(255, 255, 255, 0.8);
 const TRANSPARENT = Colors.transparent;
