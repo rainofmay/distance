@@ -1,3 +1,4 @@
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_player/video_player.dart';
@@ -7,12 +8,12 @@ class BackgroundProvider extends ChangeNotifier {
   int _selectedIndex = 0;
   String _selectedURL = 'assets/images/backgroundtext1.jpeg';
   bool _isImage = true;
-  late VideoPlayerController _videoController; // 비디오 컨트롤러 추가
+  late CachedVideoPlayerController _videoController; // 비디오 컨트롤러 추가
 
   int get selectedCategoryIndex => _selectedCategoryIndex;
   int get selectedIndex => _selectedIndex;
   bool get isImage => _isImage;
-  VideoPlayerController get videoController => _videoController; // Getter 추가
+  CachedVideoPlayerController get videoController => _videoController; // Getter 추가
 
   set isImage(bool isImage) {
     _isImage = isImage;
@@ -23,36 +24,47 @@ class BackgroundProvider extends ChangeNotifier {
     notifyListeners();
     saveIsImage(isImage);
   }
+
+  void disposeVideo() {
+    if (_videoController != null && _videoController.value.isInitialized) {
+      _videoController.pause();
+      _videoController.dispose();
+      print("[background_provider] disposeVideo() : VideoController is disposed");
+    }else{
+      print("[background_provider] disposeVideo() : VideoController is null");
+    }
+  }
+
   // 비디오를 초기화하는 메소드
   void initializeVideo() {
-    final videoUrl = Uri.parse(videoURLs[selectedCategoryIndex][selectedIndex]);
-    _videoController = VideoPlayerController.networkUrl(videoUrl)
+    //disposeVideo(); // 기존 비디오를 dispose하고 새로운 비디오를 초기화
+    final String videoUrl = videoURLs[selectedCategoryIndex][selectedIndex];
+    _videoController = CachedVideoPlayerController.network(videoUrl)
       ..initialize().then((_) {
         _videoController.play();
         _videoController.setLooping(true);
         notifyListeners(); // 비디오가 초기화되었음을 알림
-        print("initializeVideo Success.");
+        print("[background_provider] : initializeVideo 캐싱 완료");
       });
   }
 
   set selectedCategoryIndex(int id) {
     _selectedCategoryIndex = id;
-    notifyListeners();
     // 저장
     saveCategoryIndex(id);
+    notifyListeners();
   }
 
   set selectedIndex(int id) {
     _selectedIndex = id;
-    notifyListeners();
     // 저장
     saveIndex(id);
+    notifyListeners();
   }
 
   set selectedImageURL(String url) {
     _selectedURL = url;
     notifyListeners();
-
   }
 
   List<List<String>> imageURLs = [
@@ -97,7 +109,7 @@ class BackgroundProvider extends ChangeNotifier {
         if (imageIndex >= imageURLs[categoryIndex].length) {
           // 예외 처리: 현재 선택된 이미지 인덱스가 범위를 벗어나면 기본값으로 설정
           imageIndex = 0;
-          print("background_provider get selectedImageURL : imageURL = 0으로 예외처리");
+          print("[background_provider] get selectedImageURL : imageURL = 0으로 예외처리");
         }
       }
 

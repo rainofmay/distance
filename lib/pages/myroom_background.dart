@@ -64,7 +64,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-
     return BackdropFilter(
       filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
       child: Dialog(
@@ -183,7 +182,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   selectedCategoryIndex: index,
                   selectedIndex: imageIndex, // 값 전달
                   isImage: true,
-                  isSelected: backgroundProvider.isImage && (index == backgroundProvider.selectedCategoryIndex && imageIndex == backgroundProvider.selectedIndex),
                 );
               },
             ),
@@ -225,7 +223,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   selectedCategoryIndex: index,
                   selectedIndex: videoIndex, // 값 전달
                   isImage: false,
-                  isSelected: !backgroundProvider.isImage && (index == backgroundProvider.selectedCategoryIndex && videoIndex == backgroundProvider.selectedIndex),
                 );
               },
             ),
