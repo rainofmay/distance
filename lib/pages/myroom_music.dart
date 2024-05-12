@@ -211,15 +211,15 @@ class _MusicSettingState extends State<MusicSetting> {
                   ),
                   BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
                   OkCancelButtons(
-                      okText: '적용',
+                      okText: 'OK',
                       cancelText: '취소',
                       onPressed: () {
                         Navigator.of(context).pop(); // 닫히는 버튼
-                        backgroundProvider.initializeVideo();
+                        //backgroundProvider.initializeVideo()
                       },
                       onCancelPressed: () {
                         Navigator.of(context).pop(); // 닫히는 버튼
-                        backgroundProvider.initializeVideo();
+                        //backgroundProvider.initializeVideo();
                       }),
                 ],
               ),

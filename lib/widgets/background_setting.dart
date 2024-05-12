@@ -71,11 +71,6 @@ class _BackgroundSettingSecondState extends State<BackgroundSettingSecond> {
                   ),
                 ],
               ),
-              SizedBox(
-                width: 150, // 원하는 너비
-                height: 250, // 원하는 높이
-                child: MyRoom(),
-              ),
             ],
           ),
         ),

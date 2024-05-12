@@ -1,88 +1,120 @@
-/*import 'dart:async';
-import 'dart:typed_data';
+// 필요한 패키지 임포트
+import 'dart:math';
 import 'package:flutter/material.dart';
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 
-class AudioSpectrumVisualizer extends StatefulWidget {
+class AudioSpectrumWidget extends StatefulWidget {
+  final String audioFilePath;
+
+  const AudioSpectrumWidget({super.key, required this.audioFilePath});
+
   @override
-  _AudioSpectrumVisualizerState createState() => _AudioSpectrumVisualizerState();
+  _AudioSpectrumWidgetState createState() => _AudioSpectrumWidgetState();
 }
 
-class _AudioSpectrumVisualizerState extends State<AudioSpectrumVisualizer> {
-  late AudioPlayer _audioPlayer;
-  List<double> _audioSamples = List.filled(1024, 0);
-  Timer? _timer;
+class _AudioSpectrumWidgetState extends State<AudioSpectrumWidget> {
+  late AudioPlayer audioPlayer;
+  bool isPlaying = false;
+  List<double> spectrumData = List.filled(100, 0.0);
 
   @override
   void initState() {
     super.initState();
-    _initializeAudioPlayer();
+    audioPlayer = AudioPlayer();
+    audioPlayer.onPlayerComplete.listen((event) {
+      setState(() {
+        isPlaying = false;
+      });
+    });
+    audioPlayer.onPositionChanged.listen((Duration duration) {
+      updateSpectrumData();
+    });
   }
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
-    _timer?.cancel();
+    audioPlayer.dispose();
     super.dispose();
   }
 
-  Future<void> _initializeAudioPlayer() async {
-    _audioPlayer = AudioPlayer();
-    await _audioPlayer.setAsset('assets/audio/sample.mp3'); // 내부 저장소의 오디오 파일 경로 설정
-    _audioPlayer.play(); // 오디오 파일 재생
-    _startAudioStream();
+  void startPlaying() async {
+    await audioPlayer.play(AssetSource(widget.audioFilePath));
+    setState(() {
+      isPlaying = true;
+    });
   }
 
-  void _startAudioStream() {
-    _timer = Timer.periodic(Duration(milliseconds: 100), (_) async {
-      final samples =
-      setState(() {
-        _audioSamples = Float64List.fromList(samples).toList(); // 오디오 샘플을 리스트로 변환하여 업데이트합니다.
-      });
+  void stopPlaying() async {
+    await audioPlayer.stop();
+    setState(() {
+      isPlaying = false;
+    });
+  }
+
+  void updateSpectrumData() {
+    Random random = Random();
+    setState(() {
+      // spectrumData의 각 값이 size.height를 초과하지 않도록 합니다.
+      spectrumData = List.generate(100, (index) => random.nextDouble() * 100);
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('오디오 스펙트럼 비주얼라이저'),
-      ),
-      body: Center(
-        child: Container(
-          width: double.infinity,
-          height: 200,
-          child: CustomPaint(
-            painter: _VisualizerPainter(_audioSamples),
-          ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        ElevatedButton(
+          onPressed: () {
+            if (!isPlaying) {
+              startPlaying();
+            } else {
+              stopPlaying();
+            }
+          },
+          child: Text(isPlaying ? 'Stop Playing' : 'Start Playing'),
         ),
-      ),
+        SizedBox(height: 20),
+        CustomPaint(
+          size: Size(300, 150),
+          painter: AudioSpectrumPainter(spectrumData),
+        ),
+      ],
     );
   }
 }
 
-class _VisualizerPainter extends CustomPainter {
-  final List<double> audioSamples;
+class AudioSpectrumPainter extends CustomPainter {
+  final List<double> spectrumData;
 
-  _VisualizerPainter(this.audioSamples);
+  AudioSpectrumPainter(this.spectrumData);
 
   @override
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = Colors.purple
-      ..strokeWidth = 2;
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, size.width, size.height),
+      Paint()..color = Colors.black, // 배경을 검정색으로 설정
+    );
 
-    double barWidth = size.width / audioSamples.length;
-    for (int i = 0; i < audioSamples.length; i++) {
-      double barHeight = audioSamples[i] * size.height;
-      Offset startPoint = Offset(i * barWidth, size.height);
-      Offset endPoint = Offset(i * barWidth, size.height - barHeight);
-      canvas.drawLine(startPoint, endPoint, paint);
+    for (int i = 0; i < spectrumData.length; i++) {
+      final Paint paint = Paint()
+        ..color = Colors.blue
+        ..strokeWidth = 2.0
+        ..style = PaintingStyle.fill;
+
+      final double width = size.width / spectrumData.length;
+      final double x = i * width;
+      // y 값이 올라갔다가 내려오게 조정합니다.
+      final double height = min(spectrumData[i], size.height); // size.height를 초과하지 않도록 조정
+      final double y = size.height - height;
+      canvas.drawLine(
+        Offset(x, size.height),
+        Offset(x, y),
+        paint,
+      );
     }
   }
 
   @override
-  bool shouldRepaint(_VisualizerPainter oldDelegate) {
-    return true;
-  }
-}*/
+  bool shouldRepaint(AudioSpectrumPainter oldDelegate) => true;
+}

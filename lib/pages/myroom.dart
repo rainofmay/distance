@@ -1,8 +1,10 @@
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/widgets/action_buttons.dart';
+import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/myroom_schedule.dart';
@@ -23,21 +25,25 @@ class _MyRoomState extends State<MyRoom>{
   @override
   void initState() {
     super.initState();
+
   }
+
 
   @override
   void dispose() {
     super.dispose();
+    print("[myroom]: dispose 실행");
   }
 
   @override
   Widget build(BuildContext context) {
-    final backgroundProvider = Provider.of<BackgroundProvider>(context);
-    final backgroundSettingProvider =
-    Provider.of<BackgroundSettingProvider>(context);
-    if(backgroundProvider.isImage == false) {
-      print("비디오 replay in building");
+    BackgroundProvider backgroundProvider = Provider.of<BackgroundProvider>(context);
+    BackgroundSettingProvider backgroundSettingProvider = Provider.of<BackgroundSettingProvider>(context);
+    if(backgroundProvider.isImage == false && backgroundProvider.videoController.value.isInitialized) {
+      print("[myroom]: build() 비디오 리플레이");
       backgroundProvider.videoController.play();
+    }else{
+      print("[myroom]: build() ");
     }
     return Scaffold(
       body: Stack(
@@ -59,7 +65,7 @@ class _MyRoomState extends State<MyRoom>{
                 child: SizedBox(
                   width: backgroundProvider.videoController.value.size.width,
                   height: backgroundProvider.videoController.value.size.height,
-                  child: VideoPlayer(backgroundProvider.videoController),
+                  child: CachedVideoPlayer(backgroundProvider.videoController),
                 ),
               ),
             )
@@ -81,6 +87,11 @@ class _MyRoomState extends State<MyRoom>{
                 ? FloatingTodo()
                 : null,
           ),
+          Container(
+            child: backgroundSettingProvider.audioSpectrumEnabled
+                ? AudioSpectrumWidget(audioFilePath: 'audios/nature/defaultMainMusic.mp3')
+                : null,
+          )
         ],
       ),
       floatingActionButton: ExpandableFab(
