@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/common_function/schedule/get_schedule_events.dart';
 import 'package:mobile/model/todo_model.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -11,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import '../../model/schedule_model.dart';
 import 'event.dart';
+
 
 class Calendar extends StatefulWidget {
   final OnDaySelected onDaySelected;
@@ -28,32 +28,37 @@ class Calendar extends StatefulWidget {
 }
 
 class _CalendarState extends State<Calendar> {
+  Map<String, int> colorLists = {};
+  late Color? _eventColor;
+
   List<Event> _getEvents(DateTime day) {
     List data = context.read<ScheduleEventsProvider>().eventsLists;
-    print(data);
     Map<DateTime, List<Event>> events = {};
     for (int i = 0; i < data.length; i++) {
       DateTime startDate = data[i][0];
       DateTime endDate = data[i][1];
       String id = data[i][2];
+      int sectionColor = data[i][3];
+      colorLists.addAll({id: sectionColor});
+
       while (
           startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
         events.containsKey(startDate)
-            ? events[startDate]!.add(Event(id))
+            ? events[startDate]!.contains(Event(id))
+                ? null
+                : events[startDate]!.add(Event(id))
             : events.addAll({
                 startDate: [Event(id)]
               });
         startDate = startDate.add(Duration(days: 1));
       }
     }
-    print(events);
-
+    print(colorLists);
     return events[day] ?? [];
   }
 
   @override
   Widget build(BuildContext context) {
-    getScheduleEvents(context);
     return GestureDetector(
         onVerticalDragUpdate: (details) {
           // 사용자의 세로 방향 스와이프 업데이트를 가져옴
@@ -124,18 +129,25 @@ class _CalendarState extends State<Calendar> {
             }
             return null;
           }, markerBuilder: (context, day, events) {
-            if (events.isNotEmpty && events.length < 5) {
+            if (events.isEmpty) {
+              null;
+            }
+            else if (events.isNotEmpty && events.length < 5) {
               return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: events.length,
                   itemBuilder: (context, index) {
+                    print(events.runtimeType);
+                    _eventColor = sectionColors[colorLists[events[index].toString()] ?? 1];
+                    print('${events[0]} events');
                     return Container(
                       margin: const EdgeInsets.only(top: 35),
-                      child: const Icon(
+                      child: Icon(
                         size: 8,
                         Icons.circle,
-                        color: COMPLEMENTARY_COLOR,
+                        color: _eventColor,
+                        //events[index] == null ? null : sectionColors[colorLists[events[index]]!],
                       ),
                     );
                   });

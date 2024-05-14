@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/common_function/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
@@ -14,6 +15,7 @@ import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
+import '../../myroom.dart';
 
 class CreateSchedule extends StatefulWidget {
   const CreateSchedule({super.key});
@@ -47,6 +49,8 @@ class _CreateScheduleState extends State<CreateSchedule> {
   final TextEditingController _textController = TextEditingController();
   bool _isTimeSet = true;
 
+  // GlobalKey<MyRoomState> myRoomKey = GlobalKey();
+
   @override
   void dispose() {
     // 텍스트에디팅컨트롤러를 제거하고, 등록된 리스너도 제거된다.
@@ -69,29 +73,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
     if (_formKey.currentState!.validate()) {
       // bool값 리턴
       _formKey.currentState!.save();
-      // if (_endDate.day < _startDate.day) {
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //         content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
-      //         duration: Duration(seconds: 1),
-      //         dismissDirection: DismissDirection.down),
-      //   );
-      //   return;
-      // } else if (timeComparison(
-      //         _originalStartTime, _originalEndTime, _isTimeSet) ==
-      //     false) {
-      //   print('$_originalStartTime, $_originalEndTime');
-      //   ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(
-      //       content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.'),
-      //       duration: Duration(seconds: 1),
-      //       dismissDirection: DismissDirection.down,
-      //     ),
-      //   );
-      //   return;
-      // }
     }
-
     //일정 추가
     final schedule = ScheduleModel(
       id: Uuid().v4(),
@@ -108,7 +90,8 @@ class _CreateScheduleState extends State<CreateSchedule> {
     final supabase = Supabase.instance.client;
 
     try {
-      await supabase.from('schedule').insert(schedule.toJson());
+      await supabase.from('schedule').insert(schedule.toJson()).then((value) =>
+          context.read<ScheduleEventsProvider>().getScheduleEvents());
     } catch (error) {
       print('schedule insert 에러 $error');
     }
@@ -218,11 +201,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
             builder:
                 (BuildContext context, TextEditingValue value, Widget? child) {
               return TextButton(
-                onPressed: _termsForSave()
-                    ? () => {
-                          _onSavePressed(),
-                        }
-                    : null,
+                onPressed: _termsForSave() ? () => _onSavePressed() : null,
                 child: Text(
                   '저장',
                   style: TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),

@@ -1,7 +1,7 @@
 class Event {
-  String title;
-  Event(this.title);
+  String id;
+  Event(this.id);
 
   @override
-  String toString() => title;
+  String toString() => id;
 }

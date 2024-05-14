@@ -13,6 +13,7 @@ import '../../../common_function/schedule/time_comarison.dart';
 import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
+import '../../../util/schedule_events_provider.dart';
 import '../../../widgets/custom_text_field.dart';
 
 class ModifySchedule extends StatefulWidget {
@@ -105,7 +106,8 @@ class _ModifyScheduleState extends State<ModifySchedule> {
 
     try {
       await Supabase.instance.client.from('schedule').update(
-      schedule.toJson()).eq('id', schedule.id);
+      schedule.toJson()).eq('id', schedule.id).then((value) =>
+          context.read<ScheduleEventsProvider>().getScheduleEvents());
     } catch (error) {
       print('에러 $error');
     }
@@ -228,7 +230,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                 'id': context
                     .read<ModifyingScheduleProvider>()
                     .modifyingScheduleId
-              });
+              }).then((value) => context.read<ScheduleEventsProvider>().getScheduleEvents());
               if (!context.mounted) return;
               context.read<CalendarProvider>().setSelectedDate(
                   _startDate); // 재랜더링에 필요한 코드,* 일정 사라지는 애니메이션 검토
