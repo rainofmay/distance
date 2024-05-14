@@ -128,7 +128,6 @@ class _TodoState extends State<Todo> {
 
   @override
   Widget build(BuildContext context) {
-    print('재랜더링');
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

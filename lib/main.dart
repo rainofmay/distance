@@ -8,6 +8,7 @@ import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/util/schedule_color_provider.dart';
+import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
@@ -39,6 +40,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => BottomIndex()),
         ChangeNotifierProvider(create: (context) => ScheduleColorProvider()),
+        ChangeNotifierProvider(create: (context) => ScheduleEventsProvider()),
         ChangeNotifierProvider(create: (context) => ModifyingScheduleProvider()),
         // ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
         ChangeNotifierProvider(

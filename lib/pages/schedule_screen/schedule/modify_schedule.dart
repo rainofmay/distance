@@ -73,29 +73,21 @@ class _ModifyScheduleState extends State<ModifySchedule> {
     super.dispose();
   }
 
+  _termsForSave() {
+    if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
+        false ||
+        _endDate.day < _startDate.day ||
+        _titleController.text.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   void _onSavePressed() async {
     if (_formKey.currentState!.validate()) {
       // bool값 리턴
       _formKey.currentState!.save();
-      if (_endDate.day < _startDate.day) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              content: Text('종료일은 시작일보다 앞설 수 없습니다.'),
-              duration: Duration(seconds: 1),
-              dismissDirection: DismissDirection.down),
-        );
-        return;
-      } else if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
-          false) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('시작 시각은 종료 시각보다 앞설 수 없습니다.'),
-            duration: Duration(seconds: 1),
-            dismissDirection: DismissDirection.down,
-          ),
-        );
-        return;
-      }
     }
     
     //일정 추가
@@ -217,15 +209,15 @@ class _ModifyScheduleState extends State<ModifySchedule> {
             builder:
                 (BuildContext context, TextEditingValue value, Widget? child) {
               return TextButton(
-                onPressed: (value.text.isEmpty)
-                    ? null
-                    : () => {
-                          _onSavePressed(),
-                        },
+                onPressed:  _termsForSave()
+                    ? () => {
+                  _onSavePressed(),
+                }
+                    : null,
                 child: Text(
                   '수정',
                   style:
-                      TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
+                      TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),
                 ),
               );
             },
@@ -356,6 +348,9 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              onTap: () {
+                                _getDateFromUser(context: context, isStartTime: true);
+                              },
                               autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
@@ -383,6 +378,9 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             ),
                             onPressed: null),
                         hint: DateFormat.yMd().format(_endDate),
+                        hintStyle: _endDate.day < _startDate.day
+                            ? TextStyle(color: RED)
+                            : TextStyle(),
                       ),
                     ),
                     _isTimeSet
@@ -390,10 +388,18 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              onTap: () {
+                                _getDateFromUser(context: context, isStartTime: false);
+                              },
                               autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _endTime  == "" ? "08:00 AM" : _endTime,
+                              hintStyle: timeComparison(_originalStartTime,
+                                  _originalEndTime, _isTimeSet) ==
+                                  false
+                                  ? TextStyle(color: RED)
+                                  : TextStyle(),
                             ),
                           ))
                         : const SizedBox(),

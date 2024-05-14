@@ -54,11 +54,13 @@ class _CreateScheduleState extends State<CreateSchedule> {
     super.dispose();
   }
 
-  _termsForSave () {
-    if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) == false || _endDate.day < _startDate.day || _textController.text.isEmpty) {
+  _termsForSave() {
+    if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
+            false ||
+        _endDate.day < _startDate.day ||
+        _textController.text.isEmpty) {
       return false;
-    }
-    else {
+    } else {
       return true;
     }
   }
@@ -142,7 +144,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
             onSurface: Colors.white),
         // 전체적인 글자색
         splashFactory: NoSplash.splashFactory,
-        focusColor:TRANSPARENT,
+        focusColor: TRANSPARENT,
         hoverColor: TRANSPARENT,
         highlightColor: TRANSPARENT,
       ),
@@ -218,13 +220,13 @@ class _CreateScheduleState extends State<CreateSchedule> {
               return TextButton(
                 onPressed: _termsForSave()
                     ? () => {
-                  _onSavePressed(),
-                }
+                          _onSavePressed(),
+                        }
                     : null,
                 child: Text(
                   '저장',
                   style: TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),
-                      // TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
+                  // TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
                 ),
               );
             },
@@ -337,6 +339,10 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              onTap: () {
+                                _getDateFromUser(
+                                    context: context, isStartTime: true);
+                              },
                               autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
@@ -355,7 +361,8 @@ class _CreateScheduleState extends State<CreateSchedule> {
                         autofocus: false,
                         readOnly: true,
                         onTap: () {
-                          _getDateFromUser(context: context, isStartTime: false);
+                          _getDateFromUser(
+                              context: context, isStartTime: false);
                         },
                         titleIcon: IconButton(
                             icon: Icon(
@@ -364,7 +371,9 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             ),
                             onPressed: null),
                         hint: DateFormat.yMd().format(_endDate),
-                        hintStyle: _endDate.day < _startDate.day ? TextStyle(color: RED) : TextStyle(),
+                        hintStyle: _endDate.day < _startDate.day
+                            ? TextStyle(color: RED)
+                            : TextStyle(),
                       ),
                     ),
                     _isTimeSet
@@ -372,12 +381,19 @@ class _CreateScheduleState extends State<CreateSchedule> {
                             child: Padding(
                             padding: const EdgeInsets.only(right: 18.0),
                             child: CustomTextField(
+                              onTap: () {
+                                _getDateFromUser(
+                                    context: context, isStartTime: false);
+                              },
                               autofocus: false,
                               textAlign: TextAlign.right,
                               readOnly: true,
                               hint: _endTime,
-                              hintStyle: timeComparison(
-                                  _originalStartTime, _originalEndTime, _isTimeSet) == false ? TextStyle(color: RED) : TextStyle(),
+                              hintStyle: timeComparison(_originalStartTime,
+                                          _originalEndTime, _isTimeSet) ==
+                                      false
+                                  ? TextStyle(color: RED)
+                                  : TextStyle(),
                             ),
                           ))
                         : const SizedBox(),
