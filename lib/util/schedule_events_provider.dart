@@ -4,13 +4,6 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ScheduleEventsProvider extends ChangeNotifier {
   List<dynamic> eventsLists = [];
-  // Color eventColor = sectionColors[0];
-  // Map<String, int> colorLists = {};
-  //
-  // setColorLists (value) {
-  //   eventColor = sectionColors[value];
-  //   notifyListeners();
-  // }
 
   getScheduleEvents() async {
     final snapshot = await Supabase.instance.client.from('schedule').select();

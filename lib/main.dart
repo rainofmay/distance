@@ -13,7 +13,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:mobile/pages/myroom.dart';
 import 'package:mobile/pages/mate.dart';
-import 'package:mobile/pages/store.dart';
+import 'package:mobile/pages/store_screen/store.dart';
 import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/util/global_player.dart';

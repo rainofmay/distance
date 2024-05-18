@@ -38,7 +38,6 @@ class _ScheduleListState extends State<ScheduleList> {
 
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<List<Map<String, dynamic>>>(
       future: futureData(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {

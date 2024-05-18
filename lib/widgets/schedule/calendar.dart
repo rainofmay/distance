@@ -9,6 +9,7 @@ import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../model/schedule_model.dart';
+import '../../pages/schedule_screen/schedule/create_schedule.dart';
 import 'event.dart';
 
 
@@ -92,13 +93,15 @@ class _CalendarState extends State<Calendar> {
 
           calendarBuilders:
               CalendarBuilders(defaultBuilder: (context, day, focusedDay) {
-            return Center(child: Text(day.day.toString()));
+            return Container(
+                color: TRANSPARENT,
+                child: Center(child: Text(day.day.toString())));
           },
                   // 해당 주, 또는 월에서 벗어나는 날짜
                   outsideBuilder: (context, day, focusedDay) {
             return Center(
                 child: Text(day.day.toString(),
-                    style: TextStyle(color: UNSELECTED)));
+                    style: const TextStyle(color: UNSELECTED)));
           }, selectedBuilder: (context, date, _) {
             return Container(
               decoration: BoxDecoration(
@@ -110,7 +113,7 @@ class _CalendarState extends State<Calendar> {
               child: Center(
                 child: Text(
                   '${date.day}',
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: PRIMARY_COLOR,
                     fontWeight: FontWeight.bold,
                   ),

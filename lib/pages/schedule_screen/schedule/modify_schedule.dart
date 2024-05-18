@@ -109,7 +109,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
       schedule.toJson()).eq('id', schedule.id).then((value) =>
           context.read<ScheduleEventsProvider>().getScheduleEvents());
     } catch (error) {
-      print('에러 $error');
+      print('에러 $error'); 
     }
   
     // 새로고침을 위함도 있음.

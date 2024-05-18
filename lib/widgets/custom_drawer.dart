@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/const/colors.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Map<Map<Icon, String>, dynamic> drawerMenu;
@@ -9,7 +10,7 @@ class CustomDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-        color: Colors.white,
+        color: WHITE,
         child: Column(
           children: [
             UserAccountsDrawerHeader(
@@ -18,13 +19,13 @@ class CustomDrawer extends StatelessWidget {
                   ),
               accountName: Text(
                 '테스트',
-                style: TextStyle(color: Colors.black),
+                style: const TextStyle(color: BLACK),
               ),
               accountEmail:
-                  Text('abc123@naver.com', style: TextStyle(color: Colors.black)),
+                  Text('abc123@naver.com', style: const TextStyle(color: BLACK)),
               onDetailsPressed: () {},
-              decoration: BoxDecoration(
-                color: Colors.white,
+              decoration: const BoxDecoration(
+                color: WHITE,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(10.0),
                   bottomRight: Radius.circular(10.0),
@@ -42,6 +43,7 @@ class CustomDrawer extends StatelessWidget {
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (c) => entry.value));
+                        Navigator.of(context).pop();
                       },
                       trailing: Icon(Icons.arrow_forward_ios, size: 15,),
                     ),

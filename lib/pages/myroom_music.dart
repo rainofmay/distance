@@ -211,7 +211,7 @@ class _MusicSettingState extends State<MusicSetting> {
                   ),
                   BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
                   OkCancelButtons(
-                      okText: 'OK',
+                      okText: '확인',
                       cancelText: '취소',
                       onPressed: () {
                         Navigator.of(context).pop(); // 닫히는 버튼

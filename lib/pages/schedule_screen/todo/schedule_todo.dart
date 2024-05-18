@@ -57,6 +57,7 @@ class _ScheduleTodoState extends State<ScheduleTodo>
     _todoController.dispose();
     FocusManager.instance.primaryFocus?.unfocus();
     _scrollController.dispose();
+    _tabController.dispose();
     super.dispose();
   }
 

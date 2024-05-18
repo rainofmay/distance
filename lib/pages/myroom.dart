@@ -8,7 +8,7 @@ import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'package:mobile/pages/myroom_music.dart';
-import 'package:mobile/pages/myroom_schedule.dart';
+import 'package:mobile/pages/schedule_screen/myroom_schedule.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/floating_todo.dart';
 import 'package:mobile/pages/myroom_background.dart';
@@ -25,6 +25,7 @@ class _MyRoomState extends State<MyRoom> {
 
   @override
   void initState() {
+    print(DateTime.now().toUtc());
     context.read<ScheduleEventsProvider>().getScheduleEvents();
     super.initState();
   }
