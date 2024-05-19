@@ -79,32 +79,33 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
               ),
             ),
             Expanded(
-              child: Column(
-                children: [
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    // height: context.watch<CalendarProvider>().isCalendarVisible
-                    //     ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 420 : 170)
-                    //     : 0,
-                    padding: const EdgeInsets.only(top:20, left: 30, right: 30),
-                    child: context.watch<CalendarProvider>().isCalendarVisible
-                        ? Calendar(
-                          focusedDate: focusedDate,
-                          selectedDate: selectedDate,
-                          onDaySelected: onDaySelected,
-                        )
-                        : Container(),
-                  ),
-                  GestureDetector(
-                    onVerticalDragUpdate: (details) {
-                      final double delta = details.primaryDelta ?? 0;
-                      if (delta > 2) {
-                        context.read<CalendarProvider>().setMonthFormat();
-                      } else if (delta < -2) {
-                        context.read<CalendarProvider>().setWeekFormat();
-                      }
-                    },
-                    child: Padding(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onVerticalDragUpdate: (details) {
+                    final double delta = details.primaryDelta ?? 0;
+                    if (delta > 0) {
+                      context.read<CalendarProvider>().setMonthFormat();
+                    } else if (delta < 0) {
+                      context.read<CalendarProvider>().setWeekFormat();
+                    }
+                  },
+                child: Column(
+                  children: [
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      // height: context.watch<CalendarProvider>().isCalendarVisible
+                      //     ? (context.watch<CalendarProvider>().calendarFormat == CalendarFormat.month ? 420 : 170)
+                      //     : 0,
+                      padding: const EdgeInsets.only(top:20, left: 30, right: 30),
+                      child: context.watch<CalendarProvider>().isCalendarVisible
+                          ? Calendar(
+                            focusedDate: focusedDate,
+                            selectedDate: selectedDate,
+                            onDaySelected: onDaySelected,
+                          )
+                          : Container(),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.only(top: 20),
                       child: ListTile(
                         horizontalTitleGap: 3,
@@ -129,9 +130,9 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
                                 fontSize: 15)),
                       ),
                     ),
-                  ),
-                  Expanded(child: ScheduleList(selectedDate: selectedDate)),
-                ],
+                    Expanded(child: ScheduleList(selectedDate: selectedDate)),
+                  ],
+                ),
               ),
             ),
             // ),
