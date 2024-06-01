@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../const/colors.dart';
+
 class Photo extends StatefulWidget {
   const Photo({super.key});
 
@@ -34,9 +36,16 @@ class _PhotoState extends State<Photo> {
                   width:
                       (MediaQuery.of(context).size.width - 8 * 2 - 8 * 4) / 5,
                   // 8*2는 양옆padding, 8*4는 4개의 간격(한 줄에 5개 이므로)
-                  child: TextButton(
+                  child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(themeLists[index][0]),
+                    style: ElevatedButton.styleFrom(
+                      overlayColor: TRANSPARENT,
+                        shadowColor: TRANSPARENT,
+                        backgroundColor: WHITE,
+                        shape: RoundedRectangleBorder(
+                            side: BorderSide(color: BLACK),
+                            borderRadius: BorderRadius.circular(20))),
+                    child: Text(themeLists[index][0], style: const TextStyle(color: BLACK),),
                   ),
                 );
               }),

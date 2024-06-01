@@ -39,7 +39,7 @@ class CustomDrawer extends StatelessWidget {
                     for (var val in entry.key.entries.toList())
                     ListTile(
                       leading: val.key,
-                      title: Text(val.value, style: TextStyle(fontSize: 15),),
+                      title: Text(val.value, style: TextStyle(fontSize: 15)),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (c) => entry.value));

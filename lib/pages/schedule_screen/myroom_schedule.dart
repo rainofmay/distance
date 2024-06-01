@@ -26,17 +26,18 @@ class _ScheduleState extends State<Schedule> {
     CountUpTimer()
   ];
 
-  final Map<Map<Icon, String>, dynamic> _drawerMenu = {
-    {Icon(Icons.photo_outlined): '내 달력 배경'}: ScheduleBackgroundSetting(),
-    {Icon(Icons.notifications_none_outlined): '알림'}: ScheduleNotification(),
-  };
+  // final Map<Map<Icon, String>, dynamic> _drawerMenu = {
+  //   {Icon(Icons.photo_outlined): '내 배경'}: ScheduleBackgroundSetting(),
+  //   {Icon(Icons.notifications_none_outlined): '알림'}: ScheduleNotification(),
+  // };
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: CustomBackAppBar(
           isLeading: true,
-          backFunction:  Navigator.of(context).pop,
+          backFunction: Navigator.of(context).pop,
           appbarTitle: tabContents[currentTab],
           backgroundColor: BLACK,
           contentColor: WHITE,
@@ -61,9 +62,10 @@ class _ScheduleState extends State<Schedule> {
                 icon: const Icon(CupertinoIcons.add), color: PRIMARY_LIGHT) : const SizedBox(),
           ],
         ),
-        endDrawer: CustomDrawer(
-          drawerMenu: _drawerMenu,
-        ),
+        // endDrawer: CustomDrawer(
+        //   drawerMenu: _drawerMenu,
+        //   drawerUnderMenu: _drawerUnderMenu,
+        // ),
         body: scheduleScreens[currentTab],
         bottomNavigationBar: BottomAppBar(
             color: DARK,
@@ -87,14 +89,17 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.edit_calendar,
-                          color: currentTab == 0 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                          color:
+                              currentTab == 0 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[0],
                           style: TextStyle(
-                              color: currentTab == 0 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                              color: currentTab == 0
+                                  ? PRIMARY_COLOR
+                                  : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -114,14 +119,17 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.checklist_rounded,
-                          color: currentTab == 1 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                          color:
+                              currentTab == 1 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[1],
                           style: TextStyle(
-                              color: currentTab == 1 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                              color: currentTab == 1
+                                  ? PRIMARY_COLOR
+                                  : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -141,14 +149,17 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           CupertinoIcons.timer,
-                          color: currentTab == 2 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                          color:
+                              currentTab == 2 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[2],
                           style: TextStyle(
-                              color: currentTab == 2 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                              color: currentTab == 2
+                                  ? PRIMARY_COLOR
+                                  : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )
@@ -168,14 +179,17 @@ class _ScheduleState extends State<Schedule> {
                       children: [
                         Icon(
                           Icons.more_horiz,
-                          color: currentTab == 3 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                          color:
+                              currentTab == 3 ? PRIMARY_COLOR : DARK_UNSELECTED,
                           size: 18,
                         ),
                         const SizedBox(height: 2),
                         Text(
                           tabContents[3],
                           style: TextStyle(
-                              color: currentTab == 3 ? PRIMARY_COLOR : DARK_UNSELECTED,
+                              color: currentTab == 3
+                                  ? PRIMARY_COLOR
+                                  : DARK_UNSELECTED,
                               fontSize: 10,
                               letterSpacing: 2.2),
                         )

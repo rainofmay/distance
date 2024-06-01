@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/pages/auth_screen.dart';
+import 'package:mobile/pages/etc.dart';
 import 'package:mobile/pages/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
@@ -29,8 +30,6 @@ Future<void> main() async {
   await dotenv.load();
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
-
-  MobileAds.instance.initialize();
 
   runApp(
     MultiProvider(
@@ -62,7 +61,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPage> {
-  final List screens = [MyRoom(), Mate(), Store(), LoginPage()];
+  final List screens = [MyRoom(), Mate(), Store(), AuthScreen(), Etc()];
 
   @override
   Widget build(BuildContext context) {
