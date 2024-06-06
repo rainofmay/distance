@@ -95,7 +95,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
                   child: Text(
                     '수정',
                     style: TextStyle(
-                        color: value.text.isEmpty ? UNSELECTED : WHITE),
+                        color: value.text.isEmpty ? GREY : WHITE),
                   ),
                 );
               },

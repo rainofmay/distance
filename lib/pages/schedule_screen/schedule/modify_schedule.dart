@@ -219,7 +219,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                 child: Text(
                   '수정',
                   style:
-                      TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),
+                      TextStyle(color: _termsForSave() ? WHITE : GREY),
                 ),
               );
             },
@@ -471,7 +471,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
                               value: value,
                               child: Text(
                                 value!,
-                                style: TextStyle(color: UNSELECTED),
+                                style: TextStyle(color: GREY),
                               ));
                         }).toList(),
                       ),

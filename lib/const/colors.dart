@@ -2,14 +2,15 @@ import 'package:flutter/material.dart';
 
 const PRIMARY_COLOR = Color(0xFFECB574);  //브랜드 컬러
 const PRIMARY_LIGHT = Color(0xffF7C667);  // 브랜드 컬러 밝은 버전
+const SECONDARY = Color(0xff8FB8EE); // 브랜드컬러 후보색,
 //F9F5DA : 베이지색
 //CAD122, DFDE7D : 녹색 계열
-const COMPLEMENTARY_COLOR = Colors.purple;
+const COMPLEMENTARY_COLOR = Colors.purple; // 메인색 보색
 
 const LIGHT_WHITE = Colors.white70;
 const DARK = Color(0xff282828);
 const DARK_UNSELECTED = Color(0xff777777);
-const UNSELECTED = Colors.grey;
+const GREY = Colors.grey;
 const DARK_BACKGROUND = Color(0xff2B2828);
 // schedule card 색상
 

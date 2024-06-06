@@ -37,7 +37,7 @@ class _MusicVolumeState extends State<MusicVolume> {
             overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
               overlayColor: PRIMARY_COLOR.withOpacity(0.2),
             activeTrackColor: PRIMARY_COLOR,
-            inactiveTrackColor: UNSELECTED
+            inactiveTrackColor: GREY
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

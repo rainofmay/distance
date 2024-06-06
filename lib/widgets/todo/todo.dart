@@ -121,7 +121,7 @@ class _TodoState extends State<Todo> {
                           child: Text(todo['todo_name'],
                               style: todo['is_done']
                                   ? TextStyle(
-                                      color: UNSELECTED,
+                                      color: GREY,
                                       decoration: TextDecoration.lineThrough)
                                   : TextStyle(
                                       color: BLACK,

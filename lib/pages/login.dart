@@ -110,12 +110,6 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: resetPasswordDialog,
                 child: Text('비밀번호 재설정'),
               ),
-              SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
-              // Google 로그인 버튼
-              ElevatedButton(
-                onPressed: signInWithGoogle, // Google 로그인 함수 호출
-                child: Text('Google로 로그인'), // 버튼 텍스트 추가
-              ),
             ],
           ),
         ),

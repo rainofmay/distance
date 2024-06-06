@@ -204,7 +204,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                 onPressed: _termsForSave() ? () => _onSavePressed() : null,
                 child: Text(
                   '저장',
-                  style: TextStyle(color: _termsForSave() ? WHITE : UNSELECTED),
+                  style: TextStyle(color: _termsForSave() ? WHITE : GREY),
                   // TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
                 ),
               );
@@ -443,7 +443,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
                               value: value,
                               child: Text(
                                 value!,
-                                style: TextStyle(color: UNSELECTED),
+                                style: TextStyle(color: GREY),
                               ));
                         }).toList(),
                       ),

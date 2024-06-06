@@ -87,7 +87,7 @@ class _CalendarState extends State<Calendar> {
               outsideBuilder: (context, day, focusedDay) {
         return Center(
             child: Text(day.day.toString(),
-                style: const TextStyle(color: UNSELECTED)));
+                style: const TextStyle(color: GREY)));
       }, selectedBuilder: (context, date, _) {
         return Container(
           decoration: BoxDecoration(
