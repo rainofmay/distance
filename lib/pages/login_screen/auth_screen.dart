@@ -6,7 +6,6 @@ import 'package:mobile/const/colors.dart';
 import 'package:mobile/pages/register.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../widgets/glass_morphism.dart';
 import 'myroom.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -51,7 +50,7 @@ class _AuthScreenState extends State<AuthScreen> {
                   style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
                   textAlign: TextAlign.start),
             ),
-            BorderLine(lineHeight: 60, lineColor: TRANSPARENT),
+            const BorderLine(lineHeight: 60, lineColor: TRANSPARENT),
             Center(
               child: Column(
                 children: [
@@ -62,7 +61,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
+                          SizedBox(
                             width: widthOfLog,
                             child: TextFormField(
                               validator: (input) {
@@ -87,8 +86,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                 )),
                             ),
                           ),
-                          BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
-                          Container(
+                          const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
+                          SizedBox(
                             width: widthOfLog,
                             child: TextFormField(
                               validator: (input) {
@@ -112,7 +111,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               obscureText: true,
                             ),
                           ),
-                          SizedBox(height: 20.0),
+                          const SizedBox(height: 20.0),
                           ElevatedButton(
                             style:  ElevatedButton.styleFrom(
                               side: BorderSide(
@@ -157,12 +156,70 @@ class _AuthScreenState extends State<AuthScreen> {
                       ),
                     ),
                   ),
-                  BorderLine(lineHeight: 30, lineColor: TRANSPARENT),
+                  BorderLine(lineHeight: 35, lineColor: TRANSPARENT),
+
+                  // KAKAO 로그인
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
+                              BorderRadius.all(Radius.circular(8))),
+                          overlayColor: TRANSPARENT,
+                          foregroundColor: TRANSPARENT,
+                          fixedSize: Size(widthOfLog, heightOfLog),
+                          backgroundColor: Color(0xffFFE812)),
+                      onPressed: () => onKakaoLoginPress(context),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/icons/kakao.svg',
+                            width: 24,
+                            height: 24,
+                            // colorFilter:
+                            // const ColorFilter.mode(TRANSPARENT, BlendMode.srcIn),
+                          ),
+                          SizedBox(width: 20),
+                          Text('Kakao로 로그인',
+                              style: TextStyle(color: BLACK, fontSize: 16)),
+                        ],
+                      )),
+                  // BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
+
+                  // NAVER 로그인
+                  // ElevatedButton(
+                  //     style: ElevatedButton.styleFrom(
+                  //         shape: RoundedRectangleBorder(
+                  //             borderRadius:
+                  //                 BorderRadius.all(Radius.circular(8))),
+                  //         overlayColor: TRANSPARENT,
+                  //         foregroundColor: TRANSPARENT,
+                  //         fixedSize: Size(widthOfLog, heightOfLog),
+                  //         backgroundColor: Color(0xff03C75A)),
+                  //     onPressed: () => onGoogleLoginPress(context),
+                  //     child: Row(
+                  //
+                  //       children: [
+                  //         SvgPicture.asset(
+                  //           'assets/icons/naver.svg',
+                  //           width: 21,
+                  //           height: 21,
+                  //           colorFilter:
+                  //               const ColorFilter.mode(WHITE, BlendMode.srcIn),
+                  //         ),
+                  //         SizedBox(width: 20),
+                  //         Text('NAVER로 로그인',
+                  //             style: TextStyle(color: WHITE, fontSize: 16)),
+                  //       ],
+                  //     )),
+
+                  BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
+
+                  //Google로 로그인
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8))),
                           overlayColor: TRANSPARENT,
                           foregroundColor: TRANSPARENT,
                           fixedSize: Size(widthOfLog, heightOfLog),
@@ -171,7 +228,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Row(
                         children: [
                           Image.asset(
-                            'assets/images/google.png',
+                            'assets/icons/google.png',
                             width: 21,
                             height: 21,
                           ),
@@ -180,33 +237,6 @@ class _AuthScreenState extends State<AuthScreen> {
                               style: TextStyle(color: WHITE, fontSize: 16)),
                         ],
                       )),
-                  BorderLine(lineHeight: 10, lineColor: TRANSPARENT),
-                  // NAVER
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
-                          overlayColor: TRANSPARENT,
-                          foregroundColor: TRANSPARENT,
-                          fixedSize: Size(widthOfLog, heightOfLog),
-                          backgroundColor: Color(0xff03C75A)),
-                      onPressed: () => onGoogleLoginPress(context),
-                      child: Row(
-
-                        children: [
-                          SvgPicture.asset(
-                            'assets/icons/naver.svg',
-                            width: 21,
-                            height: 21,
-                            colorFilter:
-                                const ColorFilter.mode(WHITE, BlendMode.srcIn),
-                          ),
-                          SizedBox(width: 20),
-                          Text('NAVER로 로그인',
-                              style: TextStyle(color: WHITE, fontSize: 16)),
-                        ],
-                      ))
                 ],
               ),
             ),
@@ -255,4 +285,6 @@ class _AuthScreenState extends State<AuthScreen> {
       ));
     }
   }
+
+  onKakaoLoginPress(BuildContext context) {}
 }
