@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/const/colors.dart';
-import 'package:mobile/pages/register.dart';
+import 'package:mobile/pages/login_screen/register_screen.dart';
 import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'myroom.dart';
+import '../../common_function/custom_login.dart';
+import '../myroom.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -17,7 +19,10 @@ class AuthScreen extends StatefulWidget {
 
 class _AuthScreenState extends State<AuthScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String _email, _password;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  // late String _email, _password;
 
   @override
   Widget build(BuildContext context) {
@@ -61,56 +66,34 @@ class _AuthScreenState extends State<AuthScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(
-                            width: widthOfLog,
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input == null || input.isEmpty) {
-                                  return '이메일을 입력하세요';
-                                }
-                                // 이메일 형식이 올바른지 확인
-                                if (!RegExp(
-                                        r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
-                                    .hasMatch(input)) {
-                                  return '올바른 이메일 형식이 아닙니다';
-                                }
-                                return null;
-                              },
-                              onSaved: (input) => _email = input!,
-                              decoration: InputDecoration(
-                                  prefixIcon: Icon(Icons.mail_outline_sharp),
-                                  labelText: '이메일',
-                                  labelStyle: TextStyle(color: GREY),
-                                focusedBorder: UnderlineInputBorder(
-                                  borderSide: BorderSide(color: SECONDARY), // 포커스 시 밑줄 색상
-                                )),
-                            ),
+                          CustomTextFormField(
+                            prefixIcon: Icon(CupertinoIcons.mail),
+                            labelText: 'E-mail',
+                            maxLines: 1,
+                            fieldWidth: widthOfLog,
+                            isPasswordField: false,
+                            isReadOnly: false,
+                            keyboardType: TextInputType.emailAddress,
+                            textInputAction: TextInputAction.next,
+                            controller: _emailController,
+                            validator: (value) => inputEmailValidator(value),
                           ),
+
                           const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
-                          SizedBox(
-                            width: widthOfLog,
-                            child: TextFormField(
-                              validator: (input) {
-                                if (input == null || input.isEmpty) {
-                                  return '비밀번호를 입력하세요';
-                                }
-                                // 비밀번호가 6자 이상인지 확인
-                                if (input.length < 6) {
-                                  return '비밀번호는 최소 6자 이상이어야 합니다';
-                                }
-                                return null;
-                              },
-                              onSaved: (input) => _password = input!,
-                              decoration: InputDecoration(
-                                  prefixIcon: Icon(CupertinoIcons.padlock),
-                                  labelText: '비밀번호',
-                                  labelStyle: TextStyle(color: GREY),
-                                  focusedBorder: UnderlineInputBorder(
-                                    borderSide: BorderSide(color: SECONDARY),
-                                  )),
-                              obscureText: true,
-                            ),
+
+                          CustomTextFormField(
+                            prefixIcon: Icon(Icons.lock_open),
+                            labelText: 'Password',
+                            maxLines: 1,
+                            fieldWidth: widthOfLog,
+                            isPasswordField: true,
+                            isReadOnly: false,
+                            keyboardType: TextInputType.visiblePassword,
+                            textInputAction: TextInputAction.next,
+                            controller: _passwordController,
+                            validator: (value) => inputPasswordValidator(value),
                           ),
+
                           const SizedBox(height: 20.0),
                           ElevatedButton(
                             style:  ElevatedButton.styleFrom(
@@ -124,7 +107,6 @@ class _AuthScreenState extends State<AuthScreen> {
                               foregroundColor: TRANSPARENT,
                               overlayColor: TRANSPARENT,
                               fixedSize: Size(widthOfLog, heightOfLog),
-
                             ),
                             onPressed: () {},
                             child: Text('로그인', style: TextStyle(color: SECONDARY, fontSize: 16)),
@@ -140,7 +122,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => RegisterPage()),
+                                          builder: (context) => RegisterScreen()),
                                     );
                                   },
                                   child: Text('회원가입', style: TextStyle(color: BLACK, fontSize: 12)),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mobile/pages/register.dart'; // 추가
+import 'package:mobile/pages/login_screen/register_screen.dart'; // 추가
 
 void main() {
   runApp(MyApp());
@@ -100,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => RegisterPage()),
+                    MaterialPageRoute(builder: (context) => RegisterScreen()),
                   );
                 },
                 child: Text('회원가입'),

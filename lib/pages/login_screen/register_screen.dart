@@ -1,36 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:mobile/pages/login.dart';
+import 'package:mobile/pages/login_screen/login.dart';
+import 'package:mobile/widgets/custom_text_form_field.dart';
+import '../../common_function/custom_login.dart';
+import '../../const/colors.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: RegisterPage(),
-    );
-  }
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
-
-  @override
-  State<RegisterPage> createState() => _RegisterPageState();
-}
-
-class _RegisterPageState extends State<RegisterPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+class _RegisterScreenState extends State<RegisterScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  late String _email, _password;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordReController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    double fieldWidth = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
       appBar: AppBar(
         title: Text('회원가입'),
@@ -42,38 +31,45 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              TextFormField(
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return '이메일을 입력하세요';
-                  }
-                  // 이메일 형식이 올바른지 확인
-                  if (!RegExp(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b').hasMatch(input)) {
-                    return '올바른 이메일 형식이 아닙니다';
-                  }
-                  return null;
-                },
-                onSaved: (input) => _email = input!,
-                decoration: InputDecoration(labelText: '이메일'),
+              CustomTextFormField(
+                hintText: 'E-mail을 입력해 주세요.',
+                maxLines: 1,
+                fieldWidth: fieldWidth,
+                isPasswordField: false,
+                isReadOnly: false,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                controller: _emailController,
+                validator: (value) => inputEmailValidator(value),
               ),
-              TextFormField(
-                validator: (input) {
-                  if (input == null || input.isEmpty) {
-                    return '비밀번호를 입력하세요';
-                  }
-                  // 비밀번호가 6자 이상인지 확인
-                  if (input.length < 6) {
-                    return '비밀번호는 최소 6자 이상이어야 합니다';
-                  }
-                  return null;
-                },
-                onSaved: (input) => _password = input!,
-                decoration: InputDecoration(labelText: '비밀번호'),
-                obscureText: true,
+
+              CustomTextFormField(
+                hintText: '비밀번호를 입력해 주세요.',
+                maxLines: 1,
+                fieldWidth: fieldWidth,
+                isPasswordField: true,
+                isReadOnly: false,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.next,
+                controller: _passwordController,
+                validator: (value) => inputPasswordValidator(value),
               ),
-              SizedBox(height: 20.0),
+
+              CustomTextFormField(
+                hintText: '비밀번호 확인을 입력해 주세요.',
+                maxLines: 1,
+                fieldWidth: fieldWidth,
+                isPasswordField: true,
+                isReadOnly: false,
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                controller: _passwordReController,
+                validator: (value) => inputPasswordReValidator(value),
+              ),
+
+              const SizedBox(height: 20.0),
               ElevatedButton(
-                onPressed: signUp,
+                onPressed: () {}, //signUp,
                 child: Text('회원가입'),
               ),
             ],
@@ -83,27 +79,27 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 
-  void signUp() async {
-    if (_formKey.currentState!.validate()) {
-      _formKey.currentState!.save();
-      try {
-        await _auth.createUserWithEmailAndPassword(
-          email: _email,
-          password: _password,
-        );
-        _showDialog('회원가입 성공', '회원가입에 성공했습니다.');
-
-        if (!context.mounted) return;
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => LoginPage()),
-        );
-
-      } catch (e) {
-        _showDialog('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');
-        print(e);
-      }
-    }
-  }
+  // void signUp() async {
+  //   if (_formKey.currentState!.validate()) {
+  //     _formKey.currentState!.save();
+  //     try {
+  //       // await _auth.createUserWithEmailAndPassword(
+  //       //   email: _email,
+  //       //   password: _password,
+  //       );
+  //       _showDialog('회원가입 성공', '회원가입에 성공했습니다.');
+  //
+  //       if (!context.mounted) return;
+  //       Navigator.of(context).push(
+  //         MaterialPageRoute(builder: (context) => LoginPage()),
+  //       );
+  //
+  //     } catch (e) {
+  //       _showDialog('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');
+  //       print(e);
+  //     }
+  //   }
+  // }
 
   void _showDialog(String title, String content) {
     showDialog(
