@@ -9,15 +9,15 @@ import '../const/colors.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/background_setting.dart';
 
-class BackgroundSetting extends StatefulWidget {
-  const BackgroundSetting({super.key});
+class BackgroundSettings extends StatefulWidget {
+  const BackgroundSettings({super.key});
 
 
   @override
-  State<BackgroundSetting> createState() => _BackgroundSettingState();
+  State<BackgroundSettings> createState() => _BackgroundSettingsState();
 }
 //낮, 밤마다 시간마다 배경 설정 할 수 있게 하는 법 1. 사용자 설정, 2.
-class _BackgroundSettingState extends State<BackgroundSetting> {
+class _BackgroundSettingsState extends State<BackgroundSettings> {
   bool isSettingOn = false;
   bool isImageSetting = true;
   List<String> imageCategories = ['Cafe', 'Jazz_Bar', 'Nature'];// 카테고리 목록

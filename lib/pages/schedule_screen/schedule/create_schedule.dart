@@ -4,18 +4,19 @@ import 'package:intl/intl.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/common_function/custom_dialog.dart';
+import 'package:mobile/common/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-import '../../../common_function/schedule/time_comarison.dart';
+import '../../../common/schedule/time_comarison.dart';
 import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
 import '../../myroom.dart';
+
 
 class CreateSchedule extends StatefulWidget {
   const CreateSchedule({super.key});
@@ -237,9 +238,9 @@ class _CreateScheduleState extends State<CreateSchedule> {
                               .selectedSectionColor),
                       onPressed: () => customDialog(
                             context,
+                        240,
                             '구분 색상',
-                            null,
-                            ColorSelection(),
+                        Column(children: [ColorSelection()],),
                             TextButton(
                               child:
                                   Text('확인', style: TextStyle(color: COLOR1)),

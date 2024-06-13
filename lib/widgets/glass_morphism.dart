@@ -25,8 +25,6 @@ class GlassMorphism extends StatelessWidget {
           decoration: BoxDecoration(
             color: WHITE.withOpacity(opacity),
             borderRadius: const BorderRadius.all(Radius.circular(10)),
-            //   border: Border.all(
-            // width: 1, color: WHITE.withOpacity(0.2))
           ),
           child: child,
         ),

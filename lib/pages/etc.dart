@@ -100,7 +100,7 @@ class _EtcState extends State<Etc> {
           ListTile(
             onTap: () {},
             leading: Icon(CupertinoIcons.speaker_1),
-            title: Text('업데이트 공지'),
+            title: Text('앱 업데이트 공지'),
           ),
 
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),

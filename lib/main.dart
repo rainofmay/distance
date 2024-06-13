@@ -4,7 +4,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/pages/login_screen/auth_screen.dart';
 import 'package:mobile/pages/etc.dart';
-import 'package:mobile/pages/login_screen/login.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
@@ -47,6 +46,10 @@ Future<void> main() async {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
+          initialRoute: '/main',
+          routes: {
+            '/main' : (context) => MainPage(),
+          },
           home: MainPage(),
           theme: mainstyle.theme),
     ),

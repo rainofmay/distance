@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../const/colors.dart';
+
 class CustomContainer extends StatelessWidget {
   final double width;
   final double height;
@@ -23,7 +25,7 @@ class CustomContainer extends StatelessWidget {
           width: width,
           height: height,
           decoration: BoxDecoration(
-              color: backgroundColor,
+              color: BLACK,
               borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(

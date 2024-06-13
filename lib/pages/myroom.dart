@@ -2,6 +2,7 @@ import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
 import 'package:mobile/const/colors.dart';
+import 'package:mobile/pages/myroom_background.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/widgets/action_buttons.dart';
@@ -11,8 +12,8 @@ import 'package:mobile/pages/myroom_music.dart';
 import 'package:mobile/pages/schedule_screen/myroom_schedule.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/widgets/floating_todo.dart';
-import 'package:mobile/pages/myroom_background.dart';
 import '../util/background_provider.dart';
+import 'myroom_screen/background_setting.dart';
 
 class MyRoom extends StatefulWidget {
   const MyRoom({super.key});
