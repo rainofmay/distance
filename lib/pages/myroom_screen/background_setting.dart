@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/custom_dialog.dart';
 import 'package:provider/provider.dart';
 
@@ -17,19 +19,56 @@ class BackgroundSetting extends StatefulWidget {
   State<BackgroundSetting> createState() => _BackgroundSettingState();
 }
 
+
 class _BackgroundSettingState extends State<BackgroundSetting> {
+  File? profileImg;
+
+  Widget _buildBackground() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10.0),
+      child: profileImg == null ? Image.asset(
+        'assets/images/test.png',
+        width: MediaQuery
+            .of(context)
+            .size
+            .width * 0.55,
+        height: MediaQuery
+            .of(context)
+            .size
+            .height * 0.3,
+        fit: BoxFit.cover,
+      ) : Image(image: FileImage(profileImg!)),
+    );
+  }
+
+  Future<void> getGalleryImage() async {
+    // 갤러리에서 사진 선택
+    var image = await ImagePicker().pickImage(
+        source: ImageSource.gallery, imageQuality: 20); // maximum: 100
+    if (image != null) {
+      setState(() {
+        profileImg = File(image.path);
+      });
+    }}
+
   @override
   Widget build(BuildContext context) {
     var backgroundSettingProvider =
-        Provider.of<BackgroundSettingProvider>(context);
+    Provider.of<BackgroundSettingProvider>(context);
 
     return Center(
       child: GlassMorphism(
-        blur: 6,
-        opacity: 0.1,
+        blur: 25,
+        opacity: 0.42,
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.73,
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.8,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.7,
           child: Padding(
             padding: const EdgeInsets.all(15),
             child: SingleChildScrollView(
@@ -37,19 +76,14 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                 children: [
                   Text(
                     'My View',
-                    style: TextStyle(fontSize: 17, color: WHITE),
+                    style: TextStyle(fontSize: 17, color: BLACK),
                   ),
                   const SizedBox(height: 25),
                   Center(
                       child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Image.asset(
-                      'assets/images/test.png',
-                      width: MediaQuery.of(context).size.width * 0.55,
-                      height: MediaQuery.of(context).size.height * 0.3,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+                        borderRadius: BorderRadius.circular(10.0),
+                        child: _buildBackground()
+                      )),
                   const SizedBox(height: 15),
                   GestureDetector(
                     onTap: () {
@@ -59,10 +93,20 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                           '배경 설정',
                           SingleChildScrollView(
                             child: Column(children: [
-                              const SizedBox(height: 15),
-                              TextButton(child: Text('테마 고르기', style: TextStyle(color: LIGHT_WHITE)), onPressed: () {}),
-                              const SizedBox(height: 15),
-                              TextButton(child: Text('내 앨범에서 사진/영상 선택', style: TextStyle(color: LIGHT_WHITE)), onPressed: () {}),
+                              TextButton(
+                                  child: Text('테마 고르기',
+                                      style: TextStyle(color: PRIMARY_COLOR)),
+                                  onPressed: () {}),
+                              TextButton(
+                                onPressed: () {
+                                  getGalleryImage();
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    Navigator.pop(context);
+                                  });
+                                },
+                                child: Text('내 앨범에서 사진/영상 선택',
+                                    style: TextStyle(color: WHITE)),
+                              ),
                             ]),
                           ),
                           null);
@@ -71,18 +115,18 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
-                          CupertinoIcons.pencil,
-                          color: LIGHT_WHITE,
+                          Icons.edit_rounded,
+                          color: BLACK,
                           size: 16,
                         ),
                         const SizedBox(width: 10),
-                        Text('배경 편집', style: TextStyle(color: LIGHT_WHITE)),
+                        Text('배경 편집', style: TextStyle(color: BLACK)),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 25),
+                  const SizedBox(height: 30),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('윈도우', style: TextStyle(color: LIGHT_WHITE)),
+                    Text('Schedule', style: TextStyle(color: WHITE)),
                     CupertinoSwitch(
                       thumbColor: WHITE,
                       value: backgroundSettingProvider.isSimpleWindowEnabled,
@@ -95,13 +139,23 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   ]),
                   const SizedBox(height: 10),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('오디오', style: TextStyle(color: LIGHT_WHITE)),
+                    Text('Audio', style: TextStyle(color: WHITE)),
                     CupertinoSwitch(
                       activeColor: SECONDARY,
                       value: backgroundSettingProvider.isAudioSpectrumEnabled,
                       onChanged: (value) {
                         backgroundSettingProvider
                             .updateAudioSpectrumEnabled(value);
+                      },
+                    ),
+                  ]),
+                  const SizedBox(height: 10),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    Text('Words', style: TextStyle(color: WHITE)),
+                    CupertinoSwitch(
+                      activeColor: SECONDARY,
+                      value: backgroundSettingProvider.isAudioSpectrumEnabled,
+                      onChanged: (value) {
                       },
                     ),
                   ]),
@@ -126,4 +180,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       ),
     );
   }
+
+
 }

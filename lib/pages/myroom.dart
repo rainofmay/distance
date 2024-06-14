@@ -129,6 +129,7 @@ class _MyRoomState extends State<MyRoom> {
           ActionButton(
             onPressed: () {
               showDialog(
+                barrierColor: TRANSPARENT,
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
@@ -142,6 +143,7 @@ class _MyRoomState extends State<MyRoom> {
           ActionButton(
             onPressed: () {
               showDialog(
+                barrierColor: TRANSPARENT,
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {

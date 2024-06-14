@@ -24,7 +24,7 @@ class OkCancelButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            child: Text(cancelText, style: TextStyle(color: LIGHT_WHITE)),
+            child: Text(cancelText, style: TextStyle(color: WHITE)),
             onPressed: () {
               Navigator.of(context).pop(); // 닫히는 버튼
               onCancelPressed;
@@ -34,7 +34,7 @@ class OkCancelButtons extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               okText,
-              style: TextStyle(color: PRIMARY_COLOR),
+              style: TextStyle(color: WHITE),
             ),
           ),
         ],
