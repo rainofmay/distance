@@ -26,9 +26,9 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       borderRadius: BorderRadius.circular(10.0),
       child: profileImg == null
           ? Image.asset(
-              'assets/images/test.png',
-              width: MediaQuery.of(context).size.width * 0.55,
-              height: MediaQuery.of(context).size.height * 0.3,
+              'assets/images/nature1.jpeg',
+              width: MediaQuery.of(context).size.width * 0.56,
+              height: MediaQuery.of(context).size.height * 0.26,
               fit: BoxFit.cover,
             )
           : Image(image: FileImage(profileImg!)),
@@ -45,8 +45,51 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
     }
   }
 
+  Future<void> editDialog() async {
+    customDialog(
+        context,
+        95,
+        '배경 설정',
+        SingleChildScrollView(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(height: 22),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                Navigator.pop(context); // dialog 내리기
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => BackgroundThemes()));
+              },
+              child: Row(
+                children: [
+                  Text('테마 고르기', style: TextStyle(color: WHITE)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 22),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                getGalleryImage();
+                Future.delayed(Duration(seconds: 1), () {
+                  Navigator.pop(context);
+                });
+              },
+              child: Row(
+                children: [
+                  Text('내 앨범에서 사진/영상 선택', style: TextStyle(color: WHITE)),
+                ],
+              ),
+            ),
+          ]),
+        ),
+        null);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final double interval = MediaQuery.of(context).size.width * 0.1;
     var backgroundSettingProvider =
         Provider.of<BackgroundSettingProvider>(context);
 
@@ -67,56 +110,20 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                     style: TextStyle(fontSize: 17, color: WHITE),
                   ),
                   const SizedBox(height: 25),
-                  Center(
-                      child: ClipRRect(
-                          borderRadius: BorderRadius.circular(10.0),
-                          child: _buildBackground())),
+                  GestureDetector(
+                    onTap: () {
+                      editDialog();
+                    },
+                    child: Center(
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10.0),
+                            child: _buildBackground())),
+                  ),
                   const SizedBox(height: 15),
                   GestureDetector(
                     behavior: HitTestBehavior.translucent,
                     onTap: () {
-                      customDialog(
-                          context,
-                          95,
-                          '배경 설정',
-                          SingleChildScrollView(
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 22),
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {
-                                      Navigator.pop(context); // dialog 내리기
-                                      Navigator.push(context,
-                                          MaterialPageRoute(builder: (c) => BackgroundThemes()));
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text('테마 고르기',
-                                            style: TextStyle(color: WHITE)),
-                                      ],
-                                    ),
-                                  ),
-                                  const SizedBox(height: 22),
-                                  GestureDetector(
-                                    behavior: HitTestBehavior.opaque,
-                                    onTap: () {
-                                      getGalleryImage();
-                                      Future.delayed(Duration(seconds: 1), () {
-                                        Navigator.pop(context);
-                                      });
-                                    },
-                                    child: Row(
-                                      children: [
-                                        Text('내 앨범에서 사진/영상 선택',
-                                            style: TextStyle(color: WHITE)),
-                                      ],
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                          null);
+                      editDialog();
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -131,50 +138,68 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 30),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('Schedule', style: TextStyle(color: WHITE)),
-                    Transform.scale(
-                      scale: 0.6,
-                      child: CupertinoSwitch(
-                        thumbColor: WHITE,
-                        value: backgroundSettingProvider.isSimpleWindowEnabled,
-                        activeColor: SECONDARY,
-                        onChanged: (value) {
-                          backgroundSettingProvider
-                              .updateSimpleWindowEnabled(value);
-                        },
-                      ),
-                    ),
-                  ]),
+                  const SizedBox(height: 40),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: interval),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Schedule', style: TextStyle(color: WHITE)),
+                          Transform.scale(
+                            scale: 0.6,
+                            child: CupertinoSwitch(
+                              thumbColor: WHITE,
+                              value: backgroundSettingProvider
+                                  .isSimpleWindowEnabled,
+                              activeColor: SECONDARY,
+                              onChanged: (value) {
+                                backgroundSettingProvider
+                                    .updateSimpleWindowEnabled(value);
+                              },
+                            ),
+                          ),
+                        ]),
+                  ),
                   const SizedBox(height: 10),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('Audio', style: TextStyle(color: WHITE)),
-                    Transform.scale(
-                      scale: 0.6,
-                      child: CupertinoSwitch(
-                        activeColor: SECONDARY,
-                        value: backgroundSettingProvider.isAudioSpectrumEnabled,
-                        onChanged: (value) {
-                          backgroundSettingProvider
-                              .updateAudioSpectrumEnabled(value);
-                        },
-                      ),
-                    ),
-                  ]),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: interval),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Audio', style: TextStyle(color: WHITE)),
+                          Transform.scale(
+                            scale: 0.6,
+                            child: CupertinoSwitch(
+                              activeColor: SECONDARY,
+                              value: backgroundSettingProvider
+                                  .isAudioSpectrumEnabled,
+                              onChanged: (value) {
+                                backgroundSettingProvider
+                                    .updateAudioSpectrumEnabled(value);
+                              },
+                            ),
+                          ),
+                        ]),
+                  ),
                   const SizedBox(height: 10),
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                    Text('Words', style: TextStyle(color: WHITE)),
-                    Transform.scale(
-                      scale: 0.6,
-                      child: CupertinoSwitch(
-                        activeColor: SECONDARY,
-                        value: backgroundSettingProvider.isAudioSpectrumEnabled,
-                        onChanged: (value) {},
-                      ),
-                    ),
-                  ]),
-                  const SizedBox(height: 10),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: interval),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Words', style: TextStyle(color: WHITE)),
+                          Transform.scale(
+                            scale: 0.6,
+                            child: CupertinoSwitch(
+                              activeColor: SECONDARY,
+                              value: backgroundSettingProvider
+                                  .isAudioSpectrumEnabled,
+                              onChanged: (value) {},
+                            ),
+                          ),
+                        ]),
+                  ),
+                  const SizedBox(height: 20),
                   OkCancelButtons(
                     onPressed: () {
                       // 현재 화면을 pop하여 이전 화면으로 이동

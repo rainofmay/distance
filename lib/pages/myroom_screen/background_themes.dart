@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:mobile/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
-
 import '../../widgets/custom_drawer.dart';
 
 class BackgroundThemes extends StatefulWidget {
@@ -101,8 +100,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Spring',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -115,8 +114,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Summer',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -129,8 +128,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Fall',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -143,8 +142,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Winter',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -169,8 +168,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Ocean',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -183,8 +182,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Camping',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -197,8 +196,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Cafe',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -211,8 +210,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'City',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -225,8 +224,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                           ThemeBox(
                               themeName: 'Study',
                               onTap: () {},
-                              left: 15,
-                              right: 15,
+                              left: 12,
+                              right: 12,
                               top: 10,
                               bottom: 10,
                               decorationImage: DecorationImage(
@@ -250,8 +249,8 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                         children: [
                           ThemeBox(
                             themeName: 'Animal',
-                            left: 15,
-                            right: 15,
+                            left: 12,
+                            right: 12,
                             top: 10,
                             bottom: 10,
                               decorationImage: DecorationImage(
@@ -259,13 +258,13 @@ class _BackgroundThemesState extends State<BackgroundThemes>
                                       BLACK.withOpacity(0.4),
                                       BlendMode.srcOver),
                                   image: AssetImage(
-                                      'assets/images/cat_theme.jpg'),
+                                      'assets/images/animal_theme.jpg'),
                                   fit: BoxFit.cover)
                           ),
                           ThemeBox(
                             themeName: 'Gomzy',
-                            left: 15,
-                            right: 15,
+                            left: 12,
+                            right: 12,
                             top: 10,
                             bottom: 10,
                           ),
