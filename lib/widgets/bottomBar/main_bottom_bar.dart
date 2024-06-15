@@ -20,8 +20,8 @@ class _MainBottomNavagationBarState extends State<MainBottomNavagationBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.home_rounded), label: '내 방',),
           BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.card_giftcard), label: '스토어'),
+          // BottomNavigationBarItem(
+          //     icon: Icon(Icons.card_giftcard), label: '스토어'),
           BottomNavigationBarItem(
               icon: Icon(Icons.login), label: '로그인(임시)'),
           BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: '더보기'),

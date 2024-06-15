@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:mobile/util/background_provider.dart';
-import 'package:mobile/widgets/custom_container.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
 import '../const/colors.dart';
@@ -72,12 +71,8 @@ class _BackgroundSettingsState extends State<BackgroundSettings> {
           borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
 
-        child: CustomContainer(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.73,
-          backgroundColor: DARK_BACKGROUND,
-          distance: 0.5,
-          widget: Padding(
+        child: Container(
+          child: Padding(
             padding: const EdgeInsets.all(15),
             child: Column(
               children: [

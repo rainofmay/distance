@@ -64,7 +64,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPage> {
-  final List screens = [MyRoom(), Mate(), Store(), AuthScreen(), Etc()];
+  final List screens = [MyRoom(), Mate(), AuthScreen(), Etc()];
 
   @override
   Widget build(BuildContext context) {

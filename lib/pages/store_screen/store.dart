@@ -15,7 +15,7 @@ class Store extends StatefulWidget {
 }
 
 class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
-  late TabController _tabController;
+
 
   // final Map<Map<Icon, String>, dynamic> _drawerMenu = {
   //   {Icon(CupertinoIcons.heart_fill): 'Keep 목록'}: Container(),
@@ -23,6 +23,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
   //   {Icon(CupertinoIcons.creditcard_fill): '결제 내역'}: Container(),
   //   {Icon(CupertinoIcons.padlock_solid): '프리미엄 구독'}: Container(),
   // };
+  late TabController _tabController;
 
   @override
   void initState() {
@@ -31,9 +32,6 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
       length: 4,
       vsync: this,
     );
-
-    //adMobs 세팅
-    // setAdMob();
   }
 
   @override
@@ -84,7 +82,7 @@ class _StoreState extends State<Store> with SingleTickerProviderStateMixin {
             indicatorSize: TabBarIndicatorSize.label,
             controller: _tabController,
           ),
-          BorderLine(lineHeight: 10, lineColor: TRANSPARENT),
+          const SizedBox(height: 10),
           Expanded(
             child: TabBarView(
               controller: _tabController,
