@@ -35,7 +35,7 @@ class _EtcState extends State<Etc> {
                   children: [
                     CircleAvatar(
                       backgroundColor: WHITE,
-                      backgroundImage: AssetImage('assets/images/test.png'),
+                      backgroundImage: AssetImage('assets/images/gomjee.jpg'),
                     ),
                     const SizedBox(width: 10),
                     Text('NickName')

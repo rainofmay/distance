@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/custom_dialog.dart';
-import 'package:mobile/pages/myroom_screen/background_themes.dart';
+import 'package:mobile/pages/myroom_screen/background_themes/background_themes.dart';
 import 'package:provider/provider.dart';
 
 import '../../const/colors.dart';
