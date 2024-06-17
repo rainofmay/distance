@@ -1,7 +1,7 @@
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class ExpandableFab extends StatefulWidget {
   //변하지 않는 값은 여기에

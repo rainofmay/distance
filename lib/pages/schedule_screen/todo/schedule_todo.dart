@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/todo_model.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/todo/todo.dart';

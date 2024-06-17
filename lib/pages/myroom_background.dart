@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:provider/provider.dart';
-import '../const/colors.dart';
+import '../common/const/colors.dart';
 import '../widgets/custom_icon_button.dart';
 import '../widgets/background_setting.dart';
 

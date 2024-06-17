@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class GlassMorphism extends StatelessWidget {
   final double blur;

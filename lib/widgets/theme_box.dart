@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class ThemeBox extends StatelessWidget {
   final VoidCallback? onTap;
@@ -32,12 +32,12 @@ class ThemeBox extends StatelessWidget {
           width: 100,
           height: 100,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: WHITE,
             borderRadius: BorderRadius.all(Radius.circular(10)),
             image: decorationImage,
             // image:
           ),
-          child: Center(child: Text(themeName, style: TextStyle(color:WHITE))),
+          child: Center(child: Text(themeName, style: const TextStyle(color:WHITE))),
         ),
       ),
     );

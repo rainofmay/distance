@@ -1,7 +1,7 @@
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart'; // flutter 패키지 가져오는 코드
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/myroom_background.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/schedule_events_provider.dart';

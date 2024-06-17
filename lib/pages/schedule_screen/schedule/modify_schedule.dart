@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/common/custom_dialog.dart';

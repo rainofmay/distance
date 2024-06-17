@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/custom_dialog.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 
 class SpringScreen extends StatefulWidget {
@@ -36,12 +37,6 @@ class _SpringScreenState extends State<SpringScreen> with SingleTickerProviderSt
         isCenterTitle: true,
         backgroundColor: WHITE,
         contentColor: BLACK,
-        actions: [
-          IconButton(
-            onPressed: () {}, // 배경 설정화면으로 라우팅하는 함수 필요
-            icon: Icon(Icons.close_rounded),
-          )
-        ],
       ),
       body: Column(children: [
         const SizedBox(height: 10),

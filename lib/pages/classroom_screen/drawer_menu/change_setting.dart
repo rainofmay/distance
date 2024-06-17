@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../const/colors.dart';
+import '../../../common/const/colors.dart';
 import '../../../widgets/appBar/custom_back_appbar.dart';
 
 class ChangeSetting extends StatefulWidget {

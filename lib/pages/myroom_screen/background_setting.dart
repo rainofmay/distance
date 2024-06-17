@@ -5,8 +5,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/custom_dialog.dart';
 import 'package:mobile/pages/myroom_screen/background_themes/background_themes.dart';
 import 'package:provider/provider.dart';
-
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 import '../../util/background_setting_provider.dart';
 import '../../widgets/glass_morphism.dart';
 import '../../widgets/ok_cancel._buttons.dart';

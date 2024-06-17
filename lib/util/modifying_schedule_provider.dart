@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class ModifyingScheduleProvider extends ChangeNotifier {
   final supabase = Supabase.instance.client;

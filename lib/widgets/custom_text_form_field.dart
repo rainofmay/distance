@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../const/colors.dart';
+import '../common/const/colors.dart';
 
 class CustomTextFormField extends StatefulWidget {
   final double fieldWidth;

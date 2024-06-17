@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/global_player.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
@@ -20,7 +20,7 @@ class MusicSetting extends StatefulWidget {
 
 class _MusicSettingState extends State<MusicSetting> {
   bool isMusicOn = false;
-
+  bool isVocalMusic = false;
   @override
   void initState() {
     super.initState();
@@ -42,12 +42,12 @@ class _MusicSettingState extends State<MusicSetting> {
             width: MediaQuery.of(context).size.width * 0.8,
             height: MediaQuery.of(context).size.height * 0.7,
             child: Padding(
-              padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+              padding: const EdgeInsets.only(top: 15),
               child: SingleChildScrollView(
                 child: Column(
                   children: [
                     Text(
-                      '음악 설정',
+                      'Music',
                       style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
                     ),
                     // 세부 설정
@@ -61,112 +61,166 @@ class _MusicSettingState extends State<MusicSetting> {
                             // 양 끝에 배치
                             children: [
                               const Expanded(
-                                child: Row(
-                                  children: [
-                                    Icon(CupertinoIcons.music_note_2, size: 16, color: WHITE),
-                                    SizedBox(width: 8),
-                                    Text(
-                                      '메인 음악',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.normal,
-                                        color: WHITE
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left:10.0, right:20.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Row(
+                                          children: [
+                                            Icon(CupertinoIcons.music_note_2, size: 16, color: WHITE),
+                                            SizedBox(width: 8),
+                                            Text(
+                                              '음악',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.normal,
+                                                  color: WHITE
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Icon(Icons.arrow_forward_ios, size: 16, color: WHITE)
+                                    ],
+                                  ),
                                 ),
                               ),
-                              Consumer<GlobalAudioPlayer>(
-                                builder: (context, globalAudioPlayer, child) {
-                                  return Transform.scale(
-                                    scale: 0.7,
-                                    child: CupertinoSwitch(
-                                      value: globalAudioPlayer.isAnyPlaying,
-                                      activeColor: PRIMARY_COLOR,
-                                      onChanged: (value) {
-                                        if (globalAudioPlayer.isAnyPlaying) {
-                                          globalAudioPlayer.musicPauseAll();
-                                        } else {
-                                          globalAudioPlayer.musicPlayAll();
-                                        }
-                                      },
-                                    ),
-                                  );
-                                },
-                              ),
+                              // Consumer<GlobalAudioPlayer>(
+                              //   builder: (context, globalAudioPlayer, child) {
+                              //     return Transform.scale(
+                              //       scale: 0.7,
+                              //       child: CupertinoSwitch(
+                              //         value: globalAudioPlayer.isAnyPlaying,
+                              //         activeColor: PRIMARY_COLOR,
+                              //         onChanged: (value) {
+                              //           if (globalAudioPlayer.isAnyPlaying) {
+                              //             globalAudioPlayer.musicPauseAll();
+                              //           } else {
+                              //             globalAudioPlayer.musicPlayAll();
+                              //           }
+                              //         },
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
                             ],
                           ),
                         ),
-                        Consumer<GlobalAudioPlayer>(
-                          builder: (context, globalAudioPlayer, child) {
-                            return SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: Row(
+                        // Consumer<GlobalAudioPlayer>(
+                        //   builder: (context, globalAudioPlayer, child) {
+                        //     return SingleChildScrollView(
+                        //       scrollDirection: Axis.horizontal,
+                        //       child: Row(
+                        //         children: [
+                        //           //배열로 교체해야함
+                        //           IconButton(
+                        //             onPressed: () {
+                        //               globalAudioPlayer.changeGroup(0);
+                        //               setState(() {});
+                        //             },
+                        //             icon: ClipRRect(
+                        //               borderRadius: BorderRadius.circular(18),
+                        //               child: Image(
+                        //                 image: AssetImage(
+                        //                     'assets/images/natureimage2.jpeg'),
+                        //                 width: 50,
+                        //                 height: 50,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //           IconButton(
+                        //               onPressed: () {
+                        //                 globalAudioPlayer.changeGroup(1);
+                        //                 setState(() {});
+                        //               },
+                        //               icon: Image(
+                        //                 image: AssetImage(
+                        //                     'assets/images/cafeImage.jpeg'),
+                        //                 width: 50,
+                        //                 height: 50,
+                        //               )),
+                        //           IconButton(
+                        //               onPressed: () {
+                        //                 globalAudioPlayer.changeGroup(2);
+                        //                 setState(() {});
+                        //               },
+                        //               icon: Image(
+                        //                 image: AssetImage(
+                        //                     'assets/images/classicImage.jpeg'),
+                        //                 width: 50,
+                        //                 height: 50,
+                        //               )),
+                        //           IconButton(
+                        //               onPressed: () {
+                        //                 globalAudioPlayer.changeGroup(3);
+                        //                 setState(() {});
+                        //               },
+                        //               icon: Image(
+                        //                 image:
+                        //                 AssetImage('assets/images/musictest.png'),
+                        //                 width: 50,
+                        //                 height: 50,
+                        //               )),
+                        //           IconButton(
+                        //               onPressed: () {
+                        //                 globalAudioPlayer.changeGroup(4);
+                        //                 setState(() {});
+                        //               },
+                        //               icon: Image(
+                        //                 image:
+                        //                 AssetImage('assets/images/musictest.png'),
+                        //                 width: 50,
+                        //                 height: 50,
+                        //               )),
+                        //         ],
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right:20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
                                 children: [
-                                  //배열로 교체해야함
-                                  IconButton(
-                                    onPressed: () {
-                                      globalAudioPlayer.changeGroup(0);
-                                      setState(() {});
-                                    },
-                                    icon: ClipRRect(
-                                      borderRadius: BorderRadius.circular(18),
-                                      child: Image(
-                                        image: AssetImage(
-                                            'assets/images/natureimage2.jpeg'),
-                                        width: 50,
-                                        height: 50,
-                                      ),
-                                    ),
-                                  ),
-                                  IconButton(
-                                      onPressed: () {
-                                        globalAudioPlayer.changeGroup(1);
-                                        setState(() {});
-                                      },
-                                      icon: Image(
-                                        image: AssetImage(
-                                            'assets/images/cafeImage.jpeg'),
-                                        width: 50,
-                                        height: 50,
-                                      )),
-                                  IconButton(
-                                      onPressed: () {
-                                        globalAudioPlayer.changeGroup(2);
-                                        setState(() {});
-                                      },
-                                      icon: Image(
-                                        image: AssetImage(
-                                            'assets/images/classicImage.jpeg'),
-                                        width: 50,
-                                        height: 50,
-                                      )),
-                                  IconButton(
-                                      onPressed: () {
-                                        globalAudioPlayer.changeGroup(3);
-                                        setState(() {});
-                                      },
-                                      icon: Image(
-                                        image:
-                                        AssetImage('assets/images/musictest.png'),
-                                        width: 50,
-                                        height: 50,
-                                      )),
-                                  IconButton(
-                                      onPressed: () {
-                                        globalAudioPlayer.changeGroup(4);
-                                        setState(() {});
-                                      },
-                                      icon: Image(
-                                        image:
-                                        AssetImage('assets/images/musictest.png'),
-                                        width: 50,
-                                        height: 50,
-                                      )),
+                                  Checkbox(value: isVocalMusic, onChanged: (value) {
+                                    setState(() {
+                                      isVocalMusic = !isVocalMusic;
+                                    });
+                                  },),
+                                  const SizedBox(width: 5),
+                                  Text('보컬', style: TextStyle(color: WHITE)),
                                 ],
                               ),
-                            );
-                          },
+                              Text('퇴근길에 듣기 좋은 팝송', style: TextStyle(color: WHITE)),
+                              Icon(CupertinoIcons.infinite, color: LIGHT_WHITE, size: 16),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 15, right:20.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  Checkbox(value: isVocalMusic, onChanged: (value) {
+                                    setState(() {
+                                      isVocalMusic = !isVocalMusic;
+                                    });
+                                  },),
+                                  const SizedBox(width: 5),
+                                  Text('연주', style: TextStyle(color: WHITE)),
+                                ],
+                              ),
+                              Text('공부할 때 듣는 피아노', style: TextStyle(color: WHITE)),
+                              SizedBox(width: 16),
+                            ],
+                          ),
                         ),
                         Container(
                           alignment: Alignment.topLeft,
@@ -175,7 +229,7 @@ class _MusicSettingState extends State<MusicSetting> {
                             children: [
                               Icon(Icons.volume_up, size: 16, color: WHITE,),
                               SizedBox(width: 8),
-                              Text('음량 설정',
+                              Text('주변 소리',
                                   style: TextStyle(
                                       fontSize: 15,
                                       fontWeight: FontWeight.normal,

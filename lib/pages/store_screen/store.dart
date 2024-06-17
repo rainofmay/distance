@@ -4,7 +4,7 @@ import 'package:mobile/pages/store_screen/photo.dart';
 import 'package:mobile/pages/store_screen/user_store.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 import '../../widgets/borderline.dart';
 
 class Store extends StatefulWidget {

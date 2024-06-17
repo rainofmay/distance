@@ -54,7 +54,6 @@ flutter:
     - .env
 
 
-
   fonts:
     - family: GmarketSansTTFLight
       fonts:

@@ -6,7 +6,7 @@ import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../common/custom_login.dart';
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});

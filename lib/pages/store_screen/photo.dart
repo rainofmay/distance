@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 
 class Photo extends StatefulWidget {
   const Photo({super.key});

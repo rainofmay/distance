@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/myroom_screen/background_themes/spring_screen.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';

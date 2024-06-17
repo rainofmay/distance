@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 

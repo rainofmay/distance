@@ -4,7 +4,7 @@ import 'package:mobile/model/todo_model.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:table_calendar/table_calendar.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/calendar_provider.dart';
 import 'package:provider/provider.dart';
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/change_setting.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/invite_mate.dart';
 import 'package:mobile/pages/classroom_screen/drawer_menu/report.dart';

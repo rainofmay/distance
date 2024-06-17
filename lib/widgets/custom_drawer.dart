@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class CustomDrawer extends StatelessWidget {
   final Map<Map<Icon, String>, dynamic> drawerMenu;

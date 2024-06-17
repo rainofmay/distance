@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:provider/provider.dart';
 import '../../pages/schedule_screen/schedule/modify_schedule.dart';

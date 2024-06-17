@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 
-import '../const/colors.dart';
+import '../common/const/colors.dart';
 
 class Etc extends StatefulWidget {
   const Etc({super.key});
@@ -35,7 +35,7 @@ class _EtcState extends State<Etc> {
                   children: [
                     CircleAvatar(
                       backgroundColor: WHITE,
-                      backgroundImage: AssetImage('assets/images/gomjee.jpg'),
+                      backgroundImage: AssetImage('assets/images/gomjee_theme.jpg'),
                     ),
                     const SizedBox(width: 10),
                     Text('NickName')

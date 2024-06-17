@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 var theme = ThemeData(
   fontFamily: 'GmarketSansTTFMedium',
@@ -40,22 +40,10 @@ var theme = ThemeData(
     unselectedIconTheme: IconThemeData(size: 20),
   ),
 
-  textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-          overlayColor:
-              MaterialStateColor.resolveWith((states) => TRANSPARENT))),
-
-  iconButtonTheme: IconButtonThemeData(
-      style: ButtonStyle(
-          overlayColor:
-              MaterialStateColor.resolveWith((states) => TRANSPARENT))),
-
   tabBarTheme: TabBarTheme(
     labelColor: Colors.black,
     unselectedLabelColor: Colors.grey,
-    overlayColor: MaterialStateProperty.all(
-      TRANSPARENT,
-    ),
+    overlayColor: WidgetStateColor.transparent,
     indicatorColor: Colors.black,
     indicatorSize: TabBarIndicatorSize.label,
     dividerColor: TRANSPARENT,

@@ -4,7 +4,7 @@ import 'package:mobile/pages/schedule_screen/todo/modify_todo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'dart:convert';
 
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 import '../../model/todo_model.dart';
 import '../borderline.dart';
 

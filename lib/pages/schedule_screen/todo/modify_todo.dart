@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../../const/colors.dart';
+import '../../../common/const/colors.dart';
 import '../../../model/todo_model.dart';
 import '../../../widgets/appBar/custom_back_appbar.dart';
 import '../../../widgets/borderline.dart';

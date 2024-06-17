@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/login_screen/register_screen.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';

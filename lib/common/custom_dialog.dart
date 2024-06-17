@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 Future<void> customDialog(BuildContext context, double height, String title,

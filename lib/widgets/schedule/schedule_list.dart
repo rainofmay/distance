@@ -6,7 +6,7 @@ import 'package:mobile/widgets/schedule/schedule_card.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-import '../../const/colors.dart';
+import '../../common/const/colors.dart';
 import '../../pages/schedule_screen/schedule/modify_schedule.dart';
 import '../../util/modifying_schedule_provider.dart';
 import '../pop_up_menu.dart';

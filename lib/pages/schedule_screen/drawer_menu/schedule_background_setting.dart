@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/widgets/borderline.dart';
-import '../../../const/colors.dart';
+import '../../../common/const/colors.dart';
 import '../../../widgets/appBar/custom_back_appbar.dart';
 
 class ScheduleBackgroundSetting extends StatefulWidget {

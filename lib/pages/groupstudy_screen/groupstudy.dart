@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/classroom_screen/classroom.dart';
 import 'package:mobile/pages/groupstudy_screen/create_group_page.dart';
 import 'package:mobile/widgets/borderline.dart';
