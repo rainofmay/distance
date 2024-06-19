@@ -57,7 +57,7 @@ class _EtcState extends State<Etc> {
               ],
             ),
           ),
-          const BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
+          const SizedBox(height: 15),
 
           // 구독 프리미엄
           GestureDetector(
@@ -87,7 +87,7 @@ class _EtcState extends State<Etc> {
               ],
             ),
           )),
-          const BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
+          const SizedBox(height: 15),
 
           ListTile(
             onTap: () {},

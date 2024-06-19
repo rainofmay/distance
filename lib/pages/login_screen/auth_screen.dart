@@ -57,10 +57,10 @@ class _AuthScreenState extends State<AuthScreen> {
           idToken: googleAuth.idToken!,
           accessToken: googleAuth.accessToken!);
 
-      if (!context.mounted) return;
-      Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => MyRoom()),
-      );
+      // if (!context.mounted) return;
+      // Navigator.of(context).push(
+      //   MaterialPageRoute(builder: (_) => MyRoom()),
+      // );
 
       print(account);
     } catch (error) {
@@ -83,7 +83,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
     bool isLoginSuccess = await loginWithEmail(emailValue, passwordValue);
 
-    if (!context.mounted) return;
+    if (!mounted) return;
     if (!isLoginSuccess) {
       return showDialog (
         context: context,
@@ -94,7 +94,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
 
     // 수정 필요
-    Navigator.popAndPushNamed(context, '/main');
+    // Navigator.popAndPushNamed(context, '/main');
   }
 
   Future<bool> loginWithEmail(String emailValue, String passwordValue) async {
@@ -140,7 +140,7 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
                     textAlign: TextAlign.start),
               ),
-              const BorderLine(lineHeight: 100, lineColor: TRANSPARENT),
+              const SizedBox(height: 100),
               Center(
                 child: Column(
                   children: [
@@ -164,7 +164,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               validator: (value) => inputEmailValidator(value),
                             ),
 
-                            const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
+                            const SizedBox(height: 20),
 
                             CustomTextFormField(
                               prefixIcon: Icon(Icons.key_rounded),
@@ -223,7 +223,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         ),
                       ),
                     ),
-                    BorderLine(lineHeight: 35, lineColor: TRANSPARENT),
+                    const SizedBox(height: 35),
 
                     // KAKAO 로그인
                     ElevatedButton(
@@ -250,8 +250,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(color: BLACK, fontSize: 16)),
                           ],
                         )),
-                    // BorderLine(lineHeight: 15, lineColor: TRANSPARENT),
-
                     // NAVER 로그인
                     // ElevatedButton(
                     //     style: ElevatedButton.styleFrom(

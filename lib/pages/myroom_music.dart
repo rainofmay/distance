@@ -264,7 +264,7 @@ class _MusicSettingState extends State<MusicSetting> {
                         ),
                       ],
                     ),
-                    BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
+                    const SizedBox(height: 20),
                     OkCancelButtons(
                         okText: '확인',
                         cancelText: '취소',

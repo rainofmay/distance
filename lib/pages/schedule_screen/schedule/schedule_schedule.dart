@@ -54,7 +54,7 @@ class _ScheduleScheduleState extends State<ScheduleSchedule> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const BorderLine(lineHeight: 20, lineColor: TRANSPARENT),
+            const SizedBox(height: 10),
             // 달력 큰제목
             Container(
               alignment: Alignment.topRight,

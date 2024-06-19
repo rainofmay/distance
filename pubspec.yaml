@@ -47,6 +47,7 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/themes/
     - assets/icons/
     - assets/audios/cafe/
     - assets/audios/nature/

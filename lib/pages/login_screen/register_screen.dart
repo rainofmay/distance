@@ -75,7 +75,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         _showDialog('회원가입 성공', '회원가입에 성공했습니다.');
 
-        Navigator.popAndPushNamed(context, '/main');
+        // Navigator.popAndPushNamed(context, '/main');
         // bottomIndex 지정 필요할 듯
       } catch (e) {
         _showDialog('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');

@@ -34,10 +34,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
             {Icon(CupertinoIcons.money_dollar_circle): '구매 내역'}: '구매 내역',
           },
         ),
-        body: Column(children: [
-          const SizedBox(height: 10),
-          SingleChildScrollView(
-            child: Column(
+        body: SingleChildScrollView(
+          child: Column(children: [
+            const SizedBox(height: 10),
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 40),
@@ -87,7 +87,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/spring_theme.jpg'),
+                                  AssetImage('assets/images/themes/spring_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Summer',
@@ -100,7 +100,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/summer_theme.jpg'),
+                                  AssetImage('assets/images/themes/summer_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Fall',
@@ -112,7 +112,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage('assets/images/fall_theme.jpg'),
+                              image: AssetImage('assets/images/themes/fall_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Winter',
@@ -125,7 +125,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/winter_theme.jpg'),
+                                  AssetImage('assets/images/themes/winter_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
@@ -156,7 +156,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/ocean_theme.jpg'),
+                                  AssetImage('assets/images/themes/ocean_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Camping',
@@ -169,7 +169,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/camping_theme.jpg'),
+                                  AssetImage('assets/images/themes/camping_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Cafe',
@@ -181,7 +181,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage('assets/images/cafe_theme.jpg'),
+                              image: AssetImage('assets/images/themes/cafe_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'City',
@@ -193,7 +193,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage('assets/images/city_theme.jpg'),
+                              image: AssetImage('assets/images/themes/city_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Study',
@@ -206,7 +206,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/study_theme.jpg'),
+                                  AssetImage('assets/images/themes/study_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
@@ -236,7 +236,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/animal_theme.jpg'),
+                                  AssetImage('assets/images/themes/animal_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Gomzy',
@@ -248,14 +248,14 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/gomjee_theme.jpg'),
+                                  AssetImage('assets/images/themes/gomzy_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ]));
+          ]),
+        ));
   }
 }

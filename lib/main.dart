@@ -46,10 +46,10 @@ Future<void> main() async {
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          initialRoute: '/main',
-          routes: {
-            '/main' : (context) => MainPage(),
-          },
+          // initialRoute: '/main',
+          // routes: {
+          //   '/main' : (context) => MainPage(),
+          // },
           home: MainPage(),
           theme: mainstyle.theme),
     ),
