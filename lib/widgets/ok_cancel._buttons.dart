@@ -3,14 +3,18 @@ import 'package:mobile/common/const/colors.dart';
 
 class OkCancelButtons extends StatelessWidget {
   final String okText;
+  final Color? okTextColor;
   final String cancelText;
+  final Color? cancelTextColor;
   final VoidCallback? onCancelPressed;
   final VoidCallback onPressed;
 
   const OkCancelButtons(
       {super.key,
       required this.okText,
+      this.okTextColor = BLACK,
       required this.cancelText,
+      this.cancelTextColor = BLACK,
       required this.onPressed,
       this.onCancelPressed});
 
@@ -24,7 +28,7 @@ class OkCancelButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            child: Text(cancelText, style: TextStyle(color: WHITE)),
+            child: Text(cancelText, style: TextStyle(color: cancelTextColor ?? BLACK)),
             onPressed: () {
               Navigator.of(context).pop(); // 닫히는 버튼
               onCancelPressed;
@@ -34,7 +38,7 @@ class OkCancelButtons extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               okText,
-              style: TextStyle(color: WHITE),
+              style: TextStyle(color: okTextColor ?? BLACK),
             ),
           ),
         ],

@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/pages/etc_screen/personal_information.dart';
+import 'package:mobile/pages/etc_screen/update_notification.dart';
 import 'package:mobile/widgets/appBar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/widgets/tapable_row.dart';
 
-import '../common/const/colors.dart';
+import '../../common/const/colors.dart';
 
 class Etc extends StatefulWidget {
   const Etc({super.key});
@@ -22,7 +25,7 @@ class _EtcState extends State<Etc> {
           backgroundColor: TRANSPARENT,
           contentColor: BLACK,
           isCenterTitle: false,
-          titleSpacing: 1),
+          titleSpacing: 15),
       body: Column(
         children: [
           Padding(
@@ -35,7 +38,8 @@ class _EtcState extends State<Etc> {
                   children: [
                     CircleAvatar(
                       backgroundColor: WHITE,
-                      backgroundImage: AssetImage('assets/images/gomjee_theme.jpg'),
+                      backgroundImage:
+                          AssetImage('assets/images/themes/gomzy_theme.jpg'),
                     ),
                     const SizedBox(width: 10),
                     Text('NickName')
@@ -89,35 +93,41 @@ class _EtcState extends State<Etc> {
           )),
           const SizedBox(height: 15),
 
-          ListTile(
-            onTap: () {},
-            leading: Icon(Icons.notifications_none_rounded),
-            title: Text('알림'),
+          TapableRow(
+            widget: Icon(CupertinoIcons.lock),
+            title: '내 정보 관리',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => PersonalInformation()));
+            },
           ),
 
+          const SizedBox(height: 15),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+          const SizedBox(height: 15),
 
-          ListTile(
-            onTap: () {},
-            leading: Icon(CupertinoIcons.speaker_1),
-            title: Text('앱 업데이트 공지'),
+          TapableRow(
+            widget: Icon(CupertinoIcons.speaker_1),
+            title: '앱 업데이트 공지',
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (c) => UpdateNotification()));
+            },
           ),
 
+          const SizedBox(height: 15),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+          const SizedBox(height: 15),
 
-          ListTile(
+          TapableRow(
+            widget: Icon(Icons.notifications_none_rounded),
+            title: '알림',
             onTap: () {},
-            leading: Icon(CupertinoIcons.lock),
-            title: Text('개인 정보'),
           ),
 
+          const SizedBox(height: 15),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-
-          ListTile(
-            onTap: () {},
-            leading: Icon(Icons.settings),
-            title: Text('설정'),
-          ),
+          const SizedBox(height: 15),
         ],
       ),
     );

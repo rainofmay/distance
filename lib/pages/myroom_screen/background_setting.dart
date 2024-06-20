@@ -105,7 +105,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               child: Column(
                 children: [
                   Text(
-                    'My View',
+                    'View',
                     style: TextStyle(fontSize: 17, color: WHITE),
                   ),
                   const SizedBox(height: 25),
@@ -209,7 +209,9 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                       Navigator.pop(context);
                     },
                     okText: '저장',
+                    okTextColor: WHITE,
                     cancelText: '취소',
+                    cancelTextColor: WHITE,
                   ),
                 ],
               ),

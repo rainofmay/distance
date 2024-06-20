@@ -98,7 +98,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
     }
 
     // 새로고침을 위함도 있음.
-    if (!context.mounted) return;
+    if (!mounted) return;
     context.read<CalendarProvider>().setSelectedDate(_startDate);
     Navigator.of(context).pop();
   }

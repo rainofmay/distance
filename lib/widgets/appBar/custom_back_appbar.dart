@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appbarTitle;
@@ -32,7 +33,10 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
         ),
       ),
       leading: isLeading ? IconButton(
-        onPressed: backFunction,
+        hoverColor: TRANSPARENT,
+        splashColor: TRANSPARENT,
+        highlightColor: TRANSPARENT,
+        onPressed: backFunction ?? Navigator.of(context).pop,
         icon: Icon(
           Icons.arrow_back,
           size: 24,

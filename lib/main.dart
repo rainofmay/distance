@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/pages/login_screen/auth_screen.dart';
-import 'package:mobile/pages/etc.dart';
+import 'package:mobile/pages/etc_screen/etc.dart';
 import 'package:mobile/util/background_provider.dart';
 import 'package:mobile/util/background_setting_provider.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';

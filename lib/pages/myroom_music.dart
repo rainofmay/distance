@@ -267,7 +267,9 @@ class _MusicSettingState extends State<MusicSetting> {
                     const SizedBox(height: 20),
                     OkCancelButtons(
                         okText: '확인',
+                        okTextColor: WHITE,
                         cancelText: '취소',
+                        cancelTextColor: WHITE,
                         onPressed: () {
                           Navigator.of(context).pop(); // 닫히는 버튼
                           //backgroundProvider.initializeVideo()

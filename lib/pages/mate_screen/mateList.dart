@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
 import 'package:mobile/pages/mate_screen/mateRoom.dart';
+import 'package:mobile/widgets/appBar/custom_appbar.dart';
 import 'package:mobile/widgets/mate/add_mate_modal.dart';
 import 'package:mobile/widgets/mate/profile_card.dart';
 
+import '../../common/const/colors.dart';
 import '../../widgets/mate/dismissible_profile_card.dart';
 
 class Mate extends StatelessWidget {
@@ -12,7 +14,7 @@ class Mate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('내 메이트')),
+      appBar: CustomAppBar(appbarTitle: '메이트', backgroundColor: WHITE, contentColor: BLACK, titleSpacing: 15),
       body: ProfileList(),
       floatingActionButton: FloatingActionButton( // 메이트 추가 버튼
         onPressed: () {

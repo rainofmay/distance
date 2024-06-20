@@ -19,7 +19,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
     return Scaffold(
         backgroundColor: WHITE,
         appBar: CustomAppBar(
-            appbarTitle: 'My View',
+            appbarTitle: 'View',
             isCenterTitle: true,
             actions: [
               IconButton(
