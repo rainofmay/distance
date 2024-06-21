@@ -45,6 +45,7 @@ class _MyRoomState extends State<MyroomScreen> {
           )
               : VideoBackground(
             videoController: widget.backgroundViewModel.videoController.value,
+            isVideoLoading: widget.backgroundViewModel.isVideoLoading.value
           ),
           if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
             FloatingTodo(),
@@ -128,11 +129,15 @@ class ImageBackground extends StatelessWidget {
     );
   }
 }
-
 class VideoBackground extends StatelessWidget {
   final CachedVideoPlayerController? videoController;
+  final bool isVideoLoading;
 
-  const VideoBackground({required this.videoController, super.key});
+  const VideoBackground({
+    required this.videoController,
+    required this.isVideoLoading,
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

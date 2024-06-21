@@ -1,14 +1,17 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:get/get.dart';
+import 'package:mobile/viewModel/myroom/music/myroom_music_view_model.dart';
 import '../../../../common/const/colors.dart';
-import '../../../../viewModel/myroom/music/global_player.dart';
-class MusicVolume extends StatefulWidget {
 
+class MusicVolume extends StatefulWidget {
   final String kindOfMusic;
   final dynamic musicIcon;
   final int playerIndex;
-  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.musicIcon});
+  final MyroomMusicViewModel musicViewModel; // ViewModel을 받을 변수 추가
+
+  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.musicIcon, required this.musicViewModel});
+
 
   @override
   State<MusicVolume> createState() => _MusicVolumeState();
@@ -16,15 +19,17 @@ class MusicVolume extends StatefulWidget {
 
 class _MusicVolumeState extends State<MusicVolume> {
   double _volume = 0.5;
-    void _adjustVolume(GlobalAudioPlayer gap, double value) {
+  void _adjustVolume(double value) {
     setState(() {
       _volume = value; // 상태를 업데이트합니다.
     });
-    gap.player[widget.playerIndex].setVolume(value); // 오디오 플레이어의 볼륨을 설정합니다.
+    widget.musicViewModel.setVolume(widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정합니다.
   }
 
   @override
   Widget build(BuildContext context) {
+    _volume = widget.musicViewModel.audioPlayerList[widget.playerIndex].volume;
+
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Container(
@@ -35,9 +40,9 @@ class _MusicVolumeState extends State<MusicVolume> {
             thumbColor: WHITE,
             thumbShape: RoundSliderThumbShape(enabledThumbRadius: 8),
             overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
-              overlayColor: PRIMARY_COLOR.withOpacity(0.2),
+            overlayColor: PRIMARY_COLOR.withOpacity(0.2),
             activeTrackColor: PRIMARY_COLOR,
-            inactiveTrackColor: GREY
+            inactiveTrackColor: GREY,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,44 +57,32 @@ class _MusicVolumeState extends State<MusicVolume> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  // 여기에 Consumer 위젯을 사용합니다.
-                  Consumer<GlobalAudioPlayer>(
-                    builder: (context, globalAudioPlayer, child) {
-                      return IconButton(
-                        splashColor: TRANSPARENT,
-                        highlightColor: TRANSPARENT,
-                        hoverColor: TRANSPARENT,
-                        icon: Icon(globalAudioPlayer.isPlaying[widget.playerIndex] ? Icons.pause : Icons.play_arrow, color: LIGHT_WHITE),
-                        iconSize: 14.0,
-                        onPressed: () {
-                          if (globalAudioPlayer.isPlaying[widget.playerIndex]) {
-                              globalAudioPlayer.player[widget.playerIndex].pause();
-                              print("pause");
-
-                            //musicPause(widget.playerIndex);
-                          } else {
-                            if(globalAudioPlayer.player[widget.playerIndex].state == PlayerState.paused){
-                              globalAudioPlayer.player[widget.playerIndex].resume();
-                              print("resume");
-                              print("정보: ${globalAudioPlayer.player[widget.playerIndex]}");
-
-                              //globalAudioPlayer.resume();
-                            }else {
-                              globalAudioPlayer.musicPlay(widget.playerIndex);
-                              print("play");
-                              //globalAudioPlayer.musicPlay(index);
-                            }
-
-                          }
-                        },
-                      );
+                  IconButton(
+                    splashColor: TRANSPARENT,
+                    highlightColor: TRANSPARENT,
+                    hoverColor: TRANSPARENT,
+                    icon: Obx(() => Icon(
+                      widget.musicViewModel.isPlayingList[widget.playerIndex].value ? Icons.pause : Icons.play_arrow,
+                      color: LIGHT_WHITE,
+                    )),
+                    iconSize: 14.0,
+                    onPressed: () {
+                      if (widget.musicViewModel.isPlayingList[widget.playerIndex].value) {
+                        widget.musicViewModel.musicPause(widget.playerIndex);
+                      } else {
+                        if (widget.musicViewModel.audioPlayerList[widget.playerIndex].state == PlayerState.paused) {
+                          widget.musicViewModel.audioPlayerList[widget.playerIndex].resume();
+                        } else {
+                          widget.musicViewModel.musicPlay(widget.playerIndex);
+                        }
+                      }
                     },
                   ),
                   Expanded(
                     child: Slider(
                       value: _volume,
                       onChanged: (volume) {
-                        _adjustVolume(Provider.of<GlobalAudioPlayer>(context, listen: false), volume);
+                        _adjustVolume(volume);
                       },
                     ),
                   ),

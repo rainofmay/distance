@@ -6,8 +6,10 @@ class MyroomViewModel extends GetxController {
   final RxBool isImage = true.obs;
   final Rxn<CachedVideoPlayerController> videoController = Rxn<CachedVideoPlayerController>();
   final RxString selectedItemUrl = ''.obs;
+  final RxString selectedItemThumbnail = ''.obs;
   final RxBool isSimpleWindowEnabled = false.obs;
   final RxBool isAudioSpectrumEnabled = false.obs;
+  final RxBool isVideoLoading = true.obs;
 
   @override
   void onInit() {
@@ -25,6 +27,9 @@ class MyroomViewModel extends GetxController {
   void toggleMedia() {
     if (isImage.value) {
       videoController.value?.pause();
+      videoController.value?.dispose();
+      videoController.value = null;
+      isVideoLoading.value = true;
     } else {
       initializeVideo();
     }
@@ -32,26 +37,38 @@ class MyroomViewModel extends GetxController {
 
   void initializeVideo() {
     final videoUrl = selectedItemUrl.value;
-    if (videoUrl.isNotEmpty) {
+    if (videoUrl.isNotEmpty && videoController.value == null) {
+      isVideoLoading.value = true;
       videoController.value = CachedVideoPlayerController.network(videoUrl)
         ..initialize().then((_) {
+          isVideoLoading.value = false;
           videoController.value?.play();
           videoController.value?.setLooping(true);
+        }).catchError((error) {
+          isVideoLoading.value = false;
         });
     }
   }
 
-  void setSelectedImageUrl(String url) {
-    isImage.value = true;
+  void setSelectedImageUrl(String url, String thumbnailUrl) {
+    videoController.value?.dispose();
+    videoController.value = null;
     selectedItemUrl.value = url;
+    selectedItemThumbnail.value = thumbnailUrl;
+    isImage.value = true;
+    isVideoLoading.value = true;
     saveItemUrl(url);
     saveIsImage(true);
   }
 
-  void setSelectedVideoUrl(String url) {
+  void setSelectedVideoUrl(String videoUrl, String thumbnailUrl) {
+    videoController.value?.dispose();
+    videoController.value = null;
+    selectedItemUrl.value = videoUrl;
+    selectedItemThumbnail.value = thumbnailUrl;
     isImage.value = false;
-    selectedItemUrl.value = url;
-    saveItemUrl(url);
+    isVideoLoading.value = true;
+    saveItemUrl(videoUrl);
     saveIsImage(false);
     initializeVideo();
   }
@@ -62,6 +79,10 @@ class MyroomViewModel extends GetxController {
     selectedItemUrl.value = prefs.getString('selectedItemUrl') ?? '';
     isSimpleWindowEnabled.value = prefs.getBool('isSimpleWindowEnabled') ?? false;
     isAudioSpectrumEnabled.value = prefs.getBool('isAudioSpectrumEnabled') ?? false;
+
+    if (!isImage.value) {
+      initializeVideo();
+    }
   }
 
   Future<void> saveItemUrl(String url) async {
@@ -85,6 +106,4 @@ class MyroomViewModel extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
   }
-
-
 }

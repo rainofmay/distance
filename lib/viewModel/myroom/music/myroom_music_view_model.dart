@@ -9,8 +9,11 @@ class MyroomMusicViewModel extends GetxController {
   final List<AudioPlayer> audioPlayerList = List.generate(5, (_) => AudioPlayer());
   final List<RxBool> isPlayingList = List.generate(5, (_) => false.obs);
   final _isAnyPlaying = false.obs;
-  late final RxInt _currentGroupIndex; // Change to RxInt and use .obs
-  late final RxInt _currentAudioIndex;
+  final RxInt currentGroupIndex = 0.obs; // Change to RxInt and use .obs
+  final RxInt currentAudioIndex = 0.obs;
+  final isVocalMusic = false.obs;
+  final isInstrumentalMusic = false.obs;
+
   List<List<MusicInfo>> DUMMY_DATA = [
     [
       MusicInfo(
@@ -79,24 +82,17 @@ class MyroomMusicViewModel extends GetxController {
     _init();
   }
 
-  List<AudioPlayer> get player => audioPlayerList;
-  int get currentGroupIndex => _currentGroupIndex.value;
-  int get currentAudioIndex => _currentAudioIndex.value;
-  List<RxBool> get isPlaying => isPlayingList;
-  bool get isAnyPlaying => _isAnyPlaying.value;
-  var isVocalMusic = false.obs;
-  var isInstrumentalMusic = false.obs;
-
   void _init() async {
     print("myroom_music_view_model.dart : _init() : audioPlayer was created");
-    _currentGroupIndex.value = 0;
-    _currentAudioIndex.value = 0;
-    for (int i = 0; i < player.length; i++) {
-      player[i].onPlayerStateChanged.listen((PlayerState state) {
+    currentGroupIndex.value = 0;
+    currentAudioIndex.value = 0;
+    for (int i = 0; i < audioPlayerList.length; i++) {
+      setVolume(i, 0.5); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정합니다.
+      audioPlayerList[i].onPlayerStateChanged.listen((PlayerState state) {
         if (state == PlayerState.playing) {
-          isPlaying[i].value = true;
+          isPlayingList[i].value = true;
         } else {
-          isPlaying[i].value = false;
+          isPlayingList[i].value = false;
         }
         _isAnyPlaying.value = !areAllPlayersStopped();
         update();
@@ -105,7 +101,7 @@ class MyroomMusicViewModel extends GetxController {
   }
 
   bool areAllPlayersStopped() {
-    for (RxBool playing in isPlaying) {
+    for (RxBool playing in isPlayingList) {
       if (playing.value) {
         return false;
       }
@@ -114,33 +110,33 @@ class MyroomMusicViewModel extends GetxController {
   }
 
   void musicPlayAll() {
-    for (int i = 0; i < DUMMY_DATA[_currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
       musicPlay(i);
     }
   }
 
   void musicPauseAll() {
-    for (int i = 0; i < DUMMY_DATA[_currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
       musicPause(i);
     }
   }
 
   void musicStopAll() {
-    for (int i = 0; i < DUMMY_DATA[_currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
       musicStop(i);
     }
   }
 
   void musicPlay(int index) async {
-    List<String> nowAudioGroup = DUMMY_DATA[_currentGroupIndex.value].map((musicInfo) => musicInfo.audioURL).toList();
+    List<String> nowAudioGroup = DUMMY_DATA[currentGroupIndex.value].map((musicInfo) => musicInfo.audioURL).toList();
     try {
-      await player[index].play(AssetSource(nowAudioGroup[index]));
-      player[index].onPlayerStateChanged.listen((state) {
+      await audioPlayerList[index].play(AssetSource(nowAudioGroup[index]));
+      audioPlayerList[index].onPlayerStateChanged.listen((state) {
         if (state == PlayerState.playing) {
           print('Audio Playing');
         }
       });
-      await player[index].setReleaseMode(ReleaseMode.loop);
+      await audioPlayerList[index].setReleaseMode(ReleaseMode.loop);
       print("Play(loop on):  $index");
     } catch (e) {
       print("Error $e");
@@ -148,26 +144,29 @@ class MyroomMusicViewModel extends GetxController {
   }
 
   void musicPause(int index) async {
-    await player[index].pause();
+    await audioPlayerList[index].pause();
     print("pause : $index");
   }
 
   void musicStop(int index) async {
-    await player[index].stop();
+    await audioPlayerList[index].stop();
     print("stop: $index");
   }
 
   void changeGroup(int index) {
     if (index >= 0 && index < DUMMY_DATA.length) {
-      _currentGroupIndex.value = index;
-      _currentAudioIndex.value = 0;
+      currentGroupIndex.value = index;
+      currentAudioIndex.value = 0;
       _init();
       musicStopAll();
     }
   }
+  double getVolume(int index) {
+    return audioPlayerList[index].volume;
+  }
 
   void setVolume(int index, double volume) {
-    player[index].setVolume(volume);
+    audioPlayerList[index].setVolume(volume);
   }
 
   void toggleVocalMusic() {
@@ -181,7 +180,7 @@ class MyroomMusicViewModel extends GetxController {
   @override
   void dispose() {
     for (int i = 0; i < DUMMY_DATA.length; i++) {
-      player[i].dispose();
+      audioPlayerList[i].dispose();
     }
     super.dispose();
   }

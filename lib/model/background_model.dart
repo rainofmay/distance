@@ -19,9 +19,9 @@ class ThemeVideo {
   final bool isPaid;
 
   ThemeVideo({
+    required this.id,
     required this.thumbnailUrl,
     required this.highQualityUrl,
-    required this.id,
     required this.isPaid,
   });
 }
