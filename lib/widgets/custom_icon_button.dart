@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/util/background_provider.dart';
+import 'package:mobile/viewModel/background/background_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../common/const/colors.dart';

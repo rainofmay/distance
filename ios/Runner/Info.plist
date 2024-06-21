@@ -62,5 +62,7 @@
 	        <array>
 	            <string>com.example.mobile</string>
 	        </array>
+        </dict>
+    </array>
 </dict>
 </plist>

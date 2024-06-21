@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
-import 'package:mobile/pages/mate_screen/mateRoom.dart';
+import 'package:mobile/view/mate/mateRoom.dart';
 
 class ProfileCard extends StatelessWidget {
   final UserProfile profile;

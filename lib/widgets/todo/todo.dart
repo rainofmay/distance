@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:mobile/pages/schedule_screen/todo/modify_todo.dart';
+import 'package:mobile/view/schedule/todo/modify_todo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'dart:convert';
-
 import '../../common/const/colors.dart';
-import '../../model/todo_model.dart';
 import '../borderline.dart';
 
 class Todo extends StatefulWidget {
