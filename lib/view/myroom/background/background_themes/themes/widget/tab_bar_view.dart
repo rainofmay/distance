@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget tapbarView(controller, Widget picture, Widget videos) {
+Widget tabBarView(controller, Widget picture, Widget videos) {
   return Expanded(
       child: TabBarView(
     controller: controller,

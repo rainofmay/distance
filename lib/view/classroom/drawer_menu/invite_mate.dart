@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import '../../../common/const/colors.dart';
 
 class InviteMate extends StatelessWidget {

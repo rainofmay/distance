@@ -85,6 +85,4 @@ class MyroomViewModel extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
   }
-
-
 }

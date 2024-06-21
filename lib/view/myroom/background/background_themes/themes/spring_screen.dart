@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/themeItem.dart';
-import 'package:mobile/widgets/appBar/custom_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/widget/gridItems.dart';
-import 'package:mobile/view/myroom/background/background_themes/themes/widget/tapbarView.dart';
-import 'package:mobile/view/myroom/background/background_themes/themes/widget/topTabar.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/widget/tab_bar_view.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/widget/topper_tab_bar.dart';
 
 class SpringScreen extends StatefulWidget {
   const SpringScreen({super.key});
@@ -67,8 +67,8 @@ class _SpringScreenState extends State<SpringScreen>
       body: Column(
         children: [
           const SizedBox(height: 10),
-          topperTabar(_tabController),
-          tapbarView(_tabController, gridPictures(DUMMY_PICTURES),
+          topperTabBar(_tabController),
+          tabBarView(_tabController, gridPictures(DUMMY_PICTURES),
               gridVideos(DUMMY_VIDEOS))
         ],
       ),

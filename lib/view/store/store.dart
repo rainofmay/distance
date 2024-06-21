@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/view/store/photo.dart';
 import 'package:mobile/view/store/user_store.dart';
-import 'package:mobile/widgets/appBar/custom_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 
 import '../../common/const/colors.dart';
 

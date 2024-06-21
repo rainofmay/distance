@@ -3,7 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/viewModel/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/widgets/custom_check_box.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/view/myroom/music/widget/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
@@ -93,7 +94,7 @@ class _MusicSettingState extends State<MusicSetting> {
                           children: [
                             Obx(() => Row(
                               children: [
-                                Checkbox(
+                                CustomCheckBox(
                                   value: musicViewModel.isVocalMusic.value,
                                   onChanged: (value) {
                                     musicViewModel.toggleVocalMusic();
@@ -116,7 +117,7 @@ class _MusicSettingState extends State<MusicSetting> {
                           children: [
                             Obx(() => Row(
                               children: [
-                                Checkbox(
+                                CustomCheckBox(
                                   value: musicViewModel.isInstrumentalMusic.value,
                                   onChanged: (value) {
                                     musicViewModel.toggleInstrumentalMusic();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:mobile/viewModel/background/myroom_view_model.dart';
+import 'package:mobile/view_model/background/myroom_view_model.dart';
 
 class FloatingTodo extends StatefulWidget {
   const FloatingTodo({super.key});

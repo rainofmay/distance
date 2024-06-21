@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class CreateGroupPage extends StatefulWidget {

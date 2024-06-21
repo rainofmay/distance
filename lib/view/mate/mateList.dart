@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
-import 'package:mobile/widgets/appBar/custom_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/mate/add_mate_modal.dart';
 
 import '../../common/const/colors.dart';

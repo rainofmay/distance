@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
-import 'package:mobile/common/custom_dialog.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
+import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/widgets/schedule/color_selection.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
-import '../../../common/schedule/time_comarison.dart';
 import '../../../model/schedule_model.dart';
 import '../../../util/calendar_provider.dart';
 import '../../../util/schedule_color_provider.dart';
 import '../../../widgets/custom_text_field.dart';
+import 'functions/time_comarison.dart';
 
 
 class CreateSchedule extends StatefulWidget {

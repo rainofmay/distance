@@ -4,7 +4,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../../common/const/colors.dart';
 import '../../../model/todo_model.dart';
-import '../../../widgets/appBar/custom_back_appbar.dart';
+import '../../../widgets/app_bar/custom_back_appbar.dart';
 import '../../../widgets/borderline.dart';
 import '../../../widgets/custom_text_field.dart';
 

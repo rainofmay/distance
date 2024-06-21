@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../common/const/colors.dart';
-import '../../../../viewModel/myroom/music/global_player.dart';
+import '../../../../view_model/myroom/music/global_player.dart';
 class MusicVolume extends StatefulWidget {
 
   final String kindOfMusic;
