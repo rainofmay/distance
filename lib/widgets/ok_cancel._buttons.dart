@@ -12,9 +12,9 @@ class OkCancelButtons extends StatelessWidget {
   const OkCancelButtons(
       {super.key,
       required this.okText,
-      this.okTextColor = BLACK,
+      this.okTextColor = WHITE,
       required this.cancelText,
-      this.cancelTextColor = BLACK,
+      this.cancelTextColor = WHITE,
       required this.onPressed,
       this.onCancelPressed});
 
@@ -23,7 +23,7 @@ class OkCancelButtons extends StatelessWidget {
     return Container(
       alignment: Alignment.center,
       // height: 30,
-      margin: EdgeInsets.only(top: 10, bottom: 10),
+      margin: EdgeInsets.only(top: 5, bottom: 5),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

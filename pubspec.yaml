@@ -52,6 +52,7 @@ flutter:
     - assets/icons/
     - assets/audios/cafe/
     - assets/audios/nature/
+    - assets/videos/sea/
     - assets/videos/
     - .env
 

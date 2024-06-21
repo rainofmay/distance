@@ -23,16 +23,15 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   Widget _buildBackground() {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(10.0),
-      child: Obx(() {
-        return Image.asset(
-          myroomViewModel.selectedItemUrl.value,
-          width: MediaQuery.of(context).size.width * 0.56,
-          height: MediaQuery.of(context).size.height * 0.26,
-          fit: BoxFit.cover,
-        );
-      }
-    ));
+        borderRadius: BorderRadius.circular(10.0),
+        child: Obx(() {
+          return Image.asset(
+            myroomViewModel.selectedItemThumbnail.value,
+            width: MediaQuery.of(context).size.width * 0.56,
+            height: MediaQuery.of(context).size.height * 0.26,
+            fit: BoxFit.cover,
+          );
+        }));
   }
 
   Future<void> getGalleryImage() async {
@@ -51,7 +50,8 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         95,
         '배경 설정',
         SingleChildScrollView(
-          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 22),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -145,13 +145,15 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                           Transform.scale(
                             scale: 0.6,
                             child: Obx(() => CupertinoSwitch(
-                              thumbColor: WHITE,
-                              value: myroomViewModel.isSimpleWindowEnabled.value,
-                              activeColor: SECONDARY,
-                              onChanged: (value) {
-                                myroomViewModel.updateSimpleWindowChange(value);
-                              },
-                            )),
+                                  thumbColor: WHITE,
+                                  value: myroomViewModel
+                                      .isSimpleWindowEnabled.value,
+                                  activeColor: SECONDARY,
+                                  onChanged: (value) {
+                                    myroomViewModel
+                                        .updateSimpleWindowChange(value);
+                                  },
+                                )),
                           ),
                         ]),
                   ),
@@ -165,12 +167,14 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                           Transform.scale(
                             scale: 0.6,
                             child: Obx(() => CupertinoSwitch(
-                              activeColor: SECONDARY,
-                              value: myroomViewModel.isAudioSpectrumEnabled.value,
-                              onChanged: (value) {
-                                myroomViewModel.updateAudioSpectrumChange(value);
-                              },
-                            )),
+                                  activeColor: SECONDARY,
+                                  value: myroomViewModel
+                                      .isAudioSpectrumEnabled.value,
+                                  onChanged: (value) {
+                                    myroomViewModel
+                                        .updateAudioSpectrumChange(value);
+                                  },
+                                )),
                           ),
                         ]),
                   ),
@@ -184,13 +188,15 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                           Transform.scale(
                             scale: 0.6,
                             child: Obx(() => CupertinoSwitch(
-                              activeColor: SECONDARY,
-                              value: myroomViewModel.isAudioSpectrumEnabled.value,
-                              onChanged: (value) {
-                                // update as necessary
-                                myroomViewModel.updateAudioSpectrumChange(value);
-                              },
-                            )),
+                                  activeColor: SECONDARY,
+                                  value: myroomViewModel
+                                      .isAudioSpectrumEnabled.value,
+                                  onChanged: (value) {
+                                    // update as necessary
+                                    myroomViewModel
+                                        .updateAudioSpectrumChange(value);
+                                  },
+                                )),
                           ),
                         ]),
                   ),
