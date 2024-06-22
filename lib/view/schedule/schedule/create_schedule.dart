@@ -203,7 +203,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
               return TextButton(
                 onPressed: _termsForSave() ? () => _onSavePressed() : null,
                 child: Text(
-                  '저장',
+                  '저장.',
                   style: TextStyle(color: _termsForSave() ? WHITE : GREY),
                   // TextStyle(color: value.text.isEmpty ? UNSELECTED : WHITE),
                 ),
