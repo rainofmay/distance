@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/pages/etc_screen/profile_edit.dart';
-import 'package:mobile/pages/etc_screen/withdrawal.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/view/etc/profile_edit.dart';
+import 'package:mobile/view/etc/withdrawal.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
 

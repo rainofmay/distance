@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/pages/etc_screen/personal_information.dart';
-import 'package:mobile/pages/etc_screen/update_notification.dart';
-import 'package:mobile/widgets/appBar/custom_appbar.dart';
+import 'package:mobile/view/etc/personal_information.dart';
+import 'package:mobile/view/etc/update_notification.dart';
+import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
 

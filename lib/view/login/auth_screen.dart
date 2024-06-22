@@ -6,7 +6,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import '../../common/custom_login.dart';
+import '../../widgets/functions/custom_login.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});

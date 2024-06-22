@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../common/const/colors.dart';
-import '../../../widgets/appBar/custom_back_appbar.dart';
+import '../../../widgets/app_bar/custom_back_appbar.dart';
 
 class ScheduleNotification extends StatefulWidget {
   const ScheduleNotification({super.key});

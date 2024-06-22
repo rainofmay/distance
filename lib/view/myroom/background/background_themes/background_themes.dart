@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/spring_screen.dart';
-import 'package:mobile/widgets/appBar/custom_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 

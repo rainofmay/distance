@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 
 class UserStore extends StatelessWidget {

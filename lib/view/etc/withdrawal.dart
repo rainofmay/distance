@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 import '../../common/const/colors.dart';
+import '../../widgets/custom_check_box.dart';
 import '../../widgets/ok_cancel._buttons.dart';
 
 class Withdrawal extends StatefulWidget {
@@ -44,7 +45,7 @@ class _WithdrawalState extends State<Withdrawal> {
             children: [
               Row(
                 children: [
-                  Checkbox(value: _isChecked, onChanged: (value) {
+                  CustomCheckBox(value: _isChecked, onChanged: (value) {
                     setState(() {
                       _isChecked = value!;
                     });

@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/viewModel/background/myroom_view_model.dart';
+import 'package:mobile/view_model/background/myroom_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';

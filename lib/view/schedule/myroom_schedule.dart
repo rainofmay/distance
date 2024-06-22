@@ -5,7 +5,7 @@ import 'package:mobile/view/schedule/schedule/schedule_schedule.dart';
 import 'package:mobile/view/schedule/timer/schedule_stopwatch.dart';
 import 'package:mobile/view/schedule/todo/schedule_todo.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/widgets/appBar/custom_back_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 class Schedule extends StatefulWidget {
   const Schedule({super.key});

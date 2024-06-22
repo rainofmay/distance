@@ -3,6 +3,7 @@ import 'package:mobile/view/schedule/todo/modify_todo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../common/const/colors.dart';
 import '../borderline.dart';
+import '../custom_check_box.dart';
 
 class Todo extends StatefulWidget {
   final String column;
@@ -27,9 +28,6 @@ class _TodoState extends State<Todo> {
     super.initState();
     // _loadTodos();
   }
-
-
-
 
   toggleTodo(bool value, String id) async {
     await Supabase.instance.client
@@ -80,15 +78,7 @@ class _TodoState extends State<Todo> {
                   return Column(
                     children: [
                       ListTile(
-                        leading: Checkbox(
-                          splashRadius: 0,
-                          activeColor: DARK,
-                          checkColor: PRIMARY_COLOR,
-                          hoverColor: TRANSPARENT,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50),
-                            side: BorderSide(color: BLACK),
-                          ),
+                        leading: CustomCheckBox(
                           value: todo['is_done'],
                           onChanged: (bool? newValue) async {
                             await toggleTodo(
