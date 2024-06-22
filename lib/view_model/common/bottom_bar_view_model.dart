@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import '../../view/etc/etc.dart';
 import '../../view/login/auth_screen.dart';
-import '../../view/mate/mateList.dart';
+import '../../view/mate/mate_list_screen.dart';
 import '../../view/myroom/myroom_screen.dart';
 
 class BottomBarViewModel extends GetxController {

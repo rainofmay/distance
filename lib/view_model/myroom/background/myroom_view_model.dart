@@ -58,6 +58,7 @@ class MyroomViewModel extends GetxController {
     isImage.value = true;
     isVideoLoading.value = true;
     saveItemUrl(url);
+    saveThumbnailUrl(thumbnailUrl);
     saveIsImage(true);
   }
 
@@ -69,6 +70,7 @@ class MyroomViewModel extends GetxController {
     isImage.value = false;
     isVideoLoading.value = true;
     saveItemUrl(videoUrl);
+    saveThumbnailUrl(thumbnailUrl);
     saveIsImage(false);
     initializeVideo();
   }
@@ -76,7 +78,8 @@ class MyroomViewModel extends GetxController {
   void loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isImage.value = prefs.getBool('isImage') ?? true;
-    selectedItemUrl.value = prefs.getString('selectedItemUrl') ?? '';
+    selectedItemUrl.value = prefs.getString('selectedItemUrl') ?? './assets/images/nature1.jpeg';
+    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ?? './assets/images/nature1.jpeg';
     isSimpleWindowEnabled.value = prefs.getBool('isSimpleWindowEnabled') ?? false;
     isAudioSpectrumEnabled.value = prefs.getBool('isAudioSpectrumEnabled') ?? false;
 
@@ -88,6 +91,11 @@ class MyroomViewModel extends GetxController {
   Future<void> saveItemUrl(String url) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('selectedItemUrl', url);
+  }
+
+  Future<void> saveThumbnailUrl(String url) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('selectedItemThumbnail', url);
   }
 
   Future<void> saveIsImage(bool isImg) async {

@@ -57,14 +57,14 @@ class _MusicVolumeState extends State<MusicVolume> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
+                  Obx(() =>IconButton(
                     splashColor: TRANSPARENT,
                     highlightColor: TRANSPARENT,
                     hoverColor: TRANSPARENT,
-                    icon: Obx(() => Icon(
+                    icon:  Icon(
                       widget.musicViewModel.isPlayingList[widget.playerIndex].value ? Icons.pause : Icons.play_arrow,
                       color: LIGHT_WHITE,
-                    )),
+                    ),
                     iconSize: 14.0,
                     onPressed: () {
                       if (widget.musicViewModel.isPlayingList[widget.playerIndex].value) {
@@ -76,7 +76,7 @@ class _MusicVolumeState extends State<MusicVolume> {
                           widget.musicViewModel.musicPlay(widget.playerIndex);
                         }
                       }
-                    },
+                    }),
                   ),
                   Expanded(
                     child: Slider(

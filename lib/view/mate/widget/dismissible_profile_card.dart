@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/profile_card.dart';
-import 'package:mobile/widgets/mate/profile_card.dart';
+import 'package:mobile/view/mate/widget/profile_card.dart';
 
 class DismissibleProfileCard extends StatelessWidget {
   final UserProfile profile; // Profile 객체

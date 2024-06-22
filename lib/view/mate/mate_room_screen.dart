@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 
-class MateRoom extends StatefulWidget {
+class MateRoomScreen extends StatefulWidget {
   final String mateName;
   final String profileImageUrl;
   final String imageUrl;
   final String audioUrl;
 
-  const MateRoom({super.key, required this.mateName,required this.imageUrl, required this.audioUrl, required this.profileImageUrl, });
+  const MateRoomScreen({super.key, required this.mateName,required this.imageUrl, required this.audioUrl, required this.profileImageUrl, });
 
   @override
   _UserDetailsScreenState createState() => _UserDetailsScreenState();
 }
 
-class _UserDetailsScreenState extends State<MateRoom> {
+class _UserDetailsScreenState extends State<MateRoomScreen> {
   late AudioPlayer _audioPlayer;
   bool isLoading = true;
   bool _isPlaying = false;
@@ -23,7 +23,6 @@ class _UserDetailsScreenState extends State<MateRoom> {
     super.initState();
     _audioPlayer = AudioPlayer();
     _audioPlayer.play(AssetSource(widget.audioUrl));
-    //fetching으로 가져오기
     isLoading = false;
     _isPlaying = true;
   }
