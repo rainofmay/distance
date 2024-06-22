@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/view/login/auth_screen.dart';
-import 'package:mobile/view/etc.dart';
 import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/util/schedule_color_provider.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
+import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
+import 'package:mobile/view_model/myroom/music/global_player.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
-import 'package:mobile/view/myroom/myroom_screen.dart';
-import 'package:mobile/view/mate/mateList.dart';
-import 'package:mobile/widgets/bottomBar/main_bottom_bar.dart';
 import 'package:provider/provider.dart';
-import 'package:mobile/viewModel/myroom/music/global_player.dart';
-import 'package:mobile/util/bottom_index.dart';
 import 'package:mobile/util/calendar_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -32,7 +28,6 @@ Future<void> main() async {
       providers: [
         ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
-        ChangeNotifierProvider(create: (context) => BottomIndex()),
         ChangeNotifierProvider(create: (context) => ScheduleColorProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleEventsProvider()),
         ChangeNotifierProvider(create: (context) => ModifyingScheduleProvider()),
@@ -58,7 +53,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MyAppState extends State<MainPage> {
-  final List screens = [MyroomScreen(), Mate(), AuthScreen(), Etc()];
+  final BottomBarViewModel bottomBarViewModel = Get.put(BottomBarViewModel());
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +63,20 @@ class _MyAppState extends State<MainPage> {
 
     return Scaffold(
       // appBar: AppBar(),
-      body: screens.elementAt(context.watch<BottomIndex>().bottomIndex),
-      bottomNavigationBar: MainBottomNavagationBar(),
+      body: bottomBarViewModel.setScreen(),
+      bottomNavigationBar: BottomNavigationBar(
+          currentIndex: bottomBarViewModel.bottomIndex,
+          onTap: bottomBarViewModel.setBottomIndex,
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_rounded), label: '내 방',),
+            BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),
+            // BottomNavigationBarItem(
+            //     icon: Icon(Icons.card_giftcard), label: '스토어'),
+            BottomNavigationBarItem(
+                icon: Icon(Icons.login), label: '로그인(임시)'),
+            BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
+          ]),
     );
   }
 }

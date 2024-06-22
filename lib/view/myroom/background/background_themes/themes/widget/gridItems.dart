@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/view/myroom/myroom_screen.dart';
-import 'package:mobile/viewModel/background/myroom_view_model.dart';
+import 'package:mobile/view_model/background/myroom_view_model.dart';
 
 Widget gridPictures(List<ThemePicture> pictures) {
   final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
