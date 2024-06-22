@@ -119,10 +119,6 @@ class _CreateScheduleState extends State<CreateSchedule> {
             onSecondary: Color(0xff3C6769),
             error: Colors.redAccent,
             onError: Colors.red,
-            background: Color(0xff222E34),
-            // 배경색
-            onBackground: TRANSPARENT,
-            // 확인, 취소버튼 구분선
             surface: Color(0xff222E34),
             onSurface: Colors.white),
         // 전체적인 글자색
