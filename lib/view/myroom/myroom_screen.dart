@@ -42,10 +42,24 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      print("[LifeCycleState] Resumed");
       widget.backgroundViewModel.videoController.value?.play();
     } else if (state == AppLifecycleState.paused) {
+      print("[LifeCycleState] : paused");
       widget.backgroundViewModel.videoController.value?.pause();
+    } else if (state == AppLifecycleState.detached) {
+      print("[LifeCycleState] : detached");
+      widget.backgroundViewModel.videoController.value?.pause();
+    }else if (state == AppLifecycleState.hidden) {
+      print("[LifeCycleState] : hidden");
+      widget.backgroundViewModel.videoController.value?.pause();
+    }else if (state == AppLifecycleState.inactive) {
+      print("[LifeCycleState] : inactive");
+      widget.backgroundViewModel.videoController.value?.pause();
+    }else {
+      print("[LifeCycleState] : what");
     }
+
   }
 
   @override
@@ -156,6 +170,7 @@ class VideoBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return videoController != null && videoController!.value.isInitialized
         ? SizedBox.expand(
       child: FittedBox(

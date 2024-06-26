@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/sea_screen.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/spring_screen.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
@@ -147,8 +148,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Ocean',
-                          onTap: () {},
-                          left: 12,
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => SeaScreen()));
+                          },                          left: 12,
                           right: 12,
                           top: 10,
                           bottom: 10,
