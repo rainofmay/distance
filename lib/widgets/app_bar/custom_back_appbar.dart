@@ -5,6 +5,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String appbarTitle;
   final GestureTapCallback? backFunction;
   final bool isLeading;
+  final bool isCenterTitle;
   final Color backgroundColor;
   final Color contentColor;
   final List<Widget>? actions;
@@ -14,6 +15,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
       required this.appbarTitle,
       this.backFunction,
         required this.isLeading,
+        required this.isCenterTitle,
       required this.backgroundColor,
       required this.contentColor,
       this.actions,
@@ -27,6 +29,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       titleSpacing: -5,
       backgroundColor: backgroundColor,
+      centerTitle: isCenterTitle,
       shape: Border(
         bottom: BorderSide(
           color: backgroundColor,

@@ -23,6 +23,7 @@ class _WithdrawalState extends State<Withdrawal> {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: 'Distance 탈퇴',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
         contentColor: BLACK,

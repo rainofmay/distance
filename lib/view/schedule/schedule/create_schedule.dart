@@ -188,6 +188,7 @@ class _CreateScheduleState extends State<CreateSchedule> {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: '',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: BLACK,
         contentColor: WHITE,

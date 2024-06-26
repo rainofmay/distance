@@ -17,6 +17,7 @@ class _ScheduleBackgroundSettingState extends State<ScheduleBackgroundSetting> {
     return Scaffold(
       appBar: CustomBackAppBar(
         isLeading: true,
+        isCenterTitle: true,
         appbarTitle: '배경 설정',
         backFunction: Navigator.of(context).pop,
         backgroundColor: BLACK,

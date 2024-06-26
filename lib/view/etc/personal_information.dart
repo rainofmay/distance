@@ -17,6 +17,7 @@ class PersonalInformation extends StatelessWidget {
       appBar: CustomBackAppBar(
           appbarTitle: '내 정보 관리',
           isLeading: true,
+          isCenterTitle: true,
           backFunction: Navigator.of(context).pop,
           backgroundColor: WHITE,
           contentColor: BLACK),

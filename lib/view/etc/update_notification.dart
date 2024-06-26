@@ -12,6 +12,7 @@ class UpdateNotification extends StatelessWidget {
       appBar: CustomBackAppBar(
           appbarTitle: '앱 업데이트 공지',
           isLeading: true,
+          isCenterTitle: true,
           backgroundColor: WHITE,
           contentColor: BLACK),
       body: Column(

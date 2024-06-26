@@ -11,6 +11,7 @@ class InviteMate extends StatelessWidget {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: '메이트 초대',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
         contentColor: BLACK,

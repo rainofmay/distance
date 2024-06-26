@@ -44,6 +44,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       appBar: CustomBackAppBar(
         appbarTitle: '프로필 수정',
         isLeading: true,
+        isCenterTitle: true,
         backgroundColor: WHITE,
         contentColor: BLACK,
         actions: [

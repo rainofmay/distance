@@ -74,6 +74,7 @@ class _ModifyTodoState extends State<ModifyTodo> {
         appBar: CustomBackAppBar(
           isLeading: true,
           appbarTitle: '',
+          isCenterTitle: true,
           backFunction: Navigator.of(context).pop,
           backgroundColor: BLACK,
           contentColor: WHITE,

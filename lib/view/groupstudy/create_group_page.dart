@@ -34,6 +34,7 @@ class _CreateGroupPageState extends State<CreateGroupPage>
     return Scaffold(
       appBar: CustomBackAppBar(
           isLeading: true,
+          isCenterTitle: true,
           appbarTitle: '클래스룸 생성',
           backFunction: Navigator.of(context).pop,
           backgroundColor: WHITE,

@@ -34,6 +34,7 @@ class _ScheduleState extends State<Schedule> {
     return Scaffold(
         appBar: CustomBackAppBar(
           isLeading: true,
+          isCenterTitle: true,
           backFunction: Navigator.of(context).pop,
           appbarTitle: tabContents[currentTab],
           backgroundColor: BLACK,
