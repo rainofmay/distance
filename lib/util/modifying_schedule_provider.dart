@@ -34,7 +34,6 @@ class ModifyingScheduleProvider extends ChangeNotifier {
     modifyingStartTime = ScheduleModel.fromJson(json: uploadSchedule[0]).startTime;
     modifyingEndTime = ScheduleModel.fromJson(json: uploadSchedule[0]).endTime;
     modifyingIsTimeSet = ScheduleModel.fromJson(json: uploadSchedule[0]).isTimeSet;
-    print(modifyingName);
     notifyListeners();
   }
 

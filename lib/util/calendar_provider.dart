@@ -7,7 +7,9 @@ class CalendarProvider extends ChangeNotifier {
     DateTime.now().year,
     DateTime.now().month,
     DateTime.now().day,
+
   );
+
   CalendarFormat calendarFormat = CalendarFormat.week;
 
   setCalendarVisible() {

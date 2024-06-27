@@ -12,7 +12,8 @@ class Mate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(appbarTitle: '메이트', backgroundColor: WHITE, contentColor: BLACK, titleSpacing: 15),
+      backgroundColor: WHITE,
+      appBar: CustomAppBar(appbarTitle: '메이트', backgroundColor: WHITE, contentColor: BLACK, titleSpacing: 25),
       body: ProfileList(),
       floatingActionButton: FloatingActionButton( // 메이트 추가 버튼
         onPressed: () {

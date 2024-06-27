@@ -125,6 +125,29 @@ class _ProfileEditState extends State<ProfileEdit> {
                     const SizedBox(height: 40),
                     Row(
                       children: [
+                        Text('소속'),
+                        const SizedBox(width: 20),
+                        CustomTextFormField(
+                          fieldWidth: fieldWidth,
+                          isPasswordField: false,
+                          isReadOnly: false,
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          validator: (value) {
+                            var newValue = value.toString().length;
+                            if (newValue > 20) {
+                              return "20자 이내로 입력하세요.";
+                            } else if (newValue == 0) {
+                              return "소개를 입력해 주세요";
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 40),
+                    Row(
+                      children: [
                         Text('소개'),
                         const SizedBox(width: 20),
                         CustomTextFormField(

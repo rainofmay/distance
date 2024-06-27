@@ -4,12 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+
 import 'package:mobile/view/myroom/widget/widget/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
-import 'package:provider/provider.dart';
-import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
-import 'package:mobile/view/schedule/myroom_schedule.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
@@ -29,7 +27,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     widget.backgroundViewModel.loadPreferences();
-    context.read<ScheduleEventsProvider>().getScheduleEvents();
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -91,7 +88,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
               Navigator.push(
                 context,
                 PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => Schedule(),
+                  pageBuilder: (_, __, ___) => Container(),
                   transitionsBuilder: (_, animation, __, child) {
                     return SlideTransition(
                       position: Tween<Offset>(
@@ -106,7 +103,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 ),
               );
             },
-            icon: const Icon(Icons.note_alt_rounded, size: 20, color: LIGHT_WHITE),
+            icon: const Icon(Icons.settings, size: 20, color: LIGHT_WHITE),
           ),
           ActionButton(
             onPressed: () {
