@@ -54,6 +54,7 @@ flutter:
     - assets/audios/cafe/
     - assets/audios/nature/
     - assets/videos/sea/
+    - assets/videos/gomji/
     - assets/videos/
     - .env
 

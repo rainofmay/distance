@@ -57,6 +57,12 @@ class _SpringScreenState extends State<SpringScreen>
         thumbnailUrl: './assets/videos/sea/sea3.png',
         highQualityUrl:
             "https://24cledbucket.s3.ap-northeast-2.amazonaws.com/sea/sea3.mp4",
+        isPaid: true),
+    ThemeVideo(
+        id: 4,
+        thumbnailUrl: './assets/videos/gomji/campingGomji_thumbnail.png',
+        highQualityUrl:
+        "https://24cledbucket.s3.ap-northeast-2.amazonaws.com/gomji/campingGomji.mp4",
         isPaid: true)
   ];
 
