@@ -6,6 +6,7 @@ import 'package:mobile/model/calendar_info_model.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/view/schedule/widget/schedule/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class ScheduleViewModel extends GetxController {
@@ -42,9 +43,6 @@ class ScheduleViewModel extends GetxController {
   late var _selectedSectionColor;
   Color get selectedSectionColor => _selectedSectionColor.value;
 
-  /* Events */
-  // late final RxBool _isDataRenewal = false.obs;
-  // bool get isDataRenewal => _isDataRenewal.value;
   /* Provider */
   final ScheduleProvider scheduleProvider = ScheduleProvider();
 
@@ -56,6 +54,7 @@ class ScheduleViewModel extends GetxController {
     _isScheduleListLoaded = false.obs;
     initAllSchedules();
     super.onInit();
+    /* Event */
   }
 
   /* Init */
@@ -75,7 +74,7 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules = value.obs);
-    print('_allSchedules $_allSchedules');
+    // print('_allSchedules $_allSchedules');
   }
 
   Future<void> initScheduleData(DateTime day) async {
@@ -92,7 +91,6 @@ class ScheduleViewModel extends GetxController {
 
 
 /* Update */
-
   void updateSelectedDate(DateTime selectedDate) {
     _calendarInfo.value = _calendarInfo.value.copyWith(
       selectedDate: selectedDate,
@@ -121,7 +119,6 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules.value = value);
-    print('updated _allSchedules $_allSchedules');
   }
 
   Future<void> updateScheduleData(DateTime day) async{
@@ -135,5 +132,55 @@ class ScheduleViewModel extends GetxController {
   void updateColorIndex(int index) {
     _colorIndex.value = index;
     _selectedSectionColor.value = sectionColors[index];
+  }
+
+  List initEvents(DateTime day) {
+    List<dynamic> newData = [];
+    for (int i = 0; i < _allSchedules.length; i++) {
+      newData.add([
+        _allSchedules[i].startDate.toUtc().add(Duration(hours: 9)),
+        _allSchedules[i].endDate.toUtc().add(Duration(hours: 9)),
+        _allSchedules[i].id,
+        _allSchedules[i].sectionColor,
+      ]);
+    }
+    return newData;
+  }
+
+  List<Object?> getEvents(DateTime day) {
+    List<dynamic> data = initEvents(day);
+
+    Map<DateTime, List<Event>> events = {};
+    for (int i = 0; i < data.length; i++) {
+      DateTime startDate = data[i][0];
+      DateTime endDate = data[i][1];
+      String id = data[i][2];
+
+      while (
+      startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
+        events.containsKey(startDate)
+            ? events[startDate]!.contains(Event(id))
+            ? null
+            : events[startDate]!.add(Event(id))
+            : events.addAll({
+          startDate: [Event(id)]
+        });
+        startDate = startDate.add(Duration(days: 1));
+      }
+    }
+
+    return events[day] ?? [];
+  }
+
+  // Map<String, int>
+  Map<String, int> getEventsColor(day) {
+    Map<String, int> idColorData = {};
+    List data = initEvents(day);
+
+    for (int i = 0; i < data.length; i++) {
+      idColorData.addAll({data[i][2] : data[i][3]});
+    }
+    print(idColorData);
+    return idColorData;
   }
 }

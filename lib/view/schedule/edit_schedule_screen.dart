@@ -106,6 +106,11 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     print('editschedule $schedule');
     await scheduleProvider.editScheduleData(schedule)
     .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
+
+    // 이벤트 재랜더링과 연관 있는 기능들
+    await viewModel.updateAllSchedules();
+    viewModel.updateSelectedDate(_startDate);
+
     Get.back();
   }
 
@@ -213,6 +218,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
             onPressed: () async {
               await scheduleProvider.deleteScheduleData(id)
                   .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
+
+              // 이벤트 재랜더링과 연관 있는 기능들
+              await viewModel.updateAllSchedules();
+              viewModel.updateSelectedDate(_startDate);
               Get.back();
             },
             child: const Text(

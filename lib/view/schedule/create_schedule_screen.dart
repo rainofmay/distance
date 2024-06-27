@@ -103,7 +103,9 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     await viewModel.scheduleProvider.createScheduleData(schedule)
     .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
 
-    await viewModel.updateAllSchedules(); // 실행된 거 확인
+    // 이벤트 재랜더링과 연관 있는 기능들
+    await viewModel.updateAllSchedules();
+    viewModel.updateSelectedDate(_startDate);
 
     Get.back();
   }

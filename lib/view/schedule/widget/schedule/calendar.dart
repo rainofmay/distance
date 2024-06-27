@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'event.dart';
 
 class Calendar extends StatefulWidget {
   final ScheduleViewModel viewModel;
@@ -17,55 +15,7 @@ class Calendar extends StatefulWidget {
 
 class _CalendarState extends State<Calendar> {
   late final ScheduleViewModel _viewModel;
-  late final List<ScheduleModel> data = _viewModel.allSchedules;
-
-  List _initEvents(DateTime day) {
-    List<dynamic> newData = [];
-    for (int i = 0; i < data.length; i++) {
-      newData.add([
-        data[i].startDate.toUtc().add(Duration(hours: 9)),
-        data[i].endDate.toUtc().add(Duration(hours: 9)),
-        data[i].id,
-        data[i].sectionColor,
-      ]);
-      print('calendar initEvents newData $newData');
-    }
-    return newData;
-  }
-
-  List<Event?> _getEvents(DateTime day) {
-    List<dynamic> data = _initEvents(day);
-
-    Map<DateTime, List<Event>> events = {};
-    for (int i = 0; i < data.length; i++) {
-      DateTime startDate = data[i][0];
-      DateTime endDate = data[i][1];
-      String id = data[i][2];
-
-      while (
-          startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
-        events.containsKey(startDate)
-            ? events[startDate]!.contains(Event(id))
-                ? null
-                : events[startDate]!.add(Event(id))
-            : events.addAll({
-                startDate: [Event(id)]
-              });
-        startDate = startDate.add(Duration(days: 1));
-      }
-    }
-    return events[day] ?? [];
-  }
-
-  List<int> _getEventsColor(day) {
-    List data = _initEvents(day);
-    List<int> colorList = [];
-    for (int i = 0; i < data.length; i++) {
-      colorList.add(data[i][3]);
-    }
-    return colorList;
-  }
-
+  late Color _eventColor;
   @override
   void initState() {
     super.initState();
@@ -96,7 +46,6 @@ class _CalendarState extends State<Calendar> {
               date.day == _viewModel.selectedDate.day,
           firstDay: DateTime.now().subtract(const Duration(days: 365 * 10 + 5)),
           lastDay: DateTime.now().add(const Duration(days: 365 * 10 + 5)),
-          //DateTime(2999, 1, 1),
 
           calendarBuilders:
               CalendarBuilders(defaultBuilder: (context, day, focusedDay) {
@@ -139,28 +88,28 @@ class _CalendarState extends State<Calendar> {
             }
             return null;
           },
-
-                  /* Event Builder */
-                  markerBuilder: (context, day, events) {
-                    if (_getEvents(day).isEmpty) {
+            /* Event Builder */
+            markerBuilder: (context, day, events) {
+              if (_viewModel.getEvents(day).isEmpty) {
               null;
-            } else if (_getEvents(day).isNotEmpty && _getEvents(day).length < 5) {
+            } else if (_viewModel.getEvents(day).isNotEmpty && _viewModel.getEvents(day).length < 5) {
               return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: _getEvents(day).length,
+                  itemCount: _viewModel.getEvents(day).length,
                   itemBuilder: (context, index) {
-                     int itemColor = _getEventsColor(day)[index];
+                    Map<String, int> data = _viewModel.getEventsColor(day);
+                    _eventColor = sectionColors[data[events[index].toString()] ?? 1];
                     return Container(
                       margin: const EdgeInsets.only(top: 35),
                       child: Icon(
                         size: 8,
                         Icons.circle,
-                        color: sectionColors[itemColor],
+                        color: _eventColor,
                       ),
                     );
                   });
-            } else if (_getEvents(day).length >= 5) {
+            } else if (_viewModel.getEvents(day).length >= 5) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -174,7 +123,7 @@ class _CalendarState extends State<Calendar> {
                         color: COMPLEMENTARY_COLOR,
                       ),
                       child: Text(
-                        '${_getEvents(day).length}',
+                        '${_viewModel.getEvents(day).length}',
                         style: const TextStyle(fontSize: 9, color: WHITE),
                         textAlign: TextAlign.center,
                       ),
@@ -187,7 +136,7 @@ class _CalendarState extends State<Calendar> {
           }),
 
           // 달력에 이벤트 업로드
-          eventLoader: _getEvents,
+          eventLoader: _viewModel.getEvents,
           headerStyle: const HeaderStyle(
             titleCentered: true,
             formatButtonVisible: false,

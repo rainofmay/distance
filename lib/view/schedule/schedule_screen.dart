@@ -39,7 +39,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
   @override
   void initState() {
-    print('viewModel hashCode: ${viewModel.hashCode}');
     super.initState();
   }
 
