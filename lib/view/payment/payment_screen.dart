@@ -46,7 +46,7 @@ class PaymentScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Distant Premium 체험하기",
+              "Distance Premium 체험하기",
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
