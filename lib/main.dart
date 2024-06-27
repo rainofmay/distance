@@ -7,7 +7,6 @@ import 'package:mobile/util/modifying_schedule_provider.dart';
 import 'package:mobile/util/schedule_color_provider.dart';
 import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
-import 'package:mobile/view_model/myroom/music/global_player.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:provider/provider.dart';
@@ -26,11 +25,11 @@ Future<void> main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (context) => GlobalAudioPlayer()),
         ChangeNotifierProvider(create: (context) => CalendarProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleColorProvider()),
         ChangeNotifierProvider(create: (context) => ScheduleEventsProvider()),
-        ChangeNotifierProvider(create: (context) => ModifyingScheduleProvider()),
+        ChangeNotifierProvider(
+            create: (context) => ModifyingScheduleProvider()),
         // ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
       ],
       child: MaterialApp(
@@ -61,22 +60,26 @@ class _MyAppState extends State<MainPage> {
       systemNavigationBarColor: BLACK, // 하단 시스템UI 검정색
     ));
 
-    return Scaffold(
-      // appBar: AppBar(),
-      body: bottomBarViewModel.setScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: bottomBarViewModel.bottomIndex,
-          onTap: bottomBarViewModel.setBottomIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded), label: '내 방',),
-            BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),
-            // BottomNavigationBarItem(
-            //     icon: Icon(Icons.card_giftcard), label: '스토어'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.login), label: '로그인(임시)'),
-            BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
-          ]),
-    );
+    return Obx(() => Scaffold(
+          // appBar: AppBar(),
+          body: bottomBarViewModel.setScreen(),
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: bottomBarViewModel.bottomIndex,
+              onTap: bottomBarViewModel.setBottomIndex,
+              items: [
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.home_rounded),
+                  label: '내 방',
+                ),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.person_3), label: '메이트'),
+                // BottomNavigationBarItem(
+                //     icon: Icon(Icons.card_giftcard), label: '스토어'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.login), label: '로그인(임시)'),
+                BottomNavigationBarItem(
+                    icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
+              ]),
+        ));
   }
 }

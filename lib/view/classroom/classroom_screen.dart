@@ -49,6 +49,7 @@ class _ClassRoomState extends State<ClassRoom> {
     return Scaffold(
       appBar: CustomBackAppBar(
         isLeading: true,
+        isCenterTitle: true,
         appbarTitle: '들어간 그룹명',
         backFunction: _resetBottomIndex,
         backgroundColor: BLACK,

@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/view/myroom/background/background_themes/background_themes.dart';
-import 'package:mobile/view_model/background/myroom_view_model.dart';
 import '../../../common/const/colors.dart';
 import '../../../widgets/glass_morphism.dart';
 import '../../../widgets/ok_cancel._buttons.dart';
@@ -27,8 +27,14 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         child: Obx(() {
           return Image.asset(
             myroomViewModel.selectedItemThumbnail.value,
-            width: MediaQuery.of(context).size.width * 0.56,
-            height: MediaQuery.of(context).size.height * 0.26,
+            width: MediaQuery
+                .of(context)
+                .size
+                .width * 0.56,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height * 0.26,
             fit: BoxFit.cover,
           );
         }));
@@ -51,7 +57,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         '배경 설정',
         SingleChildScrollView(
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 22),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -88,139 +94,143 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final double interval = MediaQuery.of(context).size.width * 0.1;
+    final double interval = MediaQuery
+        .of(context)
+        .size
+        .width * 0.1;
 
     return Center(
       child: GlassMorphism(
         blur: 1,
         opacity: 0.65,
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.7,
-          child: Padding(
-            padding: const EdgeInsets.all(15),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    'View',
-                    style: TextStyle(fontSize: 17, color: WHITE),
-                  ),
-                  const SizedBox(height: 25),
-                  GestureDetector(
-                    onTap: () {
-                      editDialog();
-                    },
-                    child: Center(
-                        child: ClipRRect(
-                            borderRadius: BorderRadius.circular(10.0),
-                            child: _buildBackground())),
-                  ),
-                  const SizedBox(height: 15),
-                  GestureDetector(
-                    behavior: HitTestBehavior.translucent,
-                    onTap: () {
-                      editDialog();
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.edit_rounded,
-                          color: WHITE,
-                          size: 16,
-                        ),
-                        const SizedBox(width: 10),
-                        Text('배경 편집', style: TextStyle(color: WHITE)),
-                      ],
+          width: MediaQuery
+              .of(context)
+              .size
+              .width * 0.8,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.75,
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      'View',
+                      style: TextStyle(fontSize: 17, color: WHITE),
                     ),
-                  ),
-                  const SizedBox(height: 40),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: interval),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Schedule', style: TextStyle(color: WHITE)),
-                          Transform.scale(
-                            scale: 0.6,
-                            child: Obx(() => CupertinoSwitch(
-                                  thumbColor: WHITE,
-                                  value: myroomViewModel
-                                      .isSimpleWindowEnabled.value,
-                                  activeColor: SECONDARY,
-                                  onChanged: (value) {
-                                    myroomViewModel
-                                        .updateSimpleWindowChange(value);
-                                  },
-                                )),
-                          ),
-                        ]),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: interval),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Audio', style: TextStyle(color: WHITE)),
-                          Transform.scale(
-                            scale: 0.6,
-                            child: Obx(() => CupertinoSwitch(
-                                  activeColor: SECONDARY,
-                                  value: myroomViewModel
-                                      .isAudioSpectrumEnabled.value,
-                                  onChanged: (value) {
-                                    myroomViewModel
-                                        .updateAudioSpectrumChange(value);
-                                  },
-                                )),
-                          ),
-                        ]),
-                  ),
-                  const SizedBox(height: 10),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: interval),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Words', style: TextStyle(color: WHITE)),
-                          Transform.scale(
-                            scale: 0.6,
-                            child: Obx(() => CupertinoSwitch(
-                                  activeColor: SECONDARY,
-                                  value: myroomViewModel
-                                      .isAudioSpectrumEnabled.value,
-                                  onChanged: (value) {
-                                    // update as necessary
-                                    myroomViewModel
-                                        .updateAudioSpectrumChange(value);
-                                  },
-                                )),
-                          ),
-                        ]),
-                  ),
-                  const SizedBox(height: 20),
-                  OkCancelButtons(
-                    onPressed: () {
-                      // 현재 화면을 pop하여 이전 화면으로 이동
-                      Navigator.pop(context);
-                    },
-                    onCancelPressed: () {
-                      // 저장요소 취소
-                      Navigator.pop(context);
-                    },
-                    okText: '저장',
-                    okTextColor: WHITE,
-                    cancelText: '취소',
-                    cancelTextColor: WHITE,
-                  ),
-                ],
+                    const SizedBox(height: 25),
+                    _editBackground(),
+                    const SizedBox(height: 40),
+                    _toggleButtons(),
+                  ],
+                ),
               ),
-            ),
+              OkCancelButtons(
+                onPressed: () {
+                  // 현재 화면을 pop하여 이전 화면으로 이동
+                  Navigator.pop(context);
+                },
+                onCancelPressed: () {
+                  // 저장요소 취소
+                  Navigator.pop(context);
+                },
+                okText: '저장',
+                okTextColor: WHITE,
+                cancelText: '취소',
+                cancelTextColor: WHITE,
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
+  Widget _editBackground() {
+    return GestureDetector(
+      onTap: () {
+        editDialog();
+      },
+      child: Center(
+          child: ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Column(
+                children: [
+                  _buildBackground(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('배경 편집', style: TextStyle(color: WHITE)),
+                      Icon(
+                        Icons.edit_rounded,
+                        color: WHITE,
+                        size: 16,
+                      ),
+                    ],
+                  ),
+                ],
+              ))),
+    );
+  }
+
+  Widget _toggleButtons() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30),
+      child: Column(
+        children: [
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text('Schedule', style: TextStyle(color: WHITE)),
+            Transform.scale(
+              scale: 0.6,
+              child: Obx(() =>
+                  CupertinoSwitch(
+                    thumbColor: WHITE,
+                    value: myroomViewModel.isSimpleWindowEnabled.value,
+                    activeColor: SECONDARY,
+                    onChanged: (value) {
+                      myroomViewModel.updateSimpleWindowChange(value);
+                    },
+                  )),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text('Audio', style: TextStyle(color: WHITE)),
+            Transform.scale(
+              scale: 0.6,
+              child: Obx(() =>
+                  CupertinoSwitch(
+                    activeColor: SECONDARY,
+                    value: myroomViewModel.isAudioSpectrumEnabled.value,
+                    onChanged: (value) {
+                      myroomViewModel.updateAudioSpectrumChange(value);
+                    },
+                  )),
+            ),
+          ]),
+          const SizedBox(height: 10),
+          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            Text('Words', style: TextStyle(color: WHITE)),
+            Transform.scale(
+              scale: 0.6,
+              child: Obx(() =>
+                  CupertinoSwitch(
+                    activeColor: SECONDARY,
+                    value: myroomViewModel.isAudioSpectrumEnabled.value,
+                    onChanged: (value) {
+                      // update as necessary
+                      myroomViewModel.updateAudioSpectrumChange(value);
+                    },
+                  )),
+            ),
+          ])
+        ],
+      ),
+    );
+  }
+
+
 }

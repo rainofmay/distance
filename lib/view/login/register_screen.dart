@@ -112,6 +112,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       appBar: CustomBackAppBar(
           appbarTitle: '회원가입',
           isLeading: true,
+          isCenterTitle: true,
           backFunction : Navigator.of(context).pop,
           backgroundColor: WHITE,
           contentColor: BLACK),

@@ -202,6 +202,7 @@ class _ModifyScheduleState extends State<ModifySchedule> {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: '',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: BLACK,
         contentColor: WHITE,

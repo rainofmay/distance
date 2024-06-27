@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/view/etc/personal_information.dart';
 import 'package:mobile/view/etc/update_notification.dart';
+import 'package:mobile/view/payment/payment_screen.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
@@ -85,7 +86,14 @@ class _EtcState extends State<Etc> {
                   ),
                 ),
                 IconButton(
-                    onPressed: () {},
+                    onPressed: () => {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const PaymentScreen()),
+                          )
+                        },
+                    // Navigate using GetX
                     icon: Icon(Icons.arrow_forward_ios),
                     color: WHITE),
               ],

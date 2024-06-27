@@ -16,6 +16,7 @@ class _ChangeSettingState extends State<ChangeSetting> {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: '설정 변경',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
         contentColor: BLACK,

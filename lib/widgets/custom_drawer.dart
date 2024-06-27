@@ -18,7 +18,7 @@ class CustomDrawer extends StatelessWidget {
                   // backgroundImage: AssetImage(''),
                   ),
               accountName: Text(
-                '테스트',
+                '홍규진',
                 style: const TextStyle(color: BLACK),
               ),
               accountEmail:

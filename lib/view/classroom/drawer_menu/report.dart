@@ -49,6 +49,7 @@ class _ReportState extends State<Report> {
       appBar: CustomBackAppBar(
         isLeading: true,
         appbarTitle: '신고하기',
+        isCenterTitle: true,
         backFunction: Navigator.of(context).pop,
         backgroundColor: WHITE,
         contentColor: BLACK,

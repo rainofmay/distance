@@ -11,6 +11,7 @@ class UserStore extends StatelessWidget {
     return Scaffold(
       appBar: CustomBackAppBar(
           appbarTitle: '구매 정보',
+          isCenterTitle: true,
           isLeading: true,
           backFunction: Navigator.of(context).pop,
           backgroundColor: BLACK,
