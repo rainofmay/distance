@@ -57,7 +57,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         '배경 설정',
         SingleChildScrollView(
           child:
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 22),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -94,24 +94,15 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final double interval = MediaQuery
-        .of(context)
-        .size
-        .width * 0.1;
+    final double interval = MediaQuery.of(context).size.width * 0.1;
 
     return Center(
       child: GlassMorphism(
         blur: 1,
         opacity: 0.65,
         child: SizedBox(
-          width: MediaQuery
-              .of(context)
-              .size
-              .width * 0.8,
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.75,
+          width: MediaQuery.of(context).size.width * 0.8,
+          height: MediaQuery.of(context).size.height * 0.75,
           child: Column(
             children: [
               SingleChildScrollView(
@@ -163,7 +154,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('배경 편집', style: TextStyle(color: WHITE)),
+                      Text('배경 편집 ', style: TextStyle(color: WHITE)),
                       Icon(
                         Icons.edit_rounded,
                         color: WHITE,
@@ -201,8 +192,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             Text('Audio', style: TextStyle(color: WHITE)),
             Transform.scale(
               scale: 0.6,
-              child: Obx(() =>
-                  CupertinoSwitch(
+              child: Obx(() => CupertinoSwitch(
                     activeColor: SECONDARY,
                     value: myroomViewModel.isAudioSpectrumEnabled.value,
                     onChanged: (value) {
@@ -216,8 +206,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
             Text('Words', style: TextStyle(color: WHITE)),
             Transform.scale(
               scale: 0.6,
-              child: Obx(() =>
-                  CupertinoSwitch(
+              child: Obx(() => CupertinoSwitch(
                     activeColor: SECONDARY,
                     value: myroomViewModel.isAudioSpectrumEnabled.value,
                     onChanged: (value) {

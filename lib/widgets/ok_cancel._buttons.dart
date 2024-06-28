@@ -20,30 +20,28 @@ class OkCancelButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-        alignment: Alignment.center,
-        // height: 30,
-        margin: EdgeInsets.only(top: 5, bottom: 5),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            TextButton(
-              child: Text(cancelText, style: TextStyle(color: cancelTextColor ?? BLACK)),
-              onPressed: () {
-                Navigator.of(context).pop(); // 닫히는 버튼
-                onCancelPressed;
-              },
+    return Container(
+      alignment: Alignment.center,
+      // height: 30,
+      margin: EdgeInsets.only(top: 5, bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          TextButton(
+            child: Text(cancelText, style: TextStyle(color: cancelTextColor ?? BLACK)),
+            onPressed: () {
+              Navigator.of(context).pop(); // 닫히는 버튼
+              onCancelPressed;
+            },
+          ),
+          TextButton(
+            onPressed: onPressed,
+            child: Text(
+              okText,
+              style: TextStyle(color: okTextColor ?? BLACK),
             ),
-            TextButton(
-              onPressed: onPressed,
-              child: Text(
-                okText,
-                style: TextStyle(color: okTextColor ?? BLACK),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
