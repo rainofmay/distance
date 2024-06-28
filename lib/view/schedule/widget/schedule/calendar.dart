@@ -63,14 +63,14 @@ class _CalendarState extends State<Calendar> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6.0),
                   border: Border.all(
-                    color: PRIMARY_COLOR,
+                    color: SECONDARY,
                     width: 1.0,
                   )),
               child: Center(
                 child: Text(
                   '${date.day}',
                   style: const TextStyle(
-                    color: PRIMARY_COLOR,
+                    color: SECONDARY,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -120,7 +120,7 @@ class _CalendarState extends State<Calendar> {
                       height: 15,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(3),
-                        color: COMPLEMENTARY_COLOR,
+                        color: SECONDARY,
                       ),
                       child: Text(
                         '${_viewModel.getEvents(day).length}',

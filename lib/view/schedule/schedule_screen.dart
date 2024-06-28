@@ -49,8 +49,8 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appbarTitle: '일 정',
-        backgroundColor: BLACK,
-        contentColor: WHITE,
+        backgroundColor: WHITE,
+        contentColor: BLACK,
         titleSpacing: 25,
         actions: [
           IconButton(
@@ -58,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 Get.to(() => CreateScheduleScreen());
               },
               icon: const Icon(CupertinoIcons.add_circled_solid),
-              color: WHITE),
+              color: SECONDARY),
         ],
       ),
       body: SafeArea(

@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 50),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  side: BorderSide(color: SECONDARY),
+                  side: BorderSide(color: THIRD),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8))),
                   backgroundColor: WHITE,

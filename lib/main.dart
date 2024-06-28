@@ -6,15 +6,10 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/util/modifying_schedule_provider.dart';
-import 'package:mobile/util/schedule_color_provider.dart';
-import 'package:mobile/util/schedule_events_provider.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
-import 'package:provider/provider.dart';
-import 'package:mobile/util/calendar_provider.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
@@ -27,24 +22,14 @@ Future<void> main() async {
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => CalendarProvider()),
-        ChangeNotifierProvider(create: (context) => ScheduleColorProvider()),
-        ChangeNotifierProvider(create: (context) => ScheduleEventsProvider()),
-        ChangeNotifierProvider(
-            create: (context) => ModifyingScheduleProvider()),
-        // ChangeNotifierProvider(create: (context) => ClassBottomIndex()),
-      ],
-      child: GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          // initialRoute: '/main',
-          // routes: {
-          //   '/main' : (context) => MainPage(),
-          // },
-          home: MainPage(),
-          theme: mainstyle.theme),
-    ),
+    GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        // initialRoute: '/main',
+        // routes: {
+        //   '/main' : (context) => MainPage(),
+        // },
+        home: MainPage(),
+        theme: mainstyle.theme),
   );
 }
 

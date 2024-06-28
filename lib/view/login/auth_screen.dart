@@ -121,7 +121,7 @@ class _AuthScreenState extends State<AuthScreen> {
               Padding(
                 padding: const EdgeInsets.only(left:20, top:20, bottom:10),
                 child: const Text('DISTANCE',
-                    style: TextStyle(color: BLACK, fontSize: 15)),
+                    style: TextStyle(color: Color(0xff853312), fontSize: 15)),
               ),
               Padding(
                 padding: const EdgeInsets.only(left:20.0),
@@ -129,11 +129,11 @@ class _AuthScreenState extends State<AuthScreen> {
                   width: 90,
                     decoration: BoxDecoration(
                         border: Border(
-                  bottom: BorderSide(width: 1.0, color: SECONDARY),
+                  bottom: BorderSide(width: 1.0, color: Colors.grey.withOpacity(0)),
                 )))
               ),
               Padding(
-                padding: const EdgeInsets.only(left:20, top:15, bottom:10),
+                padding: const EdgeInsets.only(left:20, top:10, bottom:10),
                 child: const Text('Log in and experience Distance. It is yours.',
                     style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
                     textAlign: TextAlign.start),
@@ -172,7 +172,7 @@ class _AuthScreenState extends State<AuthScreen> {
                               isPasswordField: true,
                               isReadOnly: false,
                               keyboardType: TextInputType.visiblePassword,
-                              textInputAction: TextInputAction.next,
+                              textInputAction: TextInputAction.done,
                               controller: _passwordController,
                               validator: (value) => inputPasswordValidator(value),
                             ),
@@ -181,7 +181,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ElevatedButton(
                               style:  ElevatedButton.styleFrom(
                                 side: BorderSide(
-                                  color: SECONDARY
+                                  color: Color(0xff853312)
                                 ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
@@ -192,9 +192,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                 fixedSize: Size(widthOfLog, heightOfLog),
                               ),
                               onPressed: signIn,
-                              child: const Text('로그인', style: TextStyle(color: SECONDARY, fontSize: 16)),
+                              child: const Text('로그인', style: TextStyle(color: Color(0xff853312), fontSize: 16)),
                             ),
-                            SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
+                            const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
                             Padding(
                               padding: const EdgeInsets.only(right:20),
                               child: Row(
@@ -248,32 +248,6 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(color: BLACK, fontSize: 16)),
                           ],
                         )),
-                    // NAVER 로그인
-                    // ElevatedButton(
-                    //     style: ElevatedButton.styleFrom(
-                    //         shape: RoundedRectangleBorder(
-                    //             borderRadius:
-                    //                 BorderRadius.all(Radius.circular(8))),
-                    //         overlayColor: TRANSPARENT,
-                    //         foregroundColor: TRANSPARENT,
-                    //         fixedSize: Size(widthOfLog, heightOfLog),
-                    //         backgroundColor: Color(0xff03C75A)),
-                    //     onPressed: () => onGoogleLoginPress(context),
-                    //     child: Row(
-                    //
-                    //       children: [
-                    //         SvgPicture.asset(
-                    //           'assets/icons/naver.svg',
-                    //           width: 21,
-                    //           height: 21,
-                    //           colorFilter:
-                    //               const ColorFilter.mode(WHITE, BlendMode.srcIn),
-                    //         ),
-                    //         SizedBox(width: 20),
-                    //         Text('NAVER로 로그인',
-                    //             style: TextStyle(color: WHITE, fontSize: 16)),
-                    //       ],
-                    //     )),
 
                     const SizedBox(height: 15),
 

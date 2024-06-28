@@ -10,11 +10,12 @@ class DismissibleProfileCard extends StatelessWidget {
 
   // 생성자를 통해 필요한 데이터와 함수를 초기화
   const DismissibleProfileCard({
-    Key? key,
+    super.key,
     required this.profile,
     required this.onDelete,
     required this.index,
-  }) : super(key: key);
+  });
+
 
   @override
   Widget build(BuildContext context) {

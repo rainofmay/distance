@@ -189,7 +189,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
                   CupertinoSwitch(
                     thumbColor: WHITE,
                     value: myroomViewModel.isSimpleWindowEnabled.value,
-                    activeColor: SECONDARY,
+                    activeColor: THIRD,
                     onChanged: (value) {
                       myroomViewModel.updateSimpleWindowChange(value);
                     },
@@ -203,7 +203,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               scale: 0.6,
               child: Obx(() =>
                   CupertinoSwitch(
-                    activeColor: SECONDARY,
+                    activeColor: THIRD,
                     value: myroomViewModel.isAudioSpectrumEnabled.value,
                     onChanged: (value) {
                       myroomViewModel.updateAudioSpectrumChange(value);
@@ -218,7 +218,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               scale: 0.6,
               child: Obx(() =>
                   CupertinoSwitch(
-                    activeColor: SECONDARY,
+                    activeColor: PRIMARY_COLOR,
                     value: myroomViewModel.isAudioSpectrumEnabled.value,
                     onChanged: (value) {
                       // update as necessary
