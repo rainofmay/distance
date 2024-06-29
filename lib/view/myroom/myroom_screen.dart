@@ -5,7 +5,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 
-import 'package:mobile/view/myroom/widget/widget/widget/floating_todo.dart';
+import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
 import 'package:mobile/widgets/action_buttons.dart';
