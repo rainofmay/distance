@@ -3,12 +3,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/view/myroom/widget/custom_dialog.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/view/myroom/background/background_themes/background_themes.dart';
 import '../../../common/const/colors.dart';
-import '../../../widgets/glass_morphism.dart';
-import '../../../widgets/ok_cancel._buttons.dart';
 
 class BackgroundSetting extends StatefulWidget {
   const BackgroundSetting({super.key});
@@ -21,21 +20,37 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
   File? profileImg;
   final MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
 
+  @override
+  Widget build(BuildContext context) {
+    return CustomDialog(title: "View", children: [
+      _editBackground(),
+      _toggleButtons(),
+    ]);
+  }
+
+
   Widget _buildBackground() {
     return ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Obx(() {
-          return Image.asset(
-            myroomViewModel.selectedItemThumbnail.value,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 0.56,
-            height: MediaQuery
-                .of(context)
-                .size
-                .height * 0.26,
-            fit: BoxFit.cover,
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery
+                  .of(context)
+                  .size
+                  .height * 0.5,
+            ),
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: Image.asset(
+                myroomViewModel.selectedItemThumbnail.value,
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width * 0.56,
+                fit: BoxFit.cover,
+              ),
+            ),
           );
         }));
   }
@@ -57,7 +72,7 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         '배경 설정',
         SingleChildScrollView(
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 22),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
@@ -92,52 +107,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
         null);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: GlassMorphism(
-        blur: 1,
-        opacity: 0.65,
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.75,
-          child: Column(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 8),
-                    const Text(
-                      'View',
-                      style: TextStyle(fontSize: 18, color: WHITE),
-                    ),
-                    const SizedBox(height: 16),
-                    _editBackground(),
-                    const SizedBox(height: 40),
-                    _toggleButtons(),
-                  ],
-                ),
-              ),
-              OkCancelButtons(
-                onPressed: () {
-                  // 현재 화면을 pop하여 이전 화면으로 이동
-                  Navigator.pop(context);
-                },
-                onCancelPressed: () {
-                  // 저장요소 취소
-                  Navigator.pop(context);
-                },
-                okText: '저장',
-                okTextColor: WHITE,
-                cancelText: '취소',
-                cancelTextColor: WHITE,
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _editBackground() {
     return GestureDetector(
@@ -146,21 +115,19 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       },
       child: Center(
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10.0),
               child: Column(
                 children: [
                   _buildBackground(),
-                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Icon(
-                        Icons.settings,
+                      Text('배경 편집 ', style: TextStyle(color: WHITE)),
+                      Icon(
+                        Icons.edit_rounded,
                         color: WHITE,
                         size: 16,
                       ),
-                      const SizedBox(width: 8),
-                      const Text('내 배경 설정 ', style: TextStyle(color: WHITE)),
                     ],
                   ),
                 ],

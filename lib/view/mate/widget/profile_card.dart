@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
+import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 
@@ -116,7 +117,7 @@ class _ProfileCardState extends State<ProfileCard> {
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right:16.0),
                     child: Icon(Icons.circle,
-                      color: widget.profile.onlineStatus ? SECONDARY : GREY.withOpacity(0.5),
+                      color: getStatusColor(widget.profile.onlineStatus),
                     ),
                   ),
                 ],
