@@ -35,6 +35,7 @@ dependencies:
   collection: ^1.15.0
   flutter_svg: ^2.0.10+1
   get: ^4.6.6
+  emoji_picker_flutter: ^2.2.0
 
 
 dev_dependencies:
