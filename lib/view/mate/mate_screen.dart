@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/add_mate_modal.dart';
 import 'package:mobile/view/mate/widget/dismissible_profile_card.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/common/const/colors.dart';
 
 class MateScreen extends StatefulWidget {
-  const MateScreen({super.key});
+  MateScreen({super.key});
+  final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
+
 
   @override
   State<MateScreen> createState() => _MateScreenState();
@@ -53,17 +58,19 @@ class _MateScreenState extends State<MateScreen> {
                         ),
                       ),
                       const SizedBox(width: 20),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('NickName or ID',
-                              style: TextStyle(fontSize: 15)),
-                          const SizedBox(height: 8),
-                          Text('#Introduction',
-                              style: TextStyle(
-                                  fontSize: 13, color: DARK_UNSELECTED)),
-                        ],
+                      Obx(()=>
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(widget.viewModel.name.value,
+                                style: TextStyle(fontSize: 15)),
+                            const SizedBox(height: 8),
+                            Text(widget.viewModel.introduction.value,
+                                style: TextStyle(
+                                    fontSize: 13, color: DARK_UNSELECTED)),
+                          ],
+                        )
                       )
                     ],
                   ),
@@ -136,7 +143,7 @@ class ProfileList extends StatelessWidget {
         profileImageUrl: 'https://via.placeholder.com/150',
         imageUrl:
             'https://cdn.goodnews1.com/news/photo/201907/89251_22763_3813.JPG',
-        onlineStatus: true,
+        onlineStatus: OnlineStatus.online,
         currentActivity: '코드 작성 중'),
     UserProfile(
         name: '유저 2',
@@ -144,7 +151,7 @@ class ProfileList extends StatelessWidget {
         profileImageUrl: 'https://via.placeholder.com/150',
         imageUrl:
             'https://src.hidoc.co.kr/image/lib/2021/4/22/1619066150478_0.jpg',
-        onlineStatus: false,
+        onlineStatus: OnlineStatus.away,
         currentActivity: '디자인 작업 중'),
     // 프로필 데이터
   ];
