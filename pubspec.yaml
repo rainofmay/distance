@@ -35,6 +35,8 @@ dependencies:
   collection: ^1.15.0
   flutter_svg: ^2.0.10+1
   get: ^4.6.6
+  sleek_circular_slider: ^2.0.1
+  emoji_picker_flutter: ^2.2.0
 
 
 dev_dependencies:
@@ -50,6 +52,7 @@ flutter:
     - assets/images/
     - assets/images/seas/
     - assets/images/themes/
+    - assets/images/themes/sound/
     - assets/icons/
     - assets/audios/cafe/
     - assets/audios/nature/
