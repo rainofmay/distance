@@ -58,7 +58,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                 Get.to(() => CreateScheduleScreen());
               },
               icon: const Icon(CupertinoIcons.add_circled_solid),
-              color: SECONDARY),
+              color: BLACK),
         ],
       ),
       body: SafeArea(

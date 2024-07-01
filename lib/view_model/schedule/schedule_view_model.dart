@@ -180,7 +180,7 @@ class ScheduleViewModel extends GetxController {
     for (int i = 0; i < data.length; i++) {
       idColorData.addAll({data[i][2] : data[i][3]});
     }
-    print(idColorData);
+
     return idColorData;
   }
 }

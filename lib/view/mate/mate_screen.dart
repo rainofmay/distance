@@ -26,7 +26,7 @@ class _MateScreenState extends State<MateScreen> {
         titleSpacing: 25,
         actions: [
           IconButton(onPressed: () => ShowAddMateDialog(context), icon: Icon(CupertinoIcons.person_add)),
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search),)
         ],
       ),
       body: Column(

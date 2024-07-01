@@ -1,80 +1,163 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view/myroom/music/music_themes_screen.dart';
+import 'package:mobile/view/myroom/music/widget/circled_music_album.dart';
+import 'package:mobile/view/myroom/music/widget/music_player.dart';
 import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
 import 'package:mobile/widgets/custom_icon_button.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/view/myroom/music/widget/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
-class MusicSetting extends StatefulWidget {
-  const MusicSetting({super.key});
+class MyroomMusicScreen extends StatefulWidget {
+  const MyroomMusicScreen({super.key});
 
   @override
-  State<MusicSetting> createState() => _MusicSettingState();
+  State<MyroomMusicScreen> createState() => _MyroomMusicScreenState();
 }
 
-class _MusicSettingState extends State<MusicSetting> {
+class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
   final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel());
+  late final PageController pageController;
+
+  bool _isFirstScreen = true;
+
+  void _changeScreen(value) {
+    setState(() {
+      // value는 PageView 에서 받아온 Int 값
+      if (value == 0) {
+        _isFirstScreen = true;
+      } else if (value == 1) {
+        _isFirstScreen = false;
+      }
+    });
+  }
+
 
   @override
   void initState() {
     super.initState();
-    // DUMMY_DATA 초기화
+    pageController = PageController(initialPage: 0);
+  }
+
+  @override
+  void dispose() {
+    pageController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: TRANSPARENT,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
+    return Center(
       child: GlassMorphism(
         blur: 1,
         opacity: 0.65,
         child: SizedBox(
           width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.8,
+          height: MediaQuery.of(context).size.height * 0.75,
           child: Stack(children: [
-            Positioned.fill(
-                child: SingleChildScrollView(
-                    child: Column(
+            Positioned(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                  child: SingleChildScrollView(
+                const SizedBox(height: 30),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  width: _isFirstScreen ? 21.0 : 6.0,
+                  height: 6.0,
+                  decoration: BoxDecoration(
+                    color: _isFirstScreen ? PRIMARY_LIGHT : GREY,
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                AnimatedContainer(
+                  duration: Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  width: _isFirstScreen ? 6.0 : 21.0,
+                  height: 6.0,
+                  decoration: BoxDecoration(
+                    color: _isFirstScreen ? GREY : PRIMARY_LIGHT,
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                ),
+                const SizedBox(width: 10),
+              ],
+            )),
+            Positioned.fill(
+                child: PageView(
+                    controller: pageController,
+                    onPageChanged: (value) {
+                      _changeScreen(value);
+                    },
+                    children: [
+                  SingleChildScrollView(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
                     child: Column(
                       children: [
-                        Text(
-                          'Music',
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.normal,
-                              color: WHITE),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            'Music',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: WHITE),
+                          ),
                         ),
                         // 세부 설정
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            const SizedBox(height: 10),
                             musicTopBar(),
                             const SizedBox(height: 20),
-                            mainMusics(context),
-                            musicTheme(),
-                            musics()
+                            Center(child: CircledMusicAlbum()),
+                            MusicPlayer(),
                           ],
                         ),
                         const SizedBox(height: 20),
                       ],
                     ),
-                  ),
-                ),
-              ],
-            ))),
+                  )),
+                  SingleChildScrollView(
+                      child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 20),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            'Sound',
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.normal,
+                                color: WHITE),
+                          ),
+                        ),
+
+                        // 세부 설정
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            musicTheme(),
+                            const SizedBox(height: 20),
+                            sounds(),
+                            // musics(),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                  )),
+                ])),
             Positioned(
               // 하단에 버튼 고정
               bottom: 0,
@@ -100,105 +183,38 @@ class _MusicSettingState extends State<MusicSetting> {
   Widget musicTopBar() {
     return Container(
       margin: EdgeInsets.only(top: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        // 양 끝에 배치
-        children: [
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 20.0),
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MusicThemesScreen()),
+          );
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          // 양 끝에 배치
+          children: [
+            Expanded(
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Icon(CupertinoIcons.music_note_2, size: 20, color: WHITE),
-                  Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(width: 8),
-                        Text(
-                          '음악',
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.normal,
-                              color: WHITE),
-                        ),
-                      ],
-                    ),
+                  const Icon(CupertinoIcons.music_note_2, size: 16, color: WHITE),
+                  const SizedBox(width: 8),
+                  Text(
+                    '몰입에 도움이 되는 음악',
+                    style: TextStyle(fontSize: 16, color: WHITE),
                   ),
-                  CustomIconButton(
-                    icon: Icons.arrow_forward_ios,
-                    size: 20,
-                    color: WHITE,
-                    onPressed: () {},
-                  )
                 ],
               ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget mainMusics(BuildContext context) {
-    // BuildContext 추가
-    return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20.0),
-      child: Column(
-        children: [
-          ConstrainedBox(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height / 5, // 화면 높이의 1/3
+            Icon(Icons.arrow_forward_ios,
+              size: 16,
+              color: WHITE,
             ),
-            child: AspectRatio(
-              aspectRatio: 1.0,
-              child: Image.asset(
-                './assets/images/jazz1.jpeg',
-                fit: BoxFit.cover, // 이미지가 잘리지 않고 꽉 차도록 설정
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly, // 아이콘 간격 균등 분배
-            children: [
-              CustomIconButton(
-                icon: Icons.shuffle, // 셔플 아이콘
-                color: Colors.white,
-                onPressed: () {
-                  // 셔플 버튼 기능 구현
-                },
-              ),
-              CustomIconButton(
-                icon: Icons.skip_previous, // 이전 곡 아이콘
-                color: Colors.white,
-                onPressed: () {
-                  // 이전 곡 버튼 기능 구현
-                },
-              ),
-              CustomIconButton(
-                icon: Icons.play_arrow, // 재생 아이콘
-                color: Colors.white,
-                onPressed: () {
-                  // 재생 버튼 기능 구현
-                },
-              ),
-              CustomIconButton(
-                icon: Icons.skip_next, // 다음 곡 아이콘
-                color: Colors.white,
-                onPressed: () {
-                  // 다음 곡 버튼 기능 구현
-                },
-              ),
-              CustomIconButton(
-                icon: Icons.repeat_one, // 1회 반복 아이콘
-                color: Colors.white,
-                onPressed: () {
-                  // 1회 반복 버튼 기능 구현
-                },
-              ),
-            ],
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -207,33 +223,27 @@ class _MusicSettingState extends State<MusicSetting> {
     return Container(
       alignment: Alignment.topLeft,
       margin: const EdgeInsets.only(top: 20),
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Icon(Icons.volume_up, size: 20, color: WHITE),
-                SizedBox(width: 8),
-                Text(
-                  //바뀌어야 함
-                  '주변 소리',
-                  style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.normal,
-                      color: WHITE),
-                ),
-              ],
-            ),
-            CustomIconButton(
-              icon: Icons.arrow_forward_ios,
-              onPressed: () {},
-              size: 20,
-              color: WHITE,
-            )
-          ],
-        ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            children: [
+              Icon(Icons.headphones_rounded, size: 16, color: WHITE),
+              SizedBox(width: 8),
+              Text(
+                //바뀌어야 함
+                '주변 소리',
+                style: TextStyle(fontSize: 16, color: WHITE),
+              ),
+            ],
+          ),
+          CustomIconButton(
+            icon: Icons.arrow_forward_ios,
+            onPressed: () {},
+            size: 20,
+            color: WHITE,
+          )
+        ],
       ),
     );
   }
@@ -261,4 +271,35 @@ class _MusicSettingState extends State<MusicSetting> {
       ),
     );
   }
+}
+
+Widget sounds() {
+  return ListView.builder(
+    shrinkWrap: true,
+      itemCount: 1,
+      itemBuilder: (BuildContext context, int index) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: Row(
+                children: [
+                  ClipRRect(
+                      borderRadius: BorderRadius.circular(8.0),
+                      child: Image.asset('assets/images/themes/sound/grassbug.jpg', width: 30, height: 35)),
+                  const SizedBox(width: 16),
+                  Text('풀벌레 소리 들리는 밤', style: TextStyle(color: WHITE)),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.play, color: WHITE, size: 20)),
+                IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.speaker_2, color: WHITE, size: 20)),
+              ],
+            ),
+          ],
+        );
+      });
 }

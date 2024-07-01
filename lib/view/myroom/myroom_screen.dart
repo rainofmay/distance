@@ -112,7 +112,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 barrierDismissible: false,
                 context: context,
                 builder: (context) {
-                  return MusicSetting();
+                  return MyroomMusicScreen();
                 },
               );
             },

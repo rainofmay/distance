@@ -18,7 +18,7 @@ class _ProfileCardState extends State<ProfileCard> {
    _selectOptionDialog() async {
     customDialog(
         context,
-        95,
+        160,
         'Mate ID',
         SingleChildScrollView(
           child:
@@ -34,7 +34,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
@@ -45,7 +45,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {

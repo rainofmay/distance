@@ -94,8 +94,6 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
 
   @override
   Widget build(BuildContext context) {
-    final double interval = MediaQuery.of(context).size.width * 0.1;
-
     return Center(
       child: GlassMorphism(
         blur: 1,
@@ -108,11 +106,12 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
               SingleChildScrollView(
                 child: Column(
                   children: [
-                    Text(
+                    const SizedBox(height: 8),
+                    const Text(
                       'View',
-                      style: TextStyle(fontSize: 17, color: WHITE),
+                      style: TextStyle(fontSize: 18, color: WHITE),
                     ),
-                    const SizedBox(height: 25),
+                    const SizedBox(height: 16),
                     _editBackground(),
                     const SizedBox(height: 40),
                     _toggleButtons(),
@@ -147,19 +146,21 @@ class _BackgroundSettingState extends State<BackgroundSetting> {
       },
       child: Center(
           child: ClipRRect(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
               child: Column(
                 children: [
                   _buildBackground(),
+                  const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('배경 편집 ', style: TextStyle(color: WHITE)),
-                      Icon(
-                        Icons.edit_rounded,
+                      const Icon(
+                        Icons.settings,
                         color: WHITE,
                         size: 16,
                       ),
+                      const SizedBox(width: 8),
+                      const Text('내 배경 설정 ', style: TextStyle(color: WHITE)),
                     ],
                   ),
                 ],

@@ -65,7 +65,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
             await registerAccount(emailValue, passwordValue);
 
         if (!context.mounted) return;
-
         if (!isRegisterSuccess) {
           _showDialog('회원가입 실패', '회원가입에 실패했습니다. 다시 시도해주세요.');
           return;

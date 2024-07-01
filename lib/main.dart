@@ -24,10 +24,6 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
         debugShowCheckedModeBanner: false,
-        // initialRoute: '/main',
-        // routes: {
-        //   '/main' : (context) => MainPage(),
-        // },
         home: MainPage(),
         theme: mainstyle.theme),
   );
