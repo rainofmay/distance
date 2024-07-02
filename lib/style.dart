@@ -47,6 +47,13 @@ var theme = ThemeData(
     indicatorSize: TabBarIndicatorSize.label,
     dividerColor: TRANSPARENT,
   ),
+  iconButtonTheme: IconButtonThemeData(
+      style : IconButton.styleFrom(
+        highlightColor: TRANSPARENT,
+        hoverColor: TRANSPARENT,
+        focusColor: TRANSPARENT,
+      )
+  )
   // appBarTheme: AppBarTheme(
   //   systemOverlayStyle: SystemUiOverlayStyle.dark,
   // )

@@ -30,7 +30,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
 
 
-
   final _formKey = GlobalKey<FormState>();
   late String _scheduleName;
   late DateTime _startDate;
@@ -42,18 +41,18 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   DateTime _originalEndTime = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
 
-  String _selectedRepeat = "없음";
+  String _selectedRepeat = "반복 없음";
   String _memo = '';
-  List<String> repeatList = [
-    "없음",
+  final List<String> _repeatList = [
+    "반복 없음",
     "매일",
-    "주",
-    "월",
+    "매주",
+    "매월",
   ];
 
   late int _sectionColor;
   late TextEditingController _textController;
-  bool _isTimeSet = true;
+  bool _isTimeSet = false;
 
   @override
   void initState() {
@@ -95,10 +94,14 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       endDate: _endDate,
       startTime: _isTimeSet ? _startTime : "",
       endTime: _isTimeSet ? _endTime : "",
+      originalStartTime: _originalStartTime,
+      originalEndTime: _originalEndTime,
       isTimeSet: _isTimeSet,
       memo: _memo,
       sectionColor: _sectionColor,
     );
+
+    Get.back(); // 여기에 위치해야 중복 생성 방지됨.
 
     await viewModel.scheduleProvider.createScheduleData(schedule)
     .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
@@ -106,8 +109,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     // 이벤트 재랜더링과 연관 있는 기능들
     await viewModel.updateAllSchedules();
     viewModel.updateSelectedDate(_startDate);
-
-    Get.back();
   }
 
   Future<void> _getDateFromUser(
@@ -167,8 +168,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       barrierDismissible: true,
     );
     if (isStartTime == true) {
-      print('pickerdate $pickerDate');
-
       setState(() {
         _originalStartTime = pickerDate ?? DateTime.now(); // 시작, 종료시각 비교를 위한 변수
 
@@ -240,7 +239,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         Column(children: [ColorSelection(scheduleViewModel: viewModel)]),
                         TextButton(
                           child:
-                          Text('확인', style: TextStyle(color: COLOR1)),
+                          Text('확인', style: TextStyle(color: WHITE)),
                           onPressed: () {
                             _sectionColor = viewModel.colorIndex;
                             Navigator.of(context).pop();
@@ -385,7 +384,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         scale: 0.8,
                         child: CupertinoSwitch(
                           value: _isTimeSet,
-                          activeColor: Color(0xff81CEE5),
+                          activeColor: Color(0xff8FB8EE),
                           //Color(0xffC8D8FA)
                           onChanged: (bool? value) {
                             setState(() {
@@ -407,7 +406,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         autofocus: false,
                         titleIcon: IconButton(
                           icon: Icon(
-                            Icons.repeat,
+                            CupertinoIcons.repeat,
                             color: BLACK,
                           ),
                           onPressed: null,
@@ -419,21 +418,23 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                     Expanded(
                       flex: 1,
                       child: DropdownButton(
+                        dropdownColor: WHITE,
                         icon: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0),
+                          padding: const EdgeInsets.only(bottom: 10.0, right: 20.0),
                           child: Icon(
                             Icons.keyboard_arrow_down,
                             color: Colors.grey,
                           ),
                         ),
                         iconSize: 24,
+                        isExpanded: true,
                         underline: Container(height: 0),
                         onChanged: (String? newValue) {
                           setState(() {
                             _selectedRepeat = newValue!;
                           });
                         },
-                        items: repeatList
+                        items: _repeatList
                             .map<DropdownMenuItem<String>>((String? value) {
                           return DropdownMenuItem<String>(
                               value: value,

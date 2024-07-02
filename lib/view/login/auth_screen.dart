@@ -136,7 +136,7 @@ class _AuthScreenState extends State<AuthScreen> {
               Padding(
                 padding: const EdgeInsets.only(left:20, top:20, bottom:10),
                 child: const Text('DISTANCE',
-                    style: TextStyle(color: Color(0xff853312), fontSize: 15)),
+                    style: TextStyle(color: SECONDARY, fontSize: 15)),
               ),
               Padding(
                   padding: const EdgeInsets.only(left:20.0),
@@ -196,7 +196,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ElevatedButton(
                               style:  ElevatedButton.styleFrom(
                                 side: BorderSide(
-                                    color: Color(0xff853312)
+                                  color: SECONDARY
                                 ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
@@ -207,7 +207,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 fixedSize: Size(widthOfLog, heightOfLog),
                               ),
                               onPressed: signIn,
-                              child: const Text('로그인', style: TextStyle(color: Color(0xff853312), fontSize: 16)),
+                              child: const Text('로그인', style: TextStyle(color: SECONDARY, fontSize: 16)),
                             ),
                             const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
                             Padding(

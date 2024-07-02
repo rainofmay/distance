@@ -33,7 +33,7 @@ class ThemeBox extends StatelessWidget {
           height: 100,
           decoration: BoxDecoration(
             color: WHITE,
-            borderRadius: BorderRadius.all(Radius.circular(10)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
             image: decorationImage,
             // image:
           ),

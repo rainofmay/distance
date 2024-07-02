@@ -10,12 +10,13 @@ import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/add_mate_modal.dart';
 import 'package:mobile/view/mate/widget/dismissible_profile_card.dart';
-import 'package:mobile/view_model/mate/mate_view_model.dart';
+// import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/common/const/colors.dart';
 
 class MateScreen extends StatefulWidget {
   MateScreen({super.key});
+  // final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
 
   final MateViewModel viewModel = Get.put(MateViewModel(
       repository:
@@ -169,7 +170,7 @@ class ProfileList extends StatelessWidget {
         profileImageUrl: 'https://via.placeholder.com/150',
         imageUrl:
             'https://cdn.goodnews1.com/news/photo/201907/89251_22763_3813.JPG',
-        onlineStatus: OnlineStatus.online,
+        // onlineStatus: OnlineStatus.online,
         currentActivity: '코드 작성 중'),
     UserProfile(
         name: '유저 2',
@@ -177,7 +178,7 @@ class ProfileList extends StatelessWidget {
         profileImageUrl: 'https://via.placeholder.com/150',
         imageUrl:
             'https://src.hidoc.co.kr/image/lib/2021/4/22/1619066150478_0.jpg',
-        onlineStatus: OnlineStatus.away,
+        // onlineStatus: OnlineStatus.away,
         currentActivity: '디자인 작업 중'),
     // 프로필 데이터
   ];

@@ -65,6 +65,9 @@ class _ProfileEditState extends State<ProfileEdit> {
 
   @override
   Widget build(BuildContext context) {
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+    double fieldWidth = MediaQuery.of(context).size.width * 0.65;
+
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomBackAppBar(

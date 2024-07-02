@@ -23,6 +23,7 @@ class _ScheduleListState extends State<ScheduleList> {
     // TODO: implement initState
     super.initState();
     _viewModel = widget.viewModel;
+    // print('_viewModel.scheduleModel ${_viewModel.scheduleModel}');
   }
 
   @override
@@ -51,7 +52,7 @@ class _ScheduleListState extends State<ScheduleList> {
                     padding: const EdgeInsets.only(top: 10.0, left: 20.0),
                     child: Container(
                       width: 5,
-                      height: 90,
+                      height: 55,
                       decoration: BoxDecoration(
                           color: sectionColors[schedule.sectionColor],
                           borderRadius: BorderRadius.circular(5)),
@@ -100,8 +101,7 @@ class _ScheduleListState extends State<ScheduleList> {
                                 padding: const EdgeInsets.only(top: 10, left: 10),
                                 alignment: Alignment.topLeft,
                                 child: Text('# ${schedule.memo}',
-                                    style:
-                                    const TextStyle(fontSize: 12, color: BLACK))),
+                                    style: const TextStyle(fontSize: 12, color: BLACK), overflow: TextOverflow.ellipsis)),
                           ],
                         ),
                       ),

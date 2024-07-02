@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
@@ -52,25 +53,17 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         backgroundColor: WHITE,
         contentColor: BLACK,
         titleSpacing: 25,
-        actions: [
-          IconButton(
-              onPressed: () {
-                Get.to(() => CreateScheduleScreen());
-              },
-              icon: const Icon(CupertinoIcons.add_circled_solid),
-              color: SECONDARY),
-        ],
       ),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const SizedBox(height: 10),
+            const SizedBox(height: 5),
 
             // 달력 큰제목
             Container(
               alignment: Alignment.topRight,
-              margin: const EdgeInsets.only(top: 15, right: 40),
+              margin: const EdgeInsets.only(top: 10, right: 40),
               child: Text(
                 _months[DateTime.now().month - 1],
                 style: const TextStyle(
@@ -109,9 +102,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                       duration: const Duration(milliseconds: 200),
                       padding:
                           const EdgeInsets.only(top: 20, left: 30, right: 30),
-                      child: viewModel.isCalendarVisible == true
-                          ? Calendar(viewModel: viewModel)
-                          : Container(),
+                      child: Calendar(viewModel: viewModel)
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 20),
@@ -119,23 +110,23 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         horizontalTitleGap: 3,
                         leading: IconButton(
                             onPressed: () {
-                              viewModel.updateCalendarVisible();
+                              Get.to(() => CreateScheduleScreen());
                             },
-                            icon: const Icon(
-                              Icons.calendar_month_outlined,
-                              size: 20,
-                            ),
-                            color: BLACK,
-                            highlightColor: TRANSPARENT,
-                            splashColor: TRANSPARENT),
-                        title: Text(
-                            viewModel.selectedDate.day == DateTime.now().day
-                                ? '오늘'
-                                : '${viewModel.selectedDate.month}월 ${viewModel.selectedDate.day}일',
-                            style: const TextStyle(
-                                color: BLACK,
-                                fontWeight: FontWeight.w100,
-                                fontSize: 15)),
+                            icon: const Icon(CupertinoIcons.add_circled, color: SECONDARY, size: 22,),
+                            color: BLACK),
+                        title: Row(
+                          children: [
+                            const SizedBox(width: 5),
+                            Text(
+                                viewModel.selectedDate.day == DateTime.now().day
+                                    ? '오늘'
+                                    : '${viewModel.selectedDate.month}월 ${viewModel.selectedDate.day}일',
+                                style: const TextStyle(
+                                    color: BLACK,
+                                    fontWeight: FontWeight.w100,
+                                    fontSize: 16)),
+                          ],
+                        ),
                       ),
                     ),
                     Expanded(child: ScheduleList(viewModel: viewModel)),

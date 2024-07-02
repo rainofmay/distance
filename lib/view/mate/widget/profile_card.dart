@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
-import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 
@@ -19,7 +18,7 @@ class _ProfileCardState extends State<ProfileCard> {
    _selectOptionDialog() async {
     customDialog(
         context,
-        95,
+        160,
         'Mate ID',
         SingleChildScrollView(
           child:
@@ -35,7 +34,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
@@ -46,7 +45,7 @@ class _ProfileCardState extends State<ProfileCard> {
                 ],
               ),
             ),
-            const SizedBox(height: 22),
+            const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
@@ -114,12 +113,12 @@ class _ProfileCardState extends State<ProfileCard> {
                 children: [
                   Text(widget.profile.currentActivity,
                       style: TextStyle(fontSize: 11, color: BLACK)),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 8, right:16.0),
-                    child: Icon(Icons.circle,
-                      color: getStatusColor(widget.profile.onlineStatus),
-                    ),
-                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(left: 8, right:16.0),
+                  //   child: Icon(Icons.circle,
+                  //     color: getStatusColor(widget.profile.onlineStatus),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

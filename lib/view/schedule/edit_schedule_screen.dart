@@ -11,7 +11,6 @@ import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../model/schedule_model.dart';
 import '../../../widgets/custom_text_field.dart';
 
@@ -32,37 +31,39 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   final ScheduleProvider scheduleProvider = ScheduleProvider();
 
   final _formKey = GlobalKey<FormState>();
-  final supabase = Supabase.instance.client;
-
   late final String id = _editingScheduleModel.id;
   late String _scheduleName = _editingScheduleModel.scheduleName;
   late DateTime _startDate = _editingScheduleModel.startDate;
   late DateTime _endDate = _editingScheduleModel.endDate;
 
-  late String? _startTime = _editingScheduleModel.startTime;
-  late String? _endTime = _editingScheduleModel.endTime;
+  late String? _startTime = _editingScheduleModel.startTime == "" ? "06:00 AM" : _editingScheduleModel.startTime;
+  late String? _endTime = _editingScheduleModel.endTime == "" ? "08:00 AM" : _editingScheduleModel.endTime;
   late int _sectionColor = _editingScheduleModel.sectionColor;
   late bool _isTimeSet = _editingScheduleModel.isTimeSet;
   late String _memo = _editingScheduleModel.memo;
+  late DateTime _originalStartTime = _editingScheduleModel.originalStartTime;
+  late DateTime _originalEndTime = _editingScheduleModel.originalEndTime;
 
-  late DateTime _originalStartTime = DateTime(
-      DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 0);
-  late DateTime _originalEndTime = DateTime(
-      DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
-
-  String _selectedRepeat = "없음";
-  List<String> repeatList = [
-    "없음",
+  String _selectedRepeat = "반복 없음";
+  final List<String> repeatList = [
+    "반복 없음",
     "매일",
-    "주",
-    "월",
+    "매주",
+    "매월",
   ];
 
-  late final TextEditingController _titleController = TextEditingController(text: _editingScheduleModel.scheduleName);
-  late final TextEditingController _memoController = TextEditingController(text: _editingScheduleModel.memo);
+  late final TextEditingController _titleController;
+  late final TextEditingController _memoController;
+
+  DateTime parseDateTime(String dateTimeString) {
+    DateFormat format = DateFormat("yyyyMMdd hh:mm a");
+    return Intl.withLocale('en', () => format.parse(dateTimeString));
+  }
 
   @override
   void initState() {
+    _titleController = TextEditingController(text: _editingScheduleModel.scheduleName);
+    _memoController = TextEditingController(text: _editingScheduleModel.memo);
     super.initState();
   }
 
@@ -74,6 +75,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   }
 
   _termsForSave() {
+    print('_originalStartTime $_originalStartTime');
+    print('_originalEndTime $_originalEndTime');
     if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
             false ||
         _endDate.day < _startDate.day ||
@@ -98,12 +101,15 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       endDate: _endDate,
       startTime: _isTimeSet ? _startTime : "",
       endTime: _isTimeSet ? _endTime : "",
+      originalStartTime: _originalStartTime,
+      originalEndTime: _originalEndTime,
       isTimeSet: _isTimeSet,
       memo: _memo,
       sectionColor: _sectionColor,
     );
 
-    print('editschedule $schedule');
+    Get.back();
+
     await scheduleProvider.editScheduleData(schedule)
     .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
 
@@ -111,7 +117,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     await viewModel.updateAllSchedules();
     viewModel.updateSelectedDate(_startDate);
 
-    Get.back();
   }
 
   Future<void> _getDateFromUser(
@@ -120,7 +125,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       context: context,
       theme: ThemeData(
         useMaterial3: true,
-        // colorSchemeSeed: Color(0xff222E34),
         colorScheme: ColorScheme(
             brightness: Brightness.dark,
             primary: Color(0xff81CEE5),
@@ -266,7 +270,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                               ),
                               TextButton(
                                 child:
-                                Text('확인', style: TextStyle(color: COLOR1)),
+                                Text('확인', style: TextStyle(color: WHITE)),
                                 onPressed: () {
                                   _sectionColor = viewModel.colorIndex;
                                   Navigator.of(context).pop();
@@ -349,7 +353,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                                 autofocus: false,
                                 textAlign: TextAlign.right,
                                 readOnly: true,
-                                hint: _startTime == "" ? "06:00 AM" : _startTime,
+                                hint: _startTime == "" ? "06:00 AM" : _startTime, // value값 비었었다면 06:00 AM,
                               ),
                             ))
                             : const SizedBox(),
@@ -391,7 +395,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                                 autofocus: false,
                                 textAlign: TextAlign.right,
                                 readOnly: true,
-                                hint: _endTime == "" ? "08:00 AM" : _endTime,
+                                hint: _endTime == "" ? "08:00 AM" : _endTime,   // value값 비었었다면 08:00 AM,
                                 hintStyle: timeComparison(_originalStartTime,
                                     _originalEndTime, _isTimeSet) ==
                                     false
@@ -413,7 +417,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                             scale: 0.8,
                             child: CupertinoSwitch(
                               value: _isTimeSet,
-                              activeColor: Color(0xff81CEE5),
+                              activeColor: Color(0xff8FB8EE),
                               onChanged: (bool? value) {
                                 setState(() {
                                   _isTimeSet = value ?? false;
@@ -434,7 +438,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                             autofocus: false,
                             titleIcon: IconButton(
                               icon: Icon(
-                                Icons.repeat,
+                                CupertinoIcons.repeat,
                                 color: BLACK,
                               ),
                               onPressed: null,
@@ -446,14 +450,16 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                         Expanded(
                           flex: 1,
                           child: DropdownButton(
+                            dropdownColor: WHITE,
                             icon: Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
+                              padding: const EdgeInsets.only(bottom: 10.0, right: 20.0),
                               child: Icon(
                                 Icons.keyboard_arrow_down,
                                 color: Colors.grey,
                               ),
                             ),
                             iconSize: 24,
+                            isExpanded: true,
                             underline: Container(height: 0),
                             onChanged: (String? newValue) {
                               setState(() {
