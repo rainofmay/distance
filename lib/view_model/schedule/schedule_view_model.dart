@@ -21,14 +21,12 @@ class ScheduleViewModel extends GetxController {
   DateTime get selectedDate => _calendarInfo.value.selectedDate;
   DateTime get focusedDate => _calendarInfo.value.focusedDate;
 
-  late final RxBool _isCalendarVisible;
-  bool get isCalendarVisible => _isCalendarVisible.value;
   late final Rx<CalendarFormat> _calendarFormat;
 
   CalendarFormat get calendarFormat => _calendarFormat.value;
 
   /* Schedule */
-  late final RxList<ScheduleModel> _allSchedules;
+  late RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
   List<ScheduleModel> get allSchedules => _allSchedules;
 
   late final RxList<ScheduleModel> _scheduleModel;
@@ -66,7 +64,6 @@ class ScheduleViewModel extends GetxController {
       DateTime.now().day,
     )).obs;
 
-    _isCalendarVisible = true.obs;
     _calendarFormat = CalendarFormat.week.obs;
   }
 
@@ -74,7 +71,7 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules = value.obs);
-    // print('_allSchedules $_allSchedules');
+    print('_allSchedules $_allSchedules');
   }
 
   Future<void> initScheduleData(DateTime day) async {
@@ -82,6 +79,7 @@ class ScheduleViewModel extends GetxController {
         .fetchScehduleData(day)
         .then((value) => _scheduleModel = value.obs)
         .then((value) => _isScheduleListLoaded.value = true);
+    print('_scheduleModel $_scheduleModel');
   }
 
   void initColorSet() {
@@ -101,10 +99,6 @@ class ScheduleViewModel extends GetxController {
     _calendarInfo.value = _calendarInfo.value.copyWith(
       focusedDate: focusedDate,
     );
-  }
-
-  void updateCalendarVisible() {
-    _isCalendarVisible.value = !_isCalendarVisible.value;
   }
 
   void updateCalendarFormatToWeek() {

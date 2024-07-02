@@ -93,58 +93,6 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
         null);
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: GlassMorphism(
-          blur: 1,
-          opacity: 0.65,
-          child: SizedBox(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.75,
-            child: Stack(children: [
-              Positioned.fill(
-                  child: SingleChildScrollView(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-                      child: Column(
-                        children: [
-                          const SizedBox(height: 8),
-                          const Text(
-                            'View',
-                            style: TextStyle(fontSize: 18, color: WHITE),
-                          ),
-                          const SizedBox(height: 16),
-                          _editBackground(),
-                          const SizedBox(height: 40),
-                          _toggleButtons(),
-                        ],
-                      ),
-                    ),
-                  )),
-              Positioned(
-                // 하단에 버튼 고정
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: OkCancelButtons(
-                  onPressed: () {
-                    // 현재 화면을 pop하여 이전 화면으로 이동
-                    Navigator.pop(context);
-                  },
-                  onCancelPressed: () {
-                    // 저장요소 취소
-                    Navigator.pop(context);
-                  },
-                  okText: '저장',
-                  okTextColor: WHITE,
-                  cancelText: '취소',
-                ),
-              ),
-            ]),
-          )),
-    );
-  }
 
   Widget _editBackground() {
     return GestureDetector(
@@ -225,6 +173,59 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
           ])
         ],
       ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GlassMorphism(
+          blur: 1,
+          opacity: 0.65,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.75,
+            child: Stack(children: [
+              Positioned.fill(
+                  child: SingleChildScrollView(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 8),
+                          const Text(
+                            'View',
+                            style: TextStyle(fontSize: 18, color: WHITE),
+                          ),
+                          const SizedBox(height: 16),
+                          _editBackground(),
+                          const SizedBox(height: 40),
+                          _toggleButtons(),
+                        ],
+                      ),
+                    ),
+                  )),
+              Positioned(
+                // 하단에 버튼 고정
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: OkCancelButtons(
+                  onPressed: () {
+                    // 현재 화면을 pop하여 이전 화면으로 이동
+                    Navigator.pop(context);
+                  },
+                  onCancelPressed: () {
+                    // 저장요소 취소
+                    Navigator.pop(context);
+                  },
+                  okText: '저장',
+                  okTextColor: WHITE,
+                  cancelText: '취소',
+                ),
+              ),
+            ]),
+          )),
     );
   }
 }

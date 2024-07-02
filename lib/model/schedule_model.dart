@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class ScheduleModel {
   final String id;
   final String scheduleName;
@@ -5,6 +7,8 @@ class ScheduleModel {
   final DateTime endDate;
   final String? startTime;
   final String? endTime;
+  final DateTime originalStartTime;
+  final DateTime originalEndTime;
   final bool isTimeSet;
   // final String selectedRepeat;
   final String memo;
@@ -17,6 +21,8 @@ class ScheduleModel {
     required this.endDate,
     this.startTime,
     this.endTime,
+    required this.originalStartTime,
+    required this.originalEndTime,
     required this.isTimeSet,
     // required this.selectedRepeat,
     required this.memo,
@@ -31,6 +37,8 @@ class ScheduleModel {
         endDate = DateTime.parse(json['end_date']),
         startTime = json['start_time'],
         endTime = json['end_time'],
+        originalStartTime =  DateTime.parse(json['original_start_time']),
+        originalEndTime =  DateTime.parse(json['original_end_time']),
         isTimeSet = json['is_time_set'],
         memo = json['memo'],
         sectionColor = json['section_color'];
@@ -45,6 +53,8 @@ class ScheduleModel {
           '${endDate.year}${endDate.month.toString().padLeft(2, '0')}${endDate.day.toString().padLeft(2, '0')}',
       'start_time': startTime,
       'end_time': endTime,
+      'original_start_time' : originalStartTime.toString(),
+      'original_end_time' : originalEndTime.toString(),
       'is_time_set': isTimeSet,
       // '반복' : selectedRepeat,
       'memo': memo,
@@ -59,6 +69,8 @@ class ScheduleModel {
     DateTime? endDate,
     String? startTime,
     String? endTime,
+    DateTime? originalStartTime,
+    DateTime? originalEndTime,
     bool? isTimeSet,
     String? memo,
     int? sectionColor,
@@ -70,6 +82,8 @@ class ScheduleModel {
       endDate: endDate ?? this.endDate,
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
+      originalStartTime: originalStartTime ?? this.originalStartTime,
+      originalEndTime: originalEndTime ?? this.originalEndTime,
       isTimeSet: isTimeSet ?? this.isTimeSet,
       memo: memo ?? this.memo,
       sectionColor: this.sectionColor,
