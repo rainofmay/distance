@@ -1,5 +1,5 @@
 
-import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/model/online_status.dart';
 
 class UserProfile {
   late final String name;

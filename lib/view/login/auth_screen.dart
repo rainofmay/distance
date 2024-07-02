@@ -1,9 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/user/user_provider.dart';
+import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/view/login/register_screen.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/functions/custom_login.dart';
@@ -22,6 +26,14 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+    clientId:
+    '829800135278-tpqa4lprsna700tnnnsh7nbtnprrovqf.apps.googleusercontent.com',
+    serverClientId:
+    '829800135278-1v4gff7cgerj5ekffvl5r9spvpeg0snv.apps.googleusercontent.com',
+  );
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -30,14 +42,6 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   onGoogleLoginPress(BuildContext context) async {
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email'],
-      clientId:
-      '829800135278-tpqa4lprsna700tnnnsh7nbtnprrovqf.apps.googleusercontent.com',
-      serverClientId:
-      '829800135278-1v4gff7cgerj5ekffvl5r9spvpeg0snv.apps.googleusercontent.com',
-    );
-
     try {
       GoogleSignInAccount? account = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
@@ -54,11 +58,6 @@ class _AuthScreenState extends State<AuthScreen> {
           provider: OAuthProvider.google,
           idToken: googleAuth.idToken!,
           accessToken: googleAuth.accessToken!);
-
-      // if (!context.mounted) return;
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(builder: (_) => MyRoom()),
-      // );
 
       print(account);
     } catch (error) {
@@ -83,16 +82,17 @@ class _AuthScreenState extends State<AuthScreen> {
 
     if (!mounted) return;
     if (!isLoginSuccess) {
-      return showDialog (
-        context: context,
-        builder: (context) {
-          return Text('로그인 실패');
-        },
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그인 실패'),
+      ));
     }
-
-    // 수정 필요
-    // Navigator.popAndPushNamed(context, '/main');
+    else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그인 성공'),
+      ));
+      MateViewModel viewModel = Get.put(MateViewModel(repository: UserRepository(userProvider: UserProvider())));
+      viewModel.updateMyProfile();
+    }
   }
 
   Future<bool> loginWithEmail(String emailValue, String passwordValue) async {
@@ -104,6 +104,21 @@ class _AuthScreenState extends State<AuthScreen> {
       isLoginSuccess = false;
     }
     return isLoginSuccess;
+  }
+
+  void signOut() async {
+    try {
+      await supabase.auth.signOut();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그아웃 성공'),
+      ));
+
+    } catch (error) {
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그아웃 실패'),
+      ));
+    }
   }
 
   @override
@@ -124,13 +139,13 @@ class _AuthScreenState extends State<AuthScreen> {
                     style: TextStyle(color: Color(0xff853312), fontSize: 15)),
               ),
               Padding(
-                padding: const EdgeInsets.only(left:20.0),
-                child: Container(
-                  width: 90,
-                    decoration: BoxDecoration(
-                        border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey.withOpacity(0)),
-                )))
+                  padding: const EdgeInsets.only(left:20.0),
+                  child: Container(
+                      width: 90,
+                      decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(width: 1.0, color: Colors.grey.withOpacity(0)),
+                          )))
               ),
               Padding(
                 padding: const EdgeInsets.only(left:20, top:10, bottom:10),
@@ -181,7 +196,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             ElevatedButton(
                               style:  ElevatedButton.styleFrom(
                                 side: BorderSide(
-                                  color: Color(0xff853312)
+                                    color: Color(0xff853312)
                                 ),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
@@ -274,6 +289,20 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(color: WHITE, fontSize: 16)),
                           ],
                         )),
+                    const SizedBox(height: 15),
+
+                    // 로그아웃 버튼 추가
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(8))),
+                            overlayColor: TRANSPARENT,
+                            foregroundColor: TRANSPARENT,
+                            fixedSize: Size(widthOfLog, heightOfLog),
+                            backgroundColor: Colors.red),
+                        onPressed: signOut,
+                        child: const Text('로그아웃', style: TextStyle(color: WHITE, fontSize: 16))),
                   ],
                 ),
               ),

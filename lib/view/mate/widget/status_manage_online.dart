@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/model/online_status.dart';
 import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/myroom/widget/custom_dialog.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';

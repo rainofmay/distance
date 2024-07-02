@@ -1,8 +1,14 @@
+
+import 'online_status.dart';
+
 class UserModel {
-  int? id;
+  String? id;
   String? profileUrl;
   String? name;
+  String? introduction;
   String email;
+  String uid;
+  OnlineStatus onlineStatus;
   String backgroundUrl;
   String musicUrl;
   bool isPaid;
@@ -13,7 +19,10 @@ class UserModel {
     this.id,
     this.profileUrl,
     this.name,
+    this.introduction,
     required this.email,
+    required this.uid,
+    this.onlineStatus = OnlineStatus.online,
     this.backgroundUrl = '', // 기본값 설정
     this.musicUrl = '', // 기본값 설정
     this.isPaid = false, // 기본값 설정
@@ -26,7 +35,10 @@ class UserModel {
     return {
       'profile_url': profileUrl,
       'name': name,
+      'introduction' : introduction,
       'email': email,
+      'uid': uid,
+      'online_status' : onlineStatus,
       'background_url': backgroundUrl,
       'music_url': musicUrl,
       'is_paid': isPaid,
@@ -41,7 +53,10 @@ class UserModel {
       id: json['id'],
       profileUrl: json['profile_url'],
       name: json['name'],
+      introduction : json['introduction'],
       email: json['email'],
+      uid: json['uid'],
+      onlineStatus : OnlineStatusExtension.fromString(json['online_status']),
       backgroundUrl: json['background_url'] ?? '', // null 처리
       musicUrl: json['music_url'] ?? '', // null 처리
       isPaid: json['is_paid'] ?? false, // null 처리

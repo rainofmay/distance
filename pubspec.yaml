@@ -36,6 +36,8 @@ dependencies:
   flutter_svg: ^2.0.10+1
   get: ^4.6.6
   emoji_picker_flutter: ^2.2.0
+  aws_s3_api: ^2.0.0
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:

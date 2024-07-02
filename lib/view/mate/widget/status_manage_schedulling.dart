@@ -7,7 +7,7 @@ import 'package:flutter/foundation.dart' as foundation;
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 
 class StatusManageSchedulling extends StatefulWidget {
-  final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
+  final MateViewModel viewModel = Get.find<MateViewModel>(); // ViewModel 인스턴스 생성
   StatusManageSchedulling({super.key});
 
   final _controller = TextEditingController();

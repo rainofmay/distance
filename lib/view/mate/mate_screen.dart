@@ -2,7 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:mobile/model/online_status.dart';
 import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
+import 'package:mobile/provider/user/user_provider.dart';
+import 'package:mobile/repository/user/user_repository.dart';
+import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/add_mate_modal.dart';
 import 'package:mobile/view/mate/widget/dismissible_profile_card.dart';
@@ -12,8 +16,10 @@ import 'package:mobile/common/const/colors.dart';
 
 class MateScreen extends StatefulWidget {
   MateScreen({super.key});
-  final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
 
+  final MateViewModel viewModel = Get.put(MateViewModel(
+      repository:
+          UserRepository(userProvider: UserProvider()))); // ViewModel 인스턴스 생성
 
   @override
   State<MateScreen> createState() => _MateScreenState();
@@ -22,6 +28,7 @@ class MateScreen extends StatefulWidget {
 class _MateScreenState extends State<MateScreen> {
   @override
   Widget build(BuildContext context) {
+    widget.viewModel.updateMyProfile();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
@@ -30,7 +37,9 @@ class _MateScreenState extends State<MateScreen> {
         contentColor: BLACK,
         titleSpacing: 25,
         actions: [
-          IconButton(onPressed: () => ShowAddMateDialog(context), icon: Icon(CupertinoIcons.person_add)),
+          IconButton(
+              onPressed: () => ShowAddMateDialog(context),
+              icon: Icon(CupertinoIcons.person_add)),
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
         ],
       ),
@@ -58,21 +67,38 @@ class _MateScreenState extends State<MateScreen> {
                         ),
                       ),
                       const SizedBox(width: 20),
-                      Obx(()=>
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(widget.viewModel.name.value,
-                                style: TextStyle(fontSize: 15)),
-                            const SizedBox(height: 8),
-                            Text(widget.viewModel.introduction.value,
-                                style: TextStyle(
-                                    fontSize: 13, color: DARK_UNSELECTED)),
-                          ],
-                        )
-                      )
+                      Obx(() => Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.viewModel.name.value,
+                                  style: TextStyle(fontSize: 15)),
+                              const SizedBox(height: 8),
+                              Text(widget.viewModel.introduction.value,
+                                  style: TextStyle(
+                                      fontSize: 13, color: DARK_UNSELECTED)),
+                            ],
+                          ))
                     ],
+                  ),
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(widget.viewModel.userCurrentActivityEmoji.value,
+                            style: TextStyle(fontSize: 14, color: BLACK)),
+                        Text(widget.viewModel.userCurrentActivityText.value,
+                            style: TextStyle(fontSize: 14, color: BLACK)),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8, right: 16.0),
+                          child: Icon(
+                            Icons.circle,
+                            color: getStatusColor(
+                                widget.viewModel.isUserOnline.value),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   Container(
                     width: 80,
@@ -98,8 +124,8 @@ class _MateScreenState extends State<MateScreen> {
                           Icon(Icons.edit, size: 17, color: DARK_UNSELECTED),
                           const SizedBox(width: 5),
                           Text('Edit',
-                              style:
-                                  TextStyle(fontSize: 13, color: DARK_UNSELECTED))
+                              style: TextStyle(
+                                  fontSize: 13, color: DARK_UNSELECTED))
                         ],
                       ),
                     ),

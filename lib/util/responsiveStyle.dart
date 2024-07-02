@@ -1,7 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/model/online_status.dart';
 
 double getResponsiveFontSize(BuildContext context) {
   double screenWidth = MediaQuery.of(context).size.width;
