@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 
 var theme = ThemeData(
+    dividerColor: Colors.transparent,
   fontFamily: 'GmarketSansTTFMedium',
   splashColor: TRANSPARENT,
   //클릭했을 때 애니매이션 없애는 코드

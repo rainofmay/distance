@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/view/myroom/music/music_themes_screen.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -21,12 +22,7 @@ Future<void> main() async {
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
 
-  runApp(
-    GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        home: MainPage(),
-        theme: mainstyle.theme),
-  );
+  runApp(const MainPage());
 }
 
 class MainPage extends StatefulWidget {
@@ -48,31 +44,32 @@ class _MyAppState extends State<MainPage> {
     viewModel.initAllSchedules();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarColor: BLACK, // 하단 시스템UI 검정색
     ));
-
-    return Obx(() => Scaffold(
-          // appBar: AppBar(),
-      body: bottomBarViewModel.setScreen(),
-      bottomNavigationBar: BottomNavigationBar(
-          currentIndex: bottomBarViewModel.bottomIndex,
-          onTap: bottomBarViewModel.setBottomIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home_rounded), label: '내 방',),
-            BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.time), label: '일 정'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.login), label: '로그인(임시)'),
-            BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
-          ]),
-        ));
+    return GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: mainstyle.theme,
+      home: Obx(() => Scaffold(
+        // appBar: AppBar(),
+        body: bottomBarViewModel.setScreen(),
+        bottomNavigationBar: BottomNavigationBar(
+            currentIndex: bottomBarViewModel.bottomIndex,
+            onTap: bottomBarViewModel.setBottomIndex,
+            items: [
+              BottomNavigationBarItem(
+                icon: Icon(Icons.home_rounded), label: '내 방',),
+              BottomNavigationBarItem(
+                  icon: Icon(CupertinoIcons.time), label: '일 정'),
+              BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.login), label: '로그인(임시)'),
+              BottomNavigationBarItem(icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
+            ]),
+      ))
+    );
       // appBar: AppBar(),
   }
 }
