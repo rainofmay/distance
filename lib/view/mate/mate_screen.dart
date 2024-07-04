@@ -2,25 +2,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
-import 'package:mobile/model/online_status.dart';
-import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
+import 'package:mobile/provider/mate/mate_provider.dart';
 import 'package:mobile/provider/user/user_provider.dart';
+import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
-import 'package:mobile/view/mate/widget/add_mate_modal.dart';
-import 'package:mobile/view/mate/widget/dismissible_profile_card.dart';
+import 'package:mobile/view/mate/widget/profile_card.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/common/const/colors.dart';
 
+import 'mate_request_screen/mate_request_screen.dart';
+
 class MateScreen extends StatefulWidget {
   MateScreen({super.key});
+
   // final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
 
   final MateViewModel viewModel = Get.put(MateViewModel(
-      repository:
-          UserRepository(userProvider: UserProvider()))); // ViewModel 인스턴스 생성
+      userRepository: UserRepository(userProvider: UserProvider()),
+      mateRepository:
+          MateRepository(mateProvider: MateProvider()))); // ViewModel 인스턴스 생성
 
   @override
   State<MateScreen> createState() => _MateScreenState();
@@ -29,7 +32,6 @@ class MateScreen extends StatefulWidget {
 class _MateScreenState extends State<MateScreen> {
   @override
   Widget build(BuildContext context) {
-    widget.viewModel.updateMyProfile();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
@@ -39,7 +41,7 @@ class _MateScreenState extends State<MateScreen> {
         titleSpacing: 25,
         actions: [
           IconButton(
-              onPressed: () => ShowAddMateDialog(context),
+              onPressed: () => Get.to(MateRequestsScreen()),
               icon: Icon(CupertinoIcons.person_add)),
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
         ],
@@ -143,7 +145,7 @@ class _MateScreenState extends State<MateScreen> {
                 Text('Mates',
                     style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                 const SizedBox(width: 10),
-                Text('00명',
+                Text('${widget.viewModel.mateProfiles.value.length} 명',
                     style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                 const SizedBox(width: 16),
                 Expanded(
@@ -152,56 +154,52 @@ class _MateScreenState extends State<MateScreen> {
             ),
           ),
           const SizedBox(height: 15),
-          Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: ProfileList(),
-          ),
+          profileList(),
         ],
       ),
     );
   }
-}
 
-class ProfileList extends StatelessWidget {
-  final List<UserProfile> DUMMY_PROFILES = [
-    UserProfile(
-    name: '유저 1',
-        introduction: "유저1 소개하기",
-        profileImageUrl: 'https://via.placeholder.com/150',
-        imageUrl:
-            'https://cdn.goodnews1.com/news/photo/201907/89251_22763_3813.JPG',
-        // onlineStatus: OnlineStatus.online,
-        currentActivity: '코드 작성 중',
-        onlineStatus: OnlineStatus.online),
-    UserProfile(
-        name: '유저 2',
-        introduction: "유저2 소개하기",
-        profileImageUrl: 'https://via.placeholder.com/150',
-        imageUrl:
-            'https://src.hidoc.co.kr/image/lib/2021/4/22/1619066150478_0.jpg',
-        // onlineStatus: OnlineStatus.away,
-        currentActivity: '디자인 작업 중',
-        onlineStatus: OnlineStatus.online
-    ),
-    // 프로필 데이터
-  ];
-
-  ProfileList({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      itemCount: DUMMY_PROFILES.length,
-      itemBuilder: (context, index) {
-        return DismissibleProfileCard(
-          profile: DUMMY_PROFILES[index],
-          onDelete: (idx) {
-            DUMMY_PROFILES.removeAt(idx);
-          },
-          index: index,
-        );
-      },
+  Widget profileList() {
+    return Expanded(
+      child: Obx(() => RefreshIndicator(
+            onRefresh: () async {
+              await widget.viewModel.updateMyProfile();
+              await widget.viewModel.getMyMate();
+            },
+            child: friendsWidget(),
+          )),
     );
+  }
+
+  Widget friendsWidget() {
+    if (widget.viewModel.mateProfiles.value.isEmpty) {
+      return ListView(
+        children:[
+          Center( // 친구 없을 때 버튼 표시
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30),
+            child: ElevatedButton(
+              onPressed: () => Get.to(MateRequestsScreen()),
+              style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+              child: Text('친구 추가하러 가기'),
+            ),
+          ),
+        )],
+      );
+    } else {
+      return ListView.builder(
+        itemCount: widget.viewModel.mateProfiles.value.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: ProfileCard(
+              profile: widget.viewModel.mateProfiles[index].value,
+            ),
+          );
+        },
+      );
+    }
+
   }
 }
