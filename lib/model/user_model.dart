@@ -50,18 +50,24 @@ class UserModel {
   // 데이터베이스로부터 데이터를 읽어와 UserModel 객체로 변환하는 역할
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      profileUrl: json['profile_url'],
-      name: json['name'],
-      introduction : json['introduction'],
-      email: json['email'],
-      uid: json['uid'],
-      onlineStatus : OnlineStatusExtension.fromString(json['online_status']),
-      backgroundUrl: json['background_url'] ?? '', // null 처리
-      musicUrl: json['music_url'] ?? '', // null 처리
-      isPaid: json['is_paid'] ?? false, // null 처리
-      statusEmoji: json['status_emoji'] ?? '', // null 처리
-      statusText: json['status_text'] ?? '', // null 처리
+      id: json['id']?.toString(), // null일 경우 빈 문자열로 변환
+      profileUrl: json['profile_url'] ?? '', // null일 경우 빈 문자열로 설정
+      name: json['name'] ?? '',
+      introduction: json['introduction'] ?? '',
+      email: json['email'] ?? '', // null일 경우 빈 문자열로 설정
+      uid: json['uid'] ?? '',
+      onlineStatus: OnlineStatusExtension.fromString(json['online_status'] ?? 'online'), // null 또는 알 수 없는 값일 경우 offline으로 설정
+      backgroundUrl: json['background_url'] ?? '',
+      musicUrl: json['music_url'] ?? '',
+      isPaid: json['is_paid'] ?? false,
+      statusEmoji: json['status_emoji'] ?? '',
+      statusText: json['status_text'] ?? '',
     );
   }
+
+
+  static List<UserModel> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => UserModel.fromJson(json)).toList();
+  }
+
 }

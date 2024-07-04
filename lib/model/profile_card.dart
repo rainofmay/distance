@@ -8,7 +8,8 @@ class UserProfile {
   late final OnlineStatus onlineStatus;
   late final String currentActivity;
   late final String profileImageUrl;
-
+  late final DateTime? createdAt;
+  late final DateTime? updatedAt;
   UserProfile({
     required this.name,
     required this.introduction,
@@ -16,5 +17,7 @@ class UserProfile {
     required this.onlineStatus,
     required this.currentActivity,
     required this.profileImageUrl,
+    this.createdAt,
+    this.updatedAt
   });
 }
