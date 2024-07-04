@@ -5,6 +5,7 @@ import 'package:mobile/model/online_status.dart';
 import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/myroom/widget/custom_dialog.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/widgets/custom_dialog.dart';
 class StatusManageOnline extends StatelessWidget {
   final MateViewModel viewModel = Get.find<MateViewModel>(); // Get the ViewModel instance
   StatusManageOnline({super.key});

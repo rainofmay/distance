@@ -10,7 +10,7 @@ import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/add_mate_modal.dart';
 import 'package:mobile/view/mate/widget/dismissible_profile_card.dart';
-// import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/common/const/colors.dart';
 
@@ -165,13 +165,14 @@ class _MateScreenState extends State<MateScreen> {
 class ProfileList extends StatelessWidget {
   final List<UserProfile> DUMMY_PROFILES = [
     UserProfile(
-        name: '유저 1',
+    name: '유저 1',
         introduction: "유저1 소개하기",
         profileImageUrl: 'https://via.placeholder.com/150',
         imageUrl:
             'https://cdn.goodnews1.com/news/photo/201907/89251_22763_3813.JPG',
         // onlineStatus: OnlineStatus.online,
-        currentActivity: '코드 작성 중'),
+        currentActivity: '코드 작성 중',
+        onlineStatus: OnlineStatus.online),
     UserProfile(
         name: '유저 2',
         introduction: "유저2 소개하기",
@@ -179,7 +180,9 @@ class ProfileList extends StatelessWidget {
         imageUrl:
             'https://src.hidoc.co.kr/image/lib/2021/4/22/1619066150478_0.jpg',
         // onlineStatus: OnlineStatus.away,
-        currentActivity: '디자인 작업 중'),
+        currentActivity: '디자인 작업 중',
+        onlineStatus: OnlineStatus.online
+    ),
     // 프로필 데이터
   ];
 

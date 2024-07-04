@@ -5,6 +5,7 @@ import 'package:mobile/view/myroom/widget/custom_dialog.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/widgets/custom_dialog.dart';
 
 class StatusManageSchedulling extends StatefulWidget {
   final MateViewModel viewModel = Get.find<MateViewModel>(); // ViewModel 인스턴스 생성
