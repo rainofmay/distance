@@ -7,95 +7,65 @@ import 'package:mobile/model/music_info.dart';
 
 class MyroomMusicViewModel extends GetxController {
   final List<AudioPlayer> audioPlayerList =
-      List.generate(5, (_) => AudioPlayer());
-  final List<RxBool> isPlayingList = List.generate(5, (_) => false.obs);
+      List.generate(4, (_) => AudioPlayer());
+  final List<RxBool> isPlayingList = List.generate(4, (_) => false.obs);
   final _isAnyPlaying = false.obs;
-  final RxInt currentGroupIndex = 0.obs;
-  final RxInt currentAudioIndex = 0.obs;
-  final isVocalMusic = false.obs;
-  final isInstrumentalMusic = false.obs;
+
+  /* Music & Sound Tab Controller */
+  late final RxInt _tabIndex;
+  int get tabIndex => _tabIndex.value;
 
 
-
-  List<List<MusicInfo>> DUMMY_DATA = [
-    [
-      MusicInfo(
-          playerIndex: 0,
-          kindOfMusic: '배경 음악',
-          musicIcon:
-              Icon(CupertinoIcons.music_note, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/defaultMainMusic2.mp3'),
-      MusicInfo(
-          playerIndex: 1,
-          kindOfMusic: '풀벌레',
-          musicIcon:
-              Icon(CupertinoIcons.moon_stars, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/bugSound.mp3'),
-      MusicInfo(
-          playerIndex: 2,
-          kindOfMusic: '파도',
-          musicIcon: Icon(Icons.waves_rounded, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/waveSound.mp3'),
-      MusicInfo(
-          playerIndex: 3,
-          kindOfMusic: '바람',
-          musicIcon:
-              Icon(Icons.cloud_queue_rounded, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/windSound.mp3'),
-      MusicInfo(
-          playerIndex: 4,
-          kindOfMusic: '장작',
-          musicIcon:
-              Icon(Icons.local_fire_department, size: 18, color: LIGHT_WHITE),
-          audioURL: 'audios/nature/campingFireSound.mp3')
-    ],
-    [
-      MusicInfo(
-          playerIndex: 0,
-          kindOfMusic: '카페 말하는 소리1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/cafe/cafePeopleSound.mp3'),
-      MusicInfo(
-          playerIndex: 1,
-          kindOfMusic: '카페 말하는 소리2',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/cafe/cafePeopleSound2.mp3'),
-      MusicInfo(
-          playerIndex: 2,
-          kindOfMusic: '키보드 소리1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/cafe/keyboardTypingSound.mp3'),
-      MusicInfo(
-          playerIndex: 3,
-          kindOfMusic: '키보드 소리2',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/cafe/keyboardTypingSound2.mp3'),
-      MusicInfo(
-          playerIndex: 4,
-          kindOfMusic: '키보드 소리3',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/cafe/keyboardTypingSound3.mp3'),
-    ],
-    [
-      MusicInfo(
-          playerIndex: 0,
-          kindOfMusic: '클래식1',
-          musicIcon: Icon(CupertinoIcons.music_note, size: 18, color: WHITE),
-          audioURL: 'audios/nature/defaultMainMusic3.mp3'),
-    ]
+  List<MusicInfo> DUMMY_DATA = [
+    MusicInfo(
+        playerIndex: 0,
+        kindOfMusic: '풀벌레',
+        musicIcon:
+            Icon(CupertinoIcons.moon_stars, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/bugSound.mp3'),
+    MusicInfo(
+        playerIndex: 1,
+        kindOfMusic: '파도',
+        musicIcon: Icon(Icons.waves_rounded, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/waveSound.mp3'),
+    MusicInfo(
+        playerIndex: 2,
+        kindOfMusic: '바람',
+        musicIcon:
+            Icon(Icons.cloud_queue_rounded, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/windSound.mp3'),
+    MusicInfo(
+        playerIndex: 3,
+        kindOfMusic: '장작',
+        musicIcon:
+            Icon(Icons.local_fire_department, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/campingFireSound.mp3')
   ];
 
-  MyroomMusicViewModel() {
-    _init();
+  @override
+  void onInit() {
+    _tabIndex = 0.obs;
+    // currentAudioIndex.value = 0;
+
+    // 초기 볼륨 값
+    initSetting((int i) {
+      setVolume(i, 0.0);
+    });
+
+    super.onInit();
   }
 
-  void _init() async {
-    print("myroom_music_view_model.dart : _init() : audioPlayer was created");
-    currentGroupIndex.value = 0;
-    currentAudioIndex.value = 0;
-    initSetting((int i) {
-      setVolume(i, 0.5);
-    });
+
+  @override
+  void dispose() {
+    for (int i = 0; i < DUMMY_DATA.length; i++) {
+      audioPlayerList[i].dispose();
+    }
+    super.dispose();
+  }
+
+  changeTabIndex(int index) {
+    _tabIndex.value = index;
   }
 
   void initSetting([Function(int)? additionalFunction]) async {
@@ -134,27 +104,28 @@ class MyroomMusicViewModel extends GetxController {
   }
 
   void musicPlayAll() {
-    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA.length; i++) {
       musicPlay(i);
     }
   }
 
   void musicPauseAll() {
-    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA.length; i++) {
       musicPause(i);
     }
   }
 
   void musicStopAll() {
-    for (int i = 0; i < DUMMY_DATA[currentGroupIndex.value].length; i++) {
+    for (int i = 0; i < DUMMY_DATA.length; i++) {
       musicStop(i);
     }
   }
 
   void musicPlay(int index) async {
-    List<String> nowAudioGroup = DUMMY_DATA[currentGroupIndex.value]
+    List<String> nowAudioGroup = DUMMY_DATA
         .map((musicInfo) => musicInfo.audioURL)
         .toList();
+
     try {
       await audioPlayerList[index].play(AssetSource(nowAudioGroup[index]));
       await audioPlayerList[index].setReleaseMode(ReleaseMode.loop);
@@ -178,16 +149,16 @@ class MyroomMusicViewModel extends GetxController {
     update();
   }
 
-  void changeGroup(int index) {
-    if (index >= 0 && index < DUMMY_DATA.length) {
-      currentGroupIndex.value = index;
-      currentAudioIndex.value = 0;
-      initSetting((int i) {
-        setVolume(i, 0.5);
-      });
-      musicStopAll();
-    }
-  }
+  // void changeGroup(int index) {
+  //   if (index >= 0 && index < DUMMY_DATA.length) {
+  //     currentGroupIndex.value = index;
+  //     currentAudioIndex.value = 0;
+  //     initSetting((int i) {
+  //       setVolume(i, 0.5);
+  //     });
+  //     musicStopAll();
+  //   }
+  // }
 
   double getVolume(int index) {
     return audioPlayerList[index].volume;
@@ -197,19 +168,4 @@ class MyroomMusicViewModel extends GetxController {
     audioPlayerList[index].setVolume(volume);
   }
 
-  void toggleVocalMusic() {
-    isVocalMusic.value = !isVocalMusic.value;
-  }
-
-  void toggleInstrumentalMusic() {
-    isInstrumentalMusic.value = !isInstrumentalMusic.value;
-  }
-
-  @override
-  void dispose() {
-    for (int i = 0; i < DUMMY_DATA.length; i++) {
-      audioPlayerList[i].dispose();
-    }
-    super.dispose();
-  }
 }

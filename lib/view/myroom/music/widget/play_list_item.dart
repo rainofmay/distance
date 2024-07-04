@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/myroom/music/music_detail_screen.dart';
 
@@ -20,13 +21,7 @@ class _PlayListItemState extends State<PlayListItem> {
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => MusicDetailScreen()),
-        );
-      },
+      onTap: widget.onTap,
       child: Row(
         children: [
           ClipRRect(
