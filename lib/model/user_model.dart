@@ -38,7 +38,7 @@ class UserModel {
       'introduction' : introduction,
       'email': email,
       'uid': uid,
-      'online_status' : onlineStatus,
+      'online_status' : onlineStatus.stringValue,
       'background_url': backgroundUrl,
       'music_url': musicUrl,
       'is_paid': isPaid,

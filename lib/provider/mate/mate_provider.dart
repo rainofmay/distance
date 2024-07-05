@@ -58,7 +58,6 @@ class MateProvider {
       // 필요에 따라 에러 처리 추가 (예: 사용자에게 알림)
     }
   }
-
   /* Delete */
   Future<void> rejectMateRequest(String requestId) async {
     final myId = await AuthHelper.getMyId(); // 현재 사용자 ID 가져오기
@@ -69,6 +68,22 @@ class MateProvider {
         .eq('receiver_id', myId as Object); // receiver_id 조건 추가
 
     print("거절 완료!");
+  }
+
+  Future searchUsersByEmail(String email) async {
+    try {
+      final response = await Supabase.instance.client
+          .rpc('search_users_by_email', params: {'search_email': email});
+
+      if (response.error != null) {
+        throw response.error!;
+      }
+
+      return response;
+    } catch (e) {
+      print('Error searching users: $e');
+      return [] ;
+    }
   }
 }
 

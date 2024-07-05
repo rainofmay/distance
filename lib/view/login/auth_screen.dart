@@ -4,10 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/mate/mate_provider.dart';
-import 'package:mobile/provider/user/user_provider.dart';
-import 'package:mobile/repository/mate/mate_repository.dart';
-import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
@@ -15,7 +11,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/functions/custom_login.dart';
 
 class AuthScreen extends StatefulWidget {
-  const AuthScreen({super.key});
+  AuthScreen({super.key});
+  MateViewModel viewModel = Get.find<MateViewModel>();
 
   @override
   State<AuthScreen> createState() => _AuthScreenState();
@@ -91,10 +88,8 @@ class _AuthScreenState extends State<AuthScreen> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('로그인 성공'),
       ));
-      MateViewModel viewModel = Get.put(MateViewModel(
-          userRepository: UserRepository(userProvider: UserProvider()),
-          mateRepository: MateRepository(mateProvider: MateProvider())));
-      viewModel.updateMyProfile();
+
+      await widget.viewModel.updateMyProfile();
     }
   }
 
