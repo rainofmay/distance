@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,14 +60,39 @@ class _MateScreenState extends State<MateScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      GestureDetector(
-                        // 프로필 확대해서 보는 화면
-                        onTap: () {},
-                        child: CircleAvatar(
-                          radius: 30, // 프로필 사진 크기
-                          backgroundColor: WHITE,
-                          backgroundImage: AssetImage(
-                              'assets/images/themes/gomzy_theme.jpg'),
+                      Obx(
+                        () => GestureDetector(
+                          // 프로필 확대해서 보는 화면
+                          onTap: () {},
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50.0),
+                            child: widget.viewModel.profileImageUrl.value ==
+                                    null
+                                ? Image.asset(
+                                    'assets/images/themes/gomzy_theme.jpg',
+                                    fit: BoxFit.cover,
+                                    width: 70,
+                                    height: 70,
+                                  )
+                                : CachedNetworkImage(
+                                    // CachedNetworkImage 사용
+                                    imageUrl:
+                                        widget.viewModel.profileImageUrl.value,
+                                    fit: BoxFit.cover,
+                                    width: 70,
+                                    height: 70,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    // 로딩 표시
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset(
+                                      'assets/images/themes/gomzy_theme.jpg',
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                    ), // 에러 시 기본 이미지
+                                  ),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 20),
@@ -175,17 +201,19 @@ class _MateScreenState extends State<MateScreen> {
   Widget friendsWidget() {
     if (widget.viewModel.mateProfiles.value.isEmpty) {
       return ListView(
-        children:[
-          Center( // 친구 없을 때 버튼 표시
-          child: Padding(
-            padding: const EdgeInsets.only(top: 30),
-            child: ElevatedButton(
-              onPressed: () => Get.to(MateRequestsScreen()),
-              style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-              child: Text('친구 추가하러 가기'),
+        children: [
+          Center(
+            // 친구 없을 때 버튼 표시
+            child: Padding(
+              padding: const EdgeInsets.only(top: 30),
+              child: ElevatedButton(
+                onPressed: () => Get.to(MateRequestsScreen()),
+                style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
+                child: Text('친구 추가하러 가기'),
+              ),
             ),
-          ),
-        )],
+          )
+        ],
       );
     } else {
       return ListView.builder(
@@ -200,6 +228,5 @@ class _MateScreenState extends State<MateScreen> {
         },
       );
     }
-
   }
 }

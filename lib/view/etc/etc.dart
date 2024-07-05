@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -40,11 +41,33 @@ class _EtcState extends State<Etc> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    CircleAvatar(
-                      backgroundColor: WHITE,
-                      backgroundImage:
-                          AssetImage('assets/images/themes/gomzy_theme.jpg'),
-                    ),
+                    Obx(()=> ClipRRect(
+                      borderRadius: BorderRadius.circular(50.0),
+                      child: widget.viewModel.profileImageUrl.value == null
+                          ? Image.asset(
+                        'assets/images/themes/gomzy_theme.jpg',
+                        fit: BoxFit.cover,
+                        width: 40,
+                        height:40,
+                      )
+                          : CachedNetworkImage(
+                        // CachedNetworkImage 사용
+                        imageUrl: widget.viewModel.profileImageUrl.value,
+                        fit: BoxFit.cover,
+                        width: 40,
+                        height: 40,
+                        placeholder: (context, url) =>
+                            CircularProgressIndicator(),
+                        // 로딩 표시
+                        errorWidget: (context, url, error) => Image.asset(
+                          'assets/images/themes/gomzy_theme.jpg',
+                          fit: BoxFit.cover,
+                          width: 40,
+                          height: 40,
+                        ), // 에러 시 기본 이미지
+                      ),
+                    ),),
+
                     const SizedBox(width: 10),
                     Text(widget.viewModel.name.value)
                   ],
