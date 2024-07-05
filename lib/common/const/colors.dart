@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+class TColor {
+  static Color get primary_
+}
+
 const PRIMARY_COLOR = Color(0xFFECB574);  //브랜드 컬러
 const PRIMARY_LIGHT = Color(0xffF7C667);  // 브랜드 컬러 밝은 버전
 const SECONDARY = Color(0xff853312);

@@ -5,5 +5,5 @@ class MusicInfo {
   final String kindOfMusic;
   final dynamic musicIcon;
   final String audioURL;
-  MusicInfo({required this.playerIndex, required this.kindOfMusic, required this.musicIcon, required this.audioURL});
+  MusicInfo({required this.playerIndex, required this.kindOfMusic, this.musicIcon, required this.audioURL});
 }

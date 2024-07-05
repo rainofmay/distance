@@ -8,7 +8,6 @@ Future<void> customDialog(BuildContext context, double height, String title,
   await showDialog<void>(
     context: context,
     builder: (context) {
-      // 빌더로 AlertDialog 위젯을 생성
       return AlertDialog(
         backgroundColor: DARK,
         shape: RoundedRectangleBorder(
@@ -22,7 +21,6 @@ Future<void> customDialog(BuildContext context, double height, String title,
             ? null
             : [
                 actionWidget,
-                // OkCancelButtons(okText: '확인', cancelText: '취소', onPressed: (){},),
               ],
         actionsPadding: EdgeInsets.only(top: 0, bottom: 5, left: 0, right: 20),
       );

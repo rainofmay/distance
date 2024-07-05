@@ -50,7 +50,7 @@ class _WithdrawalState extends State<Withdrawal> {
                     setState(() {
                       _isChecked = value!;
                     });
-                  },),
+                  }, radius: 50,),
                   Text('탈퇴 시 유의사항을 모두 확인하였습니다.')
                 ],
               ),

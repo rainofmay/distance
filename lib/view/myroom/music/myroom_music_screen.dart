@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
+import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/view/myroom/music/music_themes_screen.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/circled_music_album.dart';
@@ -22,14 +23,14 @@ class MyroomMusicScreen extends StatefulWidget {
 }
 
 class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
-  final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel());
+  final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel(provider: Get.put(MyRoomMusicProvider())));
   late PageController pageController;
 
   
   @override
   void initState() {
     super.initState();
-    pageController = PageController(initialPage: 0);
+    pageController = PageController(initialPage: musicViewModel.tabIndex);
     // pageController.addListener();
   }
   
@@ -121,8 +122,8 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                                           title: '몰입에 도움이 되는 음악',
                                           iconData: CupertinoIcons.music_note_2),
                                       const SizedBox(height: 20),
-                                      Center(child: CircledMusicAlbum()),
-                                      MusicPlayer(),
+                                      Center(child: CircledMusicAlbum(viewModel : musicViewModel)),
+                                      MusicPlayer(viewModel : musicViewModel),
                                     ],
                                   ),
                                   const SizedBox(height: 20),

@@ -71,7 +71,7 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules = value.obs);
-    print('_allSchedules $_allSchedules');
+    // print('_allSchedules $_allSchedules');
   }
 
   Future<void> initScheduleData(DateTime day) async {
@@ -79,7 +79,7 @@ class ScheduleViewModel extends GetxController {
         .fetchScehduleData(day)
         .then((value) => _scheduleModel = value.obs)
         .then((value) => _isScheduleListLoaded.value = true);
-    print('_scheduleModel $_scheduleModel');
+    // print('_scheduleModel $_scheduleModel');
   }
 
   void initColorSet() {

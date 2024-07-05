@@ -59,7 +59,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save(); //  Form 내부의 TextFormField 들의 onSaved 가 호출됨.
-      print('폼키 유효성검사 성공');
+
       try {
         bool isRegisterSuccess =
             await registerAccount(emailValue, passwordValue);

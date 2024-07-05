@@ -4,11 +4,12 @@ import '../common/const/colors.dart';
 
 class CustomCheckBox extends StatelessWidget {
   final bool value;
+  final double radius;
   final void Function(bool?)? onChanged;
   final Color? checkColor;
   final Color? activeColor;
   final Color? borderColor;
-  const CustomCheckBox({super.key, required this.value, this.onChanged, this.checkColor, this.activeColor, this.borderColor});
+  const CustomCheckBox({super.key, required this.value, this.onChanged, this.checkColor, this.activeColor, this.borderColor, required this.radius});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class CustomCheckBox extends StatelessWidget {
         checkColor: checkColor ?? PRIMARY_COLOR,
         hoverColor: TRANSPARENT,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(50),
+          borderRadius: BorderRadius.circular(radius),
           side: BorderSide(color: borderColor ?? BLACK),
         ),
         value: value,

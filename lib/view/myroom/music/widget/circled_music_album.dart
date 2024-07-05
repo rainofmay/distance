@@ -2,57 +2,40 @@ import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class CircledMusicAlbum extends StatefulWidget {
-  const CircledMusicAlbum({super.key});
+  final MyroomMusicViewModel viewModel;
+  const CircledMusicAlbum({super.key, required this.viewModel});
 
   @override
   State<CircledMusicAlbum> createState() => _CircledMusicAlbumState();
 }
 
-class _CircledMusicAlbumState extends State<CircledMusicAlbum> {
-  final ValueNotifier<double> _progressNotifier = ValueNotifier(0.0);
-  final double _musicDuration = 180; // 음악 재생시간
-
-  void _startMusic() {
-    Duration duration = Duration(seconds: _musicDuration.toInt());
-    DateTime startTime = DateTime.now();
-
-    // progress notifier 업데이트
-    Future.doWhile(() async {
-      await Future.delayed(Duration(milliseconds: 100));
-      double elapsed =
-          DateTime.now().difference(startTime).inSeconds.toDouble();
-      _progressNotifier.value = elapsed / _musicDuration * 100;
-      return elapsed < _musicDuration;
-    });
-  }
+class _CircledMusicAlbumState extends State<CircledMusicAlbum> with SingleTickerProviderStateMixin{
 
   @override
   void initState() {
     super.initState();
-    _startMusic();
+
   }
 
   @override
   Widget build(BuildContext context) {
     double mediaSize = MediaQuery.of(context).size.width;
-    return Column(
+    return Obx(() => Column(
       children: [
         Stack(alignment: Alignment.center, children: [
-          Hero(
-            // 애니메이션??
-            tag: () {},
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(mediaSize * 0.4),
-              child: Image.asset(
-                'assets/images/nature4.jpg',
-                width: 220,
-                height: 220,
-                fit: BoxFit.cover,
-              ),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(mediaSize * 0.4),
+            child: Image.asset(
+              'assets/images/nature4.jpg',
+              width: 220,
+              height: 220,
+              fit: BoxFit.cover,
             ),
           ),
           SizedBox(
@@ -61,8 +44,9 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> {
             child: AbsorbPointer(
                 absorbing: true, // true면 클라이언트가 조절하지 못하게 함.
                 child: ValueListenableBuilder(
-                  valueListenable: _progressNotifier,
+                  valueListenable: widget.viewModel.progressNotifier,
                   builder: (BuildContext context, value, Widget? child) {
+                    print('view value $value');
                     return SleekCircularSlider(
                       appearance: CircularSliderAppearance(
                         customWidths: CustomSliderWidths(
@@ -92,6 +76,7 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> {
                               color: Colors.transparent,
                               fontSize: 50,
                               fontWeight: FontWeight.w600),
+                          // modifier:
                         ),
                         angleRange: 360,
                         startAngle: 270,
@@ -109,12 +94,12 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> {
           ),
         ]),
         const SizedBox(height: 15),
-        Text('1:00 | 4:00',
-            style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
+        Obx(() => Text('1:00 | ${widget.viewModel.durationInSeconds}',
+            style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11))),
         const SizedBox(height: 20),
         Text('Music Title', style: TextStyle(color: WHITE, fontSize: 14)),
         const SizedBox(height: 30),
       ],
-    );
+    ));
   }
 }
