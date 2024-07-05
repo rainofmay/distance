@@ -1,12 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/model/profile_card.dart'; // UserProfile 모델을 정의한 파일을 임포트합니다.
+import 'package:mobile/model/user_model.dart';
+import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 
 class ProfileCard extends StatefulWidget {
-  final UserProfile profile;
+  final UserModel profile;
 
   ProfileCard({super.key, required this.profile});
 
@@ -75,9 +76,9 @@ class _ProfileCardState extends State<ProfileCard> {
             context,
             MaterialPageRoute(
               builder: (context) => MateRoomScreen(
-                profileImageUrl: widget.profile.profileImageUrl,
-                mateName: widget.profile.name,
-                imageUrl: widget.profile.imageUrl,
+                profileImageUrl: widget.profile.profileUrl ?? '',
+                mateName: widget.profile.name ?? '이름이 없습니다.',
+                imageUrl: widget.profile.backgroundUrl ?? '',
                 audioUrl:
                     'audios/nature/defaultMainMusic2.mp3', // 예: 'https://example.com/music.mp3'
               ),
@@ -92,15 +93,16 @@ class _ProfileCardState extends State<ProfileCard> {
                   CircleAvatar(
                     radius: 20,
                     backgroundColor: GREY.withOpacity(0.5),
-                    backgroundImage: NetworkImage(widget.profile.profileImageUrl),
+                    backgroundImage: NetworkImage(widget.profile.profileUrl ?? ''), // null 처리
                   ),
                   const SizedBox(width: 10),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.profile.name, style: TextStyle(fontSize: 13, color: BLACK)),
+                      Text(widget.profile.name ?? '이름이 없습니다.', // null 처리
+                          style: TextStyle(fontSize: 13, color: BLACK)),
                       const SizedBox(height: 5),
-                      Text(widget.profile.introduction,
+                      Text(widget.profile.introduction ?? '소개가 없습니다.', // null 처리
                           style: TextStyle(fontSize: 11, color: DARK_UNSELECTED)),
                     ],
                   ),
@@ -111,14 +113,16 @@ class _ProfileCardState extends State<ProfileCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  Text(widget.profile.currentActivity,
+                  Text(widget.profile.statusEmoji ?? '', // null 처리
                       style: TextStyle(fontSize: 11, color: BLACK)),
-                  // Padding(
-                  //   padding: const EdgeInsets.only(left: 8, right:16.0),
-                  //   child: Icon(Icons.circle,
-                  //     color: getStatusColor(widget.profile.onlineStatus),
-                  //   ),
-                  // ),
+                  Text(widget.profile.statusText ?? '', // null 처리
+                      style: TextStyle(fontSize: 11, color: BLACK)),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8, right:16.0),
+                    child: Icon(Icons.circle,
+                      color: getStatusColor(widget.profile.onlineStatus),
+                    ),
+                  ),
                 ],
               ),
             ),

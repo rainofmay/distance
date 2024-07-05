@@ -37,6 +37,8 @@ dependencies:
   get: ^4.6.6
   sleek_circular_slider: ^2.0.1
   emoji_picker_flutter: ^2.2.0
+  aws_s3_api: ^2.0.0
+  permission_handler: ^11.3.1
 
 
 dev_dependencies:

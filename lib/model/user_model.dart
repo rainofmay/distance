@@ -1,8 +1,14 @@
+
+import 'online_status.dart';
+
 class UserModel {
-  int? id;
+  String? id;
   String? profileUrl;
   String? name;
+  String? introduction;
   String email;
+  String uid;
+  OnlineStatus onlineStatus;
   String backgroundUrl;
   String musicUrl;
   bool isPaid;
@@ -13,7 +19,10 @@ class UserModel {
     this.id,
     this.profileUrl,
     this.name,
+    this.introduction,
     required this.email,
+    required this.uid,
+    this.onlineStatus = OnlineStatus.online,
     this.backgroundUrl = '', // 기본값 설정
     this.musicUrl = '', // 기본값 설정
     this.isPaid = false, // 기본값 설정
@@ -26,7 +35,10 @@ class UserModel {
     return {
       'profile_url': profileUrl,
       'name': name,
+      'introduction' : introduction,
       'email': email,
+      'uid': uid,
+      'online_status' : onlineStatus,
       'background_url': backgroundUrl,
       'music_url': musicUrl,
       'is_paid': isPaid,
@@ -38,15 +50,24 @@ class UserModel {
   // 데이터베이스로부터 데이터를 읽어와 UserModel 객체로 변환하는 역할
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id'],
-      profileUrl: json['profile_url'],
-      name: json['name'],
-      email: json['email'],
-      backgroundUrl: json['background_url'] ?? '', // null 처리
-      musicUrl: json['music_url'] ?? '', // null 처리
-      isPaid: json['is_paid'] ?? false, // null 처리
-      statusEmoji: json['status_emoji'] ?? '', // null 처리
-      statusText: json['status_text'] ?? '', // null 처리
+      id: json['id']?.toString(), // null일 경우 빈 문자열로 변환
+      profileUrl: json['profile_url'] ?? '', // null일 경우 빈 문자열로 설정
+      name: json['name'] ?? '',
+      introduction: json['introduction'] ?? '',
+      email: json['email'] ?? '', // null일 경우 빈 문자열로 설정
+      uid: json['uid'] ?? '',
+      onlineStatus: OnlineStatusExtension.fromString(json['online_status'] ?? 'online'), // null 또는 알 수 없는 값일 경우 offline으로 설정
+      backgroundUrl: json['background_url'] ?? '',
+      musicUrl: json['music_url'] ?? '',
+      isPaid: json['is_paid'] ?? false,
+      statusEmoji: json['status_emoji'] ?? '',
+      statusText: json['status_text'] ?? '',
     );
   }
+
+
+  static List<UserModel> fromJsonList(List<dynamic> jsonList) {
+    return jsonList.map((json) => UserModel.fromJson(json)).toList();
+  }
+
 }

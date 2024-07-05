@@ -39,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       // supabase DB에 등록
       await supabase
           .from('user')
-          .insert(UserModel(email: emailValue).toMap());
+          .insert(UserModel(email: emailValue, uid: response.user!.id).toMap());
     } else {
       isRegisterSuccess = false;
     }

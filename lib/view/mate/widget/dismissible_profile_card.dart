@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/model/profile_card.dart';
+import 'package:mobile/model/user_model.dart';
 import 'package:mobile/view/mate/widget/profile_card.dart';
 
 class DismissibleProfileCard extends StatelessWidget {
-  final UserProfile profile; // Profile 객체
+  final UserModel profile; // Profile 객체
   final Function onDelete; // 삭제 로직을 위한 콜백 함수
   final int index; // 삭제할 Profile의 인덱스
 
@@ -20,7 +20,7 @@ class DismissibleProfileCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(profile.name), // 고유한 key 지정
+      key: Key(profile.uid), // 고유한 key 지정
       direction: DismissDirection.endToStart, // 오른쪽에서 왼쪽으로 스와이프
       onDismissed: (direction) {
         onDelete(index); // 실제 삭제 로직을 실행하는 콜백 함수 호출

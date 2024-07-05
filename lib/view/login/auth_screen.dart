@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/mate/mate_provider.dart';
+import 'package:mobile/provider/user/user_provider.dart';
+import 'package:mobile/repository/mate/mate_repository.dart';
+import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/view/login/register_screen.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../widgets/functions/custom_login.dart';
@@ -22,6 +28,14 @@ class _AuthScreenState extends State<AuthScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
+  GoogleSignIn googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+    clientId:
+        '829800135278-tpqa4lprsna700tnnnsh7nbtnprrovqf.apps.googleusercontent.com',
+    serverClientId:
+        '829800135278-1v4gff7cgerj5ekffvl5r9spvpeg0snv.apps.googleusercontent.com',
+  );
+
   @override
   void dispose() {
     _emailController.dispose();
@@ -30,18 +44,10 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   onGoogleLoginPress(BuildContext context) async {
-    GoogleSignIn googleSignIn = GoogleSignIn(
-      scopes: ['email'],
-      clientId:
-      '829800135278-tpqa4lprsna700tnnnsh7nbtnprrovqf.apps.googleusercontent.com',
-      serverClientId:
-      '829800135278-1v4gff7cgerj5ekffvl5r9spvpeg0snv.apps.googleusercontent.com',
-    );
-
     try {
       GoogleSignInAccount? account = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
-      await account?.authentication;
+          await account?.authentication;
 
       if (googleAuth == null ||
           googleAuth.idToken == null ||
@@ -55,11 +61,6 @@ class _AuthScreenState extends State<AuthScreen> {
           idToken: googleAuth.idToken!,
           accessToken: googleAuth.accessToken!);
 
-      // if (!context.mounted) return;
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(builder: (_) => MyRoom()),
-      // );
-
       print(account);
     } catch (error) {
       print(error);
@@ -71,7 +72,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   onKakaoLoginPress(BuildContext context) {}
 
-  void signIn() async{
+  void signIn() async {
     String emailValue = _emailController.text;
     String passwordValue = _passwordController.text;
 
@@ -83,27 +84,44 @@ class _AuthScreenState extends State<AuthScreen> {
 
     if (!mounted) return;
     if (!isLoginSuccess) {
-      return showDialog (
-        context: context,
-        builder: (context) {
-          return Text('로그인 실패');
-        },
-      );
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그인 실패'),
+      ));
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그인 성공'),
+      ));
+      MateViewModel viewModel = Get.put(MateViewModel(
+          userRepository: UserRepository(userProvider: UserProvider()),
+          mateRepository: MateRepository(mateProvider: MateProvider())));
+      viewModel.updateMyProfile();
     }
-
-    // 수정 필요
-    // Navigator.popAndPushNamed(context, '/main');
   }
 
   Future<bool> loginWithEmail(String emailValue, String passwordValue) async {
     bool isLoginSuccess = false;
-    final AuthResponse response = await supabase.auth.signInWithPassword(email: emailValue, password: passwordValue);
+    final AuthResponse response = await supabase.auth
+        .signInWithPassword(email: emailValue, password: passwordValue);
     if (response.user != null) {
       isLoginSuccess = true;
     } else {
       isLoginSuccess = false;
     }
     return isLoginSuccess;
+  }
+
+  void signOut() async {
+    try {
+      await supabase.auth.signOut();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그아웃 성공'),
+      ));
+    } catch (error) {
+      print(error);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('로그아웃 실패'),
+      ));
+    }
   }
 
   @override
@@ -119,22 +137,23 @@ class _AuthScreenState extends State<AuthScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left:20, top:20, bottom:10),
+                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
                 child: const Text('DISTANCE',
                     style: TextStyle(color: SECONDARY, fontSize: 15)),
               ),
               Padding(
-                padding: const EdgeInsets.only(left:20.0),
-                child: Container(
-                  width: 90,
-                    decoration: BoxDecoration(
-                        border: Border(
-                  bottom: BorderSide(width: 1.0, color: Colors.grey.withOpacity(0)),
-                )))
-              ),
+                  padding: const EdgeInsets.only(left: 20.0),
+                  child: Container(
+                      width: 90,
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(
+                            width: 1.0, color: Colors.grey.withOpacity(0)),
+                      )))),
               Padding(
-                padding: const EdgeInsets.only(left:20, top:10, bottom:10),
-                child: const Text('Log in and experience Distance. It is yours.',
+                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                child: const Text(
+                    'Log in and experience Distance. It is yours.',
                     style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
                     textAlign: TextAlign.start),
               ),
@@ -174,29 +193,30 @@ class _AuthScreenState extends State<AuthScreen> {
                               keyboardType: TextInputType.visiblePassword,
                               textInputAction: TextInputAction.done,
                               controller: _passwordController,
-                              validator: (value) => inputPasswordValidator(value),
+                              validator: (value) =>
+                                  inputPasswordValidator(value),
                             ),
 
                             const SizedBox(height: 20.0),
                             ElevatedButton(
-                              style:  ElevatedButton.styleFrom(
-                                side: BorderSide(
-                                  color: SECONDARY
-                                ),
+                              style: ElevatedButton.styleFrom(
+                                side: BorderSide(color: SECONDARY),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
+                                        BorderRadius.all(Radius.circular(8))),
                                 backgroundColor: WHITE,
                                 foregroundColor: TRANSPARENT,
                                 overlayColor: TRANSPARENT,
                                 fixedSize: Size(widthOfLog, heightOfLog),
                               ),
                               onPressed: signIn,
-                              child: const Text('로그인', style: TextStyle(color: SECONDARY, fontSize: 16)),
+                              child: const Text('로그인',
+                                  style: TextStyle(
+                                      color: SECONDARY, fontSize: 16)),
                             ),
                             const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
                             Padding(
-                              padding: const EdgeInsets.only(right:20),
+                              padding: const EdgeInsets.only(right: 20),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
@@ -205,14 +225,19 @@ class _AuthScreenState extends State<AuthScreen> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) => RegisterScreen()),
+                                            builder: (context) =>
+                                                RegisterScreen()),
                                       );
                                     },
-                                    child: const Text('회원가입', style: TextStyle(color: BLACK, fontSize: 12)),
+                                    child: const Text('회원가입',
+                                        style: TextStyle(
+                                            color: BLACK, fontSize: 12)),
                                   ),
                                   TextButton(
                                     onPressed: () {},
-                                    child: const Text('비밀번호 찾기', style: TextStyle(color: BLACK, fontSize: 12)),
+                                    child: const Text('비밀번호 찾기',
+                                        style: TextStyle(
+                                            color: BLACK, fontSize: 12)),
                                   ),
                                 ],
                               ),
@@ -228,7 +253,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
+                                    BorderRadius.all(Radius.circular(8))),
                             overlayColor: TRANSPARENT,
                             foregroundColor: TRANSPARENT,
                             fixedSize: Size(widthOfLog, heightOfLog),
@@ -256,7 +281,7 @@ class _AuthScreenState extends State<AuthScreen> {
                         style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
+                                    BorderRadius.all(Radius.circular(8))),
                             overlayColor: TRANSPARENT,
                             foregroundColor: TRANSPARENT,
                             fixedSize: Size(widthOfLog, heightOfLog),
@@ -274,6 +299,21 @@ class _AuthScreenState extends State<AuthScreen> {
                                 style: TextStyle(color: WHITE, fontSize: 16)),
                           ],
                         )),
+                    const SizedBox(height: 15),
+
+                    // 로그아웃 버튼 추가
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(8))),
+                            overlayColor: TRANSPARENT,
+                            foregroundColor: TRANSPARENT,
+                            fixedSize: Size(widthOfLog, heightOfLog),
+                            backgroundColor: Colors.red),
+                        onPressed: signOut,
+                        child: const Text('로그아웃',
+                            style: TextStyle(color: WHITE, fontSize: 16))),
                   ],
                 ),
               ),
