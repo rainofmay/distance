@@ -19,7 +19,6 @@ class BottomBarViewModel extends GetxController {
 
   setBottomIndex(int index) {
     _bottomIndex.value = index;
-    print(bottomIndex);
   }
 
   setScreen() {

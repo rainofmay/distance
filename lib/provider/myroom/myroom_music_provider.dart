@@ -4,7 +4,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 
 class MyRoomMusicProvider {
-  static List<MusicInfo> whiteNoiseList = [
+  static List<MusicInfo> soundList = [
     MusicInfo(
         playerIndex: 0,
         kindOfMusic: '풀벌레',
@@ -33,16 +33,16 @@ class MyRoomMusicProvider {
   static List<MusicInfo> musicList = [
     MusicInfo(
         playerIndex: 0,
-        kindOfMusic: '자기 전에 듣는 음악',
+        kindOfMusic: 'getting sleep with me',
         audioURL: 'audios/nature/defaultMainMusic2.mp3'),
     MusicInfo(
         playerIndex: 1,
-        kindOfMusic: '아침에 듣는 음악',
+        kindOfMusic: 'Lovely morning',
         audioURL: 'audios/nature/defaultMainMusic3.mp3')
   ];
 
   List<MusicInfo> getAllSounds() {
-    return whiteNoiseList;
+    return soundList;
   }
 
   List<MusicInfo> getAllMusic() {

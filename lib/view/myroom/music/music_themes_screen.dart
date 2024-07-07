@@ -4,7 +4,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/view/myroom/music/music_detail_screen.dart';
 import 'package:mobile/view/myroom/music/widget/play_list_item.dart';
-import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/section_title.dart';
 
@@ -16,7 +16,7 @@ class MusicThemesScreen extends StatefulWidget {
 }
 
 class _MusicThemesScreenState extends State<MusicThemesScreen> {
-  final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel(provider: Get.put(MyRoomMusicProvider())));
+  final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: Get.put(MyRoomMusicProvider())));
 
   @override
   void initState() {

@@ -4,23 +4,47 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
-class CircledMusicAlbum extends StatefulWidget {
-  final MyroomMusicViewModel viewModel;
-  const CircledMusicAlbum({super.key, required this.viewModel});
+class CircledMusicPlayer extends StatefulWidget {
+  final MusicViewModel viewModel;
+
+  const CircledMusicPlayer({super.key, required this.viewModel});
 
   @override
-  State<CircledMusicAlbum> createState() => _CircledMusicAlbumState();
+  State<CircledMusicPlayer> createState() => _CircledMusicPlayerState();
 }
 
-class _CircledMusicAlbumState extends State<CircledMusicAlbum> with SingleTickerProviderStateMixin{
+class _CircledMusicPlayerState extends State<CircledMusicPlayer>
+    with SingleTickerProviderStateMixin {
+  final ValueNotifier<double> _progressNotifier = ValueNotifier(0.0);
+  late AnimationController _animationController;
+
+
 
   @override
   void initState() {
-    super.initState();
+    _initializeController();
 
+    super.initState();
+  }
+
+  _initializeController() async{
+    final musicDuration = widget.viewModel.currentMusicDuration;
+    setState(() {
+      _animationController = AnimationController(
+        vsync: this,
+        duration: Duration(seconds: musicDuration.toInt()),
+      );
+
+      _animationController.addListener(() {
+        _progressNotifier.value = _animationController.value * 100;
+      });
+
+      // Start the animation
+      // _animationController.forward(from: 0.0);
+    });
   }
 
   @override
@@ -44,13 +68,15 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> with SingleTicker
             child: AbsorbPointer(
                 absorbing: true, // true면 클라이언트가 조절하지 못하게 함.
                 child: ValueListenableBuilder(
-                  valueListenable: widget.viewModel.progressNotifier,
+                  valueListenable: _progressNotifier,
                   builder: (BuildContext context, value, Widget? child) {
-                    print('view value $value');
                     return SleekCircularSlider(
                       appearance: CircularSliderAppearance(
                         customWidths: CustomSliderWidths(
-                            trackWidth: 2, progressBarWidth: 4, shadowWidth: 16, handlerSize: 4),
+                            trackWidth: 2,
+                            progressBarWidth: 4,
+                            shadowWidth: 16,
+                            handlerSize: 4),
                         customColors: CustomSliderColors(
                             dotColor: const Color(0xffBCF869),
                             trackColor:
@@ -59,7 +85,7 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> with SingleTicker
                               const Color(0xffBCF869),
                               const Color(0xff34FFAA)
                             ],
-                            shadowColor:  const Color(0xffBCF869),
+                            shadowColor: const Color(0xffBCF869),
                             shadowMaxOpacity: 0.05),
                         infoProperties: InfoProperties(
                           topLabelStyle: const TextStyle(
@@ -94,11 +120,43 @@ class _CircledMusicAlbumState extends State<CircledMusicAlbum> with SingleTicker
           ),
         ]),
         const SizedBox(height: 15),
-        Obx(() => Text('1:00 | ${widget.viewModel.durationInSeconds}',
+        Obx(() => Text('1:00 | ${widget.viewModel.currentMusicDuration}',
             style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11))),
         const SizedBox(height: 20),
-        Text('Music Title', style: TextStyle(color: WHITE, fontSize: 14)),
+        Text(widget.viewModel.musicInfoList[widget.viewModel.currentIndex].kindOfMusic, style: TextStyle(color: WHITE, fontSize: 14)),
         const SizedBox(height: 30),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                onPressed: () {},
+                icon: Icon(CupertinoIcons.shuffle, color: WHITE, size: 20)),
+            IconButton(
+                onPressed: () {
+                  widget.viewModel.previousTrack();
+                },
+                icon: Icon(Icons.skip_previous, color: WHITE, size: 28)),
+            IconButton(
+                onPressed: () {
+                  widget.viewModel.musicPlayPause();
+                  _animationController.forward(from: 0.0);
+                },
+                icon: Icon(
+                    widget.viewModel.isMusicPlaying
+                        ? Icons.pause_rounded
+                        : Icons.play_arrow_rounded,
+                    color: WHITE,
+                    size: 28)),
+            IconButton(
+                onPressed: () {
+                  widget.viewModel.nextTrack();
+                },
+                icon: Icon(Icons.skip_next_rounded, color: WHITE, size: 28)),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(CupertinoIcons.repeat, color: WHITE, size: 20)),
+          ],
+        ),
       ],
     ));
   }

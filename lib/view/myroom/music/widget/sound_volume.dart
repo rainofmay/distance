@@ -2,34 +2,34 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
-class MusicVolume extends StatefulWidget {
+class SoundVolume extends StatefulWidget {
   final String kindOfMusic;
   final dynamic musicIcon;
   final int playerIndex;
-  final MyroomMusicViewModel musicViewModel; // ViewModel을 받을 변수 추가
+  final SoundViewModel viewModel;
 
-  const MusicVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.musicIcon, required this.musicViewModel});
+  const SoundVolume({super.key, required this.playerIndex, required this.kindOfMusic, required this.musicIcon, required this.viewModel});
 
 
   @override
-  State<MusicVolume> createState() => _MusicVolumeState();
+  State<SoundVolume> createState() => _SoundVolumeState();
 }
 
-class _MusicVolumeState extends State<MusicVolume> {
+class _SoundVolumeState extends State<SoundVolume> {
   double _volume = 0.0;
   void _adjustVolume(double value) {
     setState(() {
-      _volume = value; // 상태를 업데이트합니다.
+      _volume = value;
     });
-    widget.musicViewModel.setVolume(widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정합니다.
+    widget.viewModel.setVolume(widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정
   }
 
   @override
   Widget build(BuildContext context) {
-    _volume = widget.musicViewModel.audioPlayerList[widget.playerIndex].volume;
+    _volume = widget.viewModel.soundPlayerList[widget.playerIndex].volume;
 
     return Container(
       margin: EdgeInsets.only(top: 20, left: 15),
@@ -70,18 +70,18 @@ class _MusicVolumeState extends State<MusicVolume> {
                             hoverColor: TRANSPARENT,
                             icon:  Icon(
                               // value가 true 면 ?
-                              widget.musicViewModel.isPlayingList[widget.playerIndex].value ? CupertinoIcons.speaker_2 : CupertinoIcons.speaker_slash,
+                              widget.viewModel.isPlayingList[widget.playerIndex].value ? CupertinoIcons.speaker_2 : CupertinoIcons.speaker_slash,
                               color: WHITE,
                             ),
                             iconSize: 18.0,
                             onPressed: () {
-                              if (widget.musicViewModel.isPlayingList[widget.playerIndex].value) {
-                                widget.musicViewModel.musicPause(widget.playerIndex);
+                              if (widget.viewModel.isPlayingList[widget.playerIndex].value) {
+                                widget.viewModel.musicPause(widget.playerIndex);
                               } else {
-                                if (widget.musicViewModel.audioPlayerList[widget.playerIndex].state == PlayerState.paused) {
-                                  widget.musicViewModel.audioPlayerList[widget.playerIndex].resume();
+                                if (widget.viewModel.soundPlayerList[widget.playerIndex].state == PlayerState.paused) {
+                                  widget.viewModel.soundPlayerList[widget.playerIndex].resume();
                                 } else {
-                                  widget.musicViewModel.musicPlay(widget.playerIndex);
+                                  widget.viewModel.musicPlay(widget.playerIndex);
                                 }
                               }
                             }),

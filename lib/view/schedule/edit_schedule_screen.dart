@@ -75,8 +75,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   }
 
   _termsForSave() {
-    print('_originalStartTime $_originalStartTime');
-    print('_originalEndTime $_originalEndTime');
     if (timeComparison(_originalStartTime, _originalEndTime, _isTimeSet) ==
             false ||
         _endDate.day < _startDate.day ||

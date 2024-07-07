@@ -4,7 +4,8 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
-import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
+
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/custom_check_box.dart';
@@ -18,7 +19,7 @@ class SoundThemesScreen extends StatefulWidget {
 }
 
 class _SoundThemesScreenState extends State<SoundThemesScreen> {
-  final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel(provider: Get.put(MyRoomMusicProvider())));
+  final SoundViewModel soundViewModel = Get.put(SoundViewModel(provider: Get.put(MyRoomMusicProvider())));
   bool _isReDialog = false;
 
   @override
@@ -93,9 +94,9 @@ class _SoundThemesScreenState extends State<SoundThemesScreen> {
                 ),
                 ListView.builder(
                     shrinkWrap: true,
-                    itemCount: musicViewModel.DUMMY_DATA.length,
+                    itemCount: soundViewModel.soundInfoList.length,
                     itemBuilder: (context, index) {
-                      MusicInfo musicInfo = musicViewModel.DUMMY_DATA[index];
+                      MusicInfo musicInfo = soundViewModel.soundInfoList[index];
                       return Padding(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8.0, vertical: 8.0),

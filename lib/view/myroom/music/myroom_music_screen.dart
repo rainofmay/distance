@@ -1,18 +1,17 @@
-import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
-import 'package:mobile/view/myroom/music/music_themes_screen.dart';
+import 'package:mobile/view/myroom/music/music_tab_screen.dart';
+import 'package:mobile/view/myroom/music/sound_tab_screen.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
-import 'package:mobile/view/myroom/music/widget/circled_music_album.dart';
-import 'package:mobile/view/myroom/music/widget/music_player.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
-import 'package:mobile/view_model/myroom/music/myroom_music_view_model.dart';
+import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
+import 'package:mobile/view_model/myroom/music/music_view_model.dart';
+import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
-import 'package:mobile/view/myroom/music/widget/music_volume.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class MyroomMusicScreen extends StatefulWidget {
@@ -23,7 +22,7 @@ class MyroomMusicScreen extends StatefulWidget {
 }
 
 class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
-  final MyroomMusicViewModel musicViewModel = Get.put(MyroomMusicViewModel(provider: Get.put(MyRoomMusicProvider())));
+  final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: Get.put(MyRoomMusicProvider())));
   late PageController pageController;
 
   
@@ -89,101 +88,9 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                       },
                       children: [
                         /* Music */
-                        SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 20),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Text(
-                                      'Music',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                          color: WHITE),
-                                    ),
-                                  ),
-
-                                  // Music 아래 화면
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Sector(
-                                          onTap: () {
-                                            // Get.to(() => MusicThemesScreen());
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (c) =>
-                                                        MusicThemesScreen()));
-                                          },
-                                          title: '몰입에 도움이 되는 음악',
-                                          iconData: CupertinoIcons.music_note_2),
-                                      const SizedBox(height: 20),
-                                      Center(child: CircledMusicAlbum(viewModel : musicViewModel)),
-                                      MusicPlayer(viewModel : musicViewModel),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            )),
-
+                        MusicTabScreen(viewModel: musicViewModel),
                         /* Sound */
-                        SingleChildScrollView(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20, horizontal: 20),
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(top: 10.0),
-                                    child: Text(
-                                      'Sound',
-                                      style: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.normal,
-                                          color: WHITE),
-                                    ),
-                                  ),
-
-                                  // Sound 아래 화면
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Sector(
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (c) =>
-                                                        SoundThemesScreen()));
-                                          },
-                                          title: '주변 소리',
-                                          iconData: CupertinoIcons.headphones),
-                                      const SizedBox(height: 20),
-                                      ListView.builder(
-                                          shrinkWrap: true,
-                                          itemCount: musicViewModel.DUMMY_DATA.length,
-                                          itemBuilder:
-                                              (BuildContext context, int index) {
-                                            MusicInfo musicInfo =
-                                            musicViewModel.DUMMY_DATA[index];
-                                            return MusicVolume(
-                                              playerIndex: musicInfo.playerIndex,
-                                              musicIcon: musicInfo.musicIcon,
-                                              kindOfMusic: musicInfo.kindOfMusic,
-                                              musicViewModel: musicViewModel,
-                                            );
-                                          }),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 20),
-                                ],
-                              ),
-                            )),
+                        SoundTabScreen(),
                       ])),
               Positioned(
                 // 하단에 버튼 고정
@@ -194,10 +101,10 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                   okText: '확인',
                   cancelText: '취소',
                   onPressed: () {
-                    Get.back(); // 닫히는 버튼
+                    Get.back();
                   },
                   onCancelPressed: () {
-                    Get.back(); // 닫히는 버튼
+                    Get.back();
                   },
                 ),
               ),
