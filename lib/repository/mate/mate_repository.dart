@@ -76,7 +76,7 @@ class MateRepository {
   }
 
 
-
+  //친구요청 보내기
   Future<void> sendMateRequestByEmail(String email) async {
     try {
       final myId = await AuthHelper.getMyId(); // 현재 사용자 ID 가져오기
@@ -114,6 +114,28 @@ class MateRepository {
         .eq('email', email)
         .single(); // 단일 결과 반환
     return response['id'];
+  }
+
+  //친구 찾기
+  Future<List<UserModel>> searchMatesByEmail(String email) async {
+    try {
+      final response = await _mateProvider.searchUsersByEmail(email);
+      if (response.error != null) {
+        throw response.error!;
+      }
+      // 검색 결과를 UserModel 객체 리스트로 변환
+      List<UserModel> users = (response.data as List<dynamic>).map((userData) {
+        // similarity 필드를 제거하고 나머지 데이터로 UserModel 생성
+        Map<String, dynamic> userMap = Map<String, dynamic>.from(userData);
+        userMap.remove('similarity');
+        return UserModel.fromJson(userMap);
+      }).toList();
+
+      return users;
+    } catch (e) {
+      print('Error searching users: $e');
+      return [];
+    }
   }
 
 

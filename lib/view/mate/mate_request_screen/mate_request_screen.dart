@@ -38,7 +38,7 @@ class MateRequestsScreen extends StatelessWidget {
               }
             },
             style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-            child: Text('친구 요청 보내기'),
+            child: Text('검색하기'),
           ),
           Expanded(
             child: Obx(() {

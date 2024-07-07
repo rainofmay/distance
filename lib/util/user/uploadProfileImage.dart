@@ -48,9 +48,8 @@ void showPermissionDialog(BuildContext context, String permissionName) {
   );
 }
 
-Future<void> uploadImage(BuildContext context) async {
+Future<String?> uploadImage(BuildContext context) async {
   await requestPermissions(context);
-
   bool hasPermission = false;
   if (Platform.isIOS) {
     hasPermission = await Permission.photos.isGranted;
@@ -59,7 +58,6 @@ Future<void> uploadImage(BuildContext context) async {
   }
 
   if (hasPermission) {
-    // 이미지 선택 및 업로드 로직
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -68,24 +66,28 @@ Future<void> uploadImage(BuildContext context) async {
       final s3 = AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
 
       try {
+        final key = 'userProfile/${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
         final response = await s3.putObject(
           bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
-          key: 'userProfile/${file.path.split('/').last}', // 업로드할 파일 경로 지정
+          key: key,
           body: file.readAsBytesSync(),
         );
 
-
         if (response.eTag != null) {
           print('업로드 성공');
+          // S3 객체의 URL 생성
+          final url = 'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
+          return url;
         } else {
           print('업로드 실패: ${response.eTag}');
         }
-
       } catch (e) {
         print('오류 발생: $e');
       }
-    }  } else {
+    }
+  } else {
     Get.snackbar("권한 설정", "이미지 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.");
   }
+  return null;
 }
 

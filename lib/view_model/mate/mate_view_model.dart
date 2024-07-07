@@ -25,11 +25,14 @@ class MateViewModel extends GetxController {
   late final RxString userCurrentActivityText =''.obs;
 
 
+
   late final RxBool isPaid = false.obs;
   // Initialize mateProfiles with empty list
   final pendingMateProfiles = <Rx<UserModel>>[].obs;
   final mateProfiles = <Rx<UserModel>>[].obs;
   // Methods for updating profile data are simplified
+  final searchingProfiles = <Rx<UserModel>>[].obs;
+
   void updateName(String newName) => name.value = newName;
 
   void updateIntroduction(String newIntroduction) =>
@@ -37,7 +40,7 @@ class MateViewModel extends GetxController {
 
   void updateImageUrl(String newImageUrl) => imageUrl.value = newImageUrl;
 
-  void updateProfileImageUrl(String newProfileImageUrl) =>
+  Future<void> updateProfileImageUrl(String newProfileImageUrl) async =>
       profileImageUrl.value = newProfileImageUrl;
 
   void updateOnlineStatus(OnlineStatus newStatus) =>
@@ -88,6 +91,7 @@ class MateViewModel extends GetxController {
     try {
       final myProfile = await _userRepository.fetchMyProfile();
       if (myProfile != null) { // null 확인
+        profileImageUrl.value = myProfile.profileUrl ?? '';
         name.value = myProfile.name ?? ''; // null 처리
         introduction.value = myProfile.introduction ?? ''; // null 처리
         imageUrl.value = myProfile.profileUrl ?? ''; // null 처리
@@ -96,6 +100,7 @@ class MateViewModel extends GetxController {
         isPaid.value = myProfile.isPaid ?? false;
         userCurrentActivityEmoji.value = myProfile.statusEmoji ?? ''; // null 처리
         userCurrentActivityText.value = myProfile.statusText ?? ''; // null 처리
+        update();
       }
     } catch (e) {
       // 에러 처리 (예: 사용자에게 에러 메시지 표시)
@@ -151,7 +156,14 @@ class MateViewModel extends GetxController {
       print('Error accepting mate request: $e');
     }
   }
+
   Future<void> sendMateRequestByEmail(String email) async{
     await _mateRepository.sendMateRequestByEmail(email);
   }
+
+  Future<void> searchMateByEmail(String email) async {
+    final users = await _mateRepository.searchMatesByEmail(email);
+    //미완
+  }
+
 }

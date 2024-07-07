@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/view/myroom/music/music_themes_screen.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -32,17 +31,33 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MyAppState();
 }
 
-class _MyAppState extends State<MainPage> {
+class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
   final BottomBarViewModel bottomBarViewModel = Get.put(BottomBarViewModel());
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
 
+
   @override
   void initState() {
     super.initState();
     viewModel.initAllSchedules();
+
+    WidgetsBinding.instance.addObserver(this);
   }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
