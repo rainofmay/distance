@@ -4,11 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/util/mate/online_status_manager.dart';
 
 import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
+import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
@@ -18,6 +20,8 @@ class MyroomScreen extends StatefulWidget {
   MyroomScreen({super.key});
 
   final MyroomViewModel backgroundViewModel = Get.put(MyroomViewModel());
+  final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: MyRoomMusicProvider()));
+
   @override
   State<MyroomScreen> createState() => _MyRoomState();
 }
@@ -30,6 +34,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     widget.backgroundViewModel.loadPreferences();
+    widget.musicViewModel.setInitMusicState();
     onlineStatusManager = OnlineStatusManager();
     WidgetsBinding.instance.addObserver(this);
   }

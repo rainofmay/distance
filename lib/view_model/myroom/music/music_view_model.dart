@@ -21,7 +21,7 @@ class MusicViewModel extends GetxController
 
   /* Music */
   late final Rx<AudioPlayer> _musicPlayer = AudioPlayer().obs;
-
+  AudioPlayer get musicPlayer => _musicPlayer.value;
   late final RxList<MusicInfo> _musicInfoList = <MusicInfo>[].obs;
   List<MusicInfo> get musicInfoList => _musicInfoList;
   // url만 담긴 리스트
@@ -30,24 +30,38 @@ class MusicViewModel extends GetxController
 
   late final RxInt _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
-  late final Rx<double> _currentMusicDuration = 0.0.obs;
-  double get currentMusicDuration => _currentMusicDuration.value;
+  late final Rx<Duration> _currentMusicDuration = Duration.zero.obs;
+  Duration get currentMusicDuration => _currentMusicDuration.value;
+  late final Rx<Duration> _currentMusicPosition = Duration.zero.obs;
+  Duration get currentMusicPosition => _currentMusicPosition.value;
+
   late final RxBool _isMusicPlaying = false.obs;
   bool get isMusicPlaying => _isMusicPlaying.value;
   late final Rx<double> _volume = 0.5.obs;
 
   @override
   void onInit() {
+    setInitMusicState();
+    super.onInit();
+  }
+
+  setInitMusicState() {
     getAllMusicSource();
+    _musicPlayer().onDurationChanged.listen((Duration duration) {
+      _currentMusicDuration.value = duration;
+    });
+
+
+    _musicPlayer().onPositionChanged.listen((Duration position) {
+      _currentMusicPosition.value = position;
+    });
+
     _musicPlayer().onPlayerStateChanged.listen((state) {
       _isMusicPlaying.value = state == PlayerState.playing;
     });
 
-    _musicPlayer().onDurationChanged.listen((Duration duration) {
-      _currentMusicDuration.value = duration.inSeconds.toDouble();
-    });
+
     setVolume(0.5);
-    super.onInit();
   }
 
   void setVolume(double volume) {
@@ -71,6 +85,7 @@ class MusicViewModel extends GetxController
     // 외부에서 가져올 경우 setSourceUrl
      _musicPlayer().setSourceAsset(_musicInfoList[_currentIndex.value].audioURL);
   }
+
 
   musicPlayPause() async{
     if (_musicPlayer().state == PlayerState.playing) {

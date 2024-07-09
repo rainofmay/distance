@@ -48,4 +48,22 @@ class MyRoomMusicProvider {
   List<MusicInfo> getAllMusic() {
     return musicList;
   }
+
+  static List<MusicInfo> soundListOfUser = [
+    MusicInfo(
+        playerIndex: 0,
+        kindOfMusic: '풀벌레',
+        musicIcon:
+        Icon(CupertinoIcons.moon_stars, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/bugSound.mp3'),
+    MusicInfo(
+        playerIndex: 1,
+        kindOfMusic: '파도',
+        musicIcon: Icon(Icons.waves_rounded, size: 18, color: LIGHT_WHITE),
+        audioURL: 'audios/nature/waveSound.mp3'),
+  ];
+
+  List<MusicInfo> getUserSounds() {
+    return soundListOfUser;
+  }
 }

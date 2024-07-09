@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
@@ -19,25 +21,17 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
 
   late final Rx<AudioPlayer> _audioPlayer;
   AudioPlayer get audioPlayer => _audioPlayer.value;
-  late RxBool _isSoundPlaying;
+  late final RxBool _isSoundPlaying = false.obs;
   bool get isSoundPlaying => _isSoundPlaying.value;
-
 
 
 
   @override
   void onInit() {
-    // getSoundSource();
-    print('soundInfoList');
-    _isSoundPlaying = false.obs;
-    /* 임시 테스트 */
-
-
     // 초기 볼륨 값
     initSetting((int i) {
       setVolume(i, 0.0);
     });
-
 
     super.onInit();
   }
@@ -50,10 +44,6 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
     super.dispose();
   }
 
-
-  // getSoundSource() {
-  //   _soundInfoList.value = _provider.getAllSounds();
-  // }
 
   playPause() {
     if (_isSoundPlaying.value) {
@@ -157,5 +147,8 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
   void setVolume(int index, double volume) {
     _soundPlayerList[index].setVolume(volume);
   }
+
+
+  /* Store에서 제공하는 Sound 관련 코드 */
 
 }

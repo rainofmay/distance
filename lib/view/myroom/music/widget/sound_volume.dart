@@ -25,6 +25,7 @@ class _SoundVolumeState extends State<SoundVolume> {
       _volume = value;
     });
     widget.viewModel.setVolume(widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정
+
   }
 
   @override
