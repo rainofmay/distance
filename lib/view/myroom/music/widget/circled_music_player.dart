@@ -26,13 +26,13 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
 
   void updateProgress() {
     double progress =
-        widget.viewModel.currentMusicPosition.inSeconds.toDouble() /
-            widget.viewModel.currentMusicDuration.inSeconds.toDouble();
+        widget.viewModel.currentMusicPosition.inMilliseconds.toDouble() /
+            widget.viewModel.currentMusicDuration.inMilliseconds.toDouble();
     progressNotifier.value = progress * 100;
   }
 
   subscribeDuration() {
-    _timer = Timer.periodic(Duration(seconds: 3), (timer) {
+    _timer = Timer.periodic(Duration(milliseconds: 1), (timer) {
       if (mounted) {
         updateProgress();
       } else {
@@ -44,6 +44,7 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   @override
   void initState() {
     super.initState();
+    subscribeDuration();
   }
 
   @override
@@ -109,6 +110,8 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                                     fontWeight: FontWeight.w600),
                                 // modifier:
                               ),
+                              animationEnabled: true,
+                              animDurationMultiplier: 1,
                               angleRange: 360,
                               startAngle: 270,
                             ),
@@ -125,7 +128,7 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
             ]),
             const SizedBox(height: 15),
             Obx(() => Text(
-                '${(widget.viewModel.currentMusicPosition.inSeconds)} | ${(widget.viewModel.currentMusicDuration.inSeconds) - (widget.viewModel.currentMusicPosition.inSeconds)}',
+                '${(widget.viewModel.currentMusicPosition.inMilliseconds / 1000).toStringAsFixed(1)} | ${((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).toStringAsFixed(1)}',
                 style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11))),
             const SizedBox(height: 20),
             Text(
@@ -137,8 +140,10 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(CupertinoIcons.shuffle, color: WHITE, size: 20)),
+                    onPressed: () {
+                      widget.viewModel.toggleShuffle();
+                    },
+                    icon: widget.viewModel.isShuffled ? Icon(CupertinoIcons.shuffle, color: PRIMARY_LIGHT, size: 20) : Icon(CupertinoIcons.shuffle, color: WHITE, size: 20)) ,
                 IconButton(
                     onPressed: () {
                       widget.viewModel.previousTrack();
@@ -162,8 +167,10 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                     icon:
                         Icon(Icons.skip_next_rounded, color: WHITE, size: 28)),
                 IconButton(
-                    onPressed: () {},
-                    icon: Icon(CupertinoIcons.repeat, color: WHITE, size: 20)),
+                    onPressed: () {
+                      widget.viewModel.toggleRepeat();
+                    },
+                    icon: widget.viewModel.isRepeated ?  Icon(CupertinoIcons.repeat_1, color: PRIMARY_LIGHT, size: 20) :Icon( CupertinoIcons.repeat , color: WHITE, size: 20) ),
               ],
             ),
           ],
