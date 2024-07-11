@@ -169,14 +169,16 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     );
     if (isStartTime == true) {
       setState(() {
-        _originalStartTime = pickerDate ?? DateTime.now(); // 시작, 종료시각 비교를 위한 변수
+        _originalStartTime = pickerDate ?? DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day, 6, 0);; // 시작, 종료시각 비교를 위한 변수
 
         _startDate = pickerDate ?? DateTime.now();
         _startTime = DateFormat('hh:mm a').format(pickerDate!) ?? "06:00 AM";
       });
     } else if (isStartTime == false) {
       setState(() {
-        _originalEndTime = pickerDate ?? DateTime.now();
+        _originalEndTime = pickerDate ?? DateTime(
+            DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
 
         _endDate = pickerDate ?? DateTime.now();
         _endTime = DateFormat('hh:mm a').format(pickerDate!) ?? "08:00 AM";
@@ -298,6 +300,10 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                         readOnly: true,
                         onTap: () {
                           _getDateFromUser(context: context, isStartTime: true);
+                          print(_originalStartTime);
+                          print(_originalEndTime);
+                          print(_startDate);
+                          print(_endDate);
                         },
                         titleIcon: IconButton(
                             icon: Icon(
@@ -387,6 +393,10 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                           activeColor: Color(0xff8FB8EE),
                           //Color(0xffC8D8FA)
                           onChanged: (bool? value) {
+                            print(_originalStartTime);
+                            print(_originalEndTime);
+                            print(_startDate);
+                            print(_endDate);
                             setState(() {
                               _isTimeSet = value ?? false;
                             });

@@ -134,7 +134,7 @@ class _MateScreenState extends State<MateScreen> {
                     height: 35,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: DARK_UNSELECTED,
+                        color: GREY.withOpacity(0.3),
                       ),
                       borderRadius: BorderRadius.circular(30),
                     ),
@@ -171,7 +171,7 @@ class _MateScreenState extends State<MateScreen> {
                 Text('Mates',
                     style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                 const SizedBox(width: 10),
-                Text('${widget.viewModel.mateProfiles.value.length} 명',
+                Text('(${widget.viewModel.mateProfiles.value.length})',
                     style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                 const SizedBox(width: 16),
                 Expanded(
@@ -200,21 +200,26 @@ class _MateScreenState extends State<MateScreen> {
 
   Widget friendsWidget() {
     if (widget.viewModel.mateProfiles.value.isEmpty) {
-      return ListView(
-        children: [
-          Center(
-            // 친구 없을 때 버튼 표시
-            child: Padding(
-              padding: const EdgeInsets.only(top: 30),
-              child: ElevatedButton(
-                onPressed: () => Get.to(MateRequestsScreen()),
-                style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-                child: Text('친구 추가하러 가기'),
-              ),
+      return Center(
+        // 친구 없을 때 버튼 표시
+        child: GestureDetector(
+          onTap: () => Get.to(MateRequestsScreen()),
+          child: Padding(
+            padding: const EdgeInsets.only(top: 0),
+            child: Container(
+              width: 120,
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: DARK,
+                ),
+
+              child: Center(child: Text('메이트 찾기', style: TextStyle(color: PRIMARY_LIGHT), textAlign: TextAlign.center)),
             ),
-          )
-        ],
-      );
+
+            ),
+          ),
+        );
     } else {
       return ListView.builder(
         itemCount: widget.viewModel.mateProfiles.value.length,

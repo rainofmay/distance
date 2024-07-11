@@ -75,7 +75,7 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
             onTap: bottomBarViewModel.setBottomIndex,
             items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home_rounded), label: '내 방',),
+                icon: Icon(Icons.home_rounded), label: '홈'),
               BottomNavigationBarItem(
                   icon: Icon(CupertinoIcons.time), label: '일 정'),
               BottomNavigationBarItem(icon: Icon(Icons.person_3), label: '메이트'),

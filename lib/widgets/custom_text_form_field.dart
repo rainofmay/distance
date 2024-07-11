@@ -9,12 +9,16 @@ class CustomTextFormField extends StatefulWidget {
   final bool isPasswordField;
   final bool? isEnabled; // 텍스트필드 활성화 여부
   final int? maxLines;
-  final  bool isReadOnly;
+  final bool isReadOnly;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final FormFieldValidator validator;
   final TextEditingController? controller;
+  final Widget? prefix;
   final Icon? prefixIcon;
+  final Widget? suffixWidget;
+  final Icon? suffixIcon;
+  final Widget? counter;
   final String? labelText;
 
 
@@ -30,8 +34,12 @@ class CustomTextFormField extends StatefulWidget {
     required this.textInputAction,
     this.controller,
     required this.validator,
+    this.prefix,
     this.prefixIcon,
+    this.suffixWidget,
     this.labelText,
+    this.counter,
+    this.suffixIcon,
     super.key
   });
 
@@ -54,10 +62,17 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         enabled: widget.isEnabled,
         readOnly: widget.isReadOnly ? true : false,
         maxLines: widget.maxLines,
+
         decoration: InputDecoration(
+          isDense: true,
+            contentPadding: EdgeInsets.all(10),
+          prefix: widget.prefix,
             prefixIcon: widget.prefixIcon,
+            suffix: widget.suffixWidget,
+            suffixIcon: widget.suffixIcon,
             labelText: widget.labelText,
             hintText: widget.hintText,
+            counter: widget.counter,
             labelStyle: TextStyle(color: GREY),
             focusedBorder: UnderlineInputBorder(
               borderSide: BorderSide(color: SECONDARY),
