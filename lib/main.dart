@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/util/mate/online_status_manager.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
+import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
@@ -15,7 +17,7 @@ import 'package:intl/date_symbol_data_local.dart';
 Future<void> main() async {
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
-
+  //await OnlineStatusManager.initializeBackgroundFetch();
   await initializeDateFormatting();
   await dotenv.load();
   await Supabase.initialize(
@@ -36,14 +38,16 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
-
+  final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
+  final OnlineStatusManager onlineStatusManager = OnlineStatusManager();
 
   @override
   void initState() {
     super.initState();
     viewModel.initAllSchedules();
-
     WidgetsBinding.instance.addObserver(this);
+    myRoomViewModel.loadPreferences(); // Load preferences here
+
   }
 
   @override
@@ -54,10 +58,30 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    OnlineStatusManager.handleOnlineLifecycleState(state);
+    switch (state) {
+        case AppLifecycleState.resumed:
+          myRoomViewModel.videoController.value?.play();
+          print("[LifeCycleState] Resumed");
+          break;
+        case AppLifecycleState.inactive:
+          print("[LifeCycleState] : inactive");
+          myRoomViewModel.videoController.value?.pause();
+          break;
+      case AppLifecycleState.detached:
+        // TODO: Handle this case.
+        break;
 
+      case AppLifecycleState.hidden:
+        // TODO: Handle this case.
+        break;
+
+      case AppLifecycleState.paused:
+        // TODO: Handle this case.
+        break;
+
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {

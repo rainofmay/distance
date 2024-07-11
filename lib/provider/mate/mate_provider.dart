@@ -72,13 +72,14 @@ class MateProvider {
 
   Future searchUsersByEmail(String email) async {
     try {
-      final response = await Supabase.instance.client
-          .rpc('search_users_by_email', params: {'search_email': email});
+      final response = await supabase
+          .rpc('find_similar_emails', params: {'search_email': email});
 
       if (response.error != null) {
+        print(response.error);
         throw response.error!;
       }
-
+      print(response);
       return response;
     } catch (e) {
       print('Error searching users: $e');

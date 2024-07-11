@@ -67,7 +67,21 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  onKakaoLoginPress(BuildContext context) {}
+  onKakaoLoginPress(BuildContext context) async{
+      //📲 signInWithOAuth를 사용해서 OAuthProvider.kakao로 로그인
+      await supabase.auth.signInWithOAuth(OAuthProvider.kakao);
+
+      // Listen to auth state changes in order to detect when ther OAuth login is complete.
+      supabase.auth.onAuthStateChange.listen((data) {
+
+        final AuthChangeEvent event = data.event;
+        //📲 event가 로그인 상태를 확인하면 로그인 후 페이지로 이동하는 코드
+        if (event == AuthChangeEvent.signedIn) {
+          // Do something when user sign in
+         print("로그인 성공!");
+        }
+      });
+    }
 
   void signIn() async {
     String emailValue = _emailController.text;
