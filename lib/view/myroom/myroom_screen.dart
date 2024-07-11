@@ -1,12 +1,12 @@
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
+import 'package:mobile/model/online_status.dart';
+import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/util/mate/online_status_manager.dart';
-
 import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
@@ -27,7 +27,7 @@ class MyroomScreen extends StatefulWidget {
 }
 
 class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
-
+  late UserProvider userProvider;
   late OnlineStatusManager onlineStatusManager;
 
   @override
@@ -36,6 +36,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
     widget.backgroundViewModel.loadPreferences();
     widget.musicViewModel.setInitMusicState();
     onlineStatusManager = OnlineStatusManager();
+    userProvider = UserProvider();
+    userProvider.editStatusOnline(OnlineStatus.online);
     WidgetsBinding.instance.addObserver(this);
   }
 
@@ -43,30 +45,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    onlineStatusManager.handleOnlineLifecycleState(state);
-    if (state == AppLifecycleState.resumed) {
-      print("[LifeCycleState] Resumed");
-      widget.backgroundViewModel.videoController.value?.play();
-    } else if (state == AppLifecycleState.paused) {
-      print("[LifeCycleState] : paused");
-      widget.backgroundViewModel.videoController.value?.pause();
-    } else if (state == AppLifecycleState.detached) {
-      print("[LifeCycleState] : detached");
-      widget.backgroundViewModel.videoController.value?.pause();
-    }else if (state == AppLifecycleState.hidden) {
-      print("[LifeCycleState] : hidden");
-      widget.backgroundViewModel.videoController.value?.pause();
-    }else if (state == AppLifecycleState.inactive) {
-      print("[LifeCycleState] : inactive");
-      widget.backgroundViewModel.videoController.value?.pause();
-    }else {
-      print("[LifeCycleState] : what");
-    }
-
+    userProvider.editStatusOnline(OnlineStatus.offline);
   }
 
   @override
@@ -86,7 +65,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
             if (widget.backgroundViewModel.isAudioSpectrumEnabled.value)
-              AudioSpectrumWidget(audioFilePath: 'audios/nature/defaultMainMusic.mp3'),
+              AudioSpectrumWidget(audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
           ],
         );
       }),

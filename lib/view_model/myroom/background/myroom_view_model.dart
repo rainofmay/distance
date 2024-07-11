@@ -4,7 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class MyroomViewModel extends GetxController {
   final RxBool isImage = true.obs;
-  final Rxn<CachedVideoPlayerController> videoController = Rxn<CachedVideoPlayerController>();
+  final Rxn<CachedVideoPlayerController> videoController =
+      Rxn<CachedVideoPlayerController>();
   final RxString selectedItemUrl = ''.obs;
   final RxString selectedItemThumbnail = ''.obs;
   final RxBool isSimpleWindowEnabled = false.obs;
@@ -78,10 +79,14 @@ class MyroomViewModel extends GetxController {
   void loadPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isImage.value = prefs.getBool('isImage') ?? true;
-    selectedItemUrl.value = prefs.getString('selectedItemUrl') ?? './assets/images/nature1.jpeg';
-    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ?? './assets/images/nature1.jpeg';
-    isSimpleWindowEnabled.value = prefs.getBool('isSimpleWindowEnabled') ?? false;
-    isAudioSpectrumEnabled.value = prefs.getBool('isAudioSpectrumEnabled') ?? false;
+    selectedItemUrl.value =
+        prefs.getString('selectedItemUrl') ?? './assets/images/nature1.jpeg';
+    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ??
+        './assets/images/nature1.jpeg';
+    isSimpleWindowEnabled.value =
+        prefs.getBool('isSimpleWindowEnabled') ?? false;
+    isAudioSpectrumEnabled.value =
+        prefs.getBool('isAudioSpectrumEnabled') ?? false;
 
     if (!isImage.value) {
       initializeVideo();
