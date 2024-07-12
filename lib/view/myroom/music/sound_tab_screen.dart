@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
+import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
@@ -18,7 +19,7 @@ class SoundTabScreen extends StatefulWidget {
 
 class _SoundTabScreenState extends State<SoundTabScreen> {
   final SoundViewModel soundViewModel =
-      Get.put(SoundViewModel(provider: Get.put(MyRoomMusicProvider())));
+      Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
 
   @override
   Widget build(BuildContext context) {
@@ -54,8 +55,7 @@ class _SoundTabScreenState extends State<SoundTabScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     MusicInfo musicInfo = soundViewModel.soundInfoList[index];
                     return SoundVolume(
-                      playerIndex: musicInfo.playerIndex,
-                      musicIcon: musicInfo.musicIcon,
+                      playerIndex: index,
                       kindOfMusic: musicInfo.kindOfMusic,
                       viewModel: soundViewModel,
                     );

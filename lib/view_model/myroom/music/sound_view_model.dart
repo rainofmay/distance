@@ -4,14 +4,15 @@ import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
+import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 
 class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
-  final MyRoomMusicProvider _provider;
+  final MyRoomSoundProvider _provider;
 
-  SoundViewModel({required MyRoomMusicProvider provider})
+  SoundViewModel({required MyRoomSoundProvider provider})
       : _provider = provider;
 
-  late final List<MusicInfo> _soundInfoList = _provider.getAllSounds();
+  late final List<MusicInfo> _soundInfoList = _provider.getUserSounds();
   List<MusicInfo> get soundInfoList => _soundInfoList;
   late final RxList<AudioPlayer> _soundPlayerList = List.generate(_soundInfoList.length, (_) => AudioPlayer()).obs;
   List<AudioPlayer> get soundPlayerList => _soundPlayerList;

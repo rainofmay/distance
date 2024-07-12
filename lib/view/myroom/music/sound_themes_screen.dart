@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
+import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
@@ -20,7 +21,7 @@ class SoundThemesScreen extends StatefulWidget {
 
 class _SoundThemesScreenState extends State<SoundThemesScreen> {
   final StoreSoundViewModel storeSoundViewModel =
-      Get.put(StoreSoundViewModel(provider: Get.put(MyRoomMusicProvider())));
+      Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
   late final storeSoundInfoList = storeSoundViewModel.storeSoundInfoList;
 
   @override
@@ -45,100 +46,108 @@ class _SoundThemesScreenState extends State<SoundThemesScreen> {
             contentColor: BLACK,
             isLeading: true,
             backFunction: () => Get.back()),
-        body: Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
-                const SizedBox(height: 16),
-                ExpansionTile(
-                    tilePadding: EdgeInsets.only(left: 0, right: 8),
-                    childrenPadding: EdgeInsets.only(left: 8),
-                    iconColor: GREY,
-                    collapsedIconColor: GREY,
-                    expandedAlignment: Alignment.centerLeft,
-                    title: Text(
-                        '내가 담은 리스트 (${storeSoundViewModel.soundInfoListOfUser.length})',
-                        style: TextStyle(fontSize: 14)),
-                    children: [
-                      ListView.builder(
-                          shrinkWrap: true,
-                          itemCount:
-                              storeSoundViewModel.soundInfoListOfUser.length,
-                          itemBuilder: (context, index) {
-                            MusicInfo musicInfo =
-                                storeSoundViewModel.soundInfoListOfUser[index];
-                            return Text(musicInfo.kindOfMusic);
-                          }),
-                    ]),
-                const SizedBox(height: 16),
-                BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
-                Padding(
-                  padding: const EdgeInsets.only(top: 16, bottom: 8),
-                  child: const Text('전 체'),
-                ),
-
-                // Wrap(
-                //   spacing: 8.0,
-                //   runSpacing: 6.0,
-                //   children: [
-                //     TextButton(onPressed: , child: child)
-                //   ],
-                // ),
-                Padding(
-                  padding: const EdgeInsets.only(right: 16.0, bottom: 8),
-                  child: const Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('미리듣기',
-                          style:
-                              TextStyle(fontSize: 10, color: DARK_UNSELECTED)),
-                      SizedBox(width: 28),
-                      Text('담기',
-                          style:
-                              TextStyle(fontSize: 10, color: DARK_UNSELECTED)),
-                      SizedBox(width: 4),
-                    ],
+        body: SingleChildScrollView(
+          child: Padding(
+              padding: const EdgeInsets.only(left: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
+                  const SizedBox(height: 16),
+                  ExpansionTile(
+                      tilePadding: EdgeInsets.only(left: 0, right: 8),
+                      childrenPadding: EdgeInsets.only(left: 8),
+                      dense: true,
+                      iconColor: GREY,
+                      collapsedIconColor: GREY,
+                      expandedAlignment: Alignment.centerLeft,
+                      leading: Icon(CupertinoIcons.heart_fill, color: Color(
+                          0xff800020), size: 16),
+                      title: Transform.translate(
+                        offset: Offset(-16, 0),
+                        child: Text(
+                            '내가 담은 리스트 (${storeSoundViewModel.soundInfoListOfUser.length})',
+                            style: TextStyle(fontSize: 14)),
+                      ),
+                      children: [
+                        ListView.builder(
+                            shrinkWrap: true,
+                            itemCount:
+                                storeSoundViewModel.soundInfoListOfUser.length,
+                            itemBuilder: (context, index) {
+                              MusicInfo musicInfo =
+                                  storeSoundViewModel.soundInfoListOfUser[index];
+                              return Text(musicInfo.kindOfMusic);
+                            }),
+                      ]),
+                  const SizedBox(height: 16),
+                  BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16, bottom: 8),
+                    child: const Text('전 체'),
                   ),
-                ),
-                ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: storeSoundInfoList.length,
-                    itemBuilder: (context, index) {
-                      MusicInfo musicInfo = storeSoundInfoList[index];
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8.0, vertical: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(musicInfo.kindOfMusic),
-                            Obx(
-                              () => Row(
-                                children: [
-                                  IconButton(
-                                      onPressed: () {
-                                        storeSoundViewModel.storeSoundPlay(index);
-                                      },
-                                      icon: storeSoundViewModel.storePlayingBoolList[index] == false
-                                          ? Icon(CupertinoIcons.speaker_slash, size: 20)
-                                          : Icon(CupertinoIcons.speaker_3, color: SECONDARY, size: 20)),
-                                  const SizedBox(width: 16),
-                                  IconButton(
-                                      onPressed: () =>
-                                          _alertDialog(context, musicInfo),
-                                      icon:
-                                          Icon(CupertinoIcons.heart, size: 20))
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      );
-                    }),
-              ],
-            )));
+          
+                  // Wrap(
+                  //   spacing: 8.0,
+                  //   runSpacing: 6.0,
+                  //   children: [
+                  //     TextButton(onPressed: , child: child)
+                  //   ],
+                  // ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16.0, bottom: 8),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text('미리듣기',
+                            style:
+                                TextStyle(fontSize: 10, color: DARK_UNSELECTED)),
+                        SizedBox(width: 28),
+                        Text('담기',
+                            style:
+                                TextStyle(fontSize: 10, color: DARK_UNSELECTED)),
+                        SizedBox(width: 4),
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: storeSoundInfoList.length,
+                      itemBuilder: (context, index) {
+                        MusicInfo musicInfo = storeSoundInfoList[index];
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0, vertical: 8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text('# ${musicInfo.kindOfMusic}'),
+                              Obx(
+                                () => Row(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          storeSoundViewModel.storeSoundPlay(index);
+                                        },
+                                        icon: storeSoundViewModel.storePlayingBoolList[index] == false
+                                            ? Icon(CupertinoIcons.speaker_slash, size: 20)
+                                            : Icon(CupertinoIcons.speaker_3, color: SECONDARY, size: 20)),
+                                    const SizedBox(width: 16),
+                                    IconButton(
+                                        onPressed: () =>
+                                            _alertDialog(context, musicInfo),
+                                        icon:
+                                            Icon(CupertinoIcons.heart, size: 20))
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      }),
+                ],
+              )),
+        ));
   }
 }
 

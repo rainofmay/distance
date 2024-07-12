@@ -4,11 +4,12 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:get/get.dart';
+import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 
 class StoreSoundViewModel extends GetxController {
-  final MyRoomMusicProvider _provider;
+  final MyRoomSoundProvider _provider;
 
-  StoreSoundViewModel({required MyRoomMusicProvider provider})
+  StoreSoundViewModel({required MyRoomSoundProvider provider})
       : _provider = provider;
 
   late final List<MusicInfo> _storeSoundInfoList = _provider.getAllSounds();
