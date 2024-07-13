@@ -57,7 +57,7 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                     children: [
                       const SizedBox(height: 30),
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         curve: Curves.easeInOut,
                         width: musicViewModel.tabIndex == 0 ? 21.0 : 6.0,
                         height: 6.0,
@@ -68,7 +68,7 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                       ),
                       const SizedBox(width: 8),
                       AnimatedContainer(
-                        duration: Duration(milliseconds: 200),
+                        duration: const Duration(milliseconds: 200),
                         curve: Curves.easeInOut,
                         width: musicViewModel.tabIndex == 0 ? 6.0 : 21.0,
                         height: 6.0,

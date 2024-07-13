@@ -30,7 +30,7 @@ class _SoundTabScreenState extends State<SoundTabScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: Text(
+            child: const Text(
               'Sound',
               style: TextStyle(
                   fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),

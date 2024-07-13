@@ -7,6 +7,7 @@ import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/functions/time_comarison.dart';
 import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
+import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
@@ -121,27 +122,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       {required BuildContext context, required bool isStartTime}) async {
     DateTime? pickerDate = await showOmniDateTimePicker(
       context: context,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme(
-            brightness: Brightness.dark,
-            primary: Color(0xff81CEE5),
-            // 확인, 취소버튼 색
-            onPrimary: Color(0xff222E34),
-            // 선택한 날짜
-            secondary: TRANSPARENT,
-            onSecondary: Color(0xff3C6769),
-            error: Colors.redAccent,
-            onError: Colors.red,
-            surface: Color(0xff222E34),
-            onBackground: TRANSPARENT,
-            onSurface: Colors.white),
-        // 전체적인 글자색
-        splashFactory: NoSplash.splashFactory,
-        focusColor: TRANSPARENT,
-        hoverColor: TRANSPARENT,
-        highlightColor: TRANSPARENT,
-      ),
+      theme: OmniDateTimePickerTheme.theme,
       initialDate: isStartTime ? _originalStartTime : _originalEndTime,
       type: _isTimeSet
           ? OmniDateTimePickerType.dateAndTime
@@ -241,7 +222,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
               child: Padding(
                 padding:
                 // appBar와 body 간의 간격
-                EdgeInsets.only(
+                const EdgeInsets.only(
                   left: 8.0,
                   top: 16.0,
                 ),

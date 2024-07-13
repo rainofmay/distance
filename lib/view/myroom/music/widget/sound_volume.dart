@@ -44,17 +44,17 @@ class _SoundVolumeState extends State<SoundVolume> {
         SizedBox(
           width: 130,
           child: Text(widget.kindOfMusic,
-              style: TextStyle(fontSize: 13, color: LIGHT_WHITE),
+              style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
         const SizedBox(width: 8),
         SliderTheme(
           data: SliderThemeData(
             trackHeight: 2,
-            trackShape: RoundedRectSliderTrackShape(),
+            trackShape: const RoundedRectSliderTrackShape(),
             thumbColor: WHITE,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
-            overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 13),
             overlayColor: PRIMARY_COLOR.withOpacity(0.2),
             activeTrackColor: PRIMARY_COLOR,
             inactiveTrackColor: DARK_UNSELECTED,

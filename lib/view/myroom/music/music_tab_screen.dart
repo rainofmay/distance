@@ -24,7 +24,7 @@ class _MusicTabScreenState extends State<MusicTabScreen> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: Text(
+            child: const Text(
               'Music',
               style: TextStyle(
                   fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),

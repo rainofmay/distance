@@ -9,7 +9,9 @@ import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/functions/time_comarison.dart';
+import 'package:mobile/view/schedule/widget/repeat_schedule.dart';
 import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
+import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
@@ -115,28 +117,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       {required BuildContext context, required bool isStartTime}) async {
     DateTime? pickerDate = await showOmniDateTimePicker(
       context: context,
-      theme: ThemeData(
-        useMaterial3: true,
-        // colorSchemeSeed: Color(0xff222E34),
-        colorScheme: ColorScheme(
-            brightness: Brightness.dark,
-            primary: Color(0xff81CEE5),
-            // 확인, 취소버튼 색
-            onPrimary: Color(0xff222E34),
-            // 선택한 날짜
-            secondary: TRANSPARENT,
-            onSecondary: Color(0xff3C6769),
-            error: Colors.redAccent,
-            onError: Colors.red,
-            surface: Color(0xff222E34),
-            onBackground: TRANSPARENT,
-            onSurface: Colors.white),
-        // 전체적인 글자색
-        splashFactory: NoSplash.splashFactory,
-        focusColor: TRANSPARENT,
-        hoverColor: TRANSPARENT,
-        highlightColor: TRANSPARENT,
-      ),
+      theme: OmniDateTimePickerTheme.theme,
       initialDate: isStartTime ? _originalStartTime : _originalEndTime,
       type: _isTimeSet
           ? OmniDateTimePickerType.dateAndTime
@@ -206,7 +187,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                 onPressed: _termsForSave() ? () => _onSavePressed() : null,
                 child: Text(
                   '저장',
-                  style: TextStyle(color: _termsForSave() ? WHITE : GREY),
+                  style: TextStyle(color: _termsForSave() ? PRIMARY_LIGHT : GREY),
                 ),
               );
             },
@@ -393,10 +374,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                           activeColor: Color(0xff8FB8EE),
                           //Color(0xffC8D8FA)
                           onChanged: (bool? value) {
-                            print(_originalStartTime);
-                            print(_originalEndTime);
-                            print(_startDate);
-                            print(_endDate);
                             setState(() {
                               _isTimeSet = value ?? false;
                             });
@@ -407,56 +384,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
                   ),
                 ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      flex: 4,
-                      child: CustomTextField(
-                        autofocus: false,
-                        titleIcon: IconButton(
-                          icon: Icon(
-                            CupertinoIcons.repeat,
-                            color: BLACK,
-                          ),
-                          onPressed: null,
-                        ),
-                        readOnly: true,
-                        hint: _selectedRepeat,
-                      ),
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: DropdownButton(
-                        dropdownColor: WHITE,
-                        icon: Padding(
-                          padding: const EdgeInsets.only(bottom: 10.0, right: 20.0),
-                          child: Icon(
-                            Icons.keyboard_arrow_down,
-                            color: Colors.grey,
-                          ),
-                        ),
-                        iconSize: 24,
-                        isExpanded: true,
-                        underline: Container(height: 0),
-                        onChanged: (String? newValue) {
-                          setState(() {
-                            _selectedRepeat = newValue!;
-                          });
-                        },
-                        items: _repeatList
-                            .map<DropdownMenuItem<String>>((String? value) {
-                          return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(
-                                value!,
-                                style: TextStyle(color: GREY),
-                              ));
-                        }).toList(),
-                      ),
-                    ),
-                  ],
-                ),
+                RepeatScheduleWidget(),
               ],
             )),
           ),
