@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 
 class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
@@ -12,11 +11,11 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
   SoundViewModel({required MyRoomSoundProvider provider})
       : _provider = provider;
 
-  late final List<MusicInfo> _soundInfoList = _provider.getUserSounds();
+  late final RxList<MusicInfo>_soundInfoList;
   List<MusicInfo> get soundInfoList => _soundInfoList;
-  late final RxList<AudioPlayer> _soundPlayerList = List.generate(_soundInfoList.length, (_) => AudioPlayer()).obs;
+  late final RxList<AudioPlayer> _soundPlayerList;
   List<AudioPlayer> get soundPlayerList => _soundPlayerList;
-  late final List<RxBool> isPlayingList = List.generate(_soundInfoList.length, (_) => false.obs);
+  late final RxList<RxBool> isPlayingList;
   final _isAnyPlaying = false.obs;
 
 
@@ -28,7 +27,11 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
 
 
   @override
-  void onInit() {
+  void onInit() async{
+    _soundInfoList = (await _provider.loadUserSounds()).obs;  // 초기 데이터 로드
+    _soundPlayerList =
+    List.generate(_soundInfoList.length, (_) => AudioPlayer()).obs;
+    isPlayingList = List.generate(_soundInfoList.length, (_) => false.obs).obs;
     // 초기 볼륨 값
     initSetting((int i) {
       setVolume(i, 0.0);
@@ -43,6 +46,42 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
       _soundPlayerList[i].dispose();
     }
     super.dispose();
+  }
+
+
+  Future<void> loadSounds() async{
+}
+
+    Future<void> updateSounds() async {
+      final newSoundInfoList = await _provider.loadUserSounds();
+
+      _soundInfoList.value = newSoundInfoList;
+      _soundInfoList.refresh();
+      // 뮤직 리스트만큼 플레이어 생성
+      _soundPlayerList.value = newSoundInfoList
+          .map((_) => AudioPlayer())
+          .toList();
+
+      // 뮤직 리스트만큼 isPlayingList 생성
+      isPlayingList.value = newSoundInfoList
+          .map((_) => false.obs)
+          .toList();
+
+      initSetting((int i) {
+        setVolume(i, 0.0);
+      });
+
+    }
+
+
+  Future<void> addSoundToUserList(MusicInfo musicInfo) async{
+    await _provider.addSoundToUserSoundList(musicInfo);
+    await updateSounds();
+  }
+
+  Future<void> removeSoundFromUserList(MusicInfo musicInfo) async{
+    await _provider.removeSoundFromUserSoundList(musicInfo);
+    await updateSounds();
   }
 
 
