@@ -9,7 +9,7 @@ import 'package:mobile/view/myroom/music/widget/sector.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
 class SoundTabScreen extends StatefulWidget {
-  const SoundTabScreen({Key? key}) : super(key: key);
+  const SoundTabScreen({super.key});
 
   @override
   State<SoundTabScreen> createState() => _SoundTabScreenState();
@@ -17,7 +17,7 @@ class SoundTabScreen extends StatefulWidget {
 
 class _SoundTabScreenState extends State<SoundTabScreen> {
   final SoundViewModel soundViewModel =
-      Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
+  Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
 
   @override
   void initState() {
@@ -28,20 +28,20 @@ class _SoundTabScreenState extends State<SoundTabScreen> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 10.0),
-            child: const Text(
-              'Sound',
-              style: TextStyle(
-                  fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
-            ),
-          ),
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  'Sound',
+                  style: TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
+                ),
+              ),
 
-          // Sound 아래 화면
-          Obx(() => Column(
+              // Sound 아래 화면
+              Obx(() => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Sector(
@@ -64,8 +64,8 @@ class _SoundTabScreenState extends State<SoundTabScreen> {
                       })
                 ],
               )),
-        ],
-      ),
-    ));
+            ],
+          ),
+        ));
   }
 }

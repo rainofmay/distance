@@ -7,7 +7,6 @@ import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
 class SoundVolume extends StatefulWidget {
   final int playerIndex;
-  final SoundViewModel viewModel;
 
   const SoundVolume(
       {super.key,
@@ -42,17 +41,17 @@ class _SoundVolumeState extends State<SoundVolume> {
         SizedBox(
           width: 130,
           child: Text(viewModel.soundInfoList[widget.playerIndex].kindOfMusic,
-              style: TextStyle(fontSize: 13, color: LIGHT_WHITE),
+              style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
         const SizedBox(width: 8),
         SliderTheme(
           data: SliderThemeData(
             trackHeight: 2,
-            trackShape: RoundedRectSliderTrackShape(),
+            trackShape: const RoundedRectSliderTrackShape(),
             thumbColor: WHITE,
-            thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6),
-            overlayShape: RoundSliderOverlayShape(overlayRadius: 13),
+            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
+            overlayShape: const RoundSliderOverlayShape(overlayRadius: 13),
             overlayColor: PRIMARY_COLOR.withOpacity(0.2),
             activeTrackColor: PRIMARY_COLOR,
             inactiveTrackColor: DARK_UNSELECTED,

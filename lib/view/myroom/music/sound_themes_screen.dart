@@ -19,7 +19,7 @@ class SoundThemesScreen extends StatefulWidget {
 
 class _SoundThemesScreenState extends State<SoundThemesScreen> {
   final StoreSoundViewModel storeSoundViewModel =
-      Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
+  Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
   late final storeSoundInfoList = storeSoundViewModel.storeSoundInfoList;
   final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
   @override
@@ -50,46 +50,38 @@ class _SoundThemesScreenState extends State<SoundThemesScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
                   const SizedBox(height: 16),
                   Obx(() => ExpansionTile(
-                          tilePadding: EdgeInsets.only(left: 0, right: 8),
-                          childrenPadding: EdgeInsets.only(left: 8),
-                          dense: true,
-                          iconColor: GREY,
-                          collapsedIconColor: GREY,
-                          expandedAlignment: Alignment.centerLeft,
-                          leading: Icon(CupertinoIcons.heart_fill,
-                              color: Color(0xff800020), size: 16),
-                          title: Transform.translate(
-                            offset: Offset(-16, 0),
-                            child: Text(
-                                '내가 담은 리스트 (${soundViewModel.soundInfoList.length})',
-                                style: TextStyle(fontSize: 14)),
-                          ),
-                          children: [
-                            ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: soundViewModel.soundInfoList.length,
-                                itemBuilder: (context, index) {
-                                  MusicInfo musicInfo = soundViewModel.soundInfoList[index];
-                                  return Text(musicInfo.kindOfMusic);
-                                }),
-                          ])),
+                      tilePadding: EdgeInsets.only(left: 0, right: 8),
+                      childrenPadding: EdgeInsets.only(left: 8),
+                      dense: true,
+                      iconColor: GREY,
+                      collapsedIconColor: GREY,
+                      expandedAlignment: Alignment.centerLeft,
+                      leading: Icon(CupertinoIcons.heart_fill,
+                          color: Color(0xff800020), size: 16),
+                      title: Transform.translate(
+                        offset: Offset(-16, 0),
+                        child: Text(
+                            '내가 담은 리스트 (${soundViewModel.soundInfoList.length})',
+                            style: TextStyle(fontSize: 14)),
+                      ),
+                      children: [
+                        ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount: soundViewModel.soundInfoList.length,
+                            itemBuilder: (context, index) {
+                              MusicInfo musicInfo = soundViewModel.soundInfoList[index];
+                              return Text(musicInfo.kindOfMusic);
+                            }),
+                      ])),
                   const SizedBox(height: 16),
                   BorderLine(lineHeight: 1, lineColor: GREY.withOpacity(0.1)),
                   Padding(
                     padding: const EdgeInsets.only(top: 16, bottom: 8),
                     child: const Text('전 체'),
                   ),
-
-                  // Wrap(
-                  //   spacing: 8.0,
-                  //   runSpacing: 6.0,
-                  //   children: [
-                  //     TextButton(onPressed: , child: child)
-                  //   ],
-                  // ),
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0, bottom: 8),
                     child: const Row(
@@ -108,6 +100,7 @@ class _SoundThemesScreenState extends State<SoundThemesScreen> {
                   ),
                   ListView.builder(
                       shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
                       itemCount: storeSoundInfoList.length,
                       itemBuilder: (context, index) {
                         MusicInfo musicInfo = storeSoundInfoList[index];
@@ -119,21 +112,27 @@ class _SoundThemesScreenState extends State<SoundThemesScreen> {
                             children: [
                               Text('# ${musicInfo.kindOfMusic}'),
                               Obx(
-                                () => Row(
+                                    () => Row(
                                   children: [
                                     IconButton(
                                         onPressed: () {
-                                          storeSoundViewModel.storeSoundPlay(index);
+                                          storeSoundViewModel
+                                              .storeSoundPlay(index);
                                         },
-                                        icon: storeSoundViewModel.storePlayingBoolList[index] == false
-                                            ? Icon(CupertinoIcons.speaker_slash, size: 20)
-                                            : Icon(CupertinoIcons.speaker_3, color: SECONDARY, size: 20)),
+                                        icon: storeSoundViewModel
+                                            .storePlayingBoolList[
+                                        index] ==
+                                            false
+                                            ? Icon(CupertinoIcons.speaker_slash,
+                                            size: 20)
+                                            : Icon(CupertinoIcons.speaker_3,
+                                            color: SECONDARY, size: 20)),
                                     const SizedBox(width: 16),
                                     IconButton(
                                         onPressed: () =>
                                             _alertDialog(context, musicInfo),
-                                        icon:
-                                            Icon(CupertinoIcons.heart, size: 20))
+                                        icon: Icon(CupertinoIcons.heart,
+                                            size: 20))
                                   ],
                                 ),
                               )
@@ -163,20 +162,20 @@ void _alertDialog(BuildContext context, MusicInfo musicInfo) {
           title: Text('담 기', style: TextStyle(fontSize: 15, color: WHITE)),
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: const Text('내 리스트에 담으시겠습니까?',
-                        style: TextStyle(fontSize: 13, color: WHITE)),
+                return SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: const Text('내 리스트에 담으시겠습니까?',
+                            style: TextStyle(fontSize: 13, color: WHITE)),
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            );
-          }),
+                );
+              }),
           actions: [
             OkCancelButtons(
               okText: '확인',
