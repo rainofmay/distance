@@ -1,7 +1,6 @@
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:uuid/uuid.dart';
 
 class AuthHelper {
   // 클래스로 만들어 재사용성 높이기
@@ -40,4 +39,14 @@ class AuthHelper {
       return null;
     }
   }
+  static Future<Map<String, dynamic>?> fetchUserData(String userId) async {
+    final response = await _supabase
+        .from('user') // 사용자 정보 테이블 이름
+        .select()
+        .eq('id', userId) // 사용자 ID로 필터링
+        .single();
+
+    return response;
+  }
+
 }

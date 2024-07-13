@@ -6,17 +6,12 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
 class SoundVolume extends StatefulWidget {
-  final String kindOfMusic;
-  final dynamic musicIcon;
   final int playerIndex;
-  final SoundViewModel viewModel;
-
   const SoundVolume(
       {super.key,
       required this.playerIndex,
-      required this.kindOfMusic,
-      this.musicIcon,
-      required this.viewModel});
+      });
+
 
   @override
   State<SoundVolume> createState() => _SoundVolumeState();
@@ -24,18 +19,19 @@ class SoundVolume extends StatefulWidget {
 
 class _SoundVolumeState extends State<SoundVolume> {
   double _volume = 0.5;
+  final viewModel = Get.find<SoundViewModel>();
 
   void _adjustVolume(double value) {
     setState(() {
       _volume = value;
     });
-    widget.viewModel.setVolume(
+    viewModel.setVolume(
         widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정
   }
 
   @override
   Widget build(BuildContext context) {
-    _volume = widget.viewModel.soundPlayerList[widget.playerIndex].volume;
+    _volume = viewModel.soundPlayerList[widget.playerIndex].volume;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical : 8.0),
@@ -43,7 +39,7 @@ class _SoundVolumeState extends State<SoundVolume> {
           children: [
         SizedBox(
           width: 130,
-          child: Text(widget.kindOfMusic,
+          child: Text(viewModel.soundInfoList[widget.playerIndex].kindOfMusic,
               style: TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
@@ -72,7 +68,7 @@ class _SoundVolumeState extends State<SoundVolume> {
                         hoverColor: TRANSPARENT,
                         icon: Icon(
                           // value가 true 면 ?
-                          widget.viewModel.isPlayingList[widget.playerIndex]
+                          viewModel.isPlayingList[widget.playerIndex]
                                   .value
                               ? CupertinoIcons.speaker_2
                               : CupertinoIcons.speaker_slash,
@@ -80,20 +76,19 @@ class _SoundVolumeState extends State<SoundVolume> {
                         ),
                         iconSize: 16.0,
                         onPressed: () {
-                          if (widget.viewModel
+                          if (viewModel
                               .isPlayingList[widget.playerIndex].value) {
-                            widget.viewModel.musicPause(widget.playerIndex);
+                            viewModel.musicPause(widget.playerIndex);
                           } else {
-                            if (widget
-                                    .viewModel
+                            if (viewModel
                                     .soundPlayerList[widget.playerIndex]
                                     .state ==
                                 PlayerState.paused) {
-                              widget.viewModel
+                              viewModel
                                   .soundPlayerList[widget.playerIndex]
                                   .resume();
                             } else {
-                              widget.viewModel.musicPlay(widget.playerIndex);
+                              viewModel.musicPlay(widget.playerIndex);
                             }
                           }
                         }),

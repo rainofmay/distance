@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:get/get.dart';
 import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 
@@ -29,7 +28,7 @@ class StoreSoundViewModel extends GetxController {
 
 
   /* 유저 관련 */
-  late RxList<MusicInfo> _soundInfoListOfUser = _provider.getUserSounds().obs;
+  late final RxList<MusicInfo> _soundInfoListOfUser = _provider.getUserSounds().obs;
   List<MusicInfo> get soundInfoListOfUser => _soundInfoListOfUser;
 
   @override
