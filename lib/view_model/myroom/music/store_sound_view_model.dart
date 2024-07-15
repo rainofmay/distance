@@ -47,6 +47,7 @@ class StoreSoundViewModel extends GetxController {
   void dispose() {
     super.dispose();
     _timer.cancel();
+    _storeSoundPlayer().dispose();
   }
 
   storeSoundPlay(index) async {
