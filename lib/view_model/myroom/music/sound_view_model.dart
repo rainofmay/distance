@@ -11,7 +11,7 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
   SoundViewModel({required MyRoomSoundProvider provider})
       : _provider = provider;
 
-  late final RxList<MusicInfo>_soundInfoList;
+  late RxList<MusicInfo>_soundInfoList =  <MusicInfo>[].obs;
   List<MusicInfo> get soundInfoList => _soundInfoList;
   late final RxList<AudioPlayer> _soundPlayerList;
   List<AudioPlayer> get soundPlayerList => _soundPlayerList;
@@ -68,7 +68,7 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
           .toList();
 
       initSetting((int i) {
-        setVolume(i, 0.0);
+        setVolume(i, 0.5);
       });
 
     }
