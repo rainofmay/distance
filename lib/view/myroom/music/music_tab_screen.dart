@@ -6,15 +6,10 @@ import 'package:mobile/view/myroom/music/widget/circled_music_player.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 
-class MusicTabScreen extends StatefulWidget {
+class MusicTabScreen extends StatelessWidget {
   final MusicViewModel viewModel;
   const MusicTabScreen({super.key, required this.viewModel});
 
-  @override
-  State<MusicTabScreen> createState() => _MusicTabScreenState();
-}
-
-class _MusicTabScreenState extends State<MusicTabScreen> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -42,7 +37,7 @@ class _MusicTabScreenState extends State<MusicTabScreen> {
                   title: '몰입에 도움이 되는 음악',
                   iconData: CupertinoIcons.music_note_2),
               const SizedBox(height: 20),
-              Center(child: CircledMusicPlayer(viewModel: widget.viewModel)),
+              Center(child: CircledMusicPlayer(viewModel: viewModel)),
             ],
           ),
           const SizedBox(height: 20),

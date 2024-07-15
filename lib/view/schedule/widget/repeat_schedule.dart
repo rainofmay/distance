@@ -112,7 +112,7 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                       ),
                       iconSize: 18,
                       underline: Container(height: 0),
-                      items: List.generate(52, (index) => index + 1).map((int value) {
+                      items: List.generate(12, (index) => index + 1).map((int value) {
                         return DropdownMenuItem<int>(
                           value: value,
                           child: Text('$value주', style: TextStyle(color: BLACK, fontSize: 14)),

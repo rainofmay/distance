@@ -6,6 +6,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/functions/time_comarison.dart';
+import 'package:mobile/view/schedule/widget/repeat_schedule.dart';
 import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -426,38 +427,9 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                             hint: _selectedRepeat,
                           ),
                         ),
-                        Expanded(
-                          flex: 1,
-                          child: DropdownButton(
-                            dropdownColor: WHITE,
-                            icon: Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0, right: 20.0),
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            iconSize: 24,
-                            isExpanded: true,
-                            underline: Container(height: 0),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedRepeat = newValue!;
-                              });
-                            },
-                            items: repeatList
-                                .map<DropdownMenuItem<String>>((String? value) {
-                              return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(
-                                    value!,
-                                    style: TextStyle(color: GREY),
-                                  ));
-                            }).toList(),
-                          ),
-                        ),
                       ],
                     ),
+                    RepeatScheduleWidget(),
                   ],
                 ),
               ),

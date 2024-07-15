@@ -31,7 +31,6 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
 
-
   final _formKey = GlobalKey<FormState>();
   late String _scheduleName;
   late DateTime _startDate;

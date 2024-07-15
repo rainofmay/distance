@@ -59,8 +59,8 @@ class _MusicThemesScreenState extends State<MusicThemesScreen> {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (c) => MusicDetailScreen()));
                               },
-                              thumbnailUrl: 'assets/images/themes/summer_theme.jpg',
-                              title: '휴가철 듣는 청량한 노래',
+                              thumbnailUrl: 'assets/images/themes/music/consolation.jpg',
+                              title: '위로를 주는 음악',
                               instrument: 'Vocal songs',
                               numberOfsongs: 10,
                               textColor: BLACK),

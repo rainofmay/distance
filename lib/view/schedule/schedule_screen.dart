@@ -11,18 +11,11 @@ import 'package:mobile/view/schedule/widget/schedule/schedule_list.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 
-class ScheduleScreen extends StatefulWidget {
-  const ScheduleScreen({super.key});
-
-  @override
-  State<ScheduleScreen> createState() => _ScheduleScreenState();
-}
-
-class _ScheduleScreenState extends State<ScheduleScreen> {
+class ScheduleScreen extends StatelessWidget {
+   ScheduleScreen({super.key});
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
-
   final List<String> _months = [
     'Jan',
     'Fab',
@@ -37,11 +30,6 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     'Nov',
     'Dec'
   ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {

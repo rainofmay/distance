@@ -12,15 +12,10 @@ import 'package:mobile/widgets/tapable_row.dart';
 
 import '../../common/const/colors.dart';
 
-class Etc extends StatefulWidget {
+class Etc extends StatelessWidget {
   Etc({super.key});
   final MateViewModel viewModel = Get.find<MateViewModel>(); // Get the ViewModel instance
 
-  @override
-  State<Etc> createState() => _EtcState();
-}
-
-class _EtcState extends State<Etc> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,7 +38,7 @@ class _EtcState extends State<Etc> {
                   children: [
                     Obx(()=> ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
-                      child: widget.viewModel.profileImageUrl.value == null
+                      child: viewModel.profileImageUrl.value == null
                           ? Image.asset(
                         'assets/images/themes/gomzy_theme.jpg',
                         fit: BoxFit.cover,
@@ -52,7 +47,7 @@ class _EtcState extends State<Etc> {
                       )
                           : CachedNetworkImage(
                         // CachedNetworkImage 사용
-                        imageUrl: widget.viewModel.profileImageUrl.value,
+                        imageUrl: viewModel.profileImageUrl.value,
                         fit: BoxFit.cover,
                         width: 40,
                         height: 40,
@@ -69,7 +64,7 @@ class _EtcState extends State<Etc> {
                     ),),
 
                     const SizedBox(width: 10),
-                    Text(widget.viewModel.name.value)
+                    Text(viewModel.name.value)
                   ],
                 ),
                 Expanded(child: Container()),

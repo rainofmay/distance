@@ -3,24 +3,11 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 
-class ColorSelection extends StatefulWidget {
+class ColorSelection extends StatelessWidget {
   final ScheduleViewModel scheduleViewModel;
   ColorSelection({super.key, required this.scheduleViewModel});
 
 
-
-  @override
-  State<ColorSelection> createState() => _ColorSelectionState();
-}
-
-class _ColorSelectionState extends State<ColorSelection> {
-  late final ScheduleViewModel _scheduleViewModel;
-
-  @override
-  void initState() {
-    _scheduleViewModel = widget.scheduleViewModel;
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,11 +31,11 @@ class _ColorSelectionState extends State<ColorSelection> {
         itemBuilder: (BuildContext context, int index) {
           return Obx(() => GestureDetector(
             onTap: () {
-              _scheduleViewModel.updateColorIndex(index);
+              scheduleViewModel.updateColorIndex(index);
             },
             child: CircleAvatar(
                 backgroundColor: sectionColors[index],
-                child: _scheduleViewModel.colorIndex == index
+                child: scheduleViewModel.colorIndex == index
                     ? Icon(
                   Icons.check_rounded,
                   color: WHITE,
