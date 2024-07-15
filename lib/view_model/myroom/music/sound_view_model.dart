@@ -18,12 +18,10 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
   late final RxList<RxBool> isPlayingList;
   final _isAnyPlaying = false.obs;
 
-
   late final Rx<AudioPlayer> _audioPlayer;
   AudioPlayer get audioPlayer => _audioPlayer.value;
   late final RxBool _isSoundPlaying = false.obs;
   bool get isSoundPlaying => _isSoundPlaying.value;
-
 
 
   @override
@@ -47,7 +45,6 @@ class SoundViewModel extends GetxController with GetTickerProviderStateMixin{
     }
     super.dispose();
   }
-
 
   Future<void> loadSounds() async{
 }

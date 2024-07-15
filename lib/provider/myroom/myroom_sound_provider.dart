@@ -113,17 +113,25 @@ class MyRoomSoundProvider {
   }
 
  Future<void> addSoundToUserSoundList(MusicInfo musicInfo) async{
-    soundListOfUser.add(musicInfo);
-    await saveUserSounds();
+   bool isDuplicate = soundListOfUser.any((sound) =>
+   sound.id == musicInfo.id && sound.kindOfMusic == musicInfo.kindOfMusic);
+
+   if (!isDuplicate) {
+     soundListOfUser.add(musicInfo.copyWith(isLiked : true));
+     await saveUserSounds();
+   } else {
+     print('이미 리스트에 존재하는 음악입니다: ${musicInfo.kindOfMusic}');
+   }
   }
 
   Future<void> removeSoundFromUserSoundList(MusicInfo musicInfo) async {
+    musicInfo.copyWith(isLiked : false);
     soundListOfUser.removeWhere((sound) => sound.id == musicInfo.id);
     saveUserSounds();
   }
-
 
   List<MusicInfo> getUserSounds() {
     return soundListOfUser;
   }
 }
+

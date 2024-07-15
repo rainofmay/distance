@@ -9,7 +9,7 @@ Future<void> customDialog(BuildContext context, double height, String title,
     context: context,
     builder: (context) {
       return AlertDialog(
-        backgroundColor: DARK,
+        backgroundColor: BLACK,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),
@@ -22,7 +22,8 @@ Future<void> customDialog(BuildContext context, double height, String title,
             : [
                 actionWidget,
               ],
-        actionsPadding: EdgeInsets.only(top: 0, bottom: 5, left: 0, right: 20),
+        actionsPadding: EdgeInsets.only(top: 0, bottom: 5, left: 8, right: 20),
+        contentPadding: EdgeInsets.only(left: 16, top: 15),
       );
     },
   );
