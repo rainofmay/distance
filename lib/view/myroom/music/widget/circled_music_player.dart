@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
@@ -25,9 +24,14 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   Timer? _timer;
 
   void updateProgress() {
-    double progress =
-        widget.viewModel.currentMusicPosition.inMilliseconds.toDouble() /
-            widget.viewModel.currentMusicDuration.inMilliseconds.toDouble();
+    // Handle cases where duration is zero or not available
+    final currentDuration = widget.viewModel.currentMusicDuration;
+    final currentPosition = widget.viewModel.currentMusicPosition;
+
+    double progress = (currentDuration.inMilliseconds == 0 || currentPosition.inMilliseconds == 0)
+        ? 0.0
+        : currentPosition.inMilliseconds.toDouble() / currentDuration.inMilliseconds.toDouble();
+
     progressNotifier.value = progress * 100;
   }
 
@@ -56,8 +60,12 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   @override
   Widget build(BuildContext context) {
     double mediaSize = MediaQuery.of(context).size.width;
-    return Obx(() => Column(
-          children: [
+    return Obx(() {
+      final currentPositionSeconds = (widget.viewModel.currentMusicPosition.inMilliseconds / 1000).clamp(0, double.infinity);
+      final remainingDurationSeconds = ((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).clamp(0, double.infinity);
+
+      return Column(
+      children: [
             Stack(alignment: Alignment.center, children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(mediaSize * 0.4),
@@ -127,9 +135,9 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
               ),
             ]),
             const SizedBox(height: 15),
-            Obx(() => Text(
-                '${(widget.viewModel.currentMusicPosition.inMilliseconds / 1000).toStringAsFixed(1)} | ${((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).toStringAsFixed(1)}',
-                style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11))),
+            Text(
+            '${currentPositionSeconds.toStringAsFixed(1)} | ${remainingDurationSeconds.toStringAsFixed(1)}',
+            style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
             const SizedBox(height: 20),
             Text(
                 widget.viewModel.musicInfoList[widget.viewModel.currentIndex]
@@ -173,7 +181,9 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                     icon: widget.viewModel.isRepeated ?  Icon(CupertinoIcons.repeat_1, color: PRIMARY_LIGHT, size: 20) :Icon( CupertinoIcons.repeat , color: WHITE, size: 20) ),
               ],
             ),
-          ],
-        ));
+          ]
+        );
+    }
+    );
   }
 }

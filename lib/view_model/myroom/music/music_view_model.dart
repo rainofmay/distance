@@ -109,8 +109,6 @@ class MusicViewModel extends GetxController
 
       _currentIndex.value = newIndex;
     }
-
-    await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
   }
 
   toggleShuffle() async {
@@ -141,8 +139,10 @@ class MusicViewModel extends GetxController
       //셔플일 때 반복일 때 어차피 둘 중 하나밖에 안되기때문에 상관 없음
       if(isShuffled) {
         setCurrentMusic(isShuffled);
+        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
       }else{
         setCurrentMusic(isShuffled);
+        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
       }
     }
   }

@@ -20,7 +20,6 @@ class MyroomScreen extends StatefulWidget {
   MyroomScreen({super.key});
 
   final MyroomViewModel backgroundViewModel = Get.put(MyroomViewModel());
-  final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: MyRoomMusicProvider()));
 
   @override
   State<MyroomScreen> createState() => _MyRoomState();
@@ -34,7 +33,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     widget.backgroundViewModel.loadPreferences();
-    widget.musicViewModel.setInitMusicState();
     onlineStatusManager = OnlineStatusManager();
     userProvider = UserProvider();
     userProvider.editStatusOnline(OnlineStatus.online);

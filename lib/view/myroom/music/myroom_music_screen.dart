@@ -29,6 +29,7 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
   @override
   void initState() {
     super.initState();
+    musicViewModel.setInitMusicState();
     pageController = PageController(initialPage: musicViewModel.tabIndex);
     // pageController.addListener();
   }
