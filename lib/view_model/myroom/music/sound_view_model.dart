@@ -6,10 +6,11 @@ import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
 
 class SoundPlayer {
   final int id;
+  final String kindOfMusic;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying;
 
-  SoundPlayer(this.id, this.audioPlayer) : isPlaying = false.obs;
+  SoundPlayer(this.id, this.kindOfMusic, this.audioPlayer) : isPlaying = false.obs;
 }
 
 
@@ -49,21 +50,21 @@ class SoundViewModel extends GetxController {
 
   void _updateSoundPlayers() {
     _soundPlayersList.value = _soundInfoList
-        .map((info) => SoundPlayer(info.id, AudioPlayer()))
+        .map((info) => SoundPlayer(info.id, info.kindOfMusic, AudioPlayer()))
         .toList();
   }
 
 
   Future<void> updateSounds(MusicInfo musicInfo) async {
     final newSoundInfoList = await _provider.loadUserSounds();
-    int diff = _soundInfoList.length - newSoundInfoList.length;
     _soundInfoList.value = newSoundInfoList;
     _soundInfoList.refresh();
 
     // 리스트 동기화 확인 및 조정
     while (_soundPlayersList.length < _soundInfoList.length) {
-      SoundPlayer newPlayer = SoundPlayer(musicInfo.id, AudioPlayer());
+      SoundPlayer newPlayer = SoundPlayer(musicInfo.id, musicInfo.kindOfMusic, AudioPlayer());
       _soundPlayersList.add(newPlayer);
+      setVolume(_soundPlayersList.length-1, 0.0);
     }
     while (_soundPlayersList.length > _soundInfoList.length) {
       int index = _soundPlayersList.indexWhere((index) =>
@@ -73,9 +74,6 @@ class SoundViewModel extends GetxController {
           .then((value) => _soundPlayersList[index].audioPlayer.dispose());
       _soundPlayersList.removeWhere((index) => index.id == musicInfo.id);
     }
-    initSetting((int i) {
-      setVolume(i, 0.0);
-    });
     update();
   }
 
