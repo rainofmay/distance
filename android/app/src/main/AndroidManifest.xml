@@ -30,15 +30,15 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.VIEW" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
 
-<!--                <category android:name="android.intent.category.DEFAULT" />-->
-<!--                <category android:name="android.intent.category.BROWSABLE" />-->
-<!--                &lt;!&ndash; Accepts URIs that begin with packageID, oauth &ndash;&gt;-->
-<!--                <data android:scheme="com.kyujin.distance" android:host="oauth"/>-->
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <!-- Accepts URIs that begin with packageID, oauth -->
+                <data android:scheme="kakaoaec099113dc70792df78c1aa4a1ac2f4" android:host="oauth"/>
 
-<!--            </intent-filter>-->
+            </intent-filter>
 
         </activity>
         <!-- Don't delete the meta-data below.
