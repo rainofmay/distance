@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
@@ -22,7 +23,7 @@ Future<void> main() async {
   await dotenv.load();
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
-
+  KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
   runApp(const MainPage());
 }
 
