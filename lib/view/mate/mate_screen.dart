@@ -7,6 +7,7 @@ import 'package:mobile/provider/mate/mate_provider.dart';
 import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/profile_card.dart';
@@ -33,6 +34,7 @@ class MateScreen extends StatefulWidget {
 class _MateScreenState extends State<MateScreen> {
   @override
   Widget build(BuildContext context) {
+    AuthHelper.navigateToAuthScreen();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
@@ -200,26 +202,28 @@ class _MateScreenState extends State<MateScreen> {
 
   Widget friendsWidget() {
     if (widget.viewModel.mateProfiles.value.isEmpty) {
-      return Center(
-        // 친구 없을 때 버튼 표시
-        child: GestureDetector(
-          onTap: () => Get.to(MateRequestsScreen()),
-          child: Padding(
-            padding: const EdgeInsets.only(top: 0),
-            child: Container(
-              width: 120,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: DARK,
-                ),
-
-              child: Center(child: Text('메이트 찾기', style: TextStyle(color: PRIMARY_LIGHT), textAlign: TextAlign.center)),
-            ),
-
+      return SingleChildScrollView(
+        child: Center(
+          // 친구 없을 때 버튼 표시
+          child: GestureDetector(
+            onTap: () => Get.to(MateRequestsScreen()),
+            child: Padding(
+              padding: const EdgeInsets.only(top: 0),
+              child: Container(
+                width: 120,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: DARK,
+                  ),
+        
+                child: Center(child: Text('메이트 찾기', style: TextStyle(color: PRIMARY_LIGHT), textAlign: TextAlign.center)),
+              ),
+        
+              ),
             ),
           ),
-        );
+      );
     } else {
       return ListView.builder(
         itemCount: widget.viewModel.mateProfiles.value.length,

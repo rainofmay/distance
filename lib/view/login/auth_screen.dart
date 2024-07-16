@@ -1,5 +1,9 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -8,10 +12,12 @@ import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import '../../widgets/functions/custom_login.dart';
 
 class AuthScreen extends StatefulWidget {
   AuthScreen({super.key});
+
   MateViewModel viewModel = Get.find<MateViewModel>();
 
   @override
@@ -40,7 +46,12 @@ class _AuthScreenState extends State<AuthScreen> {
     super.dispose();
   }
 
-  onGoogleLoginPress(BuildContext context) async {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  Future<void> onGoogleLoginPress(BuildContext context) async {
     try {
       GoogleSignInAccount? account = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth =
@@ -67,21 +78,125 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  onKakaoLoginPress(BuildContext context) async{
-      //📲 signInWithOAuth를 사용해서 OAuthProvider.kakao로 로그인
-      await supabase.auth.signInWithOAuth(OAuthProvider.kakao);
 
-      // Listen to auth state changes in order to detect when ther OAuth login is complete.
-      supabase.auth.onAuthStateChange.listen((data) {
+  Future<void> onKakaoLoginPress(BuildContext context) async {
+    try {
+      OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
+      print('카카오 로그인 성공 ${token.accessToken}');
 
-        final AuthChangeEvent event = data.event;
-        //📲 event가 로그인 상태를 확인하면 로그인 후 페이지로 이동하는 코드
-        if (event == AuthChangeEvent.signedIn) {
-          // Do something when user sign in
-         print("로그인 성공!");
-        }
-      });
+      final user = await UserApi.instance.me();
+      String? email = user.kakaoAccount?.email;
+      String? nickname = user.kakaoAccount?.profile?.nickname;
+      String? profileUrl = user.kakaoAccount?.profile?.profileImageUrl;
+      if (email == null) {
+        Get.snackbar('오류', '이메일 정보를 가져올 수 없습니다.');
+        return;
+      }
+
+      bool userExists = await checkUserExists(email);
+
+      if (userExists) {
+        await loginUser(email, token.accessToken);
+        Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+      } else {
+        await registerUser(email, nickname, profileUrl ,token.accessToken);
+        Get.snackbar('회원가입 성공', '카카오 계정으로 회원가입되었습니다.');
+      }
+
+      await widget.viewModel.updateMyProfile();
+      // Get.offAll(() => HomeScreen());
+
+    } catch (error) {
+      print('카카오 로그인 실패 $error');
+      Get.snackbar('오류', '로그인 중 문제가 발생했습니다.');
     }
+  }
+
+  Future<bool> checkUserExists(String email) async {
+    try {
+      final response = await supabase
+          .from('user')
+          .select()
+          .eq('email', email)
+          .single();
+      return response['uid'] != null;
+    } catch (error) {
+      print('사용자 확인 중 오류 발생: $error');
+      return false;
+    }
+  }
+
+  Future<void> loginUser(String email, String accessToken) async {
+    try {
+      // 고정된 비밀번호 생성 (이메일 기반)
+      String fixedPassword = generateFixedPassword(email);
+
+      final response = await supabase.auth.signInWithPassword(
+        email: email,
+        password: fixedPassword,
+      );
+
+      if (response.user == null) {
+        throw Exception('로그인 실패');
+      }
+
+      // JWT 토큰에 커스텀 클레임 추가
+      await supabase.auth.updateUser(
+        UserAttributes(
+          data: {'is_kakao_user': true},
+        ),
+      );
+
+
+    } catch (error) {
+      print('로그인 중 오류 발생: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> registerUser(String email, String? nickname, String? profileUrl, String accessToken) async {
+    try {
+      // 고정된 비밀번호 생성
+      String fixedPassword = generateFixedPassword(email);
+
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: fixedPassword,
+      );
+
+      if (response.user == null) {
+        throw Exception('회원가입 실패');
+      }
+
+      // JWT 토큰에 커스텀 클레임 추가
+      await supabase.auth.updateUser(
+        UserAttributes(
+          data: {'is_kakao_user': true},
+        ),
+      );
+
+      // 사용자 정보 저장
+      await supabase.from('user').insert({
+        'id': response.user!.id,
+        'email': email,
+        'name': nickname,
+        'profile_url': profileUrl,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+
+    } catch (error) {
+      print('회원가입 중 오류 발생: $error');
+      rethrow;
+    }
+  }
+
+// 이메일 기반으로 고정된 비밀번호 생성
+  String generateFixedPassword(String email) {
+    var bytes = utf8.encode(email + "some_secret_salt");
+    var digest = sha256.convert(bytes);
+    return digest.toString();
+  }
+
 
   void signIn() async {
     String emailValue = _emailController.text;

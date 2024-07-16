@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/etc/personal_information.dart';
 import 'package:mobile/view/etc/update_notification.dart';
 import 'package:mobile/view/payment/payment_screen.dart';
@@ -18,6 +19,7 @@ class Etc extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AuthHelper.navigateToAuthScreen();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
