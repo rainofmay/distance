@@ -3,7 +3,7 @@ import 'package:mobile/common/const/colors.dart';
 
 class SectionTitle extends StatelessWidget {
   final String title;
-  final Color? textColor = DARK_UNSELECTED;
+  final Color? textColor = WHITE;
   final void Function()? onTap;
 
   SectionTitle({super.key, required this.title, this.onTap});
@@ -17,9 +17,9 @@ class SectionTitle extends StatelessWidget {
       child: Row(
         children: [
           Text(title,
-              style: TextStyle(color: textColor ?? DARK_UNSELECTED, fontSize: 12)),
+              style: TextStyle(color: textColor ?? WHITE, fontSize: 12)),
           const SizedBox(width: 16),
-          Expanded(child: Container(color: GREY.withOpacity(0.3), height: 1))
+          Expanded(child: Container(color: WHITE.withOpacity(0.3), height: 1))
         ],
       ),
     );

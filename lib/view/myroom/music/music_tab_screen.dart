@@ -34,7 +34,7 @@ class MusicTabScreen extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (c) => MusicThemesScreen()));
                   },
-                  title: '몰입에 도움이 되는 음악',
+                  title: '너에게 위로를 주는 음악',
                   iconData: CupertinoIcons.music_note_2),
               const SizedBox(height: 20),
               Center(child: CircledMusicPlayer(viewModel: viewModel)),

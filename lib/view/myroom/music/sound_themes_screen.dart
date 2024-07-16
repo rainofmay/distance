@@ -8,8 +8,6 @@ import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
-import 'package:mobile/widgets/functions/custom_dialog.dart';
-import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class SoundThemesScreen extends StatelessWidget {
   final StoreSoundViewModel storeSoundViewModel =
@@ -60,7 +58,7 @@ class SoundThemesScreen extends StatelessWidget {
                             itemCount: 1,
                             itemBuilder: (context, index) {
                               return Obx(()=> Wrap(
-                                spacing: 5,
+                                spacing: 8,
                                 runSpacing: 8,
                                 children: List.generate(soundViewModel.soundInfoList.length, (index) {
                                   MusicInfo musicInfo = soundViewModel.soundInfoList[index];
@@ -70,7 +68,7 @@ class SoundThemesScreen extends StatelessWidget {
                                         gradient: LinearGradient(
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
-                                          colors: [Color(0xff002930), Color(0xff001824)],
+                                          colors: [Color(0xff023C46), Color(0xff001824)],
                                         ),
                                         borderRadius: BorderRadius.circular(40)
                                     ),
@@ -79,7 +77,7 @@ class SoundThemesScreen extends StatelessWidget {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           Padding(
-                                            padding: const EdgeInsets.all(10.0),
+                                            padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
                                             child: Text('# ${musicInfo.kindOfMusic}', style: TextStyle(color: WHITE)),
                                           ),
                                         ],
@@ -146,7 +144,6 @@ class SoundThemesScreen extends StatelessWidget {
                                     IconButton(
                                         onPressed: () async {
                                           if (_containsMusicInfoById(soundViewModel.soundInfoList, musicInfo.id) == false) {
-                                            print('테스트');
                                           await soundViewModel.addSoundToUserList(musicInfo);
                                           }
                                           else {

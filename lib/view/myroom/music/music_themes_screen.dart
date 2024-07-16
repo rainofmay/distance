@@ -31,12 +31,12 @@ class _MusicThemesScreenState extends State<MusicThemesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: WHITE,
+      backgroundColor:  Colors.black87,
       appBar: CustomBackAppBar(
         appbarTitle: 'Music',
         isCenterTitle: true,
-        backgroundColor: WHITE,
-        contentColor: BLACK,
+        backgroundColor:  Colors.black87,
+        contentColor: WHITE,
         isLeading: true,
         backFunction: () {
           Get.back();
@@ -56,14 +56,14 @@ class _MusicThemesScreenState extends State<MusicThemesScreen> {
                           const SizedBox(height: 16),
                           PlayListItem(
                               onTap: () {
-                                Navigator.push(context,
-                                    MaterialPageRoute(builder: (c) => MusicDetailScreen()));
+                                // Navigator.push(context,
+                                //     MaterialPageRoute(builder: (c) => MusicDetailScreen()));
                               },
                               thumbnailUrl: 'assets/images/themes/music/consolation.jpg',
-                              title: '위로를 주는 음악',
+                              title: '너에게 위로를 주는 음악',
                               instrument: 'Vocal songs',
                               numberOfsongs: 10,
-                              textColor: BLACK),
+                              textColor: PRIMARY_LIGHT),
                           const SizedBox(height: 40),
                           // Expanded(child: ListView.builder(itemBuilder: itemBuilder)),
                           //ListView.builder 로 변환해야함 !!!
@@ -72,10 +72,10 @@ class _MusicThemesScreenState extends State<MusicThemesScreen> {
                           PlayListItem(
                               onTap: () {},
                               thumbnailUrl: 'assets/images/themes/summer_theme.jpg',
-                              title: '휴가철 듣는 청량한 노래',
+                              title: '수면 유도 음악',
                               instrument: 'Vocal songs',
                               numberOfsongs: 10,
-                              textColor: SECONDARY),
+                              textColor: WHITE),
                           const SizedBox(height: 16),
                           PlayListItem(
                               onTap: () {},
@@ -83,7 +83,7 @@ class _MusicThemesScreenState extends State<MusicThemesScreen> {
                               title: '카페 분위기 음악',
                               instrument: 'Piano, Jazz',
                               numberOfsongs: 10,
-                              textColor: BLACK),
+                              textColor: WHITE),
                         ],
                       ),
                   ),

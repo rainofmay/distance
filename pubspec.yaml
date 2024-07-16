@@ -58,6 +58,7 @@ flutter:
     - assets/images/themes/music/
     - assets/icons/
     - assets/audios/nature/
+    - assets/audios/music/consolation/
     - assets/videos/sea/
     - assets/videos/gomji/
     - assets/videos/

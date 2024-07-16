@@ -120,7 +120,7 @@ class MyRoomSoundProvider {
      soundListOfUser.add(musicInfo.copyWith(isLiked : true));
      await saveUserSounds();
    } else {
-     print('이미 리스트에 존재하는 음악입니다: ${musicInfo.kindOfMusic}');
+     print('이미 리스트에 존재하는 소리입니다: ${musicInfo.kindOfMusic}');
    }
   }
 

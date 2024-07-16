@@ -61,8 +61,8 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   Widget build(BuildContext context) {
     double mediaSize = MediaQuery.of(context).size.width;
     return Obx(() {
-      final currentPositionSeconds = (widget.viewModel.currentMusicPosition.inMilliseconds / 1000).clamp(0, double.infinity);
-      final remainingDurationSeconds = ((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).clamp(0, double.infinity);
+      // final currentPositionSeconds = (widget.viewModel.currentMusicPosition.inMilliseconds / 1000).clamp(0, double.infinity);
+      // final remainingDurationSeconds = ((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).clamp(0, double.infinity);
 
       return Column(
       children: [
@@ -134,15 +134,15 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                         })),
               ),
             ]),
-            const SizedBox(height: 15),
-            Text(
-            '${currentPositionSeconds.toStringAsFixed(1)} | ${remainingDurationSeconds.toStringAsFixed(1)}',
-            style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
+            // const SizedBox(height: 15),
+            // Text(
+            // '${currentPositionSeconds.toStringAsFixed(1)} | ${remainingDurationSeconds.toStringAsFixed(1)}',
+            // style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
             const SizedBox(height: 20),
             Text(
                 widget.viewModel.musicInfoList[widget.viewModel.currentIndex]
                     .kindOfMusic,
-                style: TextStyle(color: WHITE, fontSize: 14)),
+                style: TextStyle(color: WHITE, fontSize: 14, overflow: TextOverflow.ellipsis)),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

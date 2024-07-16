@@ -161,7 +161,5 @@ class MusicViewModel extends GetxController
     if(isRepeated) {
       _isShuffled.value = false;
     }
-
   }
-
 }
