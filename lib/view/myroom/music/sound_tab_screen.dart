@@ -8,21 +8,11 @@ import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
-class SoundTabScreen extends StatefulWidget {
-  const SoundTabScreen({super.key});
+class SoundTabScreen extends StatelessWidget {
+  SoundTabScreen({super.key});
 
-  @override
-  State<SoundTabScreen> createState() => _SoundTabScreenState();
-}
-
-class _SoundTabScreenState extends State<SoundTabScreen> {
   final SoundViewModel soundViewModel =
   Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +44,7 @@ class _SoundTabScreenState extends State<SoundTabScreen> {
                       title: '주변 소리',
                       iconData: CupertinoIcons.headphones),
                   const SizedBox(height: 20),
+
                   ListView.builder(
                       shrinkWrap: true,
                       itemCount: soundViewModel.soundInfoList.length,

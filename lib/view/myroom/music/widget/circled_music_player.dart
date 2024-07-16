@@ -138,11 +138,11 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
             // Text(
             // '${currentPositionSeconds.toStringAsFixed(1)} | ${remainingDurationSeconds.toStringAsFixed(1)}',
             // style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             Text(
                 widget.viewModel.musicInfoList[widget.viewModel.currentIndex]
                     .kindOfMusic,
-                style: TextStyle(color: WHITE, fontSize: 14, overflow: TextOverflow.ellipsis)),
+                style: TextStyle(color: WHITE, fontSize: 12, overflow: TextOverflow.ellipsis)),
             const SizedBox(height: 30),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

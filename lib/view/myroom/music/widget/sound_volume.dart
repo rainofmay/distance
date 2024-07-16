@@ -32,11 +32,12 @@ class _SoundVolumeState extends State<SoundVolume> {
 
   @override
   Widget build(BuildContext context) {
-    _volume = viewModel.soundPlayerList[widget.playerIndex].volume;
+    _volume = viewModel.soundPlayersList[widget.playerIndex].audioPlayer.volume;
 
     return Padding(
       padding: const EdgeInsets.symmetric(vertical : 8.0),
       child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
         SizedBox(
           width: 130,
@@ -44,7 +45,7 @@ class _SoundVolumeState extends State<SoundVolume> {
               style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
-        const SizedBox(width: 8),
+        const SizedBox(width: 4),
         SliderTheme(
           data: SliderThemeData(
             trackHeight: 2,
@@ -60,7 +61,7 @@ class _SoundVolumeState extends State<SoundVolume> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Obx(
                     () => IconButton(
@@ -68,26 +69,20 @@ class _SoundVolumeState extends State<SoundVolume> {
                         highlightColor: TRANSPARENT,
                         hoverColor: TRANSPARENT,
                         icon: Icon(
-                          // value가 true 면 ?
-                          viewModel.isPlayingList[widget.playerIndex]
-                                  .value
+                          viewModel.soundPlayersList[widget.playerIndex].isPlaying.value
                               ? CupertinoIcons.speaker_2
                               : CupertinoIcons.speaker_slash,
                           color: WHITE,
                         ),
                         iconSize: 16.0,
                         onPressed: () {
-                          if (viewModel
-                              .isPlayingList[widget.playerIndex].value) {
+                          if (viewModel.soundPlayersList[widget.playerIndex].isPlaying.value == true) {
                             viewModel.musicPause(widget.playerIndex);
                           } else {
                             if (viewModel
-                                    .soundPlayerList[widget.playerIndex]
-                                    .state ==
-                                PlayerState.paused) {
+                                    .soundPlayersList[widget.playerIndex].audioPlayer.state == PlayerState.paused) {
                               viewModel
-                                  .soundPlayerList[widget.playerIndex]
-                                  .resume();
+                                  .soundPlayersList[widget.playerIndex].audioPlayer.resume();
                             } else {
                               viewModel.musicPlay(widget.playerIndex);
                             }
@@ -95,7 +90,7 @@ class _SoundVolumeState extends State<SoundVolume> {
                         }),
                   ),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.35,
+                    width: MediaQuery.of(context).size.width * 0.25,
                     child: Slider(
                       value: _volume,
                       onChanged: (volume) {
