@@ -6,7 +6,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/functions/time_comarison.dart';
-import 'package:mobile/view/schedule/widget/repeat_schedule.dart';
+import 'package:mobile/view/schedule/widget/schedule/repeat_schedule.dart';
 import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -111,12 +111,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     Get.back();
 
     await scheduleProvider.editScheduleData(schedule)
-    .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
+        .then((value) => viewModel.updateAllSchedules());
 
     // 이벤트 재랜더링과 연관 있는 기능들
-    await viewModel.updateAllSchedules();
     viewModel.updateSelectedDate(_startDate);
-
   }
 
   Future<void> _getDateFromUser(
@@ -201,11 +199,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           TextButton(
             onPressed: () async {
               await scheduleProvider.deleteScheduleData(id)
-                  .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
+                  .then((value) => viewModel.updateAllSchedules());
 
               // 이벤트 재랜더링과 연관 있는 기능들
-              await viewModel.updateAllSchedules();
-              viewModel.updateSelectedDate(_startDate);
+              viewModel.updateSelectedDate(viewModel.selectedDate);
               Get.back();
             },
             child: const Text(

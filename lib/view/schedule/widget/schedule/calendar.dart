@@ -37,13 +37,10 @@ class _CalendarState extends State<Calendar> {
             _viewModel.updateFocusedDate(focusedDay);
 
             /* selected Date가 바뀐 후, 리스트를 다시 불러올 함수?*/
-            _viewModel.updateScheduleData(_viewModel.selectedDate);
+
           },
 
-          selectedDayPredicate: (date) =>
-              date.year == _viewModel.selectedDate.year &&
-              date.month == _viewModel.selectedDate.month &&
-              date.day == _viewModel.selectedDate.day,
+          selectedDayPredicate: (day) => isSameDay(_viewModel.selectedDate, day),
           firstDay: DateTime.now().subtract(const Duration(days: 365 * 10 + 5)),
           lastDay: DateTime.now().add(const Duration(days: 365 * 10 + 5)),
 

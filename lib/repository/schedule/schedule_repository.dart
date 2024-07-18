@@ -17,12 +17,12 @@ class ScheduleRepository {
   }
 
 
-  Future<List<ScheduleModel>> fetchScehduleData(DateTime day) async {
-    var response = await _scheduleProvider.getScheduleData(day);
-    print('repository response $response');
-    final schedueleData =
-        response.map((e) => ScheduleModel.fromJson(json: e)).toList();
-    print('repository schedueleData $schedueleData');
-    return schedueleData;
-  }
+  // Future<List<ScheduleModel>> fetchScehduleData(DateTime day) async {
+  //   var response = await _scheduleProvider.getScheduleData(day);
+  //   print('repository response $response');
+  //   final schedueleData =
+  //       response.map((e) => ScheduleModel.fromJson(json: e)).toList();
+  //   print('repository schedueleData $schedueleData');
+  //   return schedueleData;
+  // }
 }

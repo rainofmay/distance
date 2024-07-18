@@ -14,8 +14,12 @@ import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
 Future<void> main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
   //플러터 프레임워크가 준비될 때까지 대기
   WidgetsFlutterBinding.ensureInitialized();
   //await OnlineStatusManager.initializeBackgroundFetch();
@@ -24,7 +28,10 @@ Future<void> main() async {
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
   KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
+
+
   runApp(const MainPage());
+  FlutterNativeSplash.remove();
 }
 
 class MainPage extends StatefulWidget {

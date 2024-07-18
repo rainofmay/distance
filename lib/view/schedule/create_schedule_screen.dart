@@ -9,7 +9,7 @@ import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/functions/time_comarison.dart';
-import 'package:mobile/view/schedule/widget/repeat_schedule.dart';
+import 'package:mobile/view/schedule/widget/schedule/repeat_schedule.dart';
 import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -42,14 +42,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   DateTime _originalEndTime = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day, 8, 0);
 
-  String _selectedRepeat = "반복 없음";
   String _memo = '';
-  final List<String> _repeatList = [
-    "반복 없음",
-    "매일",
-    "매주",
-    "매월",
-  ];
 
   late int _sectionColor;
   late TextEditingController _textController;
@@ -87,6 +80,8 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       // bool값 리턴
       _formKey.currentState!.save();
     }
+
+
     //일정 추가
     final schedule = ScheduleModel(
       id: Uuid().v4(),
@@ -104,14 +99,22 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
 
     Get.back(); // 여기에 위치해야 중복 생성 방지됨.
 
-    await viewModel.scheduleProvider.createScheduleData(schedule)
-    .then((value) => viewModel.updateScheduleData(viewModel.selectedDate));
+    // 일정 개수가 10000개 이상인지 확인
+    if (viewModel.allSchedules.length >= 10000) {
+      // 가장 오래된 일정 찾기
+      ScheduleModel oldestSchedule = viewModel.allSchedules.reduce((a, b) =>
+      a.startDate.isBefore(b.startDate) ? a : b);
 
-    // 이벤트 재랜더링과 연관 있는 기능들
-    await viewModel.updateAllSchedules();
+      // 가장 오래된 일정 삭제
+      await viewModel.scheduleProvider.deleteScheduleData(oldestSchedule.id);
+    }
+
+    await viewModel.scheduleProvider.createScheduleData(schedule)
+    .then((value) => viewModel.updateAllSchedules());
+
+    // 이벤트 재랜더링과 연관 있는 기능
     viewModel.updateSelectedDate(_startDate);
   }
-
   Future<void> _getDateFromUser(
       {required BuildContext context, required bool isStartTime}) async {
     DateTime? pickerDate = await showOmniDateTimePicker(

@@ -29,15 +29,14 @@ class ScheduleViewModel extends GetxController {
   late RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
   List<ScheduleModel> get allSchedules => _allSchedules;
 
-  late final RxList<ScheduleModel> _scheduleModel;
-  List<ScheduleModel> get scheduleModel => _scheduleModel;
+  final RxList<ScheduleModel> _selectedDateSchedules = <ScheduleModel>[].obs;
+  List get selectedDateSchedules => _selectedDateSchedules;
 
   late final RxBool _isScheduleListLoaded;
   bool get isScheduleListLoaded => _isScheduleListLoaded.value;
 
   late final RxInt _colorIndex;
   int get colorIndex => _colorIndex.value;
-
   late var _selectedSectionColor;
   Color get selectedSectionColor => _selectedSectionColor.value;
 
@@ -47,12 +46,11 @@ class ScheduleViewModel extends GetxController {
   @override
   void onInit() {
     initCalendarInfo();
-    initScheduleData(selectedDate);
+    initAllSchedules();
+    updateSelectedDate(selectedDate);
     initColorSet();
     _isScheduleListLoaded = false.obs;
-    initAllSchedules();
     super.onInit();
-    /* Event */
   }
 
   /* Init */
@@ -70,16 +68,9 @@ class ScheduleViewModel extends GetxController {
   Future<void> initAllSchedules() async {
     await _repository
         .fetchAllScheduleData()
-        .then((value) => _allSchedules = value.obs);
-    // print('_allSchedules $_allSchedules');
-  }
-
-  Future<void> initScheduleData(DateTime day) async {
-    await _repository
-        .fetchScehduleData(day)
-        .then((value) => _scheduleModel = value.obs)
+        .then((value) => _allSchedules = value.obs)
         .then((value) => _isScheduleListLoaded.value = true);
-    // print('_scheduleModel $_scheduleModel');
+    // print('_allSchedules $_allSchedules');
   }
 
   void initColorSet() {
@@ -87,18 +78,29 @@ class ScheduleViewModel extends GetxController {
     _selectedSectionColor = sectionColors[0].obs;
   }
 
-
 /* Update */
-  void updateSelectedDate(DateTime selectedDate) {
-    _calendarInfo.value = _calendarInfo.value.copyWith(
-      selectedDate: selectedDate,
-    );
-  }
-
   void updateFocusedDate(DateTime focusedDate) {
     _calendarInfo.value = _calendarInfo.value.copyWith(
       focusedDate: focusedDate,
     );
+  }
+
+  void updateSelectedDate(DateTime selectedDate) {
+    _calendarInfo.value = _calendarInfo.value.copyWith(
+      selectedDate: selectedDate,
+    );
+    updateSelectedDateSchedules();
+  }
+
+  void updateSelectedDateSchedules() {
+    // 선택된 날짜에 해당하는 일정들을 필터링
+    _selectedDateSchedules.value = allSchedules.where((schedule) =>
+    (schedule.startDate.year <= selectedDate.year &&
+        schedule.startDate.month <= selectedDate.month &&
+        schedule.startDate.day <= selectedDate.day) && (schedule.endDate.year >= selectedDate.year &&
+        schedule.endDate.month >= selectedDate.month &&
+        schedule.endDate.day >= selectedDate.day)
+    ).toList();
   }
 
   void updateCalendarFormatToWeek() {
@@ -115,13 +117,6 @@ class ScheduleViewModel extends GetxController {
         .then((value) => _allSchedules.value = value);
   }
 
-  Future<void> updateScheduleData(DateTime day) async{
-    _isScheduleListLoaded.value = false;
-    await _repository
-        .fetchScehduleData(day)
-        .then((value) => _scheduleModel.value = value)
-        .then((value) => _isScheduleListLoaded.value = true);
-  }
 
   void updateColorIndex(int index) {
     _colorIndex.value = index;

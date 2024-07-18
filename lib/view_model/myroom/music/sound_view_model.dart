@@ -35,7 +35,7 @@ class SoundViewModel extends GetxController {
 
     // 초기 볼륨 값
     initSetting((int i) {
-      setVolume(i, 0.0);
+      setVolume(i, 0.5);
     });
     super.onInit();
   }
@@ -64,7 +64,7 @@ class SoundViewModel extends GetxController {
     while (_soundPlayersList.length < _soundInfoList.length) {
       SoundPlayer newPlayer = SoundPlayer(musicInfo.id, musicInfo.kindOfMusic, AudioPlayer());
       _soundPlayersList.add(newPlayer);
-      setVolume(_soundPlayersList.length-1, 0.0);
+      setVolume(_soundPlayersList.length-1, 0.5);
     }
     while (_soundPlayersList.length > _soundInfoList.length) {
       int index = _soundPlayersList.indexWhere((index) =>
