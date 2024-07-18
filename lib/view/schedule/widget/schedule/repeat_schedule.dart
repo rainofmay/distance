@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
+import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
-class RepeatScheduleWidget extends StatefulWidget {
-  const RepeatScheduleWidget({super.key});
-
-  @override
-  State<RepeatScheduleWidget> createState() => _RepeatScheduleWidgetState();
-}
-
-class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
-  String _selectedRepeatType = '반복 없음';
-  final List<String> _repeatTypes = ['반복 없음', '지정'];
-  final List<bool> _selectedDays = List.filled(7, false);
-  int _selectedWeek = 1;
-  DateTime _endDate = DateTime.now().add(Duration(days: 365));
+class RepeatScheduleWidget extends StatelessWidget {
+  final viewModel = Get.find<ScheduleViewModel>();
+  RepeatScheduleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,19 +21,19 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
           children: [
             Expanded(
               flex: 5,
-              child: CustomTextField(
+              child: Obx(() => CustomTextField(
                 autofocus: false,
                 titleIcon: const IconButton(
                   icon: Icon(CupertinoIcons.repeat, color: Colors.black),
                   onPressed: null,
                 ),
                 readOnly: true,
-                hint: _selectedRepeatType,
-              ),
+                hint: viewModel.selectedRepeatType,
+              ),)
             ),
             Expanded(
               flex: 2,
-              child: DropdownButton<String>(
+              child: Obx(() => DropdownButton<String>(
                 style: const TextStyle(fontSize: 16),
                 dropdownColor: WHITE,
                 icon: const Padding(
@@ -51,31 +43,29 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                 iconSize: 24,
                 isExpanded: true,
                 underline: Container(height: 0),
-                value: _selectedRepeatType,
+                value: viewModel.selectedRepeatType,
                 onChanged: (String? newValue) {
-                  setState(() {
-                    _selectedRepeatType = newValue!;
-                  });
+                  viewModel.updateSelectedRepeatType(newValue);
                 },
-                items: _repeatTypes.map<DropdownMenuItem<String>>((String value) {
+                items: viewModel.repeatTypes.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: Padding(
                       padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Text(value, style: const TextStyle(color: Colors.grey)),
+                      child: Text(value, style: const TextStyle(color: BLACK)),
                     ),
                   );
                 }).toList(),
-              ),
+              ))
             ),
           ],
         ),
         Padding(
           padding: const EdgeInsets.only(left: 8.0, right: 8),
-          child: Column(
+          child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (_selectedRepeatType == '지정') ...[
+              if (viewModel.selectedRepeatType == '지정') ...[
                 SizedBox(height: 16),
                 Text('반복할 요일 선택', style: TextStyle(fontSize: 14, color: BLACK)),
                 Wrap(
@@ -88,12 +78,10 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                       checkmarkColor: PRIMARY_COLOR,
                       side: BorderSide.none,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                      label: Text(['월', '화', '수', '목', '금', '토', '일'][index], style: TextStyle(color: _selectedDays[index] == true ? PRIMARY_COLOR : DARK_UNSELECTED)),
-                      selected: _selectedDays[index],
+                      label: Text(['월', '화', '수', '목', '금', '토', '일'][index], style: TextStyle(color: viewModel.repeatDays[index] == true ? PRIMARY_COLOR : DARK_UNSELECTED)),
+                      selected: viewModel.repeatDays[index],
                       onSelected: (bool selected) {
-                        setState(() {
-                          _selectedDays[index] = selected;
-                        });
+                        viewModel.updateRepeatDay(index, selected);
                       },
                     );
                   }),
@@ -105,7 +93,7 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                     const SizedBox(width: 24),
                     DropdownButton<int>(
                       dropdownColor: WHITE,
-                      value: _selectedWeek,
+                      value: viewModel.repeatWeeks,
                       icon: Icon(
                         Icons.keyboard_arrow_down,
                         color: Colors.grey,
@@ -119,9 +107,7 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                         );
                       }).toList(),
                       onChanged: (int? newValue) {
-                        setState(() {
-                          _selectedWeek = newValue!;
-                        });
+                        viewModel.updateRepeatWeek(newValue);
                       },
                     ),
                   ],
@@ -129,23 +115,21 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                 const SizedBox(height: 16),
                 Row(
                   children: [
-                    Text('종료일 : ${_endDate.toString().split(' ')[0]}'),
+                    Text('종료일 : ${viewModel.repeatEndDate.toString().split(' ')[0]}'),
                     Padding(
                       padding: const EdgeInsets.only(bottom: 2.0),
                       child: IconButton(onPressed: () async {
                         final DateTime? picked = await showOmniDateTimePicker(
                             context: context,
                             theme: OmniDateTimePickerTheme.theme,
-                          initialDate: _endDate,
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime.now().add(Duration(days: 365)),
-                          barrierDismissible: true,
-                          type: OmniDateTimePickerType.date
+                            initialDate: viewModel.repeatEndDate,
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(Duration(days: 365 * 3)),
+                            barrierDismissible: true,
+                            type: OmniDateTimePickerType.date
                         );
-                        if (picked != null && picked != _endDate) {
-                          setState(() {
-                            _endDate = picked;
-                          });
+                        if (picked != null && picked != viewModel.repeatEndDate) {
+                          viewModel.updateRepeatEndDate(picked);
                         }
                       }, icon: const Icon(CupertinoIcons.calendar, size: 20)),
                     )
@@ -153,7 +137,7 @@ class _RepeatScheduleWidgetState extends State<RepeatScheduleWidget> {
                 ),
               ],
             ],
-          ),
+          ),)
         )
       ],
     );

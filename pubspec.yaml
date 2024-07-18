@@ -45,6 +45,10 @@ dependencies:
   flutter_colorpicker: ^1.1.0
   flutter_native_splash: ^2.4.1
 
+flutter_native_splash:
+  color: "#8FB8EE"
+  image: "assets/images/splash_logo.png"
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

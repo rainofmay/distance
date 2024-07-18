@@ -10,9 +10,12 @@ class ScheduleModel {
   final DateTime originalStartTime;
   final DateTime originalEndTime;
   final bool isTimeSet;
-  // final String selectedRepeat;
   final String memo;
   final int sectionColor;
+  final String repeatType;
+  final List<bool> repeatDays;
+  final int repeatWeeks;
+  final DateTime? repeatEndDate;
 
   ScheduleModel({
     required this.id,
@@ -27,6 +30,10 @@ class ScheduleModel {
     // required this.selectedRepeat,
     required this.memo,
     required this.sectionColor,
+    this.repeatType = '반복 없음',
+    this.repeatDays = const [],
+    this.repeatWeeks = 1,
+    this.repeatEndDate,
   });
 
 //JSON으로부터 모델을 만들어내는 생성자
@@ -37,11 +44,17 @@ class ScheduleModel {
         endDate = DateTime.parse(json['end_date']),
         startTime = json['start_time'],
         endTime = json['end_time'],
-        originalStartTime =  DateTime.parse(json['original_start_time']),
-        originalEndTime =  DateTime.parse(json['original_end_time']),
+        originalStartTime = DateTime.parse(json['original_start_time']),
+        originalEndTime = DateTime.parse(json['original_end_time']),
         isTimeSet = json['is_time_set'],
         memo = json['memo'],
-        sectionColor = json['section_color'];
+        sectionColor = json['section_color'],
+        repeatType = json['repeat_type'] ?? '반복 없음',
+        repeatDays = List<bool>.from(json['repeat_days'] ?? []),
+        repeatWeeks = json['repeat_weeks'] ?? 1,
+        repeatEndDate = json['repeat_end_date'] != null
+            ? DateTime.parse(json['repeat_end_date'])
+            : null;
 
   Map<String, dynamic> toJson() {
     return {
@@ -53,12 +66,16 @@ class ScheduleModel {
           '${endDate.year}${endDate.month.toString().padLeft(2, '0')}${endDate.day.toString().padLeft(2, '0')}',
       'start_time': startTime,
       'end_time': endTime,
-      'original_start_time' : originalStartTime.toString(),
-      'original_end_time' : originalEndTime.toString(),
+      'original_start_time': originalStartTime.toString(),
+      'original_end_time': originalEndTime.toString(),
       'is_time_set': isTimeSet,
       // '반복' : selectedRepeat,
       'memo': memo,
       'section_color': sectionColor,
+      'repeat_type': repeatType,
+      'repeat_days': repeatDays,
+      'repeat_weeks': repeatWeeks,
+      'repeat_end_date': repeatEndDate?.toIso8601String(),
     };
   }
 
@@ -74,6 +91,10 @@ class ScheduleModel {
     bool? isTimeSet,
     String? memo,
     int? sectionColor,
+    String? repeatType,
+    List<bool>? repeatDays,
+    int? repeatWeeks,
+    DateTime? repeatEndDate,
   }) {
     return ScheduleModel(
       id: id ?? this.id,
@@ -87,6 +108,10 @@ class ScheduleModel {
       isTimeSet: isTimeSet ?? this.isTimeSet,
       memo: memo ?? this.memo,
       sectionColor: this.sectionColor,
+      repeatType: repeatType ?? this.repeatType,
+      repeatDays: repeatDays ?? this.repeatDays,
+      repeatWeeks: repeatWeeks ?? this.repeatWeeks,
+      repeatEndDate: repeatEndDate ?? this.repeatEndDate,
     );
   }
 }

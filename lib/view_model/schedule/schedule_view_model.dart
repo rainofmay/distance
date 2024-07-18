@@ -16,6 +16,9 @@ class ScheduleViewModel extends GetxController {
   ScheduleViewModel({required ScheduleRepository repository})
       : _repository = repository;
 
+  /* Provider */
+  final ScheduleProvider scheduleProvider = ScheduleProvider();
+
   /* Calendar */
   late final Rx<CalendarInfoModel> _calendarInfo;
   DateTime get selectedDate => _calendarInfo.value.selectedDate;
@@ -40,8 +43,17 @@ class ScheduleViewModel extends GetxController {
   late var _selectedSectionColor;
   Color get selectedSectionColor => _selectedSectionColor.value;
 
-  /* Provider */
-  final ScheduleProvider scheduleProvider = ScheduleProvider();
+  /* Repeat date */
+  final RxList<String> _repeatTypes = ['반복없음', '지정'].obs;
+  List<String> get repeatTypes => _repeatTypes;
+  late final RxString _selectedRepeatType;
+  String get selectedRepeatType => _selectedRepeatType.value;
+  late final RxList<bool> _repeatDays ;
+  List<bool> get repeatDays => _repeatDays;
+  late final RxInt _repeatWeeks;
+  int get repeatWeeks => _repeatWeeks.value;
+  late final Rx<DateTime> _repeatEndDate ;
+  DateTime get repeatEndDate => _repeatEndDate.value;
 
   @override
   void onInit() {
@@ -50,6 +62,7 @@ class ScheduleViewModel extends GetxController {
     updateSelectedDate(selectedDate);
     initColorSet();
     _isScheduleListLoaded = false.obs;
+    initRepeatData();
     super.onInit();
   }
 
@@ -76,6 +89,13 @@ class ScheduleViewModel extends GetxController {
   void initColorSet() {
     _colorIndex = 0.obs;
     _selectedSectionColor = sectionColors[0].obs;
+  }
+
+  initRepeatData() {
+    _selectedRepeatType = _repeatTypes[0].obs;
+    _repeatDays =  List.filled(7, false).obs;
+    _repeatWeeks = 1.obs;
+    _repeatEndDate = DateTime.now().add(Duration(days: 365 * 3)).obs;
   }
 
 /* Update */
@@ -115,6 +135,32 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules.value = value);
+  }
+
+  void updateSelectedRepeatType(String? newValue) {
+    if (newValue != null && newValue != _selectedRepeatType.value) {
+      _selectedRepeatType.value = newValue;
+    }
+  }
+
+  void updateRepeatDay(int index, bool selected) {
+    if (_repeatDays[index] != selected) {
+      final newList = List<bool>.from(_repeatDays);
+      newList[index] = selected;
+      _repeatDays.value = newList;
+    }
+  }
+
+  void updateRepeatWeek(int? newValue) {
+    if (newValue != null && newValue != _repeatWeeks.value) {
+      _repeatWeeks.value = newValue;
+    }
+  }
+
+  void updateRepeatEndDate(DateTime? newValue) {
+    if (newValue != null && newValue != _repeatEndDate.value) {
+      _repeatEndDate.value = newValue;
+    }
   }
 
 
