@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class QuoteSettingsDialog extends StatelessWidget {
   final MyroomViewModel viewModel = Get.find<MyroomViewModel>();
@@ -34,11 +36,24 @@ class QuoteSettingsDialog extends StatelessWidget {
                           _buildBackdropColorPicker(context),
                           _buildFontColorPicker(context),
                           _buildFontDropdown(context),
+                          _buildCustomQuoteFields(),
                           _buildFontSizeSlider(),
                         ],
                       )),
                 ),
-                _buildButtons(context),
+                OkCancelButtons(
+                  onPressed: () {
+                    // 현재 화면을 pop하여 이전 화면으로 이동
+                    Navigator.pop(context);
+                  },
+                  onCancelPressed: () {
+                    // 저장요소 취소
+                    Navigator.pop(context);
+                  },
+                  okText: '저장',
+                  okTextColor: WHITE,
+                  cancelText: '취소',
+                ),
               ],
             ),
           ),
@@ -51,7 +66,7 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Backdrop Color', style: TextStyle(color: Colors.white)),
+        Text('배경 색상', style: TextStyle(color: Colors.white)),
         SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showColorPicker(context, isBackdrop: true),
@@ -71,7 +86,7 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Font Color', style: TextStyle(color: Colors.white)),
+        Text('폰트 색상', style: TextStyle(color: Colors.white)),
         SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showColorPicker(context, isBackdrop: false),
@@ -91,7 +106,7 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Font', style: TextStyle(color: Colors.white)),
+        Text('폰트 지정', style: TextStyle(color: Colors.white)),
         Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.black54,
@@ -120,11 +135,43 @@ class QuoteSettingsDialog extends StatelessWidget {
     );
   }
 
+  Widget _buildCustomQuoteFields() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Word', style: TextStyle(color: Colors.white)),
+        TextField(
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: '적고 싶은 말을 직접 적어보세요!',
+            hintStyle: TextStyle(color: Colors.white70),
+          ),
+          onChanged: (value) => viewModel.updateCustomQuote(value),
+          autocorrect: false, // 자동 수정 비활성화
+          enableSuggestions: false, // 추천 단어 기능 비활성화
+        ),
+        SizedBox(height: 8),
+        Text('Author', style: TextStyle(color: Colors.white)),
+        TextField(
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: '누구의 말인가요?',
+            hintStyle: TextStyle(color: Colors.white70),
+          ),
+          onChanged: (value) => viewModel.updateCustomQuoteAuthor(value),
+          autocorrect: false, // 자동 수정 비활성화
+          enableSuggestions: false, // 추천 단어 기능 비활성화
+
+        ),
+      ],
+    );
+  }
+
   Widget _buildFontSizeSlider() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Font Size', style: TextStyle(color: Colors.white)),
+        Text('폰트 크기', style: TextStyle(color: Colors.white)),
         SliderTheme(
           data: SliderThemeData(
             activeTrackColor: Colors.white,
@@ -140,25 +187,6 @@ class QuoteSettingsDialog extends StatelessWidget {
             max: 32.0,
             onChanged: (value) => viewModel.updateQuoteFontSize(value),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildButtons(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        ElevatedButton(
-          child: Text('Cancel'),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        ElevatedButton(
-          child: Text('Save'),
-          onPressed: () {
-            // 여기에 저장 로직 추가
-            Navigator.of(context).pop();
-          },
         ),
       ],
     );
