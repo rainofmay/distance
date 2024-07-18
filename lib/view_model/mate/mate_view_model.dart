@@ -23,7 +23,8 @@ class MateViewModel extends GetxController {
   late final Rx<OnlineStatus> isUserOnline = OnlineStatus.offline.obs;
   late final RxString userCurrentActivityEmoji=''.obs ;
   late final RxString userCurrentActivityText =''.obs;
-
+  late final RxBool isWordOpen = false.obs;
+  late final RxBool isScheduleOpen = false.obs;
 
 
   late final RxBool isPaid = false.obs;
@@ -32,6 +33,15 @@ class MateViewModel extends GetxController {
   final mateProfiles = <Rx<UserModel>>[].obs;
   // Methods for updating profile data are simplified
   final searchingProfiles = <Rx<UserModel>>[].obs;
+
+
+  @override
+  onInit() {
+    super.onInit();
+    updateMyProfile();
+    getPendingMates();
+    getMyMate();
+  }
 
   void updateName(String newName) => name.value = newName;
 
@@ -52,13 +62,12 @@ class MateViewModel extends GetxController {
   void updateCurrentActivityText(String newActivity) =>
       userCurrentActivityText.value = newActivity;
 
-  @override
-  onInit() {
-    super.onInit();
-    updateMyProfile();
-    getPendingMates();
-    getMyMate();
-  }
+  void updateIsWordOpen(bool isOpen) =>
+      isWordOpen.value = isOpen;
+
+  void updateIsScheduleOpen(bool isOpen) =>
+      isScheduleOpen.value = isOpen;
+
 
 
   Future<void> getPendingMates() async {
@@ -100,6 +109,8 @@ class MateViewModel extends GetxController {
         isPaid.value = myProfile.isPaid ?? false;
         userCurrentActivityEmoji.value = myProfile.statusEmoji ?? ''; // null 처리
         userCurrentActivityText.value = myProfile.statusText ?? ''; // null 처리
+        isWordOpen.value = myProfile.isWordOpen ?? false;
+        isScheduleOpen.value = myProfile.isScheduleOpen ?? false;
         update();
       }
     } catch (e) {
@@ -107,6 +118,7 @@ class MateViewModel extends GetxController {
       print('Error fetching user profile: $e');
     }
   }
+
   void onTapOnlineStatus(OnlineStatus status) {
     switch (status) {
       case OnlineStatus.online:
