@@ -1,4 +1,5 @@
 import 'package:cached_video_player/cached_video_player.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -10,7 +11,14 @@ class MyroomViewModel extends GetxController {
   final RxString selectedItemThumbnail = ''.obs;
   final RxBool isSimpleWindowEnabled = false.obs;
   final RxBool isAudioSpectrumEnabled = false.obs;
+  final RxBool isBackdropWordEnabled = false.obs;
+
   final RxBool isVideoLoading = true.obs;
+  final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
+  final RxDouble quoteBackdropOpacity = 0.5.obs;
+  final Rx<Color> quoteFontColor = Colors.white.obs;
+  final RxString quoteFont = 'GmarketSansTTFMedium'.obs;
+  final RxDouble quoteFontSize = 18.0.obs;
 
   @override
   void onInit() {
@@ -87,6 +95,14 @@ class MyroomViewModel extends GetxController {
         prefs.getBool('isSimpleWindowEnabled') ?? false;
     isAudioSpectrumEnabled.value =
         prefs.getBool('isAudioSpectrumEnabled') ?? false;
+    isBackdropWordEnabled.value =
+        prefs.getBool('isBackdropWordEnabled') ?? false;
+
+    quoteBackdropColor.value = Color(prefs.getInt('quoteBackdropColor') ?? 0xFFFFFFFF);
+    quoteBackdropOpacity.value = prefs.getDouble('quoteBackdropOpacity') ?? 0.5;
+    quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFMedium';
+    quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 18.0;
+    quoteFontColor.value = Color(prefs.getInt('quoteFontColor') ?? 0xFF000000);
 
     if (!isImage.value) {
       initializeVideo();
@@ -119,4 +135,40 @@ class MyroomViewModel extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
   }
+
+  void updateBackdropWordChange(value) async {
+    isBackdropWordEnabled.value = value;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isBackdropWordEnabled', isBackdropWordEnabled.value);
+  }
+
+  void updateQuoteBackdropColor(Color color) async {
+    quoteBackdropColor.value = color;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('quoteBackdropColor', color.value);
+  }
+
+  void updateQuoteBackdropOpacity(double opacity) async {
+    quoteBackdropOpacity.value = opacity;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('quoteBackdropOpacity', opacity);
+  }
+
+  void updateQuoteFont(String font) async {
+    quoteFont.value = font;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('quoteFont', font);
+  }
+
+  void updateQuoteFontSize(double size) async {
+    quoteFontSize.value = size;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('quoteFontSize', size);
+  }
+  void updateQuoteFontColor(Color color) async{
+    quoteFontColor.value = color;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setInt('quoteFontColor', color.value);
+  }
+
 }

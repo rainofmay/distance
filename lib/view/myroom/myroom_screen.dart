@@ -3,14 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:mobile/model/online_status.dart';
 import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/util/mate/online_status_manager.dart';
+import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_setting_screen.dart';
+import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_word_screen.dart';
 import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
-import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
@@ -54,16 +54,26 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
           children: [
             widget.backgroundViewModel.isImage.value
                 ? ImageBackground(
-              imageUrl: widget.backgroundViewModel.selectedItemUrl.value,
-            )
+                    imageUrl: widget.backgroundViewModel.selectedItemUrl.value,
+                  )
                 : VideoBackground(
-              videoController: widget.backgroundViewModel.videoController.value,
-              isVideoLoading: widget.backgroundViewModel.isVideoLoading.value,
-            ),
+                    videoController:
+                        widget.backgroundViewModel.videoController.value,
+                    isVideoLoading:
+                        widget.backgroundViewModel.isVideoLoading.value,
+                  ),
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
             if (widget.backgroundViewModel.isAudioSpectrumEnabled.value)
-              AudioSpectrumWidget(audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
+              AudioSpectrumWidget(
+                  audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
+            if (widget.backgroundViewModel.isBackdropWordEnabled.value)
+              Positioned(
+                top: 40,
+                left: 20,
+                right: 20,
+                child: MotivationalQuote(),
+              ),
           ],
         );
       }),
@@ -72,22 +82,11 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
         sub: [
           ActionButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => Container(),
-                  transitionsBuilder: (_, animation, __, child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: const Offset(0.0, 1.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                  transitionDuration: const Duration(milliseconds: 140),
-                  reverseTransitionDuration: const Duration(milliseconds: 140),
-                ),
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return QuoteSettingsDialog();
+                },
               );
             },
             icon: const Icon(Icons.settings, size: 20, color: LIGHT_WHITE),
@@ -103,7 +102,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(Icons.library_music_rounded, size: 20, color: LIGHT_WHITE),
+            icon: const Icon(Icons.library_music_rounded,
+                size: 20, color: LIGHT_WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -116,7 +116,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(CupertinoIcons.photo_fill, size: 20, color: LIGHT_WHITE),
+            icon: const Icon(CupertinoIcons.photo_fill,
+                size: 20, color: LIGHT_WHITE),
           ),
         ],
       ),
@@ -154,25 +155,24 @@ class VideoBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return videoController != null && videoController!.value.isInitialized
         ? SizedBox.expand(
-      child: FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(
-          width: videoController!.value.size.width,
-          height: videoController!.value.size.height,
-          child: CachedVideoPlayer(videoController!),
-        ),
-      ),
-    )
+            child: FittedBox(
+              fit: BoxFit.cover,
+              child: SizedBox(
+                width: videoController!.value.size.width,
+                height: videoController!.value.size.height,
+                child: CachedVideoPlayer(videoController!),
+              ),
+            ),
+          )
         : Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage('assets/images/loading.gif'),
-        ),
-      ),
-    );
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage('assets/images/loading.gif'),
+              ),
+            ),
+          );
   }
 }

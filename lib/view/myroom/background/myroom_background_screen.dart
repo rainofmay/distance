@@ -163,10 +163,10 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
                 activeColor: SECONDARY,
-                value: myroomViewModel.isAudioSpectrumEnabled.value,
+                value: myroomViewModel.isBackdropWordEnabled.value,
                 onChanged: (value) {
                   // update as necessary
-                  myroomViewModel.updateAudioSpectrumChange(value);
+                  myroomViewModel.updateBackdropWordChange(value);
                 },
               )),
             ),
