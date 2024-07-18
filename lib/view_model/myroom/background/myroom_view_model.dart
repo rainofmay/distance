@@ -20,6 +20,10 @@ class MyroomViewModel extends GetxController {
   final RxString quoteFont = 'GmarketSansTTFMedium'.obs;
   final RxDouble quoteFontSize = 18.0.obs;
 
+  final RxString customQuote = ''.obs;
+  final RxString customQuoteAuthor = ''.obs;
+
+
   @override
   void onInit() {
     super.onInit();
@@ -103,6 +107,8 @@ class MyroomViewModel extends GetxController {
     quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFMedium';
     quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 18.0;
     quoteFontColor.value = Color(prefs.getInt('quoteFontColor') ?? 0xFF000000);
+    customQuote.value = prefs.getString('customQuote') ?? '';
+    customQuoteAuthor.value = prefs.getString('customQuoteAuthor') ?? '';
 
     if (!isImage.value) {
       initializeVideo();
@@ -169,6 +175,18 @@ class MyroomViewModel extends GetxController {
     quoteFontColor.value = color;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('quoteFontColor', color.value);
+  }
+
+  void updateCustomQuote(String quote) async {
+    customQuote.value = quote;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('customQuote', quote);
+  }
+
+  void updateCustomQuoteAuthor(String author) async {
+    customQuoteAuthor.value = author;
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('customQuoteAuthor', author);
   }
 
 }

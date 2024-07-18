@@ -15,7 +15,7 @@ class UserProvider {
       final myId = await AuthHelper.getMyId();
       if (myId != null) {
         final response =
-            await supabase.from('user').select().eq('id', myId).single();
+        await supabase.from('user').select().eq('id', myId).single();
         if (response != null) {
           return response;
         } else {
@@ -89,7 +89,7 @@ class UserProvider {
         await supabase
             .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
             .update({'introduction': introduction}).eq(
-                'id', myId); // uid를 기준으로 업데이트
+            'id', myId); // uid를 기준으로 업데이트
         print("myId $myId");
         print("update Introduction to $introduction");
       } else {
@@ -110,7 +110,7 @@ class UserProvider {
         await supabase
             .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
             .update({'status_emoji': newStatusEmoji}).eq(
-                'id', myId); // uid를 기준으로 업데이트
+            'id', myId); // uid를 기준으로 업데이트
         print("update status_emoji");
       } else {
         // 로그인되지 않은 경우 처리 (예: 에러 메시지 출력)
@@ -130,7 +130,7 @@ class UserProvider {
         await supabase
             .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
             .update({'status_text': newStatusText}).eq(
-                'id', myId); // uid를 기준으로 업데이트
+            'id', myId); // uid를 기준으로 업데이트
         print("update status_text");
       } else {
         // 로그인되지 않은 경우 처리 (예: 에러 메시지 출력)
@@ -148,8 +148,24 @@ class UserProvider {
     if (myId != null) {
       await supabase
           .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
-          .update({'online_status': status.stringValue}).eq('id', myId); // uid를 기준으로 업데이트
+          .update({'online_status': status.stringValue}).eq(
+          'id', myId); // uid를 기준으로 업데이트
     }
 /* Delete */
+
   }
+
+  Future<void> updateUserSettings(bool isWordOpen, bool isScheduleOpen) async {
+    final userId = await AuthHelper.getMyId();
+    if (userId != null) {
+      await supabase
+        .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
+        .update({'is_word_open': isWordOpen}).eq(
+        'id', userId); // uid를 기준으로 업데이트
+      await supabase
+          .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
+          .update({'is_schedule_open': isScheduleOpen}).eq(
+          'id', userId); // uid를 기준으로 업데이트
+  }
+}
 }

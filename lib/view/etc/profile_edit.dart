@@ -48,12 +48,17 @@ class _ProfileEditState extends State<ProfileEdit> {
     // 저장 눌렀을 때 실행할 함수
     widget.viewModel.updateName(widget._nameController.text);
     widget.viewModel.updateIntroduction(widget._introduceController.text);
+
+    //viewModel로 통합 필요!
     widget.userProvider.editName(widget._nameController.text);
     widget.userProvider.editIntroduction(widget._introduceController.text);
+    //viewModel로 통합 필요!
     widget.userProvider
         .editStatusEmoji(widget.viewModel.userCurrentActivityEmoji.value);
     widget.userProvider
         .editStatusText(widget.viewModel.userCurrentActivityText.value);
+    widget.userProvider.updateUserSettings(widget.viewModel.isWordOpen.value, widget.viewModel.isScheduleOpen.value);
+
     if (!mounted) return;
     Navigator.of(context).pop();
   }
@@ -87,7 +92,9 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 50),
             nameAndIntroduce(),
             const SizedBox(height: 50),
-            statusSelect()
+            statusSelect(),
+            const SizedBox(height: 50),
+            buildSettingsToggle(),
           ],
         ),
       ),
@@ -309,4 +316,32 @@ class _ProfileEditState extends State<ProfileEdit> {
               style: TextStyle(fontSize: 16)),
         ]));
   }
+
+  Widget buildSettingsToggle() {
+    return Column(
+      children: [
+        SwitchListTile(
+          title: Text('Word 공개'),
+          value: widget.viewModel.isWordOpen.value,
+          onChanged: (bool value) {
+            setState(() {
+              widget.viewModel.isWordOpen.value = !widget.viewModel.isWordOpen.value;
+            });
+          },
+        ),
+        SwitchListTile(
+          title: Text('Schedule 공개'),
+          value: widget.viewModel.isScheduleOpen.value,
+          onChanged: (bool value) {
+            setState(() {
+              widget.viewModel.isScheduleOpen.value = !widget.viewModel.isScheduleOpen.value;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+
+
 }

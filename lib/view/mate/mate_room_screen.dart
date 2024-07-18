@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+
 
 class MateRoomScreen extends StatefulWidget {
   final String mateName;
@@ -14,33 +14,17 @@ class MateRoomScreen extends StatefulWidget {
 }
 
 class _UserDetailsScreenState extends State<MateRoomScreen> {
-  late AudioPlayer _audioPlayer;
   bool isLoading = true;
-  bool _isPlaying = false;
 
   @override
   void initState() {
     super.initState();
-    _audioPlayer = AudioPlayer();
-    _audioPlayer.play(AssetSource(widget.audioUrl));
     isLoading = false;
-    _isPlaying = true;
   }
 
-  Future<void> _togglePlay() async {
-    if (_isPlaying) {
-      await _audioPlayer.pause();
-    } else {
-      await _audioPlayer.play(AssetSource(widget.audioUrl));
-    }
-    setState(() {
-      _isPlaying = !_isPlaying;
-    });
-  }
 
   @override
   void dispose() {
-    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -58,10 +42,6 @@ class _UserDetailsScreenState extends State<MateRoomScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ElevatedButton(
-              onPressed: _togglePlay,
-              child: Text(_isPlaying ? '음악 정지' : '음악 재생'),
-            ),
             Image.network(widget.imageUrl),
           ],
         ),
