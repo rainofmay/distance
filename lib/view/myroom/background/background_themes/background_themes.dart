@@ -162,7 +162,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                                   AssetImage('assets/images/themes/ocean_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
-                          themeName: 'Camping',
+                          themeName: 'Sunset',
                           onTap: () {},
                           left: 12,
                           right: 12,
@@ -172,7 +172,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image:
-                                  AssetImage('assets/images/themes/camping_theme.jpg'),
+                              AssetImage('assets/images/themes/sunset_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Cafe',
@@ -187,6 +187,19 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               image: AssetImage('assets/images/themes/cafe_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
+                          themeName: 'Camping',
+                          onTap: () {},
+                          left: 12,
+                          right: 12,
+                          top: 10,
+                          bottom: 10,
+                          decorationImage: DecorationImage(
+                              colorFilter: ColorFilter.mode(
+                                  BLACK.withOpacity(0.4), BlendMode.srcOver),
+                              image:
+                                  AssetImage('assets/images/themes/camping_theme.jpg'),
+                              fit: BoxFit.cover)),
+                      ThemeBox(
                           themeName: 'City',
                           onTap: () {},
                           left: 12,
@@ -197,19 +210,6 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
                               image: AssetImage('assets/images/themes/city_theme.jpg'),
-                              fit: BoxFit.cover)),
-                      ThemeBox(
-                          themeName: 'Study',
-                          onTap: () {},
-                          left: 12,
-                          right: 12,
-                          top: 10,
-                          bottom: 10,
-                          decorationImage: DecorationImage(
-                              colorFilter: ColorFilter.mode(
-                                  BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image:
-                                  AssetImage('assets/images/themes/study_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),

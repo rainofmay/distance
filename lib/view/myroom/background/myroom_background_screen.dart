@@ -135,7 +135,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
               child: Obx(() => CupertinoSwitch(
                 thumbColor: WHITE,
                 value: myroomViewModel.isSimpleWindowEnabled.value,
-                activeColor: SECONDARY,
+                activeColor: PRIMARY_COLOR,
                 onChanged: (value) {
                   myroomViewModel.updateSimpleWindowChange(value);
                 },
@@ -148,7 +148,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
-                activeColor: SECONDARY,
+                activeColor: PRIMARY_COLOR,
                 value: myroomViewModel.isAudioSpectrumEnabled.value,
                 onChanged: (value) {
                   myroomViewModel.updateAudioSpectrumChange(value);
@@ -162,7 +162,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
-                activeColor: SECONDARY,
+                activeColor: PRIMARY_COLOR,
                 value: myroomViewModel.isBackdropWordEnabled.value,
                 onChanged: (value) {
                   // update as necessary

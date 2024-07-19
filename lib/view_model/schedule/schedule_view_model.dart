@@ -56,17 +56,26 @@ class ScheduleViewModel extends GetxController {
   DateTime get repeatEndDate => _repeatEndDate.value;
 
   @override
-  void onInit() {
-    initCalendarInfo();
-    initAllSchedules();
-    updateSelectedDate(selectedDate);
-    initColorSet();
+  onInit() {
     _isScheduleListLoaded = false.obs;
+    initCalendarInfo();
+
+    initAllSchedules().then((_) {
+      updateSelectedDate(selectedDate);
+      updateFocusedDate(selectedDate);
+    });
+
+    initColorSet();
+
     initRepeatData();
     super.onInit();
   }
 
   /* Init */
+  initSelectedSchedules(DateTime selectedDate) {
+
+  }
+
   Future<void> initCalendarInfo() async {
     _calendarInfo = CalendarInfoModel.selectedDate(
         selectedDate: DateTime.utc(
@@ -79,11 +88,9 @@ class ScheduleViewModel extends GetxController {
   }
 
   Future<void> initAllSchedules() async {
-    await _repository
-        .fetchAllScheduleData()
-        .then((value) => _allSchedules = value.obs)
-        .then((value) => _isScheduleListLoaded.value = true);
-    // print('_allSchedules $_allSchedules');
+    _allSchedules.value = await _repository.fetchAllScheduleData();
+    _isScheduleListLoaded.value = true;
+    update();
   }
 
   void initColorSet() {
@@ -109,7 +116,9 @@ class ScheduleViewModel extends GetxController {
     _calendarInfo.value = _calendarInfo.value.copyWith(
       selectedDate: selectedDate,
     );
-    updateSelectedDateSchedules();
+    if (_isScheduleListLoaded.value == true) {
+      updateSelectedDateSchedules();
+    }
   }
 
   void updateSelectedDateSchedules() {
@@ -121,6 +130,7 @@ class ScheduleViewModel extends GetxController {
         schedule.endDate.month >= selectedDate.month &&
         schedule.endDate.day >= selectedDate.day)
     ).toList();
+    update();
   }
 
   void updateCalendarFormatToWeek() {

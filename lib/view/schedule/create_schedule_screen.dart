@@ -1,4 +1,3 @@
-import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +14,6 @@ import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
-import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -76,33 +74,47 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
     }
   }
 
-  Future<void> _createRepeatingSchedules(ScheduleModel baseSchedule) async {
-    DateTime currentDate = baseSchedule.startDate;
-    List<int> selectedDays = List.generate(7, (i) => viewModel.repeatDays[i] ? i : -1)
-        .where((day) => day != -1)
-        .toList();
+  _createRepeatingSchedules(ScheduleModel baseSchedule) async {
+    // 1. 원래 일정 추가
+    await viewModel.scheduleProvider.createScheduleData(baseSchedule);
+
+    DateTime currentDate = baseSchedule.endDate.add(Duration(days: 1));
+    List<int> selectedDays = [];
+    for (int i = 0; i < 7; i++) {
+      if (viewModel.repeatDays[i]) {
+        selectedDays.add(i);
+      }
+    }
 
     while (currentDate.isBefore(viewModel.repeatEndDate)) {
       for (int dayOffset in selectedDays) {
-        int targetWeekday = (dayOffset + 1) % 7 + 1;
+        int targetWeekday = (dayOffset + 1) % 7;
+        if (targetWeekday == 0) targetWeekday = 7;
+
         int daysUntilTarget = (targetWeekday - currentDate.weekday + 7) % 7;
         DateTime scheduleDate = currentDate.add(Duration(days: daysUntilTarget));
 
-        // 월의 마지막 날 처리
-        if (scheduleDate.day > DateTime(scheduleDate.year, scheduleDate.month + 1, 0).day) {
-          scheduleDate = DateTime(scheduleDate.year, scheduleDate.month + 1, 0);
-        }
+        if (scheduleDate.isAfter(baseSchedule.endDate) &&
+            scheduleDate.isBefore(viewModel.repeatEndDate)) {
+          // 2 & 3. 하루짜리 반복 일정 생성
+          DateTime newDate = DateTime(
+            scheduleDate.year,
+            scheduleDate.month,
+            scheduleDate.day,
+            baseSchedule.startDate.hour,
+            baseSchedule.startDate.minute,
+          );
 
-        if (scheduleDate.isAfter(baseSchedule.startDate) &&
-            !scheduleDate.isAfter(viewModel.repeatEndDate)) {
           ScheduleModel repeatedSchedule = baseSchedule.copyWith(
             id: Uuid().v4(),
-            startDate: scheduleDate,
-            endDate: scheduleDate.add(baseSchedule.endDate.difference(baseSchedule.startDate)),
+            startDate: newDate,
+            endDate: newDate,  // startDate와 endDate를 같게 설정
           );
+
           await viewModel.scheduleProvider.createScheduleData(repeatedSchedule);
         }
       }
+
       currentDate = currentDate.add(Duration(days: 7 * viewModel.repeatWeeks));
     }
   }
@@ -131,44 +143,22 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
       repeatWeeks: viewModel.repeatWeeks,
       repeatEndDate: viewModel.repeatEndDate,
     );
-
-    if (viewModel.selectedRepeatType != '반복없음') {
-      if (_startDate.year != _endDate.year ||
-          _startDate.month != _endDate.month ||
-          _startDate.day != _endDate.day) {
-        return customDialog(
-          context,
-          120,
-          '알림',
-          Text('반복 일정을 생성하려면 시작일과 종료일이 같아야 합니다.', style: TextStyle(color: Colors.white)),
-          OkCancelButtons(okText: '확인', onPressed: Navigator.of(context).pop),
-        );
-      }
-    }
-
-    Get.back(); // 여기에 위치해야 중복 생성 방지됨
+    await _createRepeatingSchedules(schedule);
+    Get.back(); // 여기에 위치해야 중복 생성 방지됨.
 
     // 일정 개수가 10000개 이상인지 확인
     if (viewModel.allSchedules.length >= 10000) {
-      // 가장 오래된 일정 찾기 및 삭제
-      ScheduleModel oldestSchedule = viewModel.allSchedules
-          .reduce((a, b) => a.startDate.isBefore(b.startDate) ? a : b);
+      // 가장 오래된 일정 찾기
+      ScheduleModel oldestSchedule = viewModel.allSchedules.reduce((a, b) =>
+      a.startDate.isBefore(b.startDate) ? a : b);
+
+      // 가장 오래된 일정 삭제
       await viewModel.scheduleProvider.deleteScheduleData(oldestSchedule.id);
     }
 
-    // 일정 생성 및 업데이트
-    await viewModel.scheduleProvider
-        .createScheduleData(schedule)
-        .then((value) => viewModel.updateAllSchedules());
 
-    // 반복 일정 생성 (필요한 경우)
-    if (viewModel.selectedRepeatType == '지정') {
-      await _createRepeatingSchedules(schedule);
-    }
 
-    // 모든 일정 업데이트 및 UI 갱신
     await viewModel.updateAllSchedules();
-
     // 이벤트 재랜더링과 연관 있는 기능
     viewModel.updateSelectedDate(_startDate);
   }
