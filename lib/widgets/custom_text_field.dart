@@ -4,6 +4,7 @@ class CustomTextField extends StatelessWidget {
   final GestureTapCallback? onTap;
   final Widget? titleIcon;
   final FormFieldSetter? onSaved;
+  final void Function(String)? onChanged;
   final FormFieldValidator? validator;
   final String? hint;
   final TextStyle? hintStyle;
@@ -20,6 +21,7 @@ class CustomTextField extends StatelessWidget {
     this.onTap,
     this.titleIcon,
     this.onSaved,
+    this.onChanged,
     this.validator,
     this.hint,
     this.hintStyle,
@@ -51,6 +53,7 @@ class CustomTextField extends StatelessWidget {
                 autovalidateMode: AutovalidateMode.always,
                 readOnly: readOnly,
                 controller: controller,
+                onChanged: onChanged,
                 onSaved: onSaved,
                 validator: validator,
                 cursorColor: Colors.indigo,

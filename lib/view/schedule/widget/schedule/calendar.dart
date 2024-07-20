@@ -30,17 +30,15 @@ class _CalendarState extends State<Calendar> {
           // AvailableGestures.all 은 상위 제스쳐를 무시하므로 none으로 설정
           locale: 'ko_KR',
           daysOfWeekHeight: 50,
-          focusedDay: _viewModel.focusedDate,
+          focusedDay: _viewModel.calendarInfo.focusedDate,
 
           onDaySelected: (selectedDay, focusedDay) {
             _viewModel.updateSelectedDate(selectedDay);
             _viewModel.updateFocusedDate(focusedDay);
 
-            /* selected Date가 바뀐 후, 리스트를 다시 불러올 함수?*/
-
           },
 
-          selectedDayPredicate: (day) => isSameDay(_viewModel.selectedDate, day),
+          selectedDayPredicate: (day) => isSameDay(_viewModel.calendarInfo.selectedDate, day),
           firstDay: DateTime.now().subtract(const Duration(days: 365 * 10 + 5)),
           lastDay: DateTime.now().add(const Duration(days: 365 * 10 + 5)),
 

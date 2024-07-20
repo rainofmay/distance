@@ -52,7 +52,7 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
   @override
   void initState() {
     super.initState();
-    viewModel.initAllSchedules();
+    // viewModel.initAllSchedules();
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
 

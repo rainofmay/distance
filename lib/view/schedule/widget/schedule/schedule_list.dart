@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view/schedule/edit_schedule_screen.dart';
@@ -8,32 +9,34 @@ import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 
 class ScheduleList extends StatelessWidget {
   final ScheduleViewModel viewModel;
+
   ScheduleList({super.key, required this.viewModel});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() => viewModel.isScheduleListLoaded ? ListView.builder(
-      shrinkWrap: true,
-      itemCount: viewModel.selectedDateSchedules.length,
-      itemBuilder: (BuildContext context, int index) {
-        final schedule = viewModel.selectedDateSchedules[index];
-        return scheduleCard(schedule);
-      },
-    ) : Container());
+    return Obx(() => viewModel.isScheduleListLoaded
+        ? ListView.builder(
+            shrinkWrap: true,
+            itemCount: viewModel.selectedDateSchedules.length,
+            itemBuilder: (BuildContext context, int index) {
+              final schedule = viewModel.selectedDateSchedules[index];
+              return scheduleCard(schedule, context);
+            },
+          )
+        : Container());
   }
 
-
-  Widget scheduleCard(ScheduleModel schedule) {
+  Widget scheduleCard(ScheduleModel schedule, BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.only(
-            bottom: 8.0, left: 12.0, right: 12.0),
+        padding: const EdgeInsets.only(bottom: 8.0, left: 12.0, right: 12.0),
         child: GestureDetector(
           behavior: HitTestBehavior.opaque, // 빈 영역도 터치되도록
 
           // 수정 페이지 들어갈 때,
           onTap: () {
-            viewModel.updateColorIndex(schedule.sectionColor);
-            Get.to(() => EditScheduleScreen(), arguments: schedule);
+            viewModel.initializeForEditSchedule(schedule);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => EditScheduleScreen()));
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,10 +54,9 @@ class ScheduleList extends StatelessWidget {
               Expanded(
                 child: Container(
                   margin: const EdgeInsets.only(right: 30, left: 5, bottom: 15),
-
                   child: Padding(
                     padding: const EdgeInsets.only(
-                      // 카드 안에서 텍스트의 패딩 간격
+                        // 카드 안에서 텍스트의 패딩 간격
                         left: 12,
                         right: 12,
                         top: 12,
@@ -66,24 +68,29 @@ class ScheduleList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(schedule.scheduleName,
-                                style: const TextStyle(fontSize: 15, color: BLACK)),
+                                style: const TextStyle(
+                                    fontSize: 15, color: BLACK)),
                             Text(
                               schedule.isTimeSet
                                   ? schedule.startDate.day !=
-                                  schedule.endDate.day // 시간 설정 있고, 기간일 때
-                                  ? schedule.startDate.year == schedule.endDate.year
-                                  ? '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.month}/${schedule.endDate.day}'
-                                  : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.year}/${schedule.endDate.month}/${schedule.endDate.day}'
-                                  : '${schedule.startTime}~${schedule.endTime}' // 하루일 때
+                                          schedule
+                                              .endDate.day // 시간 설정 있고, 기간일 때
+                                      ? schedule.startDate.year ==
+                                              schedule.endDate.year
+                                          ? '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.month}/${schedule.endDate.day}'
+                                          : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.year}/${schedule.endDate.month}/${schedule.endDate.day}'
+                                      : '${DateFormat('hh:mm a').format(schedule.startDate)}~${DateFormat('hh:mm a').format(schedule.endDate)}' // 하루일 때
 
                                   : schedule.startDate.day !=
-                                  schedule.endDate.day // 시간 설정 없고 기간일 때,
-                                  ? schedule.startDate.year == schedule.endDate.year
-                                  ? '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.month}/${schedule.endDate.day}'
-                                  : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.year}/${schedule.endDate.month}/${schedule.endDate.day}'
-                                  : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day}',
-                              style:
-                              const TextStyle(fontSize: 9, color: Colors.grey),
+                                          schedule
+                                              .endDate.day // 시간 설정 없고 기간일 때,
+                                      ? schedule.startDate.year ==
+                                              schedule.endDate.year
+                                          ? '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.month}/${schedule.endDate.day}'
+                                          : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day} ~ ${schedule.endDate.year}/${schedule.endDate.month}/${schedule.endDate.day}'
+                                      : '${schedule.startDate.year}/${schedule.startDate.month}/${schedule.startDate.day}',
+                              style: const TextStyle(
+                                  fontSize: 9, color: Colors.grey),
                             ),
                           ],
                         ),
@@ -91,7 +98,9 @@ class ScheduleList extends StatelessWidget {
                             padding: const EdgeInsets.only(top: 10, left: 10),
                             alignment: Alignment.topLeft,
                             child: Text('# ${schedule.memo}',
-                                style: const TextStyle(fontSize: 12, color: BLACK), overflow: TextOverflow.ellipsis)),
+                                style:
+                                    const TextStyle(fontSize: 12, color: BLACK),
+                                overflow: TextOverflow.ellipsis)),
                       ],
                     ),
                   ),
@@ -99,7 +108,6 @@ class ScheduleList extends StatelessWidget {
               ),
             ],
           ),
-        )
-    );
+        ));
   }
 }

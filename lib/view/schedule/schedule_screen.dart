@@ -98,17 +98,20 @@ class ScheduleScreen extends StatelessWidget {
                         horizontalTitleGap: 3,
                         leading: IconButton(
                             onPressed: () {
-                              Get.to(() => CreateScheduleScreen());
+                              //schedule모델 값 초기화
+                              viewModel.initializeForNewSchedule();
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (c) => CreateScheduleScreen()));
                             },
-                            icon: const Icon(CupertinoIcons.add_circled, color: SECONDARY, size: 22,),
+                            icon: const Icon(CupertinoIcons.add_circled, color: SECONDARY, size: 22),
                             color: BLACK),
                         title: Row(
                           children: [
                             const SizedBox(width: 5),
                             Text(
-                                viewModel.selectedDate.day == DateTime.now().day
+                                viewModel.calendarInfo.selectedDate.day == DateTime.now().day
                                     ? '오늘'
-                                    : '${viewModel.selectedDate.month}월 ${viewModel.selectedDate.day}일',
+                                    : '${viewModel.calendarInfo.selectedDate.month}월 ${viewModel.calendarInfo.selectedDate.day}일',
                                 style: const TextStyle(
                                     color: BLACK,
                                     fontWeight: FontWeight.w100,

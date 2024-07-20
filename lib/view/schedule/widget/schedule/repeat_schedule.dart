@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
@@ -9,7 +10,8 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class RepeatScheduleWidget extends StatelessWidget {
   final viewModel = Get.find<ScheduleViewModel>();
-  RepeatScheduleWidget({super.key});
+  final ScheduleModel? scheduleModel;
+  RepeatScheduleWidget({super.key, this.scheduleModel});
 
   @override
   Widget build(BuildContext context) {
