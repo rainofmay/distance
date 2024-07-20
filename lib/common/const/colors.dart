@@ -20,14 +20,14 @@ const TRANSPARENT = Colors.transparent;
 // schedule card 색상
 const COLOR1 = Color(0xff8FB8EE);
 const COLOR2 = Color(0xFF005FDA);
-const COLOR3 = Color(0xff13264E);
+const COLOR3 = Color(0xff1d3f88);
 const COLOR4 = Color(0xfffca76a);
 const COLOR5 = Color(0xffF56A79);
 const COLOR6 = Color(0xffFF3D9C);
 const COLOR7 = Color(0xffBB1024);
 const COLOR8 = Color(0xffB7CA79);
-const COLOR9 = Color(0xff148007);
-const COLOR10 = Color(0xff003300);
+const COLOR9 = Color(0xff1c910d);
+const COLOR10 = Color(0xff055d05);
 const COLOR11 = Color(0xffC8D8FA);
 const COLOR12 = Color(0xff1AA6B7);
 const COLOR13 = Color(0xffac19b0);

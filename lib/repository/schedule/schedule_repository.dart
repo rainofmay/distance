@@ -10,19 +10,26 @@ class ScheduleRepository {
 
   /* Get Schedule List */
   Future<List<ScheduleModel>> fetchAllScheduleData() async {
-    var response = await _scheduleProvider.getAllScheduleData();
-    final allSchedueleData =
-    response.map((e) => ScheduleModel.fromJson(json: e)).toList();
-    return allSchedueleData;
+    try {
+      var response = await _scheduleProvider.getAllScheduleData();
+      final allScheduleData = response.map((e) {
+        return ScheduleModel.fromJson(json: e);
+      }).toList();
+      print('allScheduleData $allScheduleData');
+      return allScheduleData;
+    } catch (e, stackTrace) {
+      print('Error in fetchAllScheduleData: $e');
+      print('StackTrace: $stackTrace');
+      return [];
+    }
   }
 
-
-  // Future<List<ScheduleModel>> fetchScehduleData(DateTime day) async {
-  //   var response = await _scheduleProvider.getScheduleData(day);
-  //   print('repository response $response');
-  //   final schedueleData =
-  //       response.map((e) => ScheduleModel.fromJson(json: e)).toList();
-  //   print('repository schedueleData $schedueleData');
-  //   return schedueleData;
-  // }
+// Future<List<ScheduleModel>> fetchScehduleData(DateTime day) async {
+//   var response = await _scheduleProvider.getScheduleData(day);
+//   print('repository response $response');
+//   final schedueleData =
+//       response.map((e) => ScheduleModel.fromJson(json: e)).toList();
+//   print('repository schedueleData $schedueleData');
+//   return schedueleData;
+// }
 }
