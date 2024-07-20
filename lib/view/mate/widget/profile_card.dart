@@ -81,6 +81,8 @@ class _ProfileCardState extends State<ProfileCard> {
                 imageUrl: widget.profile.backgroundUrl ?? '',
                 audioUrl:
                     'audios/nature/defaultMainMusic2.mp3', // 예: 'https://example.com/music.mp3'
+                isWordOpen : widget.profile.isWordOpen ?? false,
+                isScheduleOpen : widget.profile.isScheduleOpen ?? false,
               ),
             ),
           );

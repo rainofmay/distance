@@ -1,9 +1,15 @@
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/model/background_model.dart';
+import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
+import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MyroomViewModel extends GetxController {
+
+  final MyroomBackgroundRepository myroomBackgroundRepository = MyroomBackgroundRepository(backgroundProvider: MyroomBackgroundProvider());
+
   final RxBool isImage = true.obs;
   final Rxn<CachedVideoPlayerController> videoController =
       Rxn<CachedVideoPlayerController>();
@@ -12,8 +18,8 @@ class MyroomViewModel extends GetxController {
   final RxBool isSimpleWindowEnabled = false.obs;
   final RxBool isAudioSpectrumEnabled = false.obs;
   final RxBool isBackdropWordEnabled = false.obs;
-
   final RxBool isVideoLoading = true.obs;
+
   final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
   final RxDouble quoteBackdropOpacity = 0.5.obs;
   final Rx<Color> quoteFontColor = Colors.white.obs;
@@ -22,6 +28,10 @@ class MyroomViewModel extends GetxController {
 
   final RxString customQuote = ''.obs;
   final RxString customQuoteAuthor = ''.obs;
+
+  RxBool isThemeLoading = true.obs; // 로딩 상태 변수 추가
+  final RxList<ThemePicture> themePictures = <ThemePicture>[].obs;
+  final RxList<ThemeVideo> themeVideos = <ThemeVideo>[].obs;
 
 
   @override
@@ -187,6 +197,13 @@ class MyroomViewModel extends GetxController {
     customQuoteAuthor.value = author;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('customQuoteAuthor', author);
+  }
+
+  Future<void> setTheme(String category) async {
+    isThemeLoading.value = true; // 로딩 시작
+    themePictures.value = await myroomBackgroundRepository.fetchThemePictures(category);
+    themeVideos.value = await myroomBackgroundRepository.fetchThemeVideos(category);
+    isThemeLoading.value = true; // 로딩 시작
   }
 
 }

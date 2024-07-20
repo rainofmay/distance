@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/view/myroom/background/background_themes/themes/sea_screen.dart';
-import 'package:mobile/view/myroom/background/background_themes/themes/spring_screen.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/theme_detail_choice_screen.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
@@ -78,7 +77,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           themeName: 'Spring',
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (c) => SpringScreen()));
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "spring",)));
                           },
                           left: 12,
                           right: 12,
@@ -92,7 +91,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Summer',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "summer",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -105,7 +107,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Fall',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "fall",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -117,7 +122,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Winter',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "winter",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -150,7 +158,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           themeName: 'Ocean',
                           onTap: () {
                             Navigator.push(context,
-                                MaterialPageRoute(builder: (c) => SeaScreen()));
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "ocean",)));
                           },                          left: 12,
                           right: 12,
                           top: 10,
@@ -163,7 +171,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Sunset',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "sunset",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -176,7 +187,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Cafe',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "cafe",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -188,7 +202,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Camping',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "camping",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -201,7 +218,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'City',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "city",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -231,6 +251,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Animal',
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "animal",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -243,6 +267,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Gomzy',
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "gomzy",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,

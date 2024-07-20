@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -31,10 +32,10 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
             ),
             child: AspectRatio(
               aspectRatio: 1.0,
-              child: Image.asset(
-                myroomViewModel.selectedItemThumbnail.value,
+              child: CachedNetworkImage(
+                imageUrl: myroomViewModel.selectedItemThumbnail.value,
                 width: MediaQuery.of(context).size.width * 0.56,
-                fit: BoxFit.cover,
+                fit: BoxFit.fitHeight,
               ),
             ),
           );
