@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/myroom/music/music_detail_screen.dart';
 
-class PlayListItem extends StatefulWidget {
+class PlayListItem extends StatelessWidget {
   final String thumbnailUrl;
   final String title;
   final String instrument;
@@ -13,21 +13,16 @@ class PlayListItem extends StatefulWidget {
   const PlayListItem({super.key, required this.thumbnailUrl, required this.title, required this.instrument, required this.numberOfsongs, this.onTap, required this.textColor});
 
   @override
-  State<PlayListItem> createState() => _PlayListItemState();
-}
-
-class _PlayListItemState extends State<PlayListItem> {
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
-      onTap: widget.onTap,
+      onTap: onTap,
       child: Row(
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Image.asset(
-              widget.thumbnailUrl,
+              thumbnailUrl,
               fit: BoxFit.cover,
               width: 50,
               height: 50,
@@ -38,10 +33,10 @@ class _PlayListItemState extends State<PlayListItem> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(widget.title, style: TextStyle(fontSize: 15, color: widget.textColor)),
+              Text(title, style: TextStyle(fontSize: 15, color: textColor)),
               const SizedBox(height: 5),
-              Text('${widget.instrument}  |  ${widget.numberOfsongs}곡',
-                  style: TextStyle(fontSize: 11, color: widget.textColor)),
+              Text('$instrument  |  $numberOfsongs곡',
+                  style: TextStyle(fontSize: 11, color: textColor)),
             ],
           )
         ],

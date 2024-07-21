@@ -172,7 +172,7 @@ class ScheduleViewModel extends GetxController {
     _repeatDays.value = List.from(schedule.repeatDays);
     _repeatWeeks.value = schedule.repeatWeeks;
     _repeatEndDate.value = schedule.repeatEndDate;
-    update();
+    updateFormValidity();
   }
 
   Future<void> initCalendarInfo() async {

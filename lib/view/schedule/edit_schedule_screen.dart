@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/view/schedule/functions/time_comarison.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -36,12 +35,11 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   }
 
   void _onSavePressed() async {
-    if (_formKey.currentState!.validate()) {
-      // bool값 리턴
+    if (_formKey.currentState!.validate() && viewModel.isFormValid) {
       _formKey.currentState!.save();
+      // await viewModel.updateSchedule();
+      Navigator.of(context).pop();
     }
-    viewModel.createSchedule();
-    Navigator.of(context).pop();
   }
 
   @override
@@ -61,10 +59,10 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 builder: (BuildContext context, TextEditingValue value,
                     Widget? child) {
                   return TextButton(
-                    onPressed: termsForSave() ? _onSavePressed : null,
+                    onPressed: viewModel.isFormValid ? () => _onSavePressed() : null,
                     child: Text(
                       '수정',
-                      style: TextStyle(color: termsForSave() ? WHITE : GREY),
+                      style: TextStyle(color: viewModel.isFormValid ? WHITE : GREY),
                     ),
                   );
                 },

@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/view/schedule/functions/time_comarison.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
