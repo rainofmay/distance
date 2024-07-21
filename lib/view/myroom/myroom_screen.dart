@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,9 +54,18 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
         return Stack(
           children: [
             widget.backgroundViewModel.isImage.value
-                ? ImageBackground(
-                    imageUrl: widget.backgroundViewModel.selectedItemUrl.value,
-                  )
+                ? SizedBox.expand(
+                    child: FittedBox(
+                    fit: BoxFit.cover,
+                    child: CachedNetworkImage(
+                      imageUrl:
+                          widget.backgroundViewModel.selectedItemUrl.value,
+                      fit: BoxFit.cover, // 추가: 이미지를 화면에 맞게 채우도록 설정
+                      placeholder: (context, url) =>
+                          Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    ),
+                  ))
                 : VideoBackground(
                     videoController:
                         widget.backgroundViewModel.videoController.value,
@@ -125,24 +135,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   }
 }
 
-class ImageBackground extends StatelessWidget {
-  final String imageUrl;
-
-  const ImageBackground({required this.imageUrl, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          image: AssetImage(imageUrl),
-        ),
-      ),
-    );
-  }
-}
-
 class VideoBackground extends StatelessWidget {
   final CachedVideoPlayerController? videoController;
   final bool isVideoLoading;
@@ -166,13 +158,6 @@ class VideoBackground extends StatelessWidget {
               ),
             ),
           )
-        : Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage('assets/images/loading.gif'),
-              ),
-            ),
-          );
+        : Center(child: CircularProgressIndicator());
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/theme_detail_choice_screen.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
@@ -74,10 +75,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Spring',
-                          // onTap: () {
-                          //   Navigator.push(context,
-                          //       MaterialPageRoute(builder: (c) => SpringScreen()));
-                          // },
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "spring",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -85,12 +86,15 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/spring_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/spring_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Summer',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "summer",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -98,12 +102,15 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/summer_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/summer_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Fall',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "fall",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -111,12 +118,14 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/fall_theme.jpg'),
+                              image: AssetImage('assets/images/themes/fall_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Winter',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "winter",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -124,8 +133,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/winter_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/winter_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
@@ -147,23 +156,25 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Ocean',
-                          // onTap: () {
-                          //   Navigator.push(context,
-                          //       MaterialPageRoute(builder: (c) => SeaScreen()));
-                          // },
-                          left: 12,
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "ocean",)));
+                          },                          left: 12,
                           right: 12,
                           top: 10,
                           bottom: 10,
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/ocean_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/ocean_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Sunset',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "sunset",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -171,12 +182,15 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/sunset_theme.jpg'),
+                              image:
+                              AssetImage('assets/images/themes/sunset_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Cafe',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "cafe",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -184,12 +198,14 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/cafe_theme.jpg'),
+                              image: AssetImage('assets/images/themes/cafe_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Camping',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "camping",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -197,12 +213,15 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/camping_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/camping_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'City',
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "city",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -210,8 +229,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/city_theme.jpg'),
+                              image: AssetImage('assets/images/themes/city_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
@@ -233,6 +251,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Animal',
+                          onTap: (){
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "animal",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -240,11 +262,15 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/animal_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/animal_theme.jpg'),
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Gomzy',
+                          onTap: () {
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (c) => ThemeDetailChoiceScreen(category: "gomzy",)));
+                          },
                           left: 12,
                           right: 12,
                           top: 10,
@@ -252,8 +278,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                           decorationImage: DecorationImage(
                               colorFilter: ColorFilter.mode(
                                   BLACK.withOpacity(0.4), BlendMode.srcOver),
-                              image: AssetImage(
-                                  'assets/images/themes/gomzy_theme.jpg'),
+                              image:
+                                  AssetImage('assets/images/themes/gomzy_theme.jpg'),
                               fit: BoxFit.cover)),
                     ],
                   ),
