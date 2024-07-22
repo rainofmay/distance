@@ -6,14 +6,9 @@ import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 
-class BackgroundThemes extends StatefulWidget {
+class BackgroundThemes extends StatelessWidget {
   const BackgroundThemes({super.key});
 
-  @override
-  State<BackgroundThemes> createState() => _BackgroundThemesState();
-}
-
-class _BackgroundThemesState extends State<BackgroundThemes> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

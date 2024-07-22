@@ -2,15 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
-import 'package:mobile/widgets/custom_check_box.dart';
-import 'package:mobile/widgets/functions/custom_dialog.dart';
-import 'package:mobile/widgets/ok_cancel._buttons.dart';
-
 
 class EditScheduleScreen extends StatefulWidget {
   const EditScheduleScreen({super.key});
@@ -37,7 +34,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   void _onSavePressed() async {
     if (_formKey.currentState!.validate() && viewModel.isFormValid) {
       _formKey.currentState!.save();
-      // await viewModel.updateSchedule();
+      await viewModel.editSchedule();
       Navigator.of(context).pop();
     }
   }
@@ -68,71 +65,13 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 },
               ),
               TextButton(
-                onPressed: () async {
-                  viewModel.nowHandlingScheduleModel.repeatDays.contains(true)
-                      ? customDialog(
-                          context,
-                          80,
-                          '삭제',
-                          Column(
-                            children: [
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: chooseDeleteOption(),
-                                child: Row(
-                                  children: [
-                                    CustomCheckBox(
-                                      value: !isAllDelete,
-                                      radius: 10,
-                                    ),
-                                    Text('이 날짜의 일정만 삭제'),
-                                  ],
-                                ),
-                              ),
-                              GestureDetector(
-                                behavior: HitTestBehavior.opaque,
-                                onTap: chooseDeleteOption(),
-                                child: Row(
-                                  children: [
-                                    CustomCheckBox(
-                                        value: isAllDelete, radius: 10),
-                                    Text('반복된 일정 전부 삭제'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          OkCancelButtons(
-                              okText: '확인',
-                              cancelText: '취소',
-                              onPressed: () async {
-                                if (isAllDelete) {
-                                  await viewModel.scheduleProvider
-                                      .deleteScheduleData(
-                                          viewModel.nowHandlingScheduleModel.id)
-                                      .then((value) =>
-                                          viewModel.updateAllSchedules());
-                                } else {
-                                  await viewModel.scheduleProvider
-                                      .deleteScheduleData(
-                                          viewModel.nowHandlingScheduleModel.id)
-                                      .then((value) =>
-                                          viewModel.updateAllSchedules());
-                                }
-                                // 이벤트 재랜더링과 연관 있는 기능들
-                                viewModel
-                                    .updateSelectedDate(viewModel.calendarInfo.selectedDate);
-                                if (!context.mounted) return;
-                                Navigator.of(context).pop();
-                              }),
-                        )
-                      : await viewModel.scheduleProvider
-                          .deleteScheduleData(
-                              viewModel.nowHandlingScheduleModel.id)
-                          .then((value) => viewModel.updateAllSchedules());
-                  viewModel.updateSelectedDate(viewModel.calendarInfo.selectedDate);
-                  if (!context.mounted) return;
-                  Navigator.of(context).pop();
+                onPressed: () {
+                  if (viewModel.nowHandlingScheduleModel.repeatType == '지정') {
+                    showDeleteOptionDialog(context, viewModel.nowHandlingScheduleModel);
+                  } else {
+                    viewModel.deleteSchedule(viewModel.nowHandlingScheduleModel, false);
+                    Navigator.of(context).pop();
+                  }
                 },
                 child: const Text(
                   '삭제',
@@ -148,5 +87,42 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
             child: ScheduleForm()
           )),
         ));
+  }
+
+  void showDeleteOptionDialog(BuildContext context, ScheduleModel schedule) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: BLACK,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(6)),
+          ),
+          title: Text('일정 삭제', style: TextStyle(color: WHITE, fontSize: 17)),
+          content: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextButton(
+                child: Text('반복되는 모든 일정 삭제', style: TextStyle(color: WHITE, fontSize: 15)),
+                onPressed: () {
+                  Navigator.of(context).pop();  // 다이얼로그 닫기
+                  viewModel.deleteSchedule(schedule, true);
+                  Navigator.of(context).pop();  // EditScheduleScreen 닫기
+                },
+              ),
+              TextButton(
+                child: Text('이 일정만 삭제', style: TextStyle(color: WHITE, fontSize: 15)),
+                onPressed: () {
+                  Navigator.of(context).pop();  // 다이얼로그 닫기
+                  viewModel.deleteSchedule(schedule, false);
+                  Navigator.of(context).pop();  // EditScheduleScreen 닫기
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

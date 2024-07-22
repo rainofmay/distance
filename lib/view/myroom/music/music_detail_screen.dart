@@ -8,14 +8,8 @@ import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 
-class MusicDetailScreen extends StatefulWidget {
-  const MusicDetailScreen({super.key});
-
-  @override
-  State<MusicDetailScreen> createState() => _MusicDetailScreenState();
-}
-
-class _MusicDetailScreenState extends State<MusicDetailScreen> {
+class MusicDetailScreen extends StatelessWidget {
+  MusicDetailScreen({super.key});
   final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: Get.put(MyRoomMusicProvider())));
 
   @override

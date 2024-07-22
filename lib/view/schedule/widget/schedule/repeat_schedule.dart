@@ -10,8 +10,7 @@ import 'package:omni_datetime_picker/omni_datetime_picker.dart';
 
 class RepeatScheduleWidget extends StatelessWidget {
   final viewModel = Get.find<ScheduleViewModel>();
-  final ScheduleModel? scheduleModel;
-  RepeatScheduleWidget({super.key, this.scheduleModel});
+  RepeatScheduleWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class RepeatScheduleWidget extends StatelessWidget {
                   onPressed: null,
                 ),
                 readOnly: true,
-                hint: viewModel.selectedRepeatType,
+                hint: viewModel.nowHandlingScheduleModel.repeatType,
               ),)
             ),
             Expanded(
@@ -45,9 +44,9 @@ class RepeatScheduleWidget extends StatelessWidget {
                 iconSize: 24,
                 isExpanded: true,
                 underline: Container(height: 0),
-                value: viewModel.selectedRepeatType,
+                value: viewModel.nowHandlingScheduleModel.repeatType,
                 onChanged: (String? newValue) {
-                  viewModel.updateSelectedRepeatType(newValue);
+                  viewModel.setRepeatType(newValue ?? "반복없음");
                 },
                 items: viewModel.repeatTypes.map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
@@ -67,7 +66,7 @@ class RepeatScheduleWidget extends StatelessWidget {
           child: Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (viewModel.selectedRepeatType == '지정') ...[
+              if (viewModel.nowHandlingScheduleModel.repeatType == '지정') ...[
                 SizedBox(height: 16),
                 Text('반복할 요일 선택', style: TextStyle(fontSize: 14, color: BLACK)),
                 Wrap(
@@ -80,10 +79,10 @@ class RepeatScheduleWidget extends StatelessWidget {
                       checkmarkColor: PRIMARY_COLOR,
                       side: BorderSide.none,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)),
-                      label: Text(['월', '화', '수', '목', '금', '토', '일'][index], style: TextStyle(color: viewModel.repeatDays[index] == true ? PRIMARY_COLOR : DARK_UNSELECTED)),
-                      selected: viewModel.repeatDays[index],
+                      label: Text(['월', '화', '수', '목', '금', '토', '일'][index], style: TextStyle(color: viewModel.nowHandlingScheduleModel.repeatDays[index] == true ? PRIMARY_COLOR : DARK_UNSELECTED)),
+                      selected: viewModel.nowHandlingScheduleModel.repeatDays[index],
                       onSelected: (bool selected) {
-                        viewModel.updateRepeatDay(index, selected);
+                        viewModel.setRepeatDay(index);
                       },
                     );
                   }),
@@ -95,7 +94,7 @@ class RepeatScheduleWidget extends StatelessWidget {
                     const SizedBox(width: 24),
                     DropdownButton<int>(
                       dropdownColor: WHITE,
-                      value: viewModel.repeatWeeks,
+                      value: viewModel.nowHandlingScheduleModel.repeatWeeks,
                       icon: Icon(
                         Icons.keyboard_arrow_down,
                         color: Colors.grey,
@@ -109,33 +108,37 @@ class RepeatScheduleWidget extends StatelessWidget {
                         );
                       }).toList(),
                       onChanged: (int? newValue) {
-                        viewModel.updateRepeatWeek(newValue);
+                        viewModel.setRepeatWeek(newValue);
                       },
                     ),
                   ],
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Text('종료일 : ${viewModel.repeatEndDate.toString().split(' ')[0]}'),
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 2.0),
-                      child: IconButton(onPressed: () async {
-                        final DateTime? picked = await showOmniDateTimePicker(
-                            context: context,
-                            theme: OmniDateTimePickerTheme.theme,
-                            initialDate: viewModel.repeatEndDate,
-                            firstDate: DateTime.now(),
-                            lastDate: DateTime.now().add(Duration(days: 365 * 3)),
-                            barrierDismissible: true,
-                            type: OmniDateTimePickerType.date
-                        );
-                        if (picked != null && picked != viewModel.repeatEndDate) {
-                          viewModel.updateRepeatEndDate(picked);
-                        }
-                      }, icon: const Icon(CupertinoIcons.calendar, size: 20)),
-                    )
-                  ],
+                GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () async {
+                    final DateTime? picked = await showOmniDateTimePicker(
+                        context: context,
+                        theme: OmniDateTimePickerTheme.theme,
+                        initialDate: viewModel.nowHandlingScheduleModel.repeatEndDate,
+                        firstDate: DateTime.now(),
+                        lastDate: DateTime.now().add(Duration(days: 365 * 3)),
+                        barrierDismissible: true,
+                        type: OmniDateTimePickerType.date
+                    );
+                    if (picked != null && picked != viewModel.nowHandlingScheduleModel.repeatEndDate) {
+                      viewModel.setRepeatEndDate(picked);
+                    }
+                  },
+                  child: Row(
+                    children: [
+                      Text('반복 종료일 : ${viewModel.nowHandlingScheduleModel.repeatEndDate.toString().split(' ')[0]}'),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+                        child: Icon(CupertinoIcons.calendar, size: 20)
+                      )
+                    ],
+                  ),
                 ),
               ],
             ],

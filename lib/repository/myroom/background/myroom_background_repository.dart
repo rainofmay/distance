@@ -16,22 +16,22 @@ class MyroomBackgroundRepository {
   }
 
   //테마 사진들 불러오기
-//   Future<List<ThemePicture>> fetchThemePictures(String category) async {
-//     final response = await _backgroundProvider.getThemePictures(category);
-//
-//     // 사용자 정보를 ThemePicture 객체로 변환
-//     // final themePictures = ThemePicture.fromJsonList(response);
-//
-//     return themePictures;
-//   }
-//
-//   //테마 영상들 불러오기
-//   Future<List<ThemeVideo>> fetchThemeVideos(String category) async {
-//     final response = await _backgroundProvider.getThemeVideos(category);
-//
-//     // 사용자 정보를 UserModel 객체로 변환
-//     final themeVideos = ThemeVideo.fromJsonList(response);
-//
-//     return themeVideos;
-//   }
+  Future<List<ThemePicture>> fetchThemePictures(String category) async {
+    final response = await _backgroundProvider.getThemePictures(category);
+
+    // 사용자 정보를 ThemePicture 객체로 변환
+    final themePictures = ThemePicture.fromJsonList(response);
+
+    return themePictures;
+  }
+
+  //테마 영상들 불러오기
+  Future<List<ThemeVideo>> fetchThemeVideos(String category) async {
+    final response = await _backgroundProvider.getThemeVideos(category);
+
+    // 사용자 정보를 UserModel 객체로 변환
+    final themeVideos = ThemeVideo.fromJsonList(response);
+
+    return themeVideos;
+  }
 }

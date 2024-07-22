@@ -4,6 +4,8 @@ import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:mobile/common/const/colors.dart';
 
+import 'event.dart';
+
 class Calendar extends StatefulWidget {
   final ScheduleViewModel viewModel;
 
@@ -91,16 +93,17 @@ class _CalendarState extends State<Calendar> {
               return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
-                  itemCount: _viewModel.getEvents(day).length,
+                  itemCount: events.length,
                   itemBuilder: (context, index) {
-                    Map<String, int> data = _viewModel.getEventsColor(day);
-                    _eventColor = sectionColors[data[events[index].toString()] ?? 1];
+                    Event event = events[index] as Event;
+                    int colorIndex = _viewModel.getEventsColor(day)[event.id] ?? 0;
+                    Color eventColor = sectionColors[colorIndex];
                     return Container(
                       margin: const EdgeInsets.only(top: 35),
                       child: Icon(
                         size: 8,
                         Icons.circle,
-                        color: _eventColor,
+                        color: eventColor,
                       ),
                     );
                   });

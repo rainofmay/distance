@@ -51,4 +51,12 @@ class ScheduleProvider {
       print('에러 $error');
     }
   }
+
+  Future deleteScheduleGroup(String groupId) async {
+    try {
+      await supabase.from('schedule').delete().eq('group_id', groupId);
+    } catch (error) {
+      print('Error deleting schedule group: $error');
+    }
+  }
 }

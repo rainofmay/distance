@@ -47,25 +47,14 @@ class ScheduleViewModel extends GetxController {
   TextEditingController get memoController => _memoController.value;
 
   late final Rx<ScheduleModel> _nowHandlingScheduleModel;
-
   ScheduleModel get nowHandlingScheduleModel => _nowHandlingScheduleModel.value;
+
+  final RxMap<DateTime, List<Event>> _events = <DateTime, List<Event>>{}.obs;
+  Map<DateTime, List<Event>> get events => _events;
 
   /* Repeat date */
   final RxList<String> _repeatTypes = ['반복없음', '지정'].obs;
-
   List<String> get repeatTypes => _repeatTypes;
-  late final RxString _selectedRepeatType;
-
-  String get selectedRepeatType => _selectedRepeatType.value;
-  late final RxList<bool> _repeatDays;
-
-  List<bool> get repeatDays => _repeatDays;
-  late final RxInt _repeatWeeks;
-
-  int get repeatWeeks => _repeatWeeks.value;
-  late final Rx<DateTime> _repeatEndDate;
-
-  DateTime get repeatEndDate => _repeatEndDate.value;
 
 
   /* '저장&수정' 버튼 활성화를 위한 유효성 검사 */
@@ -74,7 +63,7 @@ class ScheduleViewModel extends GetxController {
   void updateFormValidity() {
     bool isTitleValid = _titleController().text.isNotEmpty && _titleController().text.length <= 60;
     bool isMemoValid = _memoController().text.length <= 200;
-
+    bool isRepeatValid = true;
     bool isDateValid;
     if (_nowHandlingScheduleModel.value.isTimeSet) {
       // 시간이 설정된 경우: 날짜와 시간 모두 비교
@@ -90,8 +79,15 @@ class ScheduleViewModel extends GetxController {
       isDateValid = startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate);
     }
 
+    // 반복 일정인 경우 추가 검증
+    if (_nowHandlingScheduleModel.value.repeatType == '지정') {
+      isRepeatValid = _nowHandlingScheduleModel.value.startDate.year == _nowHandlingScheduleModel.value.endDate.year &&
+          _nowHandlingScheduleModel.value.startDate.month == _nowHandlingScheduleModel.value.endDate.month &&
+          _nowHandlingScheduleModel.value.startDate.day == _nowHandlingScheduleModel.value.endDate.day &&
+          _nowHandlingScheduleModel.value.repeatDays[_nowHandlingScheduleModel.value.startDate.weekday - 1];
+    }
 
-    _isFormValid.value = isTitleValid && isMemoValid && isDateValid;
+    _isFormValid.value = isTitleValid && isMemoValid && isDateValid && isRepeatValid;
   }
 
   @override
@@ -118,7 +114,6 @@ class ScheduleViewModel extends GetxController {
       // _isScheduleListLoaded.value = true;
     });
     initColorSet();
-    initRepeatData();
     super.onInit();
   }
 
@@ -147,19 +142,20 @@ class ScheduleViewModel extends GetxController {
       repeatType: _repeatTypes[0],
       repeatDays: List.filled(7, false),
       repeatWeeks: 1,
-      repeatEndDate: initialDate.add(Duration(days: 365)),
+      repeatEndDate: initialDate.add(Duration(days: 91)),
     );
   }
 
   void initializeForNewSchedule() {
-    _nowHandlingScheduleModel.value = createInitialScheduleModel();
+    final initialModel = createInitialScheduleModel();
+    _nowHandlingScheduleModel.value = initialModel;
     _titleController.value.text = '';
     _memoController.value.text = '';
     _selectedSectionColor.value = sectionColors[0];
-    _selectedRepeatType.value = _repeatTypes[0];
-    _repeatDays.value = List.filled(7, false);
-    _repeatWeeks.value = 1;
-    _repeatEndDate.value = DateTime.now().add(Duration(days: 365));
+    // _selectedRepeatType.value = _repeatTypes[0];
+    // _repeatDays.value = List.filled(7, false);
+    // _repeatWeeks.value = 1;
+    // _repeatEndDate.value = DateTime.now().add(Duration(days: 365));
     update();
   }
 
@@ -168,10 +164,10 @@ class ScheduleViewModel extends GetxController {
     _titleController.value.text = schedule.scheduleName;
     _memoController.value.text = schedule.memo;
     _selectedSectionColor.value = sectionColors[schedule.sectionColor];
-    _selectedRepeatType.value = schedule.repeatType;
-    _repeatDays.value = List.from(schedule.repeatDays);
-    _repeatWeeks.value = schedule.repeatWeeks;
-    _repeatEndDate.value = schedule.repeatEndDate;
+    // _selectedRepeatType.value = schedule.repeatType;
+    // _repeatDays.value = List.from(schedule.repeatDays);
+    // _repeatWeeks.value = schedule.repeatWeeks;
+    // _repeatEndDate.value = schedule.repeatEndDate;
     updateFormValidity();
   }
 
@@ -182,7 +178,6 @@ class ScheduleViewModel extends GetxController {
       DateTime.now().month,
       DateTime.now().day,
     )).obs;
-
     _calendarFormat = CalendarFormat.week.obs;
   }
 
@@ -196,102 +191,150 @@ class ScheduleViewModel extends GetxController {
     _selectedSectionColor = sectionColors[0].obs;
   }
 
-  initRepeatData() {
-    _selectedRepeatType = _repeatTypes[0].obs;
-    _repeatDays = List.filled(7, false).obs;
-    _repeatWeeks = 1.obs;
-    _repeatEndDate = DateTime.now().add(Duration(days: 365 * 3)).obs;
-  }
-
 /* Update */
-  void updateSchedule(ScheduleModel Function(ScheduleModel) update) {
+  void updateHandlingScheduleValue(ScheduleModel Function(ScheduleModel) update) {
     final updatedModel = update(_nowHandlingScheduleModel.value);
     _nowHandlingScheduleModel.value = updatedModel;
   }
 
-  void setId(String id) {
-    updateSchedule((s) => s.copyWith(id: id));
-  }
-  void setGroupId(String groupId) {
-    updateSchedule((s) => s.copyWith(groupId: groupId));
-  }
-
   void setScheduleName(String name) {
-    updateSchedule((s) => s.copyWith(scheduleName: name));
-    print(_nowHandlingScheduleModel.value.scheduleName);
+    updateHandlingScheduleValue((s) => s.copyWith(scheduleName: name));
   }
 
   void setScheduleMemo(String memo) {
-    updateSchedule((s) => s.copyWith(memo: memo));
+    updateHandlingScheduleValue((s) => s.copyWith(memo: memo));
   }
 
   void setStartDate(DateTime start) {
-    updateSchedule((s) => s.copyWith(startDate: start));
+    updateHandlingScheduleValue((s) {
+      if (s.repeatType == '지정') {
+        // 반복 일정일 경우
+        DateTime newEnd = DateTime(
+            start.year,
+            start.month,
+            start.day,
+            s.endDate.hour,
+            s.endDate.minute
+        );
+
+        // endDate가 startDate보다 이전이면 2시간 후로 설정
+        if (newEnd.isBefore(start)) {
+          newEnd = start.add(Duration(hours: 2));
+        }
+
+        return s.copyWith(
+          startDate: start,
+          endDate: newEnd,
+        );
+      } else {
+        // 반복 일정이 아닐 경우
+        DateTime newEnd = s.endDate;
+
+        // endDate가 새로운 startDate보다 이전이면 2시간 후로 설정
+        if (newEnd.isBefore(start)) {
+          newEnd = start.add(Duration(hours: 2));
+        }
+
+        return s.copyWith(startDate: start, endDate: newEnd);
+      }
+    });
+    updateFormValidity();
   }
 
   void setEndDate(DateTime end) {
-    updateSchedule((s) => s.copyWith(endDate: end));
+    updateHandlingScheduleValue((s) {
+      if (s.repeatType == '지정') {
+        // 반복 일정일 경우
+        DateTime newStart = DateTime(
+            end.year,
+            end.month,
+            end.day,
+            s.startDate.hour,
+            s.startDate.minute
+        );
+
+        // startDate가 endDate보다 이후이면 2시간 전으로 설정
+        if (newStart.isAfter(end)) {
+          newStart = end.subtract(Duration(hours: 2));
+        }
+
+        return s.copyWith(
+          startDate: newStart,
+          endDate: end,
+        );
+      } else {
+        // 반복 일정이 아닐 경우
+        DateTime newStart = s.startDate;
+
+        // startDate가 새로운 endDate보다 이후이면 2시간 전으로 설정
+        if (newStart.isAfter(end)) {
+          newStart = end.subtract(Duration(hours: 2));
+        }
+
+        return s.copyWith(startDate: newStart, endDate: end);
+      }
+    });
+    updateFormValidity();
   }
 
   void toggleTimeSet() {
-    updateSchedule((s) => s.copyWith(isTimeSet: !s.isTimeSet));
+    updateHandlingScheduleValue((s) => s.copyWith(isTimeSet: !s.isTimeSet));
     updateFormValidity();
   }
 
   void setRepeatType(String type) {
-    updateSchedule((s) => s.copyWith(repeatType: type));
+    updateHandlingScheduleValue((s) {
+      if (type == '지정') {
+        // 시작일과 종료일의 날짜만 같게 설정하고, 시간은 유지
+        DateTime startDate = s.startDate;
+        DateTime endDate = DateTime(
+          startDate.year,
+          startDate.month,
+          startDate.day,
+          s.endDate.hour,
+          s.endDate.minute,
+        );
+
+        // 현재 요일을 선택
+        List<bool> newRepeatDays = List.filled(7, false);
+        newRepeatDays[startDate.weekday - 1] = true;
+
+        return s.copyWith(
+          repeatType: type,
+          endDate: endDate,
+          repeatDays: newRepeatDays,
+        );
+      } else {
+        return s.copyWith(repeatType: type);
+      }
+    });
+    updateFormValidity();
   }
 
-  void toggleRepeatDay(int dayIndex) {
-    updateSchedule((s) {
+  void setRepeatDay(int dayIndex) {
+    updateHandlingScheduleValue((s) {
       final newRepeatDays = List<bool>.from(s.repeatDays);
       newRepeatDays[dayIndex] = !newRepeatDays[dayIndex];
       return s.copyWith(repeatDays: newRepeatDays);
     });
+    updateFormValidity();
   }
 
   void setRepeatWeek(int? newValue) {
     if (newValue != null && newValue != _nowHandlingScheduleModel.value.repeatWeeks) {
-      updateSchedule((s) => s.copyWith(repeatWeeks: newValue));
+      updateHandlingScheduleValue((s) => s.copyWith(repeatWeeks: newValue));
     }
   }
 
   void setRepeatEndDate(DateTime? newValue) {
     if (newValue != null && newValue != _nowHandlingScheduleModel.value.repeatEndDate) {
-      updateSchedule((s) => s.copyWith(repeatEndDate: newValue));
+      updateHandlingScheduleValue((s) => s.copyWith(repeatEndDate: newValue));
     }
   }
 
   void setSectionColorIndex(int index) {
     _selectedSectionColor.value = sectionColors[index];
-    updateSchedule((s) => s.copyWith(sectionColor: index));
-  }
-
-
-  void updateSelectedRepeatType(String? newValue) {
-    if (newValue != null && newValue != _selectedRepeatType.value) {
-      _selectedRepeatType.value = newValue;
-    }
-  }
-
-  void updateRepeatDay(int index, bool selected) {
-    if (_repeatDays[index] != selected) {
-      final newList = List<bool>.from(_repeatDays);
-      newList[index] = selected;
-      _repeatDays.value = newList;
-    }
-  }
-
-  void updateRepeatWeek(int? newValue) {
-    if (newValue != null && newValue != _repeatWeeks.value) {
-      _repeatWeeks.value = newValue;
-    }
-  }
-
-  void updateRepeatEndDate(DateTime? newValue) {
-    if (newValue != null && newValue != _repeatEndDate.value) {
-      _repeatEndDate.value = newValue;
-    }
+    updateHandlingScheduleValue((s) => s.copyWith(sectionColor: index));
   }
 
   void updateFocusedDate(DateTime focusedDate) {
@@ -341,41 +384,34 @@ class ScheduleViewModel extends GetxController {
 
 
   List initEvents(DateTime day) {
-    List<dynamic> newData = [];
-    for (int i = 0; i < _allSchedules.length; i++) {
-      newData.add([
-        _allSchedules[i].startDate.toUtc().add(Duration(hours: 9)),
-        _allSchedules[i].endDate.toUtc().add(Duration(hours: 9)),
-        _allSchedules[i].id,
-        _allSchedules[i].sectionColor,
-      ]);
-    }
-    return newData;
+    return _allSchedules.where((schedule) =>
+    schedule.startDate.isBefore(day.add(Duration(days: 1))) &&
+        schedule.endDate.isAfter(day.subtract(Duration(days: 1)))
+    ).map((schedule) => [
+      schedule.startDate,
+      schedule.endDate,
+      schedule.id,
+      schedule.sectionColor,
+    ]).toList();
   }
 
   List<Object?> getEvents(DateTime day) {
     List<dynamic> data = initEvents(day);
+    List<Event> events = [];
 
-    Map<DateTime, List<Event>> events = {};
-    for (int i = 0; i < data.length; i++) {
-      DateTime startDate = data[i][0];
-      DateTime endDate = data[i][1];
-      String id = data[i][2];
+    for (var item in data) {
+      DateTime startDate = item[0];
+      DateTime endDate = item[1];
+      String id = item[2];
 
-      while (
-          startDate.isBefore(endDate) || startDate.isAtSameMomentAs(endDate)) {
-        events.containsKey(startDate)
-            ? events[startDate]!.contains(Event(id))
-                ? null
-                : events[startDate]!.add(Event(id))
-            : events.addAll({
-                startDate: [Event(id)]
-              });
-        startDate = startDate.add(Duration(days: 1));
+      if (day.isAfter(startDate.subtract(Duration(days: 1))) &&
+          day.isBefore(endDate)) {
+        events.add(Event(id));
       }
     }
 
-    return events[day] ?? [];
+    return events;
+
   }
   Map<String, int> getEventsColor(day) {
     Map<String, int> idColorData = {};
@@ -384,14 +420,19 @@ class ScheduleViewModel extends GetxController {
     for (int i = 0; i < data.length; i++) {
       idColorData.addAll({data[i][2]: data[i][3]});
     }
-
+    print('idColorData $idColorData');
     return idColorData;
   }
 
   /* Create */
   createSchedule() async {
     try {
-      await createRepeatingSchedules(nowHandlingScheduleModel);
+      if (_nowHandlingScheduleModel.value.repeatType == '지정') {
+        await createRepeatingSchedules(_nowHandlingScheduleModel.value);
+        print("Creating Repeatingschedule: ${_nowHandlingScheduleModel.value.toJson()}");
+      } else {
+        await scheduleProvider.createScheduleData(_nowHandlingScheduleModel.value);
+      }
       await updateAllSchedules();
 
       // 일정 개수가 10000개 이상인 경우 가장 오래된 일정 삭제
@@ -402,7 +443,7 @@ class ScheduleViewModel extends GetxController {
         await updateAllSchedules();
       }
       // 관련 UI 업데이트
-      updateSelectedDate(nowHandlingScheduleModel.startDate);
+      updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
 
       update();
     } catch (e) {
@@ -411,8 +452,14 @@ class ScheduleViewModel extends GetxController {
     }
   }
 
-  createRepeatingSchedules(ScheduleModel baseSchedule) async {
+  Future<void> createRepeatingSchedules(ScheduleModel baseSchedule) async {
+    // 최초 일정 생성
     await scheduleProvider.createScheduleData(baseSchedule);
+
+    // 반복 요일이 선택되지 않았다면 여기서 종료
+    if (!baseSchedule.repeatDays.contains(true) || baseSchedule.repeatType != '지정') {
+      return;
+    }
 
     DateTime currentDate = baseSchedule.endDate.add(Duration(days: 1));
     List<int> selectedDays = [];
@@ -422,7 +469,10 @@ class ScheduleViewModel extends GetxController {
       }
     }
 
-    while (currentDate.isBefore(baseSchedule.repeatEndDate)) {
+    Set<DateTime> scheduledDates = <DateTime>{for (var d = baseSchedule.startDate; d.isBefore(baseSchedule.endDate.add(Duration(days: 1))); d = d.add(Duration(days: 1))) d};
+    DateTime endDate = baseSchedule.repeatEndDate.add(Duration(days: 1));
+
+    while (currentDate.isBefore(endDate)) {
       for (int dayOffset in selectedDays) {
         int targetWeekday = (dayOffset + 1) % 7;
         if (targetWeekday == 0) targetWeekday = 7;
@@ -431,9 +481,10 @@ class ScheduleViewModel extends GetxController {
         DateTime scheduleDate = currentDate.add(Duration(days: daysUntilTarget));
 
         if (scheduleDate.isAfter(baseSchedule.endDate) &&
-            scheduleDate.isBefore(baseSchedule.repeatEndDate)) {
-          // 2 & 3. 하루짜리 반복 일정 생성
-          DateTime newDate = DateTime(
+            scheduleDate.isBefore(endDate) &&
+            !scheduledDates.contains(DateTime(scheduleDate.year, scheduleDate.month, scheduleDate.day))) {
+
+          DateTime newStartDate = DateTime(
             scheduleDate.year,
             scheduleDate.month,
             scheduleDate.day,
@@ -441,17 +492,57 @@ class ScheduleViewModel extends GetxController {
             baseSchedule.startDate.minute,
           );
 
+          DateTime newEndDate = DateTime(
+            scheduleDate.year,
+            scheduleDate.month,
+            scheduleDate.day,
+            baseSchedule.endDate.hour,
+            baseSchedule.endDate.minute,
+          );
+
           ScheduleModel repeatedSchedule = baseSchedule.copyWith(
             id: Uuid().v4(),
-            startDate: newDate,
-            endDate: newDate,  // startDate와 endDate를 같게 설정
+            startDate: newStartDate,
+            endDate: newEndDate,
           );
 
           await scheduleProvider.createScheduleData(repeatedSchedule);
+          scheduledDates.add(scheduleDate);
         }
       }
 
       currentDate = currentDate.add(Duration(days: 7 * baseSchedule.repeatWeeks));
+    }
+  }
+
+  /* Edit */
+  Future<void> editSchedule() async {
+    try {
+      await scheduleProvider.editScheduleData(_nowHandlingScheduleModel.value);
+      await updateAllSchedules();
+      updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
+      update();
+    } catch (e) {
+      print('Error edit schedule: $e');
+      // 에러 처리 로직 추가
+    }
+  }
+
+  /* Delete */
+  Future<void> deleteSchedule(ScheduleModel schedule, bool deleteAll) async {
+    try {
+      if (deleteAll) {
+        // 그룹 ID를 사용하여 모든 관련 일정 삭제
+        await scheduleProvider.deleteScheduleGroup(schedule.groupId);
+      } else {
+        // 현재 일정만 삭제
+        await scheduleProvider.deleteScheduleData(schedule.id);
+      }
+      await updateAllSchedules();
+      updateSelectedDate(_calendarInfo.value.selectedDate);
+      update();
+    } catch (e) {
+      print('Error deleting schedule: $e');
     }
   }
 }

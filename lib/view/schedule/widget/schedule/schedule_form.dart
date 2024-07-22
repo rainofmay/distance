@@ -178,6 +178,31 @@ class ScheduleForm extends StatelessWidget {
                     : const SizedBox(),
               ],
             ),
+
+            Obx(() {
+              if (!viewModel.isFormValid) {
+                String errorMessage = '';
+                if (viewModel.nowHandlingScheduleModel.repeatType == '지정') {
+                  if (!DateUtils.isSameDay(viewModel.nowHandlingScheduleModel.startDate, viewModel.nowHandlingScheduleModel.endDate)) {
+                    errorMessage = '반복기능을 쓰실 경우, 시작일과 종료일이 같아야 합니다.';
+                  } else if (!viewModel.nowHandlingScheduleModel.repeatDays[viewModel.nowHandlingScheduleModel.startDate.weekday - 1]) {
+                    errorMessage = '시작일이 반복할 요일과 일치해야 합니다.';
+                  }
+                }
+                return errorMessage.isNotEmpty
+                    ? Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    errorMessage,
+                    style: TextStyle(color: Colors.red, fontSize: 14),
+                  ),
+                )
+                    : SizedBox.shrink();
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
+
             Padding(
               padding: const EdgeInsets.only(right: 13.0, bottom: 20.0),
               child: Row(

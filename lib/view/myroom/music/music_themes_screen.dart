@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/myroom/myroom_music_provider.dart';
-import 'package:mobile/view/myroom/music/music_detail_screen.dart';
 import 'package:mobile/view/myroom/music/widget/play_list_item.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
