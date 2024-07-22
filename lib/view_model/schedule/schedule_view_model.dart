@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/calendar_info_model.dart';
@@ -453,6 +454,7 @@ class ScheduleViewModel extends GetxController {
   }
 
   Future<void> createRepeatingSchedules(ScheduleModel baseSchedule) async {
+    await scheduleProvider.deleteSchedulesAfterDate(baseSchedule.groupId, baseSchedule.startDate);
     // 최초 일정 생성
     await scheduleProvider.createScheduleData(baseSchedule);
 
@@ -518,14 +520,113 @@ class ScheduleViewModel extends GetxController {
   /* Edit */
   Future<void> editSchedule() async {
     try {
-      await scheduleProvider.editScheduleData(_nowHandlingScheduleModel.value);
+      ScheduleModel oldSchedule = await scheduleProvider.getScheduleById(_nowHandlingScheduleModel.value.id);
+
+      if (oldSchedule.repeatType == '지정' && _nowHandlingScheduleModel.value.repeatType == '반복없음') {
+        await handleRepeatToNonRepeat(oldSchedule);
+      } else if (oldSchedule.repeatType == '지정' && _nowHandlingScheduleModel.value.repeatType == '지정') {
+        await handleRepeatToRepeat(oldSchedule);
+      } else if (oldSchedule.repeatType == '반복없음' && _nowHandlingScheduleModel.value.repeatType == '지정') {
+        await createRepeatingSchedules(_nowHandlingScheduleModel.value);
+      } else {
+        await scheduleProvider.editScheduleData(_nowHandlingScheduleModel.value);
+      }
+
       await updateAllSchedules();
       updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
       update();
     } catch (e) {
-      print('Error edit schedule: $e');
-      // 에러 처리 로직 추가
+      print('Error editing schedule: $e');
     }
+  }
+
+  Future<void> handleRepeatToNonRepeat(ScheduleModel oldSchedule) async {
+    // 날짜가 변경되었는지 확인
+    bool isDateChanged = !DateUtils.isSameDay(oldSchedule.startDate, _nowHandlingScheduleModel.value.startDate) ||
+        !DateUtils.isSameDay(oldSchedule.endDate, _nowHandlingScheduleModel.value.endDate);
+
+    if (isDateChanged) {
+      // 날짜가 변경된 경우: 새로운 groupId 부여 및 이전 그룹의 모든 일정 삭제
+      String newGroupId = Uuid().v4();
+      _nowHandlingScheduleModel.value = _nowHandlingScheduleModel.value.copyWith(
+        groupId: newGroupId,
+        repeatType: '반복없음',
+        repeatDays: List.filled(7, false),
+        repeatWeeks: 1,
+        repeatEndDate: _nowHandlingScheduleModel.value.startDate,
+      );
+
+      // 이전 그룹의 모든 일정 삭제
+      await scheduleProvider.deleteScheduleGroup(oldSchedule.groupId);
+
+      // 새로운 일정 저장
+      await scheduleProvider.createScheduleData(_nowHandlingScheduleModel.value);
+    } else {
+      // 날짜가 변경되지 않은 경우: 가장 빠른 날짜의 일정만 남기고 나머지 삭제
+      List<ScheduleModel> groupSchedules = await scheduleProvider.getSchedulesByGroupId(oldSchedule.groupId);
+      ScheduleModel earliestSchedule = groupSchedules.reduce((a, b) => a.startDate.isBefore(b.startDate) ? a : b);
+
+      if (earliestSchedule.id != _nowHandlingScheduleModel.value.id) {
+        // 현재 수정 중인 일정이 가장 빠른 일정이 아니라면, 가장 빠른 일정을 수정
+        await scheduleProvider.deleteScheduleData(_nowHandlingScheduleModel.value.id);
+        _nowHandlingScheduleModel.value = earliestSchedule.copyWith(
+          repeatType: '반복없음',
+          repeatDays: List.filled(7, false),
+          repeatWeeks: 1,
+          repeatEndDate: earliestSchedule.startDate,
+          scheduleName: _nowHandlingScheduleModel.value.scheduleName,
+          memo: _nowHandlingScheduleModel.value.memo,
+          sectionColor: _nowHandlingScheduleModel.value.sectionColor,
+        );
+      } else {
+        // 현재 일정이 가장 빠른 일정이라면, 현재 일정만 수정
+        _nowHandlingScheduleModel.value = _nowHandlingScheduleModel.value.copyWith(
+          repeatType: '반복없음',
+          repeatDays: List.filled(7, false),
+          repeatWeeks: 1,
+          repeatEndDate: _nowHandlingScheduleModel.value.startDate,
+        );
+      }
+      // 가장 빠른 날짜의 일정을 제외한 나머지 일정들을 삭제
+      await scheduleProvider.deleteSchedulesExceptOne(oldSchedule.groupId, earliestSchedule.id);
+    }
+    // 수정된 일정을 저장
+    await scheduleProvider.editScheduleData(_nowHandlingScheduleModel.value);
+  }
+
+  Future<void> handleRepeatToRepeat(ScheduleModel oldSchedule) async {
+    // 기존 그룹의 모든 일정 가져오기
+    List<ScheduleModel> oldSchedules = await scheduleProvider.getSchedulesByGroupId(oldSchedule.groupId);
+
+    // 반복 요일, 주기, 또는 종료일이 변경된 경우
+    if (!_areRepeatSettingsEqual(oldSchedule, _nowHandlingScheduleModel.value)) {
+      // 기존 그룹의 모든 일정 삭제
+      await scheduleProvider.deleteScheduleGroup(oldSchedule.groupId);
+      // 새로운 반복 일정 생성
+      await createRepeatingSchedules(_nowHandlingScheduleModel.value);
+    } else {
+      // 반복 설정은 변경되지 않고 일정 내용만 변경된 경우
+      // 현재 일정 및 이후의 모든 일정 업데이트
+      for (var schedule in oldSchedules) {
+        if (schedule.startDate.isAfter(_nowHandlingScheduleModel.value.startDate) ||
+            schedule.startDate.isAtSameMomentAs(_nowHandlingScheduleModel.value.startDate)) {
+          var updatedSchedule = schedule.copyWith(
+            scheduleName: _nowHandlingScheduleModel.value.scheduleName,
+            memo: _nowHandlingScheduleModel.value.memo,
+            sectionColor: _nowHandlingScheduleModel.value.sectionColor,
+            // 다른 필요한 필드들 업데이트
+          );
+          await scheduleProvider.editScheduleData(updatedSchedule);
+        }
+      }
+    }
+  }
+
+  bool _areRepeatSettingsEqual(ScheduleModel a, ScheduleModel b) {
+    return a.repeatType == b.repeatType &&
+        a.repeatDays.toString() == b.repeatDays.toString() &&
+        a.repeatWeeks == b.repeatWeeks &&
+        a.repeatEndDate == b.repeatEndDate;
   }
 
   /* Delete */

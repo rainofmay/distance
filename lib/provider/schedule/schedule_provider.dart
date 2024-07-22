@@ -23,6 +23,24 @@ class ScheduleProvider {
     return response;
   }
 
+  Future<ScheduleModel> getScheduleById(String id) async {
+    final response = await supabase
+        .from('schedule')
+        .select()
+        .eq('id', id)
+        .single();
+    return ScheduleModel.fromJson(json: response);
+  }
+
+  Future<List<ScheduleModel>> getSchedulesByGroupId(String groupId) async {
+    final response = await supabase
+        .from('schedule')
+        .select()
+        .eq('group_id', groupId)
+        .order('start_date', ascending: true);
+    return response.map<ScheduleModel>((json) => ScheduleModel.fromJson(json: json)).toList();
+  }
+
   /* Create */
   Future createScheduleData(ScheduleModel scheduleModel) async {
     try {
@@ -58,5 +76,21 @@ class ScheduleProvider {
     } catch (error) {
       print('Error deleting schedule group: $error');
     }
+  }
+
+  Future<void> deleteSchedulesAfterDate(String groupId, DateTime date) async {
+    await supabase
+        .from('schedule')
+        .delete()
+        .eq('group_id', groupId)
+        .gte('start_date', date.toIso8601String());
+  }
+
+  Future<void> deleteSchedulesExceptOne(String groupId, String exceptId) async {
+    await supabase
+        .from('schedule')
+        .delete()
+        .eq('group_id', groupId)
+        .neq('id', exceptId);
   }
 }
