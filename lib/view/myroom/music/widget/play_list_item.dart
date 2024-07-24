@@ -8,9 +8,9 @@ class PlayListItem extends StatelessWidget {
   final String title;
   final String instrument;
   final Color textColor;
-  final int numberOfsongs;
+  final int numberOfSongs;
   final void Function()? onTap;
-  const PlayListItem({super.key, required this.thumbnailUrl, required this.title, required this.instrument, required this.numberOfsongs, this.onTap, required this.textColor});
+  const PlayListItem({super.key, required this.thumbnailUrl, required this.title, required this.instrument, required this.numberOfSongs, this.onTap, required this.textColor});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class PlayListItem extends StatelessWidget {
             children: [
               Text(title, style: TextStyle(fontSize: 15, color: textColor)),
               const SizedBox(height: 5),
-              Text('$instrument  |  $numberOfsongs곡',
+              Text('$instrument  |  $numberOfSongs곡',
                   style: TextStyle(fontSize: 11, color: textColor)),
             ],
           )

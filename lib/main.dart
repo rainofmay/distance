@@ -5,13 +5,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/mate/online_status_manager.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'repository/myroom/music/myroom_music_repository.dart';
 import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -47,7 +50,10 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
   final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
+  final MusicViewModel musicViewModel = Get.put(MusicViewModel(repository: MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
   final OnlineStatusManager onlineStatusManager = OnlineStatusManager();
+
+
 
   @override
   void initState() {
@@ -55,7 +61,7 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver{
     // viewModel.initAllSchedules();
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
-
+    musicViewModel.initLoadMusicSource();
   }
 
   @override

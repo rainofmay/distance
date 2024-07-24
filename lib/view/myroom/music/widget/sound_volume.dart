@@ -41,7 +41,7 @@ class _SoundVolumeState extends State<SoundVolume> {
           children: [
         SizedBox(
           width: 130,
-          child: Text(viewModel.soundPlayersList[widget.playerIndex].kindOfMusic,
+          child: Text(viewModel.soundPlayersList[widget.playerIndex].musicName,
               style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),

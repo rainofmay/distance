@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/myroom/music/music_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/circled_music_player.dart';
@@ -25,7 +26,7 @@ class MusicTabScreen extends StatelessWidget {
                   fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
             ),
           ),
-          Column(
+          Obx(() => Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Sector(
@@ -34,12 +35,12 @@ class MusicTabScreen extends StatelessWidget {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (c) => MusicThemesScreen()));
                   },
-                  title: '너에게 위로를 주는 음악',
+                  title: viewModel.currentPlayList.bigTitle,
                   iconData: CupertinoIcons.music_note_2),
               const SizedBox(height: 20),
               Center(child: CircledMusicPlayer(viewModel: viewModel)),
             ],
-          ),
+          )),
           const SizedBox(height: 20),
         ],
       ),

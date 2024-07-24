@@ -2,15 +2,15 @@ import 'dart:async';
 import 'package:get/get.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
+import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
 
 class SoundPlayer {
   final int id;
-  final String kindOfMusic;
+  final String musicName;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying;
 
-  SoundPlayer(this.id, this.kindOfMusic, this.audioPlayer) : isPlaying = false.obs;
+  SoundPlayer(this.id, this.musicName, this.audioPlayer) : isPlaying = false.obs;
 }
 
 
@@ -50,7 +50,7 @@ class SoundViewModel extends GetxController {
 
   void _updateSoundPlayers() {
     _soundPlayersList.value = _soundInfoList
-        .map((info) => SoundPlayer(info.id, info.kindOfMusic, AudioPlayer()))
+        .map((info) => SoundPlayer(info.id, info.musicName, AudioPlayer()))
         .toList();
   }
 
@@ -62,7 +62,7 @@ class SoundViewModel extends GetxController {
 
     // 리스트 동기화 확인 및 조정
     while (_soundPlayersList.length < _soundInfoList.length) {
-      SoundPlayer newPlayer = SoundPlayer(musicInfo.id, musicInfo.kindOfMusic, AudioPlayer());
+      SoundPlayer newPlayer = SoundPlayer(musicInfo.id, musicInfo.musicName, AudioPlayer());
       _soundPlayersList.add(newPlayer);
       setVolume(_soundPlayersList.length-1, 0.5);
     }

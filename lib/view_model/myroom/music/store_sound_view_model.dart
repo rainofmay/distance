@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:get/get.dart';
-import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
+import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
 
 class StoreSoundViewModel extends GetxController {
   final MyRoomSoundProvider _provider;

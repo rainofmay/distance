@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
+import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -78,7 +78,7 @@ class SoundThemesScreen extends StatelessWidget {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-                                            child: Text('# ${musicInfo.kindOfMusic}', style: TextStyle(color: WHITE)),
+                                            child: Text('# ${musicInfo.musicName}', style: TextStyle(color: WHITE)),
                                           ),
                                         ],
                                       ),
@@ -123,7 +123,7 @@ class SoundThemesScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text('# ${musicInfo.kindOfMusic}', style: TextStyle(color: WHITE)),
+                              Text('# ${musicInfo.musicName}', style: TextStyle(color: WHITE)),
                               Obx(
                                     () => Row(
                                   children: [
