@@ -24,7 +24,7 @@ Future<void> main() async {
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
   //플러터 프레임워크가 준비될 때까지 대기
-  WidgetsFlutterBinding.ensureInitialized();
+  // WidgetsFlutterBinding.ensureInitialized();
   //await OnlineStatusManager.initializeBackgroundFetch();
   await initializeDateFormatting();
   await dotenv.load();

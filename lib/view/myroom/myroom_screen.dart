@@ -115,7 +115,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(CupertinoIcons.headphones,
+            icon: const Icon(Icons.headphones_rounded,
                 size: 20, color: WHITE),
           ),
           ActionButton(
