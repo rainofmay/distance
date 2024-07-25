@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view/login/password_reset_screen.dart';
 import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
@@ -50,31 +51,102 @@ class _AuthScreenState extends State<AuthScreen> {
   void initState() {
     super.initState();
   }
-
   Future<void> onGoogleLoginPress(BuildContext context) async {
     try {
       GoogleSignInAccount? account = await googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth =
-          await account?.authentication;
+      final GoogleSignInAuthentication? googleAuth = await account?.authentication;
 
-      if (googleAuth == null ||
-          googleAuth.idToken == null ||
-          googleAuth.accessToken == null) {
+      if (googleAuth == null || googleAuth.idToken == null || googleAuth.accessToken == null) {
         throw Exception('로그인 실패');
       }
 
-      // 슈파베이스로 소셜 로그인 진행
-      await Supabase.instance.client.auth.signInWithIdToken(
-          provider: OAuthProvider.google,
-          idToken: googleAuth.idToken!,
-          accessToken: googleAuth.accessToken!);
+      // 사용자 정보 가져오기
+      String? email = account?.email;
+      String? name = account?.displayName;
+      String? profileUrl = account?.photoUrl;
 
-      print(account);
+      if (email == null) {
+        Get.snackbar('오류', '이메일 정보를 가져올 수 없습니다.');
+        return;
+      }
+
+      bool userExists = await checkUserExists(email);
+
+      if (userExists) {
+        await loginUserWithGoogle(email, googleAuth.idToken!, googleAuth.accessToken!);
+        Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+      } else {
+        await registerUserWithGoogle(email, name, profileUrl, googleAuth.idToken!, googleAuth.accessToken!);
+        Get.snackbar('회원가입 성공', 'Google 계정으로 회원가입되었습니다.');
+      }
+
+      await widget.viewModel.updateMyProfile();
+      // Get.offAll(() => HomeScreen());
+
     } catch (error) {
       print(error);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('로그인 실패'),
       ));
+    }
+  }
+
+  Future<void> loginUserWithGoogle(String email, String idToken, String accessToken) async {
+    try {
+      final response = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      if (response.user == null) {
+        throw Exception('로그인 실패');
+      }
+
+      // JWT 토큰에 커스텀 클레임 추가
+      await supabase.auth.updateUser(
+        UserAttributes(
+          data: {'is_google_user': true},
+        ),
+      );
+
+    } catch (error) {
+      print('Google 로그인 중 오류 발생: $error');
+      rethrow;
+    }
+  }
+
+  Future<void> registerUserWithGoogle(String email, String? name, String? profileUrl, String idToken, String accessToken) async {
+    try {
+      final response = await Supabase.instance.client.auth.signInWithIdToken(
+        provider: OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
+
+      if (response.user == null) {
+        throw Exception('회원가입 실패');
+      }
+
+      // JWT 토큰에 커스텀 클레임 추가
+      await supabase.auth.updateUser(
+        UserAttributes(
+          data: {'is_google_user': true},
+        ),
+      );
+
+      // 사용자 정보 저장
+      await supabase.from('user').insert({
+        'id': response.user!.id,
+        'email': email,
+        'name': name,
+        'profile_url': profileUrl,
+        'created_at': DateTime.now().toIso8601String(),
+      });
+
+    } catch (error) {
+      print('Google 회원가입 중 오류 발생: $error');
+      rethrow;
     }
   }
 
@@ -96,10 +168,10 @@ class _AuthScreenState extends State<AuthScreen> {
       bool userExists = await checkUserExists(email);
 
       if (userExists) {
-        await loginUser(email, token.accessToken);
+        await loginKaKaoUser(email, token.accessToken);
         Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
       } else {
-        await registerUser(email, nickname, profileUrl ,token.accessToken);
+        await registerKaKaoUser(email, nickname, profileUrl ,token.accessToken);
         Get.snackbar('회원가입 성공', '카카오 계정으로 회원가입되었습니다.');
       }
 
@@ -126,7 +198,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  Future<void> loginUser(String email, String accessToken) async {
+  Future<void> loginKaKaoUser(String email, String accessToken) async {
     try {
       // 고정된 비밀번호 생성 (이메일 기반)
       String fixedPassword = generateFixedPassword(email);
@@ -154,7 +226,7 @@ class _AuthScreenState extends State<AuthScreen> {
     }
   }
 
-  Future<void> registerUser(String email, String? nickname, String? profileUrl, String accessToken) async {
+  Future<void> registerKaKaoUser(String email, String? nickname, String? profileUrl, String accessToken) async {
     try {
       // 고정된 비밀번호 생성
       String fixedPassword = generateFixedPassword(email);
@@ -192,7 +264,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
 // 이메일 기반으로 고정된 비밀번호 생성
   String generateFixedPassword(String email) {
-    var bytes = utf8.encode(email + "some_secret_salt");
+    var bytes = utf8.encode(email + "some_secret_salt_KAKAO_DISTANCE_OATUH_");
     var digest = sha256.convert(bytes);
     return digest.toString();
   }
@@ -358,7 +430,9 @@ class _AuthScreenState extends State<AuthScreen> {
                                             color: BLACK, fontSize: 12)),
                                   ),
                                   TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Get.to(()=> PasswordResetScreen());
+                                    },
                                     child: const Text('비밀번호 찾기',
                                         style: TextStyle(
                                             color: BLACK, fontSize: 12)),
