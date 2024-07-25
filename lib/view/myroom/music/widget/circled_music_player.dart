@@ -61,16 +61,13 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   Widget build(BuildContext context) {
     double mediaSize = MediaQuery.of(context).size.width;
     return Obx(() {
-      // final currentPositionSeconds = (widget.viewModel.currentMusicPosition.inMilliseconds / 1000).clamp(0, double.infinity);
-      // final remainingDurationSeconds = ((widget.viewModel.currentMusicDuration.inMilliseconds - widget.viewModel.currentMusicPosition.inMilliseconds) / 1000).clamp(0, double.infinity);
-
       return Column(
       children: [
             Stack(alignment: Alignment.center, children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(mediaSize * 0.4),
                 child: Image.asset(
-                  'assets/images/nature4.jpg',
+                  widget.viewModel.currentPlayList.thumbnailUrl,
                   width: 220,
                   height: 220,
                   fit: BoxFit.cover,
@@ -141,7 +138,7 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
             const SizedBox(height: 24),
             Text(
                 widget.viewModel.musicInfoList[widget.viewModel.currentIndex]
-                    .kindOfMusic,
+                    .musicName,
                 style: TextStyle(color: WHITE, fontSize: 12, overflow: TextOverflow.ellipsis)),
             const SizedBox(height: 30),
             Row(
@@ -158,8 +155,8 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                     },
                     icon: Icon(Icons.skip_previous, color: WHITE, size: 28)),
                 IconButton(
-                    onPressed: () {
-                      widget.viewModel.musicPlayPause();
+                    onPressed: () async{
+                      await widget.viewModel.musicPlayPause();
                       subscribeDuration();
                     },
                     icon: Icon(

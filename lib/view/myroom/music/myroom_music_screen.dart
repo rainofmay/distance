@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
+import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
+import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
 import 'package:mobile/view/myroom/music/music_tab_screen.dart';
 import 'package:mobile/view/myroom/music/sound_tab_screen.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
@@ -22,9 +23,8 @@ class MyroomMusicScreen extends StatefulWidget {
 }
 
 class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
-  final MusicViewModel musicViewModel = Get.put(MusicViewModel(provider: Get.put(MyRoomMusicProvider())));
+  final MusicViewModel musicViewModel = Get.put(MusicViewModel(repository: Get.put(MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider()))));
   late PageController pageController;
-
   
   @override
   void initState() {
@@ -100,12 +100,8 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                 right: 0,
                 child: OkCancelButtons(
                   okText: '확인',
-                  cancelText: '취소',
                   onPressed: () {
-                    Get.back();
-                  },
-                  onCancelPressed: () {
-                    Get.back();
+                    Navigator.of(context).pop();
                   },
                 ),
               ),

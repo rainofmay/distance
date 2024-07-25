@@ -1,17 +1,16 @@
-
 import 'dart:math';
 
 import 'package:get/get.dart';
+import 'package:mobile/model/current_play_list.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:mobile/provider/myroom/myroom_music_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
 
-class MusicViewModel extends GetxController
-    with GetTickerProviderStateMixin {
-  final MyRoomMusicProvider _provider;
+class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
+  final MyRoomMusicRepository _repository;
 
-  MusicViewModel({required MyRoomMusicProvider provider})
-      : _provider = provider;
+  MusicViewModel({required MyRoomMusicRepository repository})
+      : _repository = repository;
 
   /* Music Screen에서 Music <-> Sound 이동 탭 */
   late final RxInt _tabIndex = 0.obs;
@@ -21,16 +20,16 @@ class MusicViewModel extends GetxController
     _tabIndex.value = index;
   }
 
+  /* PlayList */
+  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList.empty().obs;
+  CurrentPlayList get currentPlayList => _currentPlayList.value;
+
   /* Music */
   late final Rx<AudioPlayer> _musicPlayer = AudioPlayer().obs;
   AudioPlayer get musicPlayer => _musicPlayer.value;
 
   late final RxList<MusicInfo> _musicInfoList = <MusicInfo>[].obs;
   List<MusicInfo> get musicInfoList => _musicInfoList;
-
-  // url만 담긴 리스트
-  late final RxList<String> _musicPlaylist = <String>[].obs;
-  List<String> get musicPlaylist => _musicPlaylist;
 
   late final RxInt _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
@@ -52,20 +51,57 @@ class MusicViewModel extends GetxController
   late final RxBool _isShuffled = false.obs;
   bool get isShuffled => _isShuffled.value;
 
-
-
   @override
   void onInit() {
     setInitMusicState();
+    print('_musicInfoList $_musicInfoList');
     super.onInit();
   }
 
+  /* Init */
+  initLoadMusicSource() async {
+    await loadCurrentPlayList();
+    await getThemeMusic(_currentPlayList.value.theme);
+  }
+
+  Future<void> loadCurrentPlayList() async {
+    final theme = await _repository.loadCurrentPlayListIndex();
+    if (theme != null) {
+      _currentPlayList.value = _repository.playListTheme.firstWhere((playList) => playList.theme == theme);
+    } else {
+      _currentPlayList.value = _repository.playListTheme[0];
+    }
+  }
+
+  Future<void> getThemeMusic(String theme) async {
+    try {
+      _musicInfoList.value = await _repository.fetchThemeMusic(theme);
+      if (_musicInfoList.isNotEmpty) {
+        await setCurrentMusic(isShuffled);
+      }
+    } catch (e) {
+      print('Failed to fetch theme music: $e');
+    }
+  }
+
+  setCurrentMusic(bool isShuffled) async {
+    if (_musicInfoList.isEmpty) return;
+
+    if (isShuffled) {
+      int newIndex;
+      //현재 음원이랑 다른 게 나올 때까지 반복 또 반복
+      do {
+        newIndex = Random().nextInt(_musicInfoList.length);
+      } while (newIndex != currentIndex);
+
+      _currentIndex.value = newIndex;
+    }
+  }
+
   setInitMusicState() {
-    getAllMusicSource();
     _musicPlayer().onDurationChanged.listen((Duration duration) {
       _currentMusicDuration.value = duration;
     });
-
 
     _musicPlayer().onPositionChanged.listen((Duration position) {
       _currentMusicPosition.value = position;
@@ -88,29 +124,12 @@ class MusicViewModel extends GetxController
 
   @override
   void dispose() {
+
     super.dispose();
   }
 
-  getAllMusicSource() async {
-    _musicInfoList.value = _provider.getAllMusic();
-    _musicPlaylist.value =
-        _musicInfoList.map((musicInfoModel) => musicInfoModel.audioURL).toList();
-    // print('_musicPlaylist.value $_musicPlaylist');
-    await setCurrentMusic(isShuffled);
-  }
 
-  setCurrentMusic(bool isShuffled) async {
-    if (isShuffled) {
-      int newIndex;
-      //현재 음원이랑 다른 게 나올 때까지 반복 또 반복
-      do {
-        newIndex = Random().nextInt(musicPlaylist.length);
-      } while (newIndex != currentIndex);
-
-      _currentIndex.value = newIndex;
-    }
-  }
-
+  /* update */
   toggleShuffle() async {
     _isShuffled.value = !_isShuffled.value;
 
@@ -118,40 +137,58 @@ class MusicViewModel extends GetxController
     if(isShuffled) {
       _isRepeated.value = false;
     }
+    // setCurrentMusic(isShuffled);
+    update();
   }
-  musicPlayPause() async{
+
+  musicPlayPause() async {
     if (_musicPlayer().state == PlayerState.playing) {
-      _musicPlayer().pause();
+      await _musicPlayer().pause();
+      _isMusicPlaying.value = false;
     } else {
-      await _musicPlayer.value.play(AssetSource(musicPlaylist[_currentIndex.value]));
+      if (_musicInfoList.isEmpty) return;
+
+      if (_musicPlayer().state == PlayerState.paused) {
+        // 일시정지 상태에서는 현재 위치에서 다시 재생
+        await _musicPlayer().resume();
+      } else {
+        await playCurrentTrack();
+      }
+
+      _isMusicPlaying.value = true;
+    }
+    update();
+  }
+
+  Future<void> playCurrentTrack() async {
+    if (_musicInfoList.isEmpty) return;
+
+    try {
+      final tempMusicFile = await _repository.downloadMusicFromUrl(_musicInfoList[_currentIndex.value].audioURL);
+      await _musicPlayer.value.play(DeviceFileSource(tempMusicFile));
+    } catch (e) {
+      print('Failed to play music: $e');
     }
   }
 
-  void nextTrack() async{
-    if (_musicPlaylist.isNotEmpty) {
+  Future<void> nextTrack() async {
+    if (_musicInfoList.isNotEmpty) {
       if(isRepeated) {
         await _musicPlayer().stop();
-        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
-      }else{
-        _currentIndex.value = (_currentIndex.value + 1) % _musicPlaylist.length;
-        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
-      }
-      //셔플일 때 반복일 때 어차피 둘 중 하나밖에 안되기때문에 상관 없음
-      if(isShuffled) {
-        setCurrentMusic(isShuffled);
-        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
-      }else{
-        setCurrentMusic(isShuffled);
-        await _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
+        await playCurrentTrack();
+      } else{
+        _currentIndex.value = (_currentIndex.value + 1) % _musicInfoList.length;
+        await setCurrentMusic(isShuffled);
+        await playCurrentTrack();
       }
     }
   }
 
-  void previousTrack() {
-    if (_musicPlaylist.isNotEmpty) {
-        _currentIndex.value = (_currentIndex.value - 1 + _musicPlaylist.length) % _musicPlaylist.length;
-        _musicPlayer().play(AssetSource(musicPlaylist[_currentIndex.value]));
-    }
+  Future<void> previousTrack() async {
+    if (_musicInfoList.isEmpty) return;
+
+    _currentIndex.value = (_currentIndex.value - 1 + _musicInfoList.length) % _musicInfoList.length;
+    await playCurrentTrack();
   }
 
   void toggleRepeat() async{

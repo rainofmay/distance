@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/myroom/myroom_sound_provider.dart';
+import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
