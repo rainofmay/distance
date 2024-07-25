@@ -18,19 +18,5 @@ class MyRoomMusicProvider {
       throw Exception('Error fetching getThemeMusic: ${e}');
     }
   }
-
-  Future<List<Map<String, dynamic>>> getCurrentPlayList() async {
-    try {
-      final response;
-      response = await supabase
-          .from('current_playlist') // 테이블 이름
-          .select('*');
-      return response;
-    }
-
-    catch (e) {
-      throw Exception('Error fetching getCurrentPlayList: ${e}');
-    }
-  }
 }
 

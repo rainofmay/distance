@@ -60,9 +60,18 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
 
   /* Init */
   initLoadMusicSource() async {
-    // 가장 최근 재생 중이었던 플레이리스트 정보 불러옴.
-    _currentPlayList.value = await _repository.fetchCurrentPlayList();
+    await loadCurrentPlayList();
     await getThemeMusic(_currentPlayList.value.theme);
+  }
+
+  Future<void> loadCurrentPlayList() async {
+    final theme = await _repository.loadCurrentPlayListIndex();
+    if (theme != null) {
+      _currentPlayList.value = _repository.playListTheme.firstWhere((playList) => playList.theme == theme);
+    } else {
+      // 인덱스가 null인 경우 처리
+      _currentPlayList.value = _repository.playListTheme[0]; // 또는 다른 적절한 처리
+    }
   }
 
   Future<void> getThemeMusic(String theme) async {
@@ -91,11 +100,9 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   }
 
   setInitMusicState() {
-    // getAllMusicSource();
     _musicPlayer().onDurationChanged.listen((Duration duration) {
       _currentMusicDuration.value = duration;
     });
-
 
     _musicPlayer().onPositionChanged.listen((Duration position) {
       _currentMusicPosition.value = position;
@@ -123,6 +130,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   }
 
 
+  /* update */
   toggleShuffle() async {
     _isShuffled.value = !_isShuffled.value;
 

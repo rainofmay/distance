@@ -8,21 +8,39 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class MyRoomMusicRepository {
   late final MyRoomMusicProvider _myRoomMusicProvider;
 
   MyRoomMusicRepository({required MyRoomMusicProvider myRoomMusicProvider})
       : _myRoomMusicProvider = myRoomMusicProvider;
 
-  Future<CurrentPlayList> fetchCurrentPlayList() async {
-    try {
-      final response = await _myRoomMusicProvider.getCurrentPlayList();
-      return response.map((item) => CurrentPlayList.fromJson(item)).first;
-    } catch (e) {
-      throw Exception('Failed to fetchCurrentPlayList: $e');
-    }
-  }
+  final List playListTheme = [
+    CurrentPlayList(
+        id: 0,
+        thumbnailUrl: 'assets/images/themes/music/music_sleep.jpg',
+        bigTitle: '밤에 들으면 좋을 음악',
+        info: 'Piano',
+        theme: 'sleep',
+        numberOfSong: 3),
+    CurrentPlayList(
+        id: 1,
+        thumbnailUrl: 'assets/images/themes/music/music_consolation.jpg',
+        bigTitle: '위로가 되는 음악',
+        info : 'Piano',
+        theme: 'consolation',
+        numberOfSong: 9),
+    CurrentPlayList(
+        id: 2,
+        thumbnailUrl: 'assets/images/themes/music/music_morning.jpg',
+        bigTitle: '하루를 시작하는 음악',
+        info : 'Acoustic, piano',
+        theme: 'consolation',
+        numberOfSong: 9)
+  ];
 
+  /* Get */
   Future<List<MusicInfo>> fetchThemeMusic(String theme) async {
     try {
       final response = await _myRoomMusicProvider.getThemeMusic(theme);
@@ -61,5 +79,19 @@ class MyRoomMusicRepository {
     final hash = md5.convert(utf8.encode(url)).toString();
     return 'music_$hash.mp3';
   }
-}
 
+  Future<String?> loadCurrentPlayListIndex() async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentPlayListIndex = prefs.getString('currentTheme');
+
+    return currentPlayListIndex;
+  }
+
+  /* Create */
+  Future<void> saveCurrentPlayListIndex(String theme) async {
+    final prefs = await SharedPreferences.getInstance();
+    final currentPlayListTheme = theme;
+    print("[currentPlayListIndex Save] : $currentPlayListTheme");
+    await prefs.setString('currentTheme', currentPlayListTheme);
+  }
+}

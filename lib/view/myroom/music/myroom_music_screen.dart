@@ -25,7 +25,6 @@ class MyroomMusicScreen extends StatefulWidget {
 class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
   final MusicViewModel musicViewModel = Get.put(MusicViewModel(repository: Get.put(MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider()))));
   late PageController pageController;
-
   
   @override
   void initState() {
