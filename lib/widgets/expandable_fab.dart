@@ -77,7 +77,7 @@ class _ExpandableFabState extends State<ExpandableFab>
                 borderRadius: BorderRadius.all(Radius.circular(50))),
           child: const Icon(
             CupertinoIcons.cube,
-            color: LIGHT_WHITE,
+            color: WHITE,
             size: 30,
           ),
         ),

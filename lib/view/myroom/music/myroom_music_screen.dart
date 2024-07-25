@@ -100,12 +100,8 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                 right: 0,
                 child: OkCancelButtons(
                   okText: '확인',
-                  cancelText: '취소',
                   onPressed: () {
-                    Get.back();
-                  },
-                  onCancelPressed: () {
-                    Get.back();
+                    Navigator.of(context).pop();
                   },
                 ),
               ),

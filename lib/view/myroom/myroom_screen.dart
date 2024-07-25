@@ -102,7 +102,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(Icons.settings, size: 20, color: LIGHT_WHITE),
+            icon: const Icon(Icons.format_color_text_rounded, size: 20, color: WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -115,8 +115,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(Icons.library_music_rounded,
-                size: 20, color: LIGHT_WHITE),
+            icon: const Icon(CupertinoIcons.headphones,
+                size: 20, color: WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -130,7 +130,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
               );
             },
             icon: const Icon(CupertinoIcons.photo_fill,
-                size: 20, color: LIGHT_WHITE),
+                size: 20, color: WHITE),
           ),
         ],
       ),

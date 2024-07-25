@@ -69,8 +69,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
     if (theme != null) {
       _currentPlayList.value = _repository.playListTheme.firstWhere((playList) => playList.theme == theme);
     } else {
-      // 인덱스가 null인 경우 처리
-      _currentPlayList.value = _repository.playListTheme[0]; // 또는 다른 적절한 처리
+      _currentPlayList.value = _repository.playListTheme[0];
     }
   }
 

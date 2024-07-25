@@ -9,52 +9,61 @@ import 'package:mobile/widgets/ok_cancel._buttons.dart';
 class QuoteSettingsDialog extends StatelessWidget {
   final MyroomViewModel viewModel = Get.find<MyroomViewModel>();
 
+   QuoteSettingsDialog({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: GlassMorphism(
-        blur: 1,
-        opacity: 0.65,
-        child: Material(
-          type: MaterialType.transparency,
-          child: Container(
-            width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.75,
-            padding: EdgeInsets.all(16),
-            child: Column(
-              children: [
-                Text(
-                  'Quote Settings',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold),
+      child: SingleChildScrollView(
+        child: Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,),
+          child: GlassMorphism(
+            blur: 1,
+            opacity: 0.65,
+            child: Material(
+              type: MaterialType.transparency,
+              child: Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                constraints: BoxConstraints(
+                  maxHeight: MediaQuery.of(context).size.height * 0.75,
                 ),
-                Expanded(
-                  child: Obx(() => ListView(
-                        children: [
-                          _buildBackdropColorPicker(context),
-                          _buildFontColorPicker(context),
-                          _buildFontDropdown(context),
-                          _buildCustomQuoteFields(),
-                          _buildFontSizeSlider(),
-                        ],
-                      )),
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  children: [
+                    Text(
+                      'Words of the day',
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: WHITE),
+                    ),
+                    Expanded(
+                      child: Obx(() => ListView(
+                        shrinkWrap: true,
+                            children: [
+                              const SizedBox(height: 16),
+                              _buildBackdropColorPicker(context),
+                              const SizedBox(height: 16),
+                              _buildFontColorPicker(context),
+                              const SizedBox(height: 16),
+                              _buildFontDropdown(context),
+                              const SizedBox(height: 16),
+                              _buildCustomQuoteFields(),
+                              const SizedBox(height: 16),
+                              _buildFontSizeSlider(),
+                            ],
+                          )),
+                    ),
+                    OkCancelButtons(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      okText: '확인',
+                      okTextColor: WHITE,
+                    ),
+                  ],
                 ),
-                OkCancelButtons(
-                  onPressed: () {
-                    // 현재 화면을 pop하여 이전 화면으로 이동
-                    Navigator.pop(context);
-                  },
-                  onCancelPressed: () {
-                    // 저장요소 취소
-                    Navigator.pop(context);
-                  },
-                  okText: '저장',
-                  okTextColor: WHITE,
-                  cancelText: '취소',
-                ),
-              ],
+              ),
             ),
           ),
         ),
@@ -66,8 +75,8 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('배경 색상', style: TextStyle(color: Colors.white)),
-        SizedBox(height: 8),
+        const Text('배경 색상', style: TextStyle(color: WHITE)),
+        const SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showColorPicker(context, isBackdrop: true),
           child: Container(
@@ -86,7 +95,7 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('폰트 색상', style: TextStyle(color: Colors.white)),
+        Text('폰트 색상', style: TextStyle(color: WHITE)),
         SizedBox(height: 8),
         GestureDetector(
           onTap: () => _showColorPicker(context, isBackdrop: false),
@@ -106,14 +115,14 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('폰트 지정', style: TextStyle(color: Colors.white)),
+        Text('폰트 지정', style: TextStyle(color: WHITE)),
         Theme(
           data: Theme.of(context).copyWith(
             canvasColor: Colors.black54,
           ),
           child: DropdownButton<String>(
             value: viewModel.quoteFont.value,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: WHITE),
             items: [
               'GmarketSansTTFMedium',
               'Roboto',
@@ -139,24 +148,31 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Word', style: TextStyle(color: Colors.white)),
+        Text('Words of the day', style: TextStyle(color: WHITE)),
         TextField(
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: WHITE, fontSize: 12),
+          cursorColor: PRIMARY_LIGHT,
           decoration: InputDecoration(
-            hintText: '적고 싶은 말을 직접 적어보세요!',
-            hintStyle: TextStyle(color: Colors.white70),
+            hintText: '보이고 싶은 말을 적어보세요.',
+            hintStyle: TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
+            ),
           ),
           onChanged: (value) => viewModel.updateCustomQuote(value),
           autocorrect: false, // 자동 수정 비활성화
           enableSuggestions: false, // 추천 단어 기능 비활성화
         ),
         SizedBox(height: 8),
-        Text('Author', style: TextStyle(color: Colors.white)),
+        Text('Who', style: TextStyle(color: WHITE)),
         TextField(
-          style: TextStyle(color: Colors.white),
+          style: TextStyle(color: WHITE, fontSize: 12),
           decoration: InputDecoration(
             hintText: '누구의 말인가요?',
-            hintStyle: TextStyle(color: Colors.white70),
+            hintStyle: TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
+            ),
           ),
           onChanged: (value) => viewModel.updateCustomQuoteAuthor(value),
           autocorrect: false, // 자동 수정 비활성화
@@ -171,14 +187,14 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('폰트 크기', style: TextStyle(color: Colors.white)),
+        Text('폰트 크기', style: TextStyle(color: WHITE)),
         SliderTheme(
           data: SliderThemeData(
-            activeTrackColor: Colors.white,
-            inactiveTrackColor: Colors.white.withOpacity(0.5),
-            thumbColor: Colors.white,
-            overlayColor: Colors.white.withOpacity(0.4),
-            valueIndicatorColor: Colors.white,
+            activeTrackColor: PRIMARY_LIGHT,
+            inactiveTrackColor: WHITE.withOpacity(0.5),
+            thumbColor: PRIMARY_LIGHT,
+            overlayColor: PRIMARY_LIGHT.withOpacity(0.4),
+            valueIndicatorColor: PRIMARY_LIGHT,
             valueIndicatorTextStyle: TextStyle(color: Colors.black),
           ),
           child: Slider(
@@ -197,7 +213,7 @@ class QuoteSettingsDialog extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(isBackdrop ? 'Pick backdrop color' : 'Pick font color'),
+          // title: Text(isBackdrop ? 'Pick backdrop color' : 'Pick font color'),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: isBackdrop
@@ -217,12 +233,7 @@ class QuoteSettingsDialog extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
-            ElevatedButton(
-              child: const Text('Done'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
+            OkCancelButtons(okText: '확인', okTextColor: BLACK, onPressed: () => Navigator.of(context).pop())
           ],
         );
       },
