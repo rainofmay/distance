@@ -36,7 +36,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with packageID, oauth -->
-                <data android:scheme="kakaoaec099113dc70792df78c1aa4a1ac2f4" android:host="oauth"/>
+                <data android:scheme="com.distance.cled24" android:host="oauth"/>
 
             </intent-filter>
 

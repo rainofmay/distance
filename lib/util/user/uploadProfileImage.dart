@@ -66,7 +66,7 @@ Future<String?> uploadImage(BuildContext context) async {
       final s3 = AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
 
       try {
-        final key = 'userProfile/${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
+        final key = 'user-profile/${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
         final response = await s3.putObject(
           bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
           key: key,
