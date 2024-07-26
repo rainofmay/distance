@@ -28,12 +28,12 @@ const COLOR7 = Color(0xffBB1024);
 const COLOR8 = Color(0xffB7CA79);
 const COLOR9 = Color(0xff1c910d);
 const COLOR10 = Color(0xff055d05);
-const COLOR11 = Color(0xffC8D8FA);
-const COLOR12 = Color(0xff1AA6B7);
-const COLOR13 = Color(0xffac19b0);
-const COLOR14 = Color(0xff853312);
-const COLOR15 = Color(0xff3c1c83);
-const COLOR16 = Color(0xff777777);
+const COLOR11 = Color(0xff1AA6B7);
+const COLOR12 = Color(0xffac19b0);
+const COLOR13 = Color(0xff853312);
+const COLOR14 = Color(0xff3c1c83);
+const COLOR15 = Color(0xff777777);
+const COLOR16 = Color(0xff000000);
 
 List<Color> sectionColors = [
   COLOR1,

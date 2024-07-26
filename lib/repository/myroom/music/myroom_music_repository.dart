@@ -18,26 +18,40 @@ class MyRoomMusicRepository {
 
   final List playListTheme = [
     CurrentPlayList(
-        id: 0,
+        id: 1,
         thumbnailUrl: 'assets/images/themes/music/music_sleep.jpg',
         bigTitle: '밤에 들으면 좋을 음악',
         info: 'Piano',
         theme: 'sleep',
         numberOfSong: 3),
     CurrentPlayList(
-        id: 1,
+        id: 2,
         thumbnailUrl: 'assets/images/themes/music/music_consolation.jpg',
         bigTitle: '위로가 되는 음악',
         info : 'Piano',
         theme: 'consolation',
         numberOfSong: 9),
     CurrentPlayList(
-        id: 2,
+        id: 3,
         thumbnailUrl: 'assets/images/themes/music/music_morning.jpg',
         bigTitle: '하루를 시작하는 음악',
         info : 'Acoustic, piano',
-        theme: 'consolation',
-        numberOfSong: 9)
+        theme: 'morning',
+        numberOfSong: 7),
+    CurrentPlayList(
+        id: 4,
+        thumbnailUrl: 'assets/images/themes/music/music_evening.jpg',
+        bigTitle: '퇴근길 해질무렵 듣는 음악',
+        info : 'Acoustic, piano',
+        theme: 'evening',
+        numberOfSong: 7),
+    CurrentPlayList(
+        id: 5,
+        thumbnailUrl: 'assets/images/themes/music/music_thought.jpg',
+        bigTitle: '생각 많아질 때 듣는 음악',
+        info : 'Piano',
+        theme: 'thought',
+        numberOfSong: 3)
   ];
 
   /* Get */

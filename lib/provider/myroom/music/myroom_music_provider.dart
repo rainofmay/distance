@@ -1,4 +1,3 @@
-import 'package:mobile/model/music_info.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MyRoomMusicProvider {

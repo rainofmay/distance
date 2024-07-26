@@ -29,7 +29,7 @@ class ScheduleViewModel extends GetxController {
   CalendarFormat get calendarFormat => _calendarFormat.value;
 
   /* Schedule */
-  late RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
+  late final RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
   List<ScheduleModel> get allSchedules => _allSchedules;
 
   final RxList<ScheduleModel> _selectedDateSchedules = <ScheduleModel>[].obs;
@@ -51,6 +51,9 @@ class ScheduleViewModel extends GetxController {
 
   final RxMap<DateTime, List<Event>> _events = <DateTime, List<Event>>{}.obs;
   Map<DateTime, List<Event>> get events => _events;
+
+  late final RxList<ScheduleModel> _todaySchedules = <ScheduleModel>[].obs;
+  List<ScheduleModel> get todaySchedules => _todaySchedules;
 
   /* Repeat date */
   final RxList<String> _repeatTypes = ['반복없음', '지정'].obs;
@@ -164,10 +167,6 @@ class ScheduleViewModel extends GetxController {
     _titleController.value.text = schedule.scheduleName;
     _memoController.value.text = schedule.memo;
     _selectedSectionColor.value = sectionColors[schedule.sectionColor];
-    // _selectedRepeatType.value = schedule.repeatType;
-    // _repeatDays.value = List.from(schedule.repeatDays);
-    // _repeatWeeks.value = schedule.repeatWeeks;
-    // _repeatEndDate.value = schedule.repeatEndDate;
     updateFormValidity();
   }
 
@@ -184,6 +183,10 @@ class ScheduleViewModel extends GetxController {
   Future<void> initAllSchedules() async {
     _allSchedules.value = await _repository.fetchAllScheduleData();
     _isScheduleListLoaded.value = true;
+    _todaySchedules.value = _allSchedules.where((schedule) {
+      final today = DateTime.now();
+      return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
+    }).toList();
     update();
   }
 
@@ -379,6 +382,12 @@ class ScheduleViewModel extends GetxController {
     await _repository
         .fetchAllScheduleData()
         .then((value) => _allSchedules.value = value);
+
+    // 플로팅 윈도우에 필요한 업데이트
+    _todaySchedules.value = _allSchedules.where((schedule) {
+      final today = DateTime.now();
+      return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
+    }).toList();
     update();
   }
 
@@ -444,6 +453,12 @@ class ScheduleViewModel extends GetxController {
       }
       // 관련 UI 업데이트
       updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
+
+      // 플로팅 윈도우에 필요한 업데이트
+      _todaySchedules.value = _allSchedules.where((schedule) {
+        final today = DateTime.now();
+        return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
+      }).toList();
 
       update();
     } catch (e) {

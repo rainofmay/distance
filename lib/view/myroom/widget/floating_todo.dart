@@ -1,7 +1,14 @@
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/schedule/schedule_provider.dart';
+import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:flutter/foundation.dart' as foundation;
 
 class FloatingTodo extends StatefulWidget {
   const FloatingTodo({super.key});
@@ -25,10 +32,14 @@ class _FloatingTodoState extends State<FloatingTodo> {
   bool _isResizingBottomRight = false; // 우하단 모서리 크기 조절 여부
   bool _isDraggingAppBar = false; // 상단 바 드래그 여부
   Offset _startDragOffset = Offset(0, 0); // 상단 바 드래그 시작 오프셋
-  List<String> incompleteTasks = ['Task 1', 'Task 2', 'Task 3']; // 미완료 작업 목록
   double minWidth = 150; // 최소 너비
   double minHeight = 100; // 최소 높이
   MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
+  ScheduleViewModel scheduleViewModel = Get.put(ScheduleViewModel(
+      repository: ScheduleRepository(scheduleProvider: ScheduleProvider())));
+
+  bool isEmojiVisible = false;
+
   // 상단 바 드래그 여부를 설정하는 함수
   void _setDraggingAppBar(bool value) {
     setState(() {
@@ -44,9 +55,18 @@ class _FloatingTodoState extends State<FloatingTodo> {
           left: positionX,
           top: positionY,
           child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5.0),
+              color: WHITE.withOpacity(0.9),
+              border: Border(
+                top: BorderSide(
+                  color: BLACK.withOpacity(0.9), // 테두리 색상
+                  width: 10.0, // 테두리 굵기
+                ),
+              ),
+            ),
             width: width,
             height: height,
-            color: Colors.tealAccent,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -62,8 +82,10 @@ class _FloatingTodoState extends State<FloatingTodo> {
                   onPanUpdate: (details) {
                     if (_isDraggingAppBar) {
                       setState(() {
-                        double dx = details.localPosition.dx - _startDragOffset.dx;
-                        double dy = details.localPosition.dy - _startDragOffset.dy;
+                        double dx =
+                            details.localPosition.dx - _startDragOffset.dx;
+                        double dy =
+                            details.localPosition.dy - _startDragOffset.dy;
                         positionX += dx;
                         positionY += dy;
                         _startDragOffset = details.localPosition;
@@ -77,32 +99,18 @@ class _FloatingTodoState extends State<FloatingTodo> {
                   child: Container(
                     width: double.infinity,
                     height: 30,
-                    color: Colors.teal,
+                    color: TRANSPARENT,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
+                          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
                           child: Text(
-                            '미완료 작업',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                              myroomViewModel
-                                  .updateSimpleWindowChange(false);
-
-                              // 위젯 삭제
-                              // 부모 위젯의 목록에서 삭제해야 할 수도 있음
-                            }
-                          ,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                            ),
+                            'TODAY',
+                            style: TextStyle(
+                                color: DARK,
+                                fontSize: 13,
+                                fontFamily: 'GmarketSansTTFMedium'),
                           ),
                         ),
                       ],
@@ -110,20 +118,81 @@ class _FloatingTodoState extends State<FloatingTodo> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: incompleteTasks.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(
-                          incompleteTasks[index],
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        onTap: () {
-                          // 작업 탭 처리
+                  child: Obx(() => scheduleViewModel.todaySchedules.isNotEmpty ? ListView.builder(
+                        itemCount: scheduleViewModel.todaySchedules.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 2.0),
+                                      child: Container(
+                                        width: 5,
+                                        height: 20,
+                                        decoration: BoxDecoration(
+                                            color: sectionColors[
+                                                scheduleViewModel
+                                                    .todaySchedules[index]
+                                                    .sectionColor],
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          scheduleViewModel
+                                              .todaySchedules[index]
+                                              .scheduleName,
+                                          style: TextStyle(
+                                              color: sectionColors[
+                                                  scheduleViewModel
+                                                      .todaySchedules[index]
+                                                      .sectionColor],
+                                              fontSize: 17,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        Text(
+                                          '# ${scheduleViewModel.todaySchedules[index].memo}',
+                                          style: TextStyle(
+                                              color: BLACK,
+                                              fontSize: 13,
+                                              overflow: TextOverflow.ellipsis),
+                                        ),
+                                        const SizedBox(height: 32),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                scheduleViewModel
+                                        .todaySchedules[index].isTimeSet
+                                    ? Padding(
+                                      padding: const EdgeInsets.only(top: 4.0, right: 8.0),
+                                      child: Text(
+                                          '${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].startDate)}~${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].endDate)}',
+                                          style: TextStyle(
+                                              fontSize: 10, color: GREY),
+                                        ),
+                                    )
+                                    : SizedBox(),
+                              ],
+                            ),
+                          );
                         },
-                      );
-                    },
-                  ),
+                      ) : Padding(
+                        padding: const EdgeInsets.only(top: 24.0),
+                        child: Text('오늘 일정이 없습니다.', style: TextStyle(fontSize: 13, color: DARK)),
+                      )),
                 ),
               ],
             ),
@@ -140,39 +209,34 @@ class _FloatingTodoState extends State<FloatingTodo> {
 
             // 상단 바를 제외한 영역에서는 크기 조절을 시작합니다.
 
-              if ((details.localPosition.dx - left).abs() <= touchRadius &&
-                  (details.localPosition.dy - top).abs() <= touchRadius) {
-                _startTopLeftOffset = details.localPosition; // 시작 오프셋을 설정합니다.
-                _isResizingTopLeft = true; // 좌상단 모서리 크기 조절을 시작합니다.
-              }
-              // 우상단 모서리
-              else if ((details.localPosition.dx - right).abs() <=
-                      touchRadius &&
-                  (details.localPosition.dy - top).abs() <= touchRadius) {
-                _startTopRightOffset = details.localPosition; // 시작 오프셋을 설정합니다.
-                _isResizingTopRight = true; // 우상단 모서리 크기 조절을 시작합니다.
-              }
+            if ((details.localPosition.dx - left).abs() <= touchRadius &&
+                (details.localPosition.dy - top).abs() <= touchRadius) {
+              _startTopLeftOffset = details.localPosition; // 시작 오프셋을 설정합니다.
+              _isResizingTopLeft = true; // 좌상단 모서리 크기 조절을 시작합니다.
+            }
+            // 우상단 모서리
+            else if ((details.localPosition.dx - right).abs() <= touchRadius &&
+                (details.localPosition.dy - top).abs() <= touchRadius) {
+              _startTopRightOffset = details.localPosition; // 시작 오프셋을 설정합니다.
+              _isResizingTopRight = true; // 우상단 모서리 크기 조절을 시작합니다.
+            }
 
-              // 좌하단 모서리
-              else if ((details.localPosition.dx - left).abs() <= touchRadius &&
-                  (details.localPosition.dy - bottom).abs() <= touchRadius) {
-                _startBottomLeftOffset =
-                    details.localPosition; // 시작 오프셋을 설정합니다.
-                _isResizingBottomLeft = true; // 좌하단 모서리 크기 조절을 시작합니다.
-              }
-              // 우하단 모서리
-              else if ((details.localPosition.dx - right).abs() <=
-                      touchRadius &&
-                  (details.localPosition.dy - bottom).abs() <= touchRadius) {
-                _startBottomRightOffset =
-                    details.localPosition; // 시작 오프셋을 설정합니다.
-                _isResizingBottomRight = true; // 우하단 모서리 크기 조절을 시작합니다.
-              }else if((details.localPosition.dy - top).abs() <= 30){
-                _isDraggingAppBar = true;
-                _startDragOffset = details.localPosition;
-                print("Dragging..");
-              }
-
+            // 좌하단 모서리
+            else if ((details.localPosition.dx - left).abs() <= touchRadius &&
+                (details.localPosition.dy - bottom).abs() <= touchRadius) {
+              _startBottomLeftOffset = details.localPosition; // 시작 오프셋을 설정합니다.
+              _isResizingBottomLeft = true; // 좌하단 모서리 크기 조절을 시작합니다.
+            }
+            // 우하단 모서리
+            else if ((details.localPosition.dx - right).abs() <= touchRadius &&
+                (details.localPosition.dy - bottom).abs() <= touchRadius) {
+              _startBottomRightOffset = details.localPosition; // 시작 오프셋을 설정합니다.
+              _isResizingBottomRight = true; // 우하단 모서리 크기 조절을 시작합니다.
+            } else if ((details.localPosition.dy - top).abs() <= 30) {
+              _isDraggingAppBar = true;
+              _startDragOffset = details.localPosition;
+              print("Dragging..");
+            }
           },
           onPanUpdate: (details) {
             // 드래그 중일 때
@@ -187,41 +251,39 @@ class _FloatingTodoState extends State<FloatingTodo> {
                   positionY += dy;
                   _startDragOffset = details.localPosition;
                 });
+              }
+              // 좌상단 모서리 크기 조절
+              if (_isResizingTopLeft) {
+                double dx = details.localPosition.dx - _startTopLeftOffset.dx;
+                double dy = details.localPosition.dy - _startTopLeftOffset.dy;
+                width -= dx;
+                height -= dy;
+                positionX += dx;
+                positionY += dy;
+                if (width < minWidth) {
+                  positionX += width - minWidth;
+                  width = minWidth;
                 }
-                // 좌상단 모서리 크기 조절
-                if (_isResizingTopLeft) {
-                  double dx = details.localPosition.dx - _startTopLeftOffset.dx;
-                  double dy = details.localPosition.dy - _startTopLeftOffset.dy;
-                  width -= dx;
-                  height -= dy;
-                  positionX += dx;
-                  positionY += dy;
-                  if (width < minWidth) {
-                    positionX += width - minWidth;
-                    width = minWidth;
-                  }
-                  if (height < minHeight) {
-                    positionY += height - minHeight;
-                    height = minHeight;
-                  }
-                  _startTopLeftOffset = details.localPosition;
+                if (height < minHeight) {
+                  positionY += height - minHeight;
+                  height = minHeight;
                 }
-                // 우상단 모서리 크기 조절
-                else if (_isResizingTopRight) {
-                  double dx = details.localPosition.dx -
-                      _startTopRightOffset.dx;
-                  double dy = details.localPosition.dy -
-                      _startTopRightOffset.dy;
-                  width += dx;
-                  height -= dy;
-                  positionY += dy;
-                  if (width < minWidth) width = minWidth;
-                  if (height < minHeight) {
-                    positionY += height - minHeight;
-                    height = minHeight;
-                  }
-                  _startTopRightOffset = details.localPosition;
+                _startTopLeftOffset = details.localPosition;
+              }
+              // 우상단 모서리 크기 조절
+              else if (_isResizingTopRight) {
+                double dx = details.localPosition.dx - _startTopRightOffset.dx;
+                double dy = details.localPosition.dy - _startTopRightOffset.dy;
+                width += dx;
+                height -= dy;
+                positionY += dy;
+                if (width < minWidth) width = minWidth;
+                if (height < minHeight) {
+                  positionY += height - minHeight;
+                  height = minHeight;
                 }
+                _startTopRightOffset = details.localPosition;
+              }
 
               // 좌하단 모서리 크기 조절
               else if (_isResizingBottomLeft) {

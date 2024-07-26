@@ -199,4 +199,12 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
       _isShuffled.value = false;
     }
   }
+
+  /* 플레이리스트 변경 */
+  setCurrentPlayList(CurrentPlayList newList) async {
+    _currentPlayList.value = newList;
+    _repository.saveCurrentPlayListIndex(newList.theme);
+    await getThemeMusic(newList.theme);
+    update();
+  }
 }
