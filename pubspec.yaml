@@ -45,6 +45,7 @@ dependencies:
   crypto: ^3.0.3
   flutter_colorpicker: ^1.1.0
   flutter_native_splash: ^2.4.1
+  google_mobile_ads: ^5.1.0
 
 flutter_native_splash:
   color: "#000000"
