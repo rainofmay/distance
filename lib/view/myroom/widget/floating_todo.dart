@@ -35,8 +35,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
   double minWidth = 150; // 최소 너비
   double minHeight = 100; // 최소 높이
   MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
-  ScheduleViewModel scheduleViewModel = Get.put(ScheduleViewModel(
-      repository: ScheduleRepository(scheduleProvider: ScheduleProvider())));
+  ScheduleViewModel scheduleViewModel = Get.find<ScheduleViewModel>();
 
   bool isEmojiVisible = false;
 
@@ -146,8 +145,8 @@ class _FloatingTodoState extends State<FloatingTodo> {
                                     ),
                                     const SizedBox(width: 12),
                                     Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           scheduleViewModel
@@ -163,7 +162,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                                         ),
                                         const SizedBox(height: 6),
                                         Text(
-                                          '# ${scheduleViewModel.todaySchedules[index].memo}',
+                                          scheduleViewModel.todaySchedules[index].memo,
                                           style: TextStyle(
                                               color: BLACK,
                                               fontSize: 13,
@@ -181,7 +180,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                                       child: Text(
                                           '${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].startDate)}~${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].endDate)}',
                                           style: TextStyle(
-                                              fontSize: 10, color: GREY),
+                                              fontSize: 8, color: GREY),
                                         ),
                                     )
                                     : SizedBox(),

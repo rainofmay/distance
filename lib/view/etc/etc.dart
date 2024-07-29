@@ -124,36 +124,45 @@ class Etc extends StatelessWidget {
           )),
           const SizedBox(height: 15),
 
-          TapableRow(
-            widget: Icon(CupertinoIcons.lock),
-            title: '내 정보 관리',
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (c) => PersonalInformation()));
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: TapableRow(
+              widget: Icon(CupertinoIcons.lock),
+              title: '내 정보 관리',
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => PersonalInformation()));
+              },
+            ),
           ),
 
           const SizedBox(height: 15),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
           const SizedBox(height: 15),
 
-          TapableRow(
-            widget: Icon(CupertinoIcons.speaker_1),
-            title: '앱 업데이트 공지',
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (c) => UpdateNotification()));
-            },
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: TapableRow(
+              widget: Icon(CupertinoIcons.speaker_1),
+              title: '앱 업데이트 공지',
+              onTap: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => UpdateNotification()));
+              },
+            ),
           ),
 
           const SizedBox(height: 15),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
           const SizedBox(height: 15),
 
-          TapableRow(
-            widget: Icon(Icons.notifications_none_rounded),
-            title: '알림',
-            onTap: () {},
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: TapableRow(
+              widget: Icon(Icons.notifications_none_rounded),
+              title: '알림',
+              onTap: () {},
+            ),
           ),
 
           const SizedBox(height: 15),

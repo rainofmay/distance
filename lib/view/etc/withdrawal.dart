@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/view/mate/widget/custom_dialog.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 import '../../common/const/colors.dart';
@@ -31,27 +32,51 @@ class _WithdrawalState extends State<Withdrawal> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          SizedBox(
-            height: 150,
-            child: Column(
-              children: [
-                Text('탈퇴 시 유의사항', style: TextStyle(fontWeight: FontWeight.w500),),
-                Text('내가 구매 및 설정한 배경, 프로필, 메이트 목록 및 메이트 간 대화 전체, 그리고 설정한 모든 정보는 사라지며 복구할 수 없습니다.'),
-                Text('구독 해지에 관한 내용'),
-              ],
+          Padding(
+            padding: const EdgeInsets.only(left: 16.0),
+            child: DefaultTextStyle(
+              style: TextStyle(
+                height: 2.7,
+                color: BLACK,
+                fontFamily: 'GmarketSansTTFMedium',
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 16),
+                  Text('탈퇴 시 유의사항',
+                      style:
+                          TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
+                  SizedBox(height: 32),
+                  Text(
+                      '1. 사용자가 구매 및 설정한 배경, 음악, 프로필, 메이트 등에 관한 모든 정보는 사라지며 복구할 수 없습니다.',
+                      style: TextStyle(fontSize: 16),
+                      softWrap: true),
+                  SizedBox(height: 32),
+                  Text('2. 프리미엄 모델을 구매했더라도 탈퇴 시에는 프리미엄에서 해지되며, 복구할 수 없습니다.',
+                      style: TextStyle(fontSize: 16), softWrap: true),
+                  SizedBox(height: 32),
+                  Text('3. 본 애플리케이션 서비스는 귀하의 개인정보 저장, 활용 등의 행위를 일체 하지 않습니다.',
+                      style: TextStyle(fontSize: 16), softWrap: true),
+                ],
+              ),
             ),
           ),
-
           Column(
             children: [
               Row(
                 children: [
-                  CustomCheckBox(value: _isChecked, onChanged: (value) {
-                    setState(() {
-                      _isChecked = value!;
-                    });
-                  }, radius: 50,),
-                  Text('탈퇴 시 유의사항을 모두 확인하였습니다.')
+                  CustomCheckBox(
+                    value: _isChecked,
+                    onChanged: (value) {
+                      setState(() {
+                        _isChecked = value!;
+                      });
+                    },
+                    radius: 50,
+                  ),
+                  Text('탈퇴 시 유의사항을 모두 확인하였습니다.',
+                      style: TextStyle(color: _isChecked ? BLACK : GREY))
                 ],
               ),
               ElevatedButton(
@@ -63,15 +88,22 @@ class _WithdrawalState extends State<Withdrawal> {
                 ),
                 child: Text(
                   '탈퇴하기',
-                  style: TextStyle(fontSize: 16, color: WHITE),
+                  style:
+                      TextStyle(fontSize: 16, color: _isChecked ? WHITE : GREY),
                 ),
                 onPressed: () {
-                  _customDialog(context);
+                  _isChecked
+                      ? customDialog(
+                          context,
+                          40,
+                          '탈퇴하시겠습니까?',
+                          Text('탈퇴하면 모든 정보가 삭제됩니다.', style: TextStyle(color: TRANSPARENT_WHITE)),
+                          OkCancelButtons(okText: '확인', onPressed: () {}, cancelText: '취소',))
+                      : null;
                 },
               )
             ],
           ),
-
         ],
       ),
     );
@@ -92,7 +124,12 @@ class _WithdrawalState extends State<Withdrawal> {
             style: TextStyle(color: Colors.grey, fontSize: 11),
           ),
           actions: [
-            OkCancelButtons(okText: '확인', cancelText: '취소', onPressed: () {})
+            OkCancelButtons(
+                okText: '확인',
+                cancelText: '취소',
+                okTextColor: BLACK,
+                cancelTextColor: BLACK,
+                onPressed: () {})
           ],
         );
       },

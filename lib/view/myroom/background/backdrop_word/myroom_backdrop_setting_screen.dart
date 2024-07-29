@@ -192,7 +192,7 @@ class QuoteSettingsDialog extends StatelessWidget {
           data: SliderThemeData(
             activeTrackColor: PRIMARY_LIGHT,
             inactiveTrackColor: WHITE.withOpacity(0.5),
-            thumbColor: PRIMARY_LIGHT,
+            thumbColor: WHITE,
             overlayColor: PRIMARY_LIGHT.withOpacity(0.4),
             valueIndicatorColor: PRIMARY_LIGHT,
             valueIndicatorTextStyle: TextStyle(color: Colors.black),

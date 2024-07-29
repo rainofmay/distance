@@ -7,9 +7,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/view/myroom/background/background_themes/background_themes.dart';
-import '../../../common/const/colors.dart';
-import '../../../widgets/glass_morphism.dart';
-import '../../../widgets/ok_cancel._buttons.dart';
+import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/widgets/glass_morphism.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class MyroomBackgroundScreen extends StatefulWidget {
   const MyroomBackgroundScreen({super.key});
@@ -130,7 +130,13 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
       child: Column(
         children: [
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('Schedule', style: TextStyle(color: WHITE)),
+            Row(
+              children: [
+                Icon(CupertinoIcons.clock, size: 15, color: WHITE),
+                const SizedBox(width: 8),
+                Text('Schedule', style: TextStyle(color: WHITE)),
+              ],
+            ),
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
@@ -145,7 +151,13 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
           ]),
           const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('Audio', style: TextStyle(color: WHITE)),
+            Row(
+              children: [
+                Icon(CupertinoIcons.double_music_note, size: 15, color: WHITE),
+                const SizedBox(width: 8),
+                Text('Audio', style: TextStyle(color: WHITE)),
+              ],
+            ),
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
@@ -159,7 +171,13 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
           ]),
           const SizedBox(height: 10),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('Words', style: TextStyle(color: WHITE)),
+            Row(
+              children: [
+                Icon(Icons.text_format_rounded, size: 17, color: WHITE),
+                const SizedBox(width: 8),
+                Text('Words', style: TextStyle(color: WHITE)),
+              ],
+            ),
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(

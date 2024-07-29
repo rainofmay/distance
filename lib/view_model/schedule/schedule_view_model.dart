@@ -108,14 +108,8 @@ class ScheduleViewModel extends GetxController {
     _memoController.value.addListener(() {
       setScheduleMemo(_memoController.value.text);
     });
-
+    loadAllSchedules();
     _isScheduleListLoaded = false.obs;
-
-    initAllSchedules().then((_) {
-      updateSelectedDate(_calendarInfo.value.selectedDate);
-      // updateSelectedDateSchedules();
-      // _isScheduleListLoaded.value = true;
-    });
     initColorSet();
     super.onInit();
   }
@@ -125,6 +119,17 @@ class ScheduleViewModel extends GetxController {
     _titleController.value.dispose();
     _memoController.value.dispose();
     super.dispose();
+  }
+
+  Future<void> loadAllSchedules() async {
+    try {
+      await initAllSchedules();
+      updateSelectedDate(_calendarInfo.value.selectedDate);
+      updateTodaySchedules();
+    } catch (e) {
+      print('Error loading schedules: $e');
+      // 에러 처리 로직 추가
+    }
   }
 
   /* Init */
@@ -181,13 +186,15 @@ class ScheduleViewModel extends GetxController {
   }
 
   Future<void> initAllSchedules() async {
-    _allSchedules.value = await _repository.fetchAllScheduleData();
-    _isScheduleListLoaded.value = true;
-    _todaySchedules.value = _allSchedules.where((schedule) {
-      final today = DateTime.now();
-      return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
-    }).toList();
-    update();
+    try {
+      _allSchedules.value = await _repository.fetchAllScheduleData();
+      _isScheduleListLoaded.value = true;
+      update();
+    } catch (e) {
+      print('Error fetching schedule data: $e');
+      _isScheduleListLoaded.value = false;
+      rethrow; // 상위 메서드에서 처리할 수 있도록 예외를 다시 던집니다.
+    }
   }
 
   void initColorSet() {
@@ -384,10 +391,7 @@ class ScheduleViewModel extends GetxController {
         .then((value) => _allSchedules.value = value);
 
     // 플로팅 윈도우에 필요한 업데이트
-    _todaySchedules.value = _allSchedules.where((schedule) {
-      final today = DateTime.now();
-      return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
-    }).toList();
+    updateTodaySchedules();
     update();
   }
 
@@ -433,6 +437,40 @@ class ScheduleViewModel extends GetxController {
     return idColorData;
   }
 
+  void updateTodaySchedules() {
+    if (!_isScheduleListLoaded.value) return;
+
+    final today = DateTime.now();
+    final todayStart = DateTime(today.year, today.month, today.day);
+    final todayEnd = todayStart.add(Duration(days: 1));
+
+    _todaySchedules.value = _allSchedules.where((schedule) {
+      // 날짜만 비교
+      final scheduleStart = DateTime(schedule.startDate.year, schedule.startDate.month, schedule.startDate.day);
+      final scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
+
+      // 반복 일정 처리
+      if (schedule.repeatType == '지정') {
+        // 반복 일정이 오늘 해당하는지 확인
+        if (scheduleStart.isBefore(todayEnd) && scheduleEnd.isAfter(todayStart)) {
+          int daysSinceStart = todayStart.difference(scheduleStart).inDays;
+          int weeksSinceStart = daysSinceStart ~/ 7;
+          if (weeksSinceStart % schedule.repeatWeeks == 0 &&
+              schedule.repeatDays[today.weekday - 1] &&
+              todayStart.isBefore(schedule.repeatEndDate)) {
+            return true;
+          }
+        }
+        return false;
+      }
+
+      // 일반 일정 처리
+      return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);
+    }).toList();
+    print('Today schedules updated: ${_todaySchedules.length}');
+    update();
+  }
+
   /* Create */
   createSchedule() async {
     try {
@@ -455,10 +493,7 @@ class ScheduleViewModel extends GetxController {
       updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
 
       // 플로팅 윈도우에 필요한 업데이트
-      _todaySchedules.value = _allSchedules.where((schedule) {
-        final today = DateTime.now();
-        return !schedule.startDate.isAfter(today) && !schedule.endDate.isBefore(today);
-      }).toList();
+      updateTodaySchedules();
 
       update();
     } catch (e) {
@@ -548,6 +583,8 @@ class ScheduleViewModel extends GetxController {
 
       await updateAllSchedules();
       updateSelectedDate(_nowHandlingScheduleModel.value.startDate);
+
+      updateTodaySchedules();
       update();
     } catch (e) {
       print('Error editing schedule: $e');
@@ -655,6 +692,7 @@ class ScheduleViewModel extends GetxController {
       }
       await updateAllSchedules();
       updateSelectedDate(_calendarInfo.value.selectedDate);
+      updateTodaySchedules();
       update();
     } catch (e) {
       print('Error deleting schedule: $e');

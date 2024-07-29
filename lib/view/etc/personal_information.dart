@@ -34,27 +34,27 @@ class PersonalInformation extends StatelessWidget {
                     context, MaterialPageRoute(builder: (c) => ProfileEdit()));
               },
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
             TapableRow(
               widget: Icon(Icons.key),
               title: '비밀번호 변경',
               onTap: () {},
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
             TapableRow(
               widget: Icon(Icons.payment),
               title: '결제 내역',
               onTap: () {},
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
 
             TapableRow(
               widget: Icon(Icons.exit_to_app_rounded),
@@ -64,9 +64,9 @@ class PersonalInformation extends StatelessWidget {
                     context, MaterialPageRoute(builder: (c) => Withdrawal()));
               },
             ),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
             BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-            const SizedBox(height: 15),
+            const SizedBox(height: 20),
           ],
         ),
       ),
