@@ -10,6 +10,7 @@ import 'package:mobile/view/schedule/widget/schedule/color_selection.dart';
 import 'package:mobile/view/schedule/widget/schedule/repeat_schedule.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
+import 'package:mobile/widgets/tapable_row.dart';
 
 class ScheduleForm extends StatelessWidget {
   ScheduleForm({super.key});
@@ -221,6 +222,35 @@ class ScheduleForm extends StatelessWidget {
                       },
                     ),
                   ),
+                ],
+              ),
+            ),
+
+            // 완료 여부
+            Padding(
+              padding: const EdgeInsets.only(left: 16.0, bottom: 16.0),
+              child: Row(
+                children: [
+                  // Icon
+                  TapableRow(
+                      widget: viewModel
+                          .nowHandlingScheduleModel.isDone
+                          ? Padding(
+                        padding: const EdgeInsets.only(right:16.0),
+                        child: Icon(Icons.check_box_rounded),
+                      )
+                          : Padding(
+                        padding: const EdgeInsets.only(right:16.0),
+                        child: Icon(
+                            Icons.check_box_outline_blank_rounded),
+                      ),
+                      title: viewModel.nowHandlingScheduleModel.isDone
+                          ? '일정 완료'
+                          : '일정 진행 중',
+                      onTap: () {
+                        viewModel.setIsDone(!viewModel
+                            .nowHandlingScheduleModel.isDone);
+                      }),
                 ],
               ),
             ),

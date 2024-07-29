@@ -11,7 +11,7 @@ import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
 
-import '../../common/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class Etc extends StatelessWidget {
   Etc({super.key});

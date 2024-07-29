@@ -1,11 +1,8 @@
-import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/schedule/schedule_provider.dart';
-import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:flutter/foundation.dart' as foundation;
@@ -117,81 +114,104 @@ class _FloatingTodoState extends State<FloatingTodo> {
                   ),
                 ),
                 Expanded(
-                  child: Obx(() => scheduleViewModel.todaySchedules.isNotEmpty ? ListView.builder(
-                        itemCount: scheduleViewModel.todaySchedules.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(top: 2.0),
-                                      child: Container(
-                                        width: 5,
-                                        height: 20,
-                                        decoration: BoxDecoration(
-                                            color: sectionColors[
-                                                scheduleViewModel
-                                                    .todaySchedules[index]
-                                                    .sectionColor],
-                                            borderRadius:
-                                                BorderRadius.circular(5)),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 12),
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          scheduleViewModel
-                                              .todaySchedules[index]
-                                              .scheduleName,
-                                          style: TextStyle(
-                                              color: sectionColors[
-                                                  scheduleViewModel
-                                                      .todaySchedules[index]
-                                                      .sectionColor],
-                                              fontSize: 17,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        const SizedBox(height: 6),
-                                        Text(
-                                          scheduleViewModel.todaySchedules[index].memo,
-                                          style: TextStyle(
-                                              color: BLACK,
-                                              fontSize: 13,
-                                              overflow: TextOverflow.ellipsis),
-                                        ),
-                                        const SizedBox(height: 32),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                scheduleViewModel
-                                        .todaySchedules[index].isTimeSet
-                                    ? Padding(
-                                      padding: const EdgeInsets.only(top: 4.0, right: 8.0),
-                                      child: Text(
-                                          '${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].startDate)}~${DateFormat('hh:mm a').format(scheduleViewModel.todaySchedules[index].endDate)}',
-                                          style: TextStyle(
-                                              fontSize: 8, color: GREY),
-                                        ),
-                                    )
-                                    : SizedBox(),
-                              ],
-                            ),
-                          );
+                  child: Obx(() =>
+                  scheduleViewModel.todaySchedules.isNotEmpty ? ListView
+                      .builder(
+                    itemCount: scheduleViewModel.todaySchedules.length,
+                    itemBuilder: (context, index) {
+                      return GestureDetector(
+                        behavior: HitTestBehavior.opaque,
+                        onTap: () async {
+                          _optionsDialog(scheduleViewModel.todaySchedules[index]);
                         },
-                      ) : Padding(
-                        padding: const EdgeInsets.only(top: 24.0),
-                        child: Text('오늘 일정이 없습니다.', style: TextStyle(fontSize: 13, color: DARK)),
-                      )),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2.0),
+                                child: Container(
+                                  width: 5,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                      color: sectionColors[
+                                      scheduleViewModel
+                                          .todaySchedules[index]
+                                          .sectionColor],
+                                      borderRadius:
+                                      BorderRadius.circular(5)),
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    scheduleViewModel
+                                        .todaySchedules[index]
+                                        .scheduleName,
+                                    style: scheduleViewModel
+                                        .todaySchedules[index].isDone ? TextStyle(
+                                        color: sectionColors[
+                                        scheduleViewModel
+                                            .todaySchedules[index]
+                                            .sectionColor],
+                                        fontSize: 17,
+                                        overflow: TextOverflow.ellipsis,
+                                        decoration: TextDecoration.lineThrough,
+                                        decorationColor: sectionColors[
+                                        scheduleViewModel
+                                            .todaySchedules[index]
+                                            .sectionColor]
+                                    ) : TextStyle(
+                                        color: sectionColors[
+                                        scheduleViewModel
+                                            .todaySchedules[index]
+                                            .sectionColor],
+                                        fontSize: 17,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    scheduleViewModel.todaySchedules[index].memo,
+                                    style: TextStyle(
+                                        color: BLACK,
+                                        fontSize: 13,
+                                        overflow: TextOverflow.ellipsis),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  scheduleViewModel
+                                      .todaySchedules[index].isTimeSet
+                                      ? Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 4.0, right: 8.0),
+                                    child: Text(
+                                      '${DateFormat('hh:mm a').format(
+                                          scheduleViewModel.todaySchedules[index]
+                                              .startDate)}~${DateFormat('hh:mm a')
+                                          .format(
+                                          scheduleViewModel.todaySchedules[index]
+                                              .endDate)}',
+                                      style: TextStyle(
+                                          fontSize: 8, color: GREY),
+                                    ),
+                                  )
+                                      : SizedBox(),
+                                  const SizedBox(height: 24),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ) : Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Text('오늘 일정이 없습니다.',
+                        style: TextStyle(fontSize: 13, color: DARK)),
+                  )),
                 ),
               ],
             ),
@@ -325,5 +345,39 @@ class _FloatingTodoState extends State<FloatingTodo> {
         ),
       ],
     );
+  }
+
+  _optionsDialog(ScheduleModel schedule) {
+    return showDialog(context: context, builder: (context) {
+      return Center(child: Container(
+        decoration: BoxDecoration(
+          color: DARK_BACKGROUND,
+          borderRadius: BorderRadius.circular(8),
+        ),
+          width: 180,
+          height: 120,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                  onTap: () async{
+                    await scheduleViewModel.toggleScheduleCompletion(schedule);
+                    if(!context.mounted) return;
+                    Navigator.of(context).pop();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Text(schedule.isDone ? '진행으로 변경' : '완료로 변경', style: TextStyle(color: WHITE))),
+              const SizedBox(height: 28),
+              GestureDetector(
+                  onTap: () async {
+                    await scheduleViewModel.deleteSchedule(schedule, false);
+                    if(!context.mounted) return;
+                    Navigator.of(context).pop();
+                  },
+                  behavior: HitTestBehavior.opaque,
+                  child: Text('일정에서 완전 삭제', style: TextStyle(color: WHITE))),
+            ]
+          )));
+    },);
   }
 }
