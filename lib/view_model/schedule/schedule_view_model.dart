@@ -469,19 +469,19 @@ class ScheduleViewModel extends GetxController {
       final scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
 
       // 반복 일정 처리
-      if (schedule.repeatType == '지정') {
-        // 반복 일정이 오늘 해당하는지 확인
-        if (scheduleStart.isBefore(todayEnd) && scheduleEnd.isAfter(todayStart)) {
-          int daysSinceStart = todayStart.difference(scheduleStart).inDays;
-          int weeksSinceStart = daysSinceStart ~/ 7;
-          if (weeksSinceStart % schedule.repeatWeeks == 0 &&
-              schedule.repeatDays[today.weekday - 1] &&
-              todayStart.isBefore(schedule.repeatEndDate)) {
-            return true;
-          }
-        }
-        return false;
-      }
+      // if (schedule.repeatType == '지정') {
+      //   // 반복 일정이 오늘 해당하는지 확인
+      //   if (scheduleStart.isBefore(todayEnd) && scheduleEnd.isAfter(todayStart)) {
+      //     int daysSinceStart = todayStart.difference(scheduleStart).inDays;
+      //     int weeksSinceStart = daysSinceStart ~/ 7;
+      //     if (weeksSinceStart % schedule.repeatWeeks == 0 &&
+      //         schedule.repeatDays[today.weekday - 1] &&
+      //         todayStart.isBefore(schedule.repeatEndDate)) {
+      //       return true;
+      //     }
+      //   }
+      //   return false;
+      // }
 
       // 일반 일정 처리
       return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);

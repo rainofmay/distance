@@ -118,17 +118,21 @@ class QuoteSettingsDialog extends StatelessWidget {
         Text('폰트 지정', style: TextStyle(color: WHITE)),
         Theme(
           data: Theme.of(context).copyWith(
-            canvasColor: Colors.black54,
+            canvasColor: BLACK,
           ),
           child: DropdownButton<String>(
             value: viewModel.quoteFont.value,
             style: TextStyle(color: WHITE),
             items: [
+              'Cafe24OhsquareAir',
+              'Cafe24SupermagicRegular',
+              'CormorantGaramondMedium',
+              'EduAUVICWANTHandRegular',
+              'GaeguRegular',
+              'GmarketSansTTFLight',
               'GmarketSansTTFMedium',
-              'Roboto',
-              'Lato',
-              'Open Sans',
-              'Montserrat'
+              'NotoSansKRBold',
+              'NotoSansKRLight',
             ].map((String value) {
               return DropdownMenuItem<String>(
                 value: value,

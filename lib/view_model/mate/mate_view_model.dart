@@ -13,7 +13,6 @@ class MateViewModel extends GetxController {
     _mateRepository = mateRepository;
 }
 
-
   late final RxString name = "".obs;
   late final RxString introduction = "".obs;
   late final RxString imageUrl = "".obs;

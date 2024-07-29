@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 
 class MotivationalQuote extends GetView<MyroomViewModel> {
-  MotivationalQuote({Key? key}) : super(key: key);
+  MotivationalQuote({super.key});
 
   @override
   Widget build(BuildContext context) {

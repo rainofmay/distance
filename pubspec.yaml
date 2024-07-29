@@ -86,4 +86,25 @@ flutter:
     - family: GmarketSansTTFMedium
       fonts:
         - asset: assets/fonts/GmarketSansTTFMedium.ttf
+    - family: Cafe24OhsquareAir
+      fonts:
+        - asset: assets/fonts/Cafe24OhsquareAir.ttf
+    - family: Cafe24SupermagicRegular
+      fonts:
+        - asset: assets/fonts/Cafe24SupermagicRegular.ttf
+    - family: CormorantGaramondMedium
+      fonts:
+        - asset: assets/fonts/CormorantGaramondMedium.ttf
+    - family: EduAUVICWANTHandRegular
+      fonts:
+        - asset: assets/fonts/EduAUVICWANTHandRegular.ttf
+    - family: GaeguRegular
+      fonts:
+        - asset: assets/fonts/GaeguRegular.ttf
+    - family: NotoSansKRBold
+      fonts:
+        - asset: assets/fonts/NotoSansKRBold.ttf
+    - family: NotoSansKRLight
+      fonts:
+        - asset: assets/fonts/NotoSansKRLight.ttf
   uses-material-design: true
