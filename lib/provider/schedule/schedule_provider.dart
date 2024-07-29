@@ -6,23 +6,11 @@ class ScheduleProvider {
 
   /* Get */
   Future<List<Map<String, dynamic>>> getAllScheduleData() async {
-    final response = await supabase.from('schedule').select();
+    final response = await supabase.from('schedule').select().order('created_at', ascending: false );
     return response;
   }
 
-  Future<List<Map<String, dynamic>>> getScheduleData(DateTime day) async {
-    final response = await supabase
-        .from('schedule')
-        .select()
-        .lte('start_date',
-        '${day.year}${day.month.toString().padLeft(2, '0')}${day.day.toString()
-            .padLeft(2, '0')}')
-        .gte('end_date',
-    '${day.year}${day.month.toString().padLeft(2, '0')}${day.day.toString()
-        .padLeft(2, '0')}');
-    return response;
-  }
-
+  // 수정모드에서 필요
   Future<ScheduleModel> getScheduleById(String id) async {
     final response = await supabase
         .from('schedule')
@@ -93,4 +81,18 @@ class ScheduleProvider {
         .eq('group_id', groupId)
         .neq('id', exceptId);
   }
+
+
+  // Future<List<Map<String, dynamic>>> getScheduleData(DateTime day) async {
+  //   final response = await supabase
+  //       .from('schedule')
+  //       .select()
+  //       .lte('start_date',
+  //       '${day.year}${day.month.toString().padLeft(2, '0')}${day.day.toString()
+  //           .padLeft(2, '0')}')
+  //       .gte('end_date',
+  //       '${day.year}${day.month.toString().padLeft(2, '0')}${day.day.toString()
+  //           .padLeft(2, '0')}');
+  //   return response;
+  // }
 }

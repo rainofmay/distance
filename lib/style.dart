@@ -18,7 +18,7 @@ var theme = ThemeData(
     height: 2.2,
     letterSpacing: 1.5,
   )),
-
+  scaffoldBackgroundColor: WHITE,
   bottomNavigationBarTheme: BottomNavigationBarThemeData(
     backgroundColor: DARK,
     type: BottomNavigationBarType.fixed,

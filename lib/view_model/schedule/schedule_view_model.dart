@@ -151,6 +151,7 @@ class ScheduleViewModel extends GetxController {
       repeatDays: List.filled(7, false),
       repeatWeeks: 1,
       repeatEndDate: initialDate.add(Duration(days: 91)),
+      isDone : false,
     );
   }
 
@@ -345,6 +346,24 @@ class ScheduleViewModel extends GetxController {
   void setSectionColorIndex(int index) {
     _selectedSectionColor.value = sectionColors[index];
     updateHandlingScheduleValue((s) => s.copyWith(sectionColor: index));
+  }
+
+  void setIsDone(bool value) {
+    updateHandlingScheduleValue((s) => s.copyWith(isDone: value));
+  }
+
+  // Floating todo 에서 일정 상태 변경하는
+  Future<void> toggleScheduleCompletion(ScheduleModel schedule) async {
+    try {
+      final updatedSchedule = schedule.copyWith(isDone: !schedule.isDone);
+      await scheduleProvider.editScheduleData(updatedSchedule);
+      await updateAllSchedules();
+      updateSelectedDateSchedules();
+      updateTodaySchedules();
+      update();
+    } catch (e) {
+      print('Error toggling schedule completion: $e');
+    }
   }
 
   void updateFocusedDate(DateTime focusedDate) {

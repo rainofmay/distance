@@ -42,6 +42,7 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        resizeToAvoidBottomInset: false,
         backgroundColor: WHITE,
         appBar: CustomBackAppBar(
           isLeading: true,
@@ -62,8 +63,10 @@ class _CreateScheduleScreenState extends State<CreateScheduleScreen> {
             ))
           ],
         ),
-        body: SafeArea(
-          child: Form(key: _formKey, child: ScheduleForm()),
+        body: SingleChildScrollView(
+          child: SafeArea(
+            child: Form(key: _formKey, child: ScheduleForm()),
+          ),
         ));
   }
 }

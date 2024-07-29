@@ -14,6 +14,7 @@ class ScheduleModel {
   final List<bool> repeatDays;
   final int repeatWeeks;
   final DateTime repeatEndDate;
+  final bool isDone;
 
   ScheduleModel(
       {required this.id,
@@ -27,7 +28,8 @@ class ScheduleModel {
       this.repeatType = '반복 없음',
       this.repeatDays = const [],
       this.repeatWeeks = 1,
-      required this.repeatEndDate});
+      required this.repeatEndDate,
+      required this.isDone});
 
 //JSON으로부터 모델을 만들어내는 생성자
   ScheduleModel.fromJson({required Map<String, dynamic> json})
@@ -42,7 +44,8 @@ class ScheduleModel {
         repeatType = json['repeat_type'] ?? '반복 없음',
         repeatDays = List<bool>.from(json['repeat_days'] ?? []),
         repeatWeeks = json['repeat_weeks'] ?? 1,
-        repeatEndDate = DateTime.parse(json['repeat_end_date']);
+        repeatEndDate = DateTime.parse(json['repeat_end_date']),
+        isDone = json['is_done'];
 
   static DateTime _parseDateTime(String dateTimeString) {
     if (dateTimeString.length == 12) {
@@ -74,6 +77,7 @@ class ScheduleModel {
       'repeat_weeks': repeatWeeks,
       'repeat_end_date':
           '${repeatEndDate.year}${repeatEndDate.month.toString().padLeft(2, '0')}${repeatEndDate.day.toString().padLeft(2, '0')}',
+      'is_done' : isDone,
     };
   }
 
@@ -90,6 +94,7 @@ class ScheduleModel {
     List<bool>? repeatDays,
     int? repeatWeeks,
     DateTime? repeatEndDate,
+    bool? isDone,
   }) {
     return ScheduleModel(
       id: id ?? this.id,
@@ -104,6 +109,7 @@ class ScheduleModel {
       repeatDays: repeatDays ?? this.repeatDays,
       repeatWeeks: repeatWeeks ?? this.repeatWeeks,
       repeatEndDate: repeatEndDate ?? this.repeatEndDate,
+      isDone : isDone ?? this.isDone,
     );
   }
 }

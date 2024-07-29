@@ -8,6 +8,8 @@ import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
+import 'package:mobile/widgets/custom_check_box.dart';
+import 'package:mobile/widgets/tapable_row.dart';
 
 class EditScheduleScreen extends StatefulWidget {
   const EditScheduleScreen({super.key});
@@ -35,6 +37,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
     if (_formKey.currentState!.validate() && viewModel.isFormValid) {
       _formKey.currentState!.save();
       await viewModel.editSchedule();
+
+      if(!mounted) return;
       Navigator.of(context).pop();
     }
   }
@@ -42,6 +46,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   @override
   Widget build(BuildContext context) {
     return Obx(() => Scaffold(
+          resizeToAvoidBottomInset: false,
           backgroundColor: WHITE,
           appBar: CustomBackAppBar(
             isLeading: true,
@@ -56,10 +61,12 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 builder: (BuildContext context, TextEditingValue value,
                     Widget? child) {
                   return TextButton(
-                    onPressed: viewModel.isFormValid ? () => _onSavePressed() : null,
+                    onPressed:
+                        viewModel.isFormValid ? () => _onSavePressed() : null,
                     child: Text(
                       '수정',
-                      style: TextStyle(color: viewModel.isFormValid ? WHITE : GREY),
+                      style: TextStyle(
+                          color: viewModel.isFormValid ? WHITE : GREY),
                     ),
                   );
                 },
@@ -67,9 +74,11 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
               TextButton(
                 onPressed: () {
                   if (viewModel.nowHandlingScheduleModel.repeatType == '지정') {
-                    showDeleteOptionDialog(context, viewModel.nowHandlingScheduleModel);
+                    showDeleteOptionDialog(
+                        context, viewModel.nowHandlingScheduleModel);
                   } else {
-                    viewModel.deleteSchedule(viewModel.nowHandlingScheduleModel, false);
+                    viewModel.deleteSchedule(
+                        viewModel.nowHandlingScheduleModel, false);
                     Navigator.of(context).pop();
                   }
                 },
@@ -83,9 +92,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           ),
           body: SafeArea(
               child: Form(
-            key: _formKey,
-            child: ScheduleForm()
-          )),
+                  key: _formKey,
+                  child: ScheduleForm())),
         ));
   }
 
@@ -104,19 +112,21 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               TextButton(
-                child: Text('반복되는 모든 일정 삭제', style: TextStyle(color: WHITE, fontSize: 15)),
+                child: Text('반복되는 모든 일정 삭제',
+                    style: TextStyle(color: WHITE, fontSize: 15)),
                 onPressed: () {
-                  Navigator.of(context).pop();  // 다이얼로그 닫기
+                  Navigator.of(context).pop(); // 다이얼로그 닫기
                   viewModel.deleteSchedule(schedule, true);
-                  Navigator.of(context).pop();  // EditScheduleScreen 닫기
+                  Navigator.of(context).pop(); // EditScheduleScreen 닫기
                 },
               ),
               TextButton(
-                child: Text('이 일정만 삭제', style: TextStyle(color: WHITE, fontSize: 15)),
+                child: Text('이 일정만 삭제',
+                    style: TextStyle(color: WHITE, fontSize: 15)),
                 onPressed: () {
-                  Navigator.of(context).pop();  // 다이얼로그 닫기
+                  Navigator.of(context).pop(); // 다이얼로그 닫기
                   viewModel.deleteSchedule(schedule, false);
-                  Navigator.of(context).pop();  // EditScheduleScreen 닫기
+                  Navigator.of(context).pop(); // EditScheduleScreen 닫기
                 },
               ),
             ],

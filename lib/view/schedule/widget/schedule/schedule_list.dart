@@ -68,7 +68,8 @@ class ScheduleList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(schedule.scheduleName,
-                                style: const TextStyle(
+                                style: schedule.isDone ? const TextStyle(
+                                    fontSize: 15, color: BLACK, decoration: TextDecoration.lineThrough) : const TextStyle(
                                     fontSize: 15, color: BLACK)),
                             Text(
                               schedule.isTimeSet
