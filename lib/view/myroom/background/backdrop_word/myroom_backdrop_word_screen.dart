@@ -33,7 +33,7 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
   Widget _buildQuoteContainer(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        final maxWidth = MediaQuery.of(context).size.width * 0.8;
+        final maxWidth = MediaQuery.of(context).size.width * 0.85;
         return Obx(() {
           return Container(
             constraints: BoxConstraints(maxWidth: maxWidth),

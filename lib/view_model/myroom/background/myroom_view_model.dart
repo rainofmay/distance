@@ -33,6 +33,7 @@ class MyroomViewModel extends GetxController {
   final RxDouble quoteFontSize = 18.0.obs;
   final Rx<Offset> quotePosition = Offset(20, 40).obs;
 
+  final RxBool isCustomQuote = false.obs;
 
   final RxString customQuote = ''.obs;
   final RxString customQuoteAuthor = ''.obs;
@@ -128,6 +129,16 @@ class MyroomViewModel extends GetxController {
     customQuote.value = prefs.getString('customQuote') ?? '';
     customQuoteAuthor.value = prefs.getString('customQuoteAuthor') ?? '';
 
+    String savedQuote = prefs.getString('customQuote') ?? '';
+    String savedAuthor = prefs.getString('customQuoteAuthor') ?? '';
+
+    if (savedQuote.isNotEmpty) {
+      currentQuote.value = Quote(quote: savedQuote, writer: savedAuthor);
+      isCustomQuote.value = true;
+    } else {
+      updateQuote();
+    }
+
     if (!isImage.value) {
       initializeVideo();
     }
@@ -169,14 +180,6 @@ class MyroomViewModel extends GetxController {
   void updateQuotePosition(Offset newPosition) {
     quotePosition.value = newPosition;
   }
-  void updateQuote() {
-    if (customQuote.value.isNotEmpty) {
-      currentQuote.value = Quote(quote: customQuote.value, writer: customQuoteAuthor.value);
-    } else {
-      final random = Random();
-      currentQuote.value = quotes[random.nextInt(quotes.length)];
-    }
-  }
 
   void updateQuoteBackdropColor(Color color) async {
     quoteBackdropColor.value = color;
@@ -207,16 +210,31 @@ class MyroomViewModel extends GetxController {
     prefs.setInt('quoteFontColor', color.value);
   }
 
+  void updateQuote() {
+      // 현재 custom quote가 표시중이라면 랜덤 quote로 변경
+      final random = Random();
+      Quote newQuote;
+      do {
+        newQuote = quotes[random.nextInt(quotes.length)];
+      } while (newQuote.quote == currentQuote.value.quote);
+      currentQuote.value = newQuote;
+      isCustomQuote.value = false;
+  }
+
   void updateCustomQuote(String quote) async {
-    customQuote.value = quote;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('customQuote', quote);
+    currentQuote.value = Quote(quote: quote, writer: customQuoteAuthor.value);
+    isCustomQuote.value = true;
   }
 
   void updateCustomQuoteAuthor(String author) async {
-    customQuoteAuthor.value = author;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('customQuoteAuthor', author);
+    currentQuote.update((val) {
+      val?.writer = author;
+    });
+    customQuoteAuthor.value = author;
   }
 
   Future<void> setTheme(String category) async {

@@ -1,13 +1,55 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/util/ads/adsHelper.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/theme_detail_choice_screen.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 
-class BackgroundThemes extends StatelessWidget {
-  const BackgroundThemes({super.key});
+class BackgroundThemes extends StatefulWidget {
+  BackgroundThemes({super.key});
+
+  @override
+  _BackgroundThemesState createState() => _BackgroundThemesState();
+}
+
+class _BackgroundThemesState extends State<BackgroundThemes> {
+  BannerAd? _bannerAd;
+  bool _isAdLoaded = false;
+
+  void _loadAd() {
+    BannerAd(
+      adUnitId: AdHelper.bannerAdUnitId,
+      request: AdRequest(),
+      size: AdSize.largeBanner,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          setState(() {
+            _bannerAd = ad as BannerAd;
+            _isAdLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          print('Failed to load a banner ad: ${err.message}');
+          ad.dispose();
+        },
+      ),
+    ).load();
+  }
+
+
+  @override
+  void initState() {
+    _loadAd();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,20 +77,20 @@ class BackgroundThemes extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 40),
                 Container(
                   width: double.infinity,
-                  height: 120,
-                  decoration: BoxDecoration(color: DARK),
                   child: Padding(
                     padding: const EdgeInsets.all(10),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('「프리미엄 Distance」',
-                            style: TextStyle(color: PRIMARY_COLOR)),
-                        Text('1개월 무료 체험', style: TextStyle(color: WHITE)),
+                        if (_isAdLoaded)
+                            SizedBox(
+                              height: _bannerAd!.size.height.toDouble(),
+                              child: AdWidget(ad: _bannerAd!),
+                            ),
+
                       ],
                     ),
                   ),
@@ -279,6 +321,7 @@ class BackgroundThemes extends StatelessWidget {
                     ],
                   ),
                 ),
+                // TODO: Display a banner when ready
               ],
             ),
           ]),

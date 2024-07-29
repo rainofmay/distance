@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
@@ -19,6 +20,11 @@ import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
+Future<InitializationStatus> _initGoogleMobileAds() {
+  // TODO: Initialize Google Mobile Ads SDK
+  return MobileAds.instance.initialize();
+}
+
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
@@ -31,7 +37,7 @@ Future<void> main() async {
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
   KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
-
+  _initGoogleMobileAds();
 
   runApp(const MainPage());
   FlutterNativeSplash.remove();
