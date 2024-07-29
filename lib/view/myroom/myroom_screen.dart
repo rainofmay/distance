@@ -5,16 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/online_status.dart';
-import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
 import 'package:mobile/provider/user/user_provider.dart';
-import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
 import 'package:mobile/util/mate/online_status_manager.dart';
 import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_setting_screen.dart';
 import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_word_screen.dart';
 import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
-import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/action_buttons.dart';
 import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
@@ -81,12 +78,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
               AudioSpectrumWidget(
                   audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
             if (widget.backgroundViewModel.isBackdropWordEnabled.value)
-              Positioned(
-                top: 40,
-                left: 20,
-                right: 20,
-                child: MotivationalQuote(),
-              ),
+              MotivationalQuote(),
+
           ],
         );
       }),
