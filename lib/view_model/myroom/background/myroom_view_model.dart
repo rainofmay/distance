@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/common/const/quotes.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../model/quote_model.dart';
 
 class MyroomViewModel extends GetxController {
 
@@ -20,11 +25,14 @@ class MyroomViewModel extends GetxController {
   final RxBool isBackdropWordEnabled = false.obs;
   final RxBool isVideoLoading = true.obs;
 
+  final Rx<Quote> currentQuote = quotes[Random().nextInt(quotes.length)].obs;
   final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
   final RxDouble quoteBackdropOpacity = 0.5.obs;
   final Rx<Color> quoteFontColor = Colors.white.obs;
   final RxString quoteFont = 'GmarketSansTTFMedium'.obs;
   final RxDouble quoteFontSize = 18.0.obs;
+  final Rx<Offset> quotePosition = Offset(20, 40).obs;
+
 
   final RxString customQuote = ''.obs;
   final RxString customQuoteAuthor = ''.obs;
@@ -156,6 +164,18 @@ class MyroomViewModel extends GetxController {
     isBackdropWordEnabled.value = value;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('isBackdropWordEnabled', isBackdropWordEnabled.value);
+  }
+
+  void updateQuotePosition(Offset newPosition) {
+    quotePosition.value = newPosition;
+  }
+  void updateQuote() {
+    if (customQuote.value.isNotEmpty) {
+      currentQuote.value = Quote(quote: customQuote.value, writer: customQuoteAuthor.value);
+    } else {
+      final random = Random();
+      currentQuote.value = quotes[random.nextInt(quotes.length)];
+    }
   }
 
   void updateQuoteBackdropColor(Color color) async {
