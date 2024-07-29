@@ -5,19 +5,30 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuoteSettingsDialog extends StatelessWidget {
   final MyroomViewModel viewModel = Get.find<MyroomViewModel>();
 
-   QuoteSettingsDialog({super.key});
+  QuoteSettingsDialog({super.key});
+  late String savedQuote = "";
+  late String savedAuthor = "";
+
+  @override
+  void initState() async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    savedQuote = prefs.getString('customQuote') ?? '';
+    savedAuthor = prefs.getString('customQuoteAuthor') ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SingleChildScrollView(
         child: Padding(
-        padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,),
+          padding: EdgeInsets.only(
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+          ),
           child: GlassMorphism(
             blur: 1,
             opacity: 0.65,
@@ -33,13 +44,11 @@ class QuoteSettingsDialog extends StatelessWidget {
                   children: [
                     Text(
                       'Words of the day',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: WHITE),
+                      style: TextStyle(fontSize: 18, color: WHITE),
                     ),
                     Expanded(
                       child: Obx(() => ListView(
-                        shrinkWrap: true,
+                            shrinkWrap: true,
                             children: [
                               const SizedBox(height: 16),
                               _buildBackdropColorPicker(context),
@@ -149,7 +158,8 @@ class QuoteSettingsDialog extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Words of the day', style: TextStyle(color: WHITE)),
-        TextField(
+        TextFormField(
+          initialValue: savedQuote,
           style: TextStyle(color: WHITE, fontSize: 12),
           cursorColor: PRIMARY_LIGHT,
           decoration: InputDecoration(
@@ -160,12 +170,14 @@ class QuoteSettingsDialog extends StatelessWidget {
             ),
           ),
           onChanged: (value) => viewModel.updateCustomQuote(value),
-          autocorrect: false, // 자동 수정 비활성화
+          autocorrect: false,
+          // 자동 수정 비활성화
           enableSuggestions: false, // 추천 단어 기능 비활성화
         ),
         SizedBox(height: 8),
         Text('Who', style: TextStyle(color: WHITE)),
-        TextField(
+        TextFormField(
+          initialValue: savedAuthor,
           style: TextStyle(color: WHITE, fontSize: 12),
           decoration: InputDecoration(
             hintText: '누구의 말인가요?',
@@ -175,9 +187,9 @@ class QuoteSettingsDialog extends StatelessWidget {
             ),
           ),
           onChanged: (value) => viewModel.updateCustomQuoteAuthor(value),
-          autocorrect: false, // 자동 수정 비활성화
+          autocorrect: false,
+          // 자동 수정 비활성화
           enableSuggestions: false, // 추천 단어 기능 비활성화
-
         ),
       ],
     );
@@ -233,7 +245,10 @@ class QuoteSettingsDialog extends StatelessWidget {
             ),
           ),
           actions: <Widget>[
-            OkCancelButtons(okText: '확인', okTextColor: BLACK, onPressed: () => Navigator.of(context).pop())
+            OkCancelButtons(
+                okText: '확인',
+                okTextColor: BLACK,
+                onPressed: () => Navigator.of(context).pop())
           ],
         );
       },
