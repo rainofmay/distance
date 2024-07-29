@@ -2,15 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/background_model.dart';
+import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
-import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 // 이미지 모음
 Widget gridPictures(List<ThemePicture> pictures) {
   final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
-
   return GridView.builder(
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 3,
@@ -38,39 +36,29 @@ Widget gridPictures(List<ThemePicture> pictures) {
 // 이미지 다이얼로그 빌더 함수
 Widget _buildImageDialog(BuildContext context, ThemePicture picture,
     MyroomViewModel myroomViewModel) {
+  final adController = Get.put(AdController());
+  adController.loadInterstitialAd();
   return AlertDialog(
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8.0), // 여기서 둥글기를 조절합니다
-    ),
-    backgroundColor: WHITE,
-    title: const Text("배경 변경", style: TextStyle(fontSize: 18)),
+    title: const Text("배경 변경"),
     content: CachedNetworkImage(imageUrl: picture.highQualityUrl),
     // CachedNetworkImage 사용
     actions: [
-      OkCancelButtons(
-        okText: '변경',
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Cancel'),
+      ),
+      TextButton(
         onPressed: () {
           myroomViewModel.setSelectedImageUrl(
               picture.highQualityUrl, picture.thumbnailUrl);
           Navigator.pop(context);
+          print("InterstitialAd 발동");
+          if (adController.interstitialAd.value != null) {
+            adController.interstitialAd.value?.show();
+          }
         },
-        okTextColor: BLACK,
-        cancelText: '취소',
-        onCancelPressed: () => Navigator.pop(context),
-        cancelTextColor: BLACK,
+        child: const Text('Change'),
       ),
-      // TextButton(
-      //   onPressed: () => Navigator.pop(context),
-      //   child: const Text('취소', style: TextStyle(color: BLACK)),
-      // ),
-      // TextButton(
-      //   onPressed: () {
-      //     myroomViewModel.setSelectedImageUrl(
-      //         picture.highQualityUrl, picture.thumbnailUrl);
-      //     Navigator.pop(context);
-      //   },
-      //   child: const Text('변경', style: TextStyle(color: BLACK)),
-      // ),
     ],
   );
 }
@@ -232,4 +220,6 @@ class CustomVideoDialog extends StatelessWidget {
       ),
     );
   }
+
 }
+
