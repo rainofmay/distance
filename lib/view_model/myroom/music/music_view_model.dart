@@ -77,7 +77,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
     try {
       _musicInfoList.value = await _repository.fetchThemeMusic(theme);
       if (_musicInfoList.isNotEmpty) {
-        await setCurrentMusic(isShuffled);
+        await setCurrentMusic(_isShuffled.value);
       }
     } catch (e) {
       print('Failed to fetch theme music: $e');
@@ -141,7 +141,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
     update();
   }
 
-  musicPlayPause() async {
+  Future<void> musicPlayPause() async {
     if (_musicPlayer().state == PlayerState.playing) {
       await _musicPlayer().pause();
       _isMusicPlaying.value = false;
@@ -202,9 +202,21 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
 
   /* 플레이리스트 변경 */
   setCurrentPlayList(CurrentPlayList newList) async {
+    // 현재 재생 중인 음악 정지
+    await _musicPlayer().stop();
+    _isMusicPlaying.value = false;
+
+    // 재생 시간 초기화
+    _currentMusicPosition.value = Duration.zero;
+    _currentMusicDuration.value = Duration.zero;
+
     _currentPlayList.value = newList;
     _repository.saveCurrentPlayListIndex(newList.theme);
     await getThemeMusic(newList.theme);
+
+    // 현재 인덱스 초기화
+    _currentIndex.value = 0;
+
     update();
   }
 }

@@ -45,7 +45,14 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
                 child: const Text(
-                    'Log in and experience Distance. It is yours.',
+                    'Log in and experience Distance.',
+                    style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
+                    textAlign: TextAlign.start),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: const Text(
+                    'You can listen to music from your own background.',
                     style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
                     textAlign: TextAlign.start),
               ),
