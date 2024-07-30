@@ -269,7 +269,7 @@ class _AuthScreenState extends State<AuthScreen> {
     return digest.toString();
   }
 
-
+   // 이메일 로그인
   void signIn() async {
     String emailValue = _emailController.text;
     String passwordValue = _passwordController.text;
@@ -310,12 +310,12 @@ class _AuthScreenState extends State<AuthScreen> {
     try {
       await supabase.auth.signOut();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그아웃 성공'),
+        content: Text('로그아웃 되었습니다.'),
       ));
     } catch (error) {
       print(error);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그아웃 실패'),
+        content: Text('로그아웃에 실패했습니다.'),
       ));
     }
   }

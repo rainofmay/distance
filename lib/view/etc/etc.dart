@@ -7,6 +7,7 @@ import 'package:mobile/view/etc/personal_information.dart';
 import 'package:mobile/view/etc/update_notification.dart';
 import 'package:mobile/view/payment/payment_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
@@ -16,7 +17,7 @@ import 'package:mobile/common/const/colors.dart';
 class Etc extends StatelessWidget {
   Etc({super.key});
   final MateViewModel viewModel = Get.find<MateViewModel>(); // Get the ViewModel instance
-
+  final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
   @override
   Widget build(BuildContext context) {
     AuthHelper.navigateToAuthScreen();
@@ -71,7 +72,9 @@ class Etc extends StatelessWidget {
                 ),
                 Expanded(child: Container()),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    loginViewModel.signOut(context);
+                  },
                   style: ElevatedButton.styleFrom(
                       overlayColor: TRANSPARENT,
                       shadowColor: TRANSPARENT,
