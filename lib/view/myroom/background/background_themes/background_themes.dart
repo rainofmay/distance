@@ -6,15 +6,16 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/theme_detail_choice_screen.dart';
+import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 
 class BackgroundThemes extends StatefulWidget {
   BackgroundThemes({super.key});
-
+  final viewModel = Get.put(MyroomViewModel());
   @override
-  _BackgroundThemesState createState() => _BackgroundThemesState();
+  State<BackgroundThemes> createState() => _BackgroundThemesState();
 }
 
 class _BackgroundThemesState extends State<BackgroundThemes> {
@@ -22,6 +23,7 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
 
   @override
   void initState() {
+    super.initState();
     adController.loadBannerAd();
   }
 
@@ -93,7 +95,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Spring',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('spring');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -113,7 +117,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Summer',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('summer');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -133,7 +139,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Fall',
-                          onTap: () {
+                          onTap: () async {
+                            if (!context.mounted) return;
+                            widget.viewModel.setCurrentTheme('fall');
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -153,7 +161,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Winter',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('winter');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -191,7 +201,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Ocean',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('ocean');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -211,7 +223,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Sunset',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('sunset');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -231,7 +245,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Cafe',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('cafe');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -251,7 +267,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Camping',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('camping');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -271,7 +289,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'City',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('city');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -309,7 +329,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                     children: [
                       ThemeBox(
                           themeName: 'Animal',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('animal');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -329,7 +351,9 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                               fit: BoxFit.cover)),
                       ThemeBox(
                           themeName: 'Gomzy',
-                          onTap: () {
+                          onTap: () async {
+                            await widget.viewModel.setCurrentTheme('gomzy');
+                            if (!context.mounted) return;
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(

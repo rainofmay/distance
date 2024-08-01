@@ -6,9 +6,8 @@ import 'package:mobile/model/background_model.dart';
 import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 
-// 이미지 모음
-Widget gridPictures(List<ThemePicture> pictures) {
-  final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
+Widget gridContents(List<dynamic> contents) {
+
   return GridView.builder(
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 3,
@@ -16,10 +15,17 @@ Widget gridPictures(List<ThemePicture> pictures) {
       mainAxisSpacing: 4.0,
       childAspectRatio: 1.0,
     ),
-    itemCount: pictures.length,
+    itemCount: contents.length,
     itemBuilder: (context, index) {
-      final picture = pictures[index];
-      return GestureDetector(
+      final content = contents[index];
+      return content.runtimeType == ThemePicture ? gridPictures(context, content) : gridVideos(context, content);
+    },
+  );
+}
+// 이미지 모음
+Widget gridPictures(BuildContext context, ThemePicture picture) {
+  final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
+  return GestureDetector(
         onTap: () {
           showDialog(
             context: context,
@@ -29,8 +35,6 @@ Widget gridPictures(List<ThemePicture> pictures) {
         },
         child: _buildImagePreview(picture), // 변경
       );
-    },
-  );
 }
 
 // 이미지 다이얼로그 빌더 함수
@@ -94,20 +98,10 @@ Widget _buildImagePreview(ThemePicture picture) {
 }
 
 // 영상 모음
-Widget gridVideos(List<ThemeVideo> videos) {
+Widget gridVideos(BuildContext context, ThemeVideo video) {
   final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
 
-  return GridView.builder(
-    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-      crossAxisCount: 3,
-      crossAxisSpacing: 4.0,
-      mainAxisSpacing: 4.0,
-      childAspectRatio: 1.0,
-    ),
-    itemCount: videos.length,
-    itemBuilder: (context, index) {
-      final video = videos[index];
-      return GestureDetector(
+  return GestureDetector(
         onTap: () async {
           myroomViewModel.isVideoLoading.value = true;
           CachedVideoPlayerController videoController_ =
@@ -135,8 +129,6 @@ Widget gridVideos(List<ThemeVideo> videos) {
         },
         child: _buildVideoPreview(video), // 변경
       );
-    },
-  );
 }
 
 // 비디오 미리보기 빌더 함수
@@ -178,8 +170,8 @@ class CustomVideoDialog extends StatelessWidget {
     required this.videoController,
     required this.onCancel,
     required this.onChange,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -208,11 +200,11 @@ class CustomVideoDialog extends StatelessWidget {
             children: [
               TextButton(
                 onPressed: onCancel,
-                child: Text('Cancel', style: TextStyle(color: Colors.white)),
+                child: Text('취소', style: TextStyle(color: Colors.white)),
               ),
               TextButton(
                 onPressed: onChange,
-                child: Text('Change', style: TextStyle(color: Colors.white)),
+                child: Text('변경', style: TextStyle(color: Colors.white)),
               ),
             ],
           ),

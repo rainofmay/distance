@@ -8,8 +8,7 @@ import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
-import 'package:mobile/widgets/custom_check_box.dart';
-import 'package:mobile/widgets/tapable_row.dart';
+
 
 class EditScheduleScreen extends StatefulWidget {
   const EditScheduleScreen({super.key});
@@ -23,8 +22,6 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
 
-  final _formKey = GlobalKey<FormState>();
-
   bool isAllDelete = false;
 
   chooseDeleteOption() {
@@ -34,8 +31,8 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
   }
 
   void _onSavePressed() async {
-    if (_formKey.currentState!.validate() && viewModel.isFormValid) {
-      _formKey.currentState!.save();
+    if (viewModel.formKey.currentState!.validate() && viewModel.isFormValid) {
+      viewModel.formKey.currentState!.save();
       await viewModel.editSchedule();
 
       if(!mounted) return;
@@ -92,7 +89,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           ),
           body: SafeArea(
               child: Form(
-                  key: _formKey,
+                  key: viewModel.formKey,
                   child: ScheduleForm())),
         ));
   }

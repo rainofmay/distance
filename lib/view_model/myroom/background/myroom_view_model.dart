@@ -8,8 +8,7 @@ import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../model/quote_model.dart';
+import 'package:mobile/model/quote_model.dart';
 
 class MyroomViewModel extends GetxController {
 
@@ -39,8 +38,13 @@ class MyroomViewModel extends GetxController {
   final RxString customQuoteAuthor = ''.obs;
 
   RxBool isThemeLoading = true.obs; // 로딩 상태 변수 추가
-  final RxList<ThemePicture> themePictures = <ThemePicture>[].obs;
-  final RxList<ThemeVideo> themeVideos = <ThemeVideo>[].obs;
+  late final RxList<dynamic> _themeContents = [].obs;
+  List<dynamic> get themeContents => _themeContents;
+
+  late final RxString _currentThemeName = ''.obs;
+  String get currentThemeName => _currentThemeName.value;
+  // final List<ThemePicture> themePictures = <ThemePicture>[];
+  // final List<ThemeVideo> themeVideos = <ThemeVideo>[];
 
 
   @override
@@ -48,6 +52,7 @@ class MyroomViewModel extends GetxController {
     super.onInit();
     loadPreferences();
     ever(isImage, (_) => toggleMedia());
+    setTheme(_currentThemeName.value);
   }
 
   @override
@@ -105,6 +110,19 @@ class MyroomViewModel extends GetxController {
     saveThumbnailUrl(thumbnailUrl);
     saveIsImage(false);
     initializeVideo();
+  }
+
+  Future<void> setTheme(String category) async {
+    isThemeLoading.value = true; // 로딩 시작
+    List<ThemePicture> themePictures = await myroomBackgroundRepository.fetchThemePictures(category);
+    List<ThemeVideo> themeVideos =  await myroomBackgroundRepository.fetchThemeVideos(category);
+    _themeContents.value = [...themePictures, ...themeVideos];
+    isThemeLoading.value = true; // 로딩 시작
+  }
+
+  Future<void> setCurrentTheme(String category) async {
+    _currentThemeName.value = category;
+    await setTheme(category);
   }
 
   void loadPreferences() async {
@@ -237,11 +255,5 @@ class MyroomViewModel extends GetxController {
     customQuoteAuthor.value = author;
   }
 
-  Future<void> setTheme(String category) async {
-    isThemeLoading.value = true; // 로딩 시작
-    themePictures.value = await myroomBackgroundRepository.fetchThemePictures(category);
-    themeVideos.value = await myroomBackgroundRepository.fetchThemeVideos(category);
-    isThemeLoading.value = true; // 로딩 시작
-  }
 
 }

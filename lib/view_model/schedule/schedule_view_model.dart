@@ -29,6 +29,8 @@ class ScheduleViewModel extends GetxController {
   CalendarFormat get calendarFormat => _calendarFormat.value;
 
   /* Schedule */
+  final formKey = GlobalKey<FormState>();
+
   late final RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
   List<ScheduleModel> get allSchedules => _allSchedules;
 
