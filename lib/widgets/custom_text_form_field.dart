@@ -62,8 +62,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         enabled: widget.isEnabled,
         readOnly: widget.isReadOnly ? true : false,
         maxLines: widget.maxLines,
-
+        cursorColor: THIRD,
         decoration: InputDecoration(
+            focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: THIRD), // 포커스 시 밑줄 색상
+            ),
+            enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: GREY), // 포커스 시 밑줄 색상
+            ),
           isDense: true,
             contentPadding: EdgeInsets.all(10),
           prefix: widget.prefix,
@@ -74,9 +80,6 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             hintText: widget.hintText,
             counter: widget.counter,
             labelStyle: TextStyle(color: GREY),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: SECONDARY),
-            )
         ),
         obscureText: widget.isPasswordField,
       ),

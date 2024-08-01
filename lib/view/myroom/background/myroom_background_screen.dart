@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/view/myroom/background/background_themes/background_themes.dart';
@@ -98,7 +99,11 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
   Widget _editBackground() {
     return GestureDetector(
       onTap: () {
-        editDialog();
+        pressed() {
+          editDialog();
+        }
+        AuthHelper.navigateToLoginScreen(
+            context, pressed);
       },
       child: Center(
           child: ClipRRect(
@@ -149,27 +154,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
               )),
             ),
           ]),
-          const SizedBox(height: 10),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Row(
-              children: [
-                Icon(CupertinoIcons.double_music_note, size: 15, color: WHITE),
-                const SizedBox(width: 8),
-                Text('Audio', style: TextStyle(color: WHITE)),
-              ],
-            ),
-            Transform.scale(
-              scale: 0.6,
-              child: Obx(() => CupertinoSwitch(
-                activeColor: PRIMARY_COLOR,
-                value: myroomViewModel.isAudioSpectrumEnabled.value,
-                onChanged: (value) {
-                  myroomViewModel.updateAudioSpectrumChange(value);
-                },
-              )),
-            ),
-          ]),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
               children: [

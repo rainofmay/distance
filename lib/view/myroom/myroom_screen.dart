@@ -13,7 +13,6 @@ import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
 import 'package:mobile/widgets/action_buttons.dart';
-import 'package:mobile/widgets/audio_spectrum_visualizer.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'background/myroom_background_screen.dart';
 
@@ -74,9 +73,9 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                   ),
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
-            if (widget.backgroundViewModel.isAudioSpectrumEnabled.value)
-              AudioSpectrumWidget(
-                  audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
+            // if (widget.backgroundViewModel.isAudioSpectrumEnabled.value)
+            //   AudioSpectrumWidget(
+            //       audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
             if (widget.backgroundViewModel.isBackdropWordEnabled.value)
               MotivationalQuote(),
 

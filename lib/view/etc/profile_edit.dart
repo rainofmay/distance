@@ -74,14 +74,9 @@ class _ProfileEditState extends State<ProfileEdit> {
         appbarTitle: '프로필 수정',
         isLeading: true,
         isCenterTitle: true,
+        backFunction: () => onSavePressed(),
         backgroundColor: WHITE,
         contentColor: BLACK,
-        actions: [
-          TextButton(
-              style: TextButton.styleFrom(overlayColor: TRANSPARENT),
-              onPressed: onSavePressed,
-              child: Text('저장', style: TextStyle(color: BLACK)))
-        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -165,7 +160,7 @@ class _ProfileEditState extends State<ProfileEdit> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         nameEdittor(fieldWidth),
-        const SizedBox(height: 20),
+        const SizedBox(height: 32),
         introductionEdittor(fieldWidth),
       ],
     );

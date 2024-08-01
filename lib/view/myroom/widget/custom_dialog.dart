@@ -187,38 +187,24 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
               child: Obx(() => CupertinoSwitch(
                 thumbColor: WHITE,
                 value: myroomViewModel.isSimpleWindowEnabled.value,
-                activeColor: SECONDARY,
+                activeColor: THIRD,
                 onChanged: (value) {
                   myroomViewModel.updateSimpleWindowChange(value);
                 },
               )),
             ),
           ]),
-          const SizedBox(height: 10),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            Text('Audio', style: TextStyle(color: WHITE)),
-            Transform.scale(
-              scale: 0.6,
-              child: Obx(() => CupertinoSwitch(
-                activeColor: SECONDARY,
-                value: myroomViewModel.isAudioSpectrumEnabled.value,
-                onChanged: (value) {
-                  myroomViewModel.updateAudioSpectrumChange(value);
-                },
-              )),
-            ),
-          ]),
-          const SizedBox(height: 10),
+          const SizedBox(height: 16),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Text('Words', style: TextStyle(color: WHITE)),
             Transform.scale(
               scale: 0.6,
               child: Obx(() => CupertinoSwitch(
-                activeColor: SECONDARY,
-                value: myroomViewModel.isAudioSpectrumEnabled.value,
+                activeColor: THIRD,
+                value: myroomViewModel.isBackdropWordEnabled.value,
                 onChanged: (value) {
                   // update as necessary
-                  myroomViewModel.updateAudioSpectrumChange(value);
+                  myroomViewModel.updateBackdropWordChange(value);
                 },
               )),
             ),

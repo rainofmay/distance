@@ -40,6 +40,13 @@ var theme = ThemeData(
     unselectedIconTheme: IconThemeData(size: 20),
   ),
 
+    textSelectionTheme: TextSelectionThemeData(
+      selectionHandleColor: THIRD, // 텍스트 선택 핸들 색상
+      cursorColor: THIRD, // 커서 색상
+      selectionColor: THIRD.withOpacity(0.5), // 선택된 텍스트 배경색
+
+    ),
+
   tabBarTheme: TabBarTheme(
     labelColor: Colors.black,
     unselectedLabelColor: Colors.grey,

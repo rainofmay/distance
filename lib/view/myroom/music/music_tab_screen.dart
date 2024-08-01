@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/myroom/music/music_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/circled_music_player.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
@@ -31,9 +32,12 @@ class MusicTabScreen extends StatelessWidget {
             children: [
               Sector(
                   onTap: () {
-                    // Get.to(() => MusicThemesScreen());
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (c) => MusicThemesScreen()));
+                      pressed() {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (c) => MusicThemesScreen()));
+                      }
+                      AuthHelper.navigateToLoginScreen(
+                          context, pressed);
                   },
                   title: viewModel.currentPlayList.bigTitle,
                   iconData: CupertinoIcons.music_note_2),

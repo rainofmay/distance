@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
 import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
 import 'package:mobile/view/myroom/music/widget/sector.dart';
@@ -36,10 +37,12 @@ class SoundTabScreen extends StatelessWidget {
                 children: [
                   Sector(
                       onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (c) => SoundThemesScreen()));
+                        pressed() {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (c) => SoundThemesScreen()));
+                        }
+                        AuthHelper.navigateToLoginScreen(
+                            context, pressed);
                       },
                       title: '주변 소리',
                       iconData: CupertinoIcons.headphones),

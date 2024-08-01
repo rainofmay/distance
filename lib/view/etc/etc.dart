@@ -2,10 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/etc/personal_information.dart';
 import 'package:mobile/view/etc/update_notification.dart';
+import 'package:mobile/view/login/login_screen.dart';
 import 'package:mobile/view/payment/payment_screen.dart';
+import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
@@ -17,10 +20,8 @@ import 'package:mobile/common/const/colors.dart';
 class Etc extends StatelessWidget {
   Etc({super.key});
   final MateViewModel viewModel = Get.find<MateViewModel>(); // Get the ViewModel instance
-  final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
   @override
   Widget build(BuildContext context) {
-    AuthHelper.navigateToAuthScreen();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
@@ -41,7 +42,7 @@ class Etc extends StatelessWidget {
                   children: [
                     Obx(()=> ClipRRect(
                       borderRadius: BorderRadius.circular(50.0),
-                      child: viewModel.profileImageUrl.value == null
+                      child: viewModel.profileImageUrl.value == ''
                           ? Image.asset(
                         'assets/images/themes/gomzy_theme.jpg',
                         fit: BoxFit.cover,
@@ -70,21 +71,6 @@ class Etc extends StatelessWidget {
                     Text(viewModel.name.value)
                   ],
                 ),
-                Expanded(child: Container()),
-                ElevatedButton(
-                  onPressed: () {
-                    loginViewModel.signOut(context);
-                  },
-                  style: ElevatedButton.styleFrom(
-                      overlayColor: TRANSPARENT,
-                      shadowColor: TRANSPARENT,
-                      backgroundColor: WHITE,
-                      shape: RoundedRectangleBorder(
-                          side: BorderSide(color: BLACK),
-                          borderRadius: BorderRadius.circular(20))),
-                  child: Text('Log out',
-                      style: TextStyle(fontSize: 10, color: BLACK)),
-                )
               ],
             ),
           ),
@@ -92,16 +78,27 @@ class Etc extends StatelessWidget {
 
           // 구독 프리미엄
           GestureDetector(
+            behavior: HitTestBehavior.opaque,
+              onTap: () {
+                  pressed() {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const PaymentScreen()),
+                    );
+                  }
+                  AuthHelper.navigateToLoginScreen(context, pressed);
+              },
               child: Container(
             width: double.infinity,
-            height: 60,
+            height: 70,
             decoration: BoxDecoration(color: BLACK),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -110,22 +107,12 @@ class Etc extends StatelessWidget {
                       Text('1개월 무료 체험', style: TextStyle(color: WHITE)),
                     ],
                   ),
-                ),
-                IconButton(
-                    onPressed: () => {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const PaymentScreen()),
-                          )
-                        },
-                    // Navigate using GetX
-                    icon: Icon(Icons.arrow_forward_ios),
-                    color: WHITE),
-              ],
+                  Icon(Icons.arrow_forward_ios, size: 20, color: WHITE,)
+                ],
+              ),
             ),
           )),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
 
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -133,15 +120,18 @@ class Etc extends StatelessWidget {
               widget: Icon(CupertinoIcons.lock),
               title: '내 정보 관리',
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => PersonalInformation()));
+                pressed() {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (c) => PersonalInformation()));
+                }
+                AuthHelper.navigateToLoginScreen(context, pressed);
               },
             ),
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
 
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -155,9 +145,9 @@ class Etc extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
 
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
@@ -168,9 +158,9 @@ class Etc extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
         ],
       ),
     );

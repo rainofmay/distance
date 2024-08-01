@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/provider/user/login_provider.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 
 class LoginViewModel extends GetxController {
   final LoginProvider _provider;
@@ -15,7 +16,8 @@ class LoginViewModel extends GetxController {
   late final Rx<TextEditingController> _passwordController = TextEditingController().obs;
   TextEditingController get passwordController => _passwordController.value;
 
-
+  final Rx<bool> _isLoggedIn = AuthHelper.isLoggedIn().obs;
+  bool get isLoggedIn => _isLoggedIn.value;
 
   @override
   void onInit() {
@@ -41,22 +43,22 @@ class LoginViewModel extends GetxController {
 
     bool isLoginSuccess = await _provider.loginWithEmail(emailValue, passwordValue);
 
-    if (!context.mounted) return;
-    if (!isLoginSuccess) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그인에 실패했습니다.'),
-      ));
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그인 되었습니다.'),
-      ));
-    }
+    // if (!context.mounted) return;
+    // if (!isLoginSuccess) {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     content: Text('로그인에 실패했습니다.'),
+    //   ));
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+    //     content: Text('로그인 되었습니다.'),
+    //   ));
+    // }
   }
 
   Future<void> signInWithKakao() async {
     try {
       await _provider.signInWithKakao();
-      Get.snackbar('성공', '카카오 로그인 되었습니다.');
+      // Get.snackbar('성공', '카카오 로그인 되었습니다.');
     } catch (e) {
       Get.snackbar('오류', '카카오 로그인에 실패했습니다.');
     }
@@ -65,7 +67,7 @@ class LoginViewModel extends GetxController {
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       await _provider.signInWithGoogle(context);
-      Get.snackbar('성공', '구글 로그인 되었습니다.');
+      // Get.snackbar('성공', '구글 로그인 되었습니다.');
     } catch (e) {
       Get.snackbar('오류', '구글 로그인에 실패했습니다.');
     }
@@ -74,7 +76,7 @@ class LoginViewModel extends GetxController {
   Future<void> signOut(BuildContext context) async {
     try {
       await _provider.signOut(context);
-      Get.snackbar('성공', '로그아웃 되었습니다.');
+      // Get.snackbar('성공', '로그아웃 되었습니다.');
     } catch (e) {
       Get.snackbar('오류', '로그아웃에 실패했습니다.');
     }

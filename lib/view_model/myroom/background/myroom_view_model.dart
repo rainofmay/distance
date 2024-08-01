@@ -21,7 +21,7 @@ class MyroomViewModel extends GetxController {
   final RxString selectedItemUrl = ''.obs;
   final RxString selectedItemThumbnail = ''.obs;
   final RxBool isSimpleWindowEnabled = false.obs;
-  final RxBool isAudioSpectrumEnabled = false.obs;
+  // final RxBool isAudioSpectrumEnabled = false.obs;
   final RxBool isBackdropWordEnabled = false.obs;
   final RxBool isVideoLoading = true.obs;
 
@@ -116,8 +116,8 @@ class MyroomViewModel extends GetxController {
         './assets/images/nature1.jpeg';
     isSimpleWindowEnabled.value =
         prefs.getBool('isSimpleWindowEnabled') ?? false;
-    isAudioSpectrumEnabled.value =
-        prefs.getBool('isAudioSpectrumEnabled') ?? false;
+    // isAudioSpectrumEnabled.value =
+    //     prefs.getBool('isAudioSpectrumEnabled') ?? false;
     isBackdropWordEnabled.value =
         prefs.getBool('isBackdropWordEnabled') ?? false;
 
@@ -165,11 +165,11 @@ class MyroomViewModel extends GetxController {
     prefs.setBool('isSimpleWindowEnabled', isSimpleWindowEnabled.value);
   }
 
-  void updateAudioSpectrumChange(value) async {
-    isAudioSpectrumEnabled.value = value;
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
-  }
+  // void updateAudioSpectrumChange(value) async {
+  //   isAudioSpectrumEnabled.value = value;
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
+  // }
 
   void updateBackdropWordChange(value) async {
     isBackdropWordEnabled.value = value;

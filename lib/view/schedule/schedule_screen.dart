@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/schedule/create_schedule_screen.dart';
 import 'package:mobile/view/schedule/widget/schedule/calendar.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_list.dart';
@@ -96,19 +97,31 @@ class ScheduleScreen extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 20),
                         child: ListTile(
                           horizontalTitleGap: 3,
-                          leading: IconButton(
-                              onPressed: () {
-                                //schedule모델 값 초기화
-                                viewModel.initializeForNewSchedule();
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (c) =>
-                                            CreateScheduleScreen()));
-                              },
-                              icon: const Icon(CupertinoIcons.add_circled,
-                                  color: SECONDARY, size: 22),
-                              color: BLACK),
+                          leading: ShaderMask(
+                            shaderCallback: (Rect bounds) {
+                              return LinearGradient(
+                                colors: [WHITE, THIRD],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ).createShader(bounds);
+                            },
+                            child: IconButton(
+                                onPressed: () {
+                                  pressed() {
+                                    viewModel.initializeForNewSchedule();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (c) =>
+                                                CreateScheduleScreen()));
+                                  }
+                                  AuthHelper.navigateToLoginScreen(
+                                      context, pressed);
+                                },
+                                icon: const Icon(CupertinoIcons.add_circled,
+                                    color: THIRD, size: 22),
+                                color: BLACK),
+                          ),
                           title: Row(
                             children: [
                               const SizedBox(width: 5),

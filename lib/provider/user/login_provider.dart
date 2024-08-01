@@ -60,7 +60,7 @@ class LoginProvider {
 
       if (userExists) {
         await loginUserWithGoogle(email, googleAuth.idToken!, googleAuth.accessToken!);
-        Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+        // Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
       } else {
         await registerUserWithGoogle(email, name, profileUrl, googleAuth.idToken!, googleAuth.accessToken!);
         Get.snackbar('회원가입 성공', 'Google 계정으로 회원가입되었습니다.');
@@ -155,7 +155,7 @@ class LoginProvider {
 
       if (userExists) {
         await loginKaKaoUser(email, token.accessToken);
-        Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+        // Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
       } else {
         await registerKaKaoUser(email, nickname, profileUrl ,token.accessToken);
         Get.snackbar('회원가입 성공', '카카오 계정으로 회원가입되었습니다.');
@@ -255,9 +255,9 @@ class LoginProvider {
   Future<void> signOut(BuildContext context) async {
     try {
       await supabase.auth.signOut();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그아웃 되었습니다.'),
-      ));
+      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      //   content: Text('로그아웃 되었습니다.'),
+      // ));
     } catch (error) {
       print(error);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(

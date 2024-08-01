@@ -34,7 +34,6 @@ class MateScreen extends StatefulWidget {
 class _MateScreenState extends State<MateScreen> {
   @override
   Widget build(BuildContext context) {
-    AuthHelper.navigateToAuthScreen();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
@@ -44,7 +43,13 @@ class _MateScreenState extends State<MateScreen> {
         titleSpacing: 25,
         actions: [
           IconButton(
-              onPressed: () => Get.to(MateRequestsScreen()),
+              onPressed: () {
+                pressed() {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (c) => MateRequestsScreen()));
+                }
+                AuthHelper.navigateToLoginScreen(context, pressed);
+              },
               icon: Icon(CupertinoIcons.person_add)),
           IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
         ],
@@ -143,11 +148,11 @@ class _MateScreenState extends State<MateScreen> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ProfileEdit()),
-                        );
+                        pressed () {
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (c) => ProfileEdit()));
+                        }
+                        AuthHelper.navigateToLoginScreen(context, pressed);
                       },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -206,23 +211,31 @@ class _MateScreenState extends State<MateScreen> {
         child: Center(
           // 친구 없을 때 버튼 표시
           child: GestureDetector(
-            onTap: () => Get.to(MateRequestsScreen()),
+            onTap: () {
+              pressed() {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (c) => MateRequestsScreen()));
+              }
+
+              AuthHelper.navigateToLoginScreen(context, pressed);
+            },
             child: Padding(
               padding: const EdgeInsets.only(top: 0),
               child: Container(
                 width: 120,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: DARK,
-                  ),
-        
-                child: Center(child: Text('메이트 찾기', style: TextStyle(color: PRIMARY_LIGHT), textAlign: TextAlign.center)),
-              ),
-        
+                height: 50,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: DARK,
+                ),
+                child: Center(
+                    child: Text('메이트 찾기',
+                        style: TextStyle(color: PRIMARY_LIGHT),
+                        textAlign: TextAlign.center)),
               ),
             ),
           ),
+        ),
       );
     } else {
       return ListView.builder(

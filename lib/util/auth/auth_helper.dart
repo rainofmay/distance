@@ -1,6 +1,12 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/view/login/login_screen.dart';
+import 'package:mobile/view/mate/widget/custom_dialog.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AuthHelper {
@@ -51,18 +57,21 @@ class AuthHelper {
     return response;
   }
 
-  static Future<void> navigateToAuthScreen() async {
-    final bottomBarViewModel = Get.find<BottomBarViewModel>();
+  static Future<void> navigateToLoginScreen(BuildContext context, void Function() navigate) async {
     String? myId = await getMyId();
     if (myId == null) {
-      // Get.to(() => AuthScreen()); // 값이 없으면 AuthScreen으로 이동
-      bottomBarViewModel.setBottomIndex(3);
-      Get.snackbar("알림", "해당 기능은 로그인 후에 이용 가능합니다!");
+      if (!context.mounted) return;
+      return customDialog(context, 40, '로그인', Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
+          OkCancelButtons(okText: '확인', okTextColor: PRIMARY_COLOR, onPressed: () {
+            Navigator.of(context).pop();
+            Navigator.push(context,
+                MaterialPageRoute(builder: (c) => LoginScreen()));
+          }, cancelText: '취소', onCancelPressed: () {
+            Navigator.of(context).pop();
+          }));
     } else {
-      // 값이 존재하는 경우 필요한 로직 수행
+      navigate();
       print("로그인 된 사용자 ID: $myId");
     }
   }
-
-
 }

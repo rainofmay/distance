@@ -31,7 +31,7 @@ class LoginScreen extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
                 child: const Text('DISTANCE',
-                    style: TextStyle(color: SECONDARY, fontSize: 15)),
+                    style: TextStyle(color: THIRD, fontSize: 15)),
               ),
               Padding(
                   padding: const EdgeInsets.only(left: 20.0),
@@ -99,7 +99,7 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(height: 20.0),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: SECONDARY),
+                                side: BorderSide(color: THIRD),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
@@ -111,10 +111,13 @@ class LoginScreen extends StatelessWidget {
                               onPressed: () async {
                                 await loginViewModel.signIn(context);
                                 await mateViewModel.updateMyProfile();
+
+                                if (!context.mounted) return;
+                                Navigator.of(context).pop();
                               },
                               child: const Text('로그인',
                                   style: TextStyle(
-                                      color: SECONDARY, fontSize: 16)),
+                                      color: THIRD, fontSize: 16)),
                             ),
                             const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
                             Padding(
@@ -165,6 +168,9 @@ class LoginScreen extends StatelessWidget {
                         onPressed: () async {
                           await loginViewModel.signInWithKakao();
                           await mateViewModel.updateMyProfile();
+
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
                         },
                         child: Row(
                           children: [
@@ -196,6 +202,9 @@ class LoginScreen extends StatelessWidget {
                         onPressed: () async {
                           await loginViewModel.signInWithGoogle(context);
                           await mateViewModel.updateMyProfile();
+
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
                         },
                         child: Row(
                           children: [

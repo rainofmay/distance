@@ -172,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 onPressed: signUp,
                 child: const Text('회원가입',
-                    style: TextStyle(color: SECONDARY, fontSize: 16)),
+                    style: TextStyle(color: THIRD, fontSize: 16)),
               ),
             ],
           ),
