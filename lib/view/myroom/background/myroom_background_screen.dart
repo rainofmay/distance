@@ -1,29 +1,25 @@
-import 'dart:io';
+import 'dart:io' as io;
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 import 'package:mobile/view/myroom/background/background_themes/background_themes.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
-class MyroomBackgroundScreen extends StatefulWidget {
-  const MyroomBackgroundScreen({super.key});
-
-  @override
-  State<MyroomBackgroundScreen> createState() => _MyroomBackgroundScreenState();
-}
-
-class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
-  File? profileImg;
+class MyroomBackgroundScreen extends StatelessWidget {
   final MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
+  MyroomBackgroundScreen({super.key});
 
-  Widget _buildBackground() {
+
+  Widget _buildBackground(BuildContext context) {
     return ClipRRect(
         borderRadius: BorderRadius.circular(10.0),
         child: Obx(() {
@@ -33,27 +29,36 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
             ),
             child: AspectRatio(
               aspectRatio: 1.0,
-              child: CachedNetworkImage(
-                imageUrl: myroomViewModel.selectedItemThumbnail.value,
-                width: MediaQuery.of(context).size.width * 0.56,
-                fit: BoxFit.fitHeight,
+              child: FutureBuilder<io.File>(
+                future: myroomViewModel.getImageFile(myroomViewModel.selectedItemThumbnail.value),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                    return Image.file(
+                      snapshot.data!,
+                      width: MediaQuery.of(context).size.width * 0.56,
+                      fit: BoxFit.fitHeight,
+                      errorBuilder: (context, error, stackTrace) {
+                        print('Error loading image: $error');
+                        return Center(child: Icon(Icons.error));
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    print('Error: ${snapshot.error}');
+                    return Center(child: Icon(Icons.error));
+                  } else {
+                    return Center(
+                      child: CustomCircularIndicator(size: 30),
+                    );
+                  }
+                },
               ),
             ),
           );
-        }));
+        }),
+    );
   }
 
-  Future<void> getGalleryImage() async {
-    var image = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 20); // maximum: 100
-    if (image != null) {
-      setState(() {
-        profileImg = File(image.path);
-      });
-    }
-  }
-
-  Future<void> editDialog() async {
+  Future<void> editDialog(BuildContext context) async {
     customDialog(
         context,
         95,
@@ -79,7 +84,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                getGalleryImage();
+                myroomViewModel.getGalleryImage();
                 Future.delayed(Duration(seconds: 1), () {
                   Navigator.pop(context);
                 });
@@ -95,12 +100,11 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
         null);
   }
 
-
-  Widget _editBackground() {
+  Widget _editBackground(BuildContext context) {
     return GestureDetector(
       onTap: () {
         pressed() {
-          editDialog();
+          editDialog(context);
         }
         AuthHelper.navigateToLoginScreen(
             context, pressed);
@@ -110,7 +114,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
               borderRadius: BorderRadius.circular(8.0),
               child: Column(
                 children: [
-                  _buildBackground(),
+                  _buildBackground(context),
                   const SizedBox(height: 16),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -202,7 +206,7 @@ class _MyroomBackgroundScreenState extends State<MyroomBackgroundScreen> {
                             style: TextStyle(fontSize: 18, color: WHITE),
                           ),
                           const SizedBox(height: 16),
-                          _editBackground(),
+                          _editBackground(context),
                           const SizedBox(height: 40),
                           _toggleButtons(),
                         ],

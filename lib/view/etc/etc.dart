@@ -13,6 +13,7 @@ import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/tapable_row.dart';
 
 import 'package:mobile/common/const/colors.dart';
@@ -56,7 +57,7 @@ class Etc extends StatelessWidget {
                         width: 40,
                         height: 40,
                         placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                            CustomCircularIndicator(size: 30.0),
                         // 로딩 표시
                         errorWidget: (context, url, error) => Image.asset(
                           'assets/images/themes/gomzy_theme.jpg',

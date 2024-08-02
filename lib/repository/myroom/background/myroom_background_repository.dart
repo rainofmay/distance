@@ -14,6 +14,16 @@ class MyroomBackgroundRepository {
   onInit() {
 
   }
+  //첫 접속자를 위한 사진 불러오기
+  Future<List<ThemePicture>> fetchFirstPicture() async {
+    final response = await _backgroundProvider.getFirstPicture();
+
+    // 사용자 정보를 ThemePicture 객체로 변환
+    final firstPicture = ThemePicture.fromJsonList(response);
+
+    return firstPicture;
+  }
+
 
   //테마 사진들 불러오기
   Future<List<ThemePicture>> fetchThemePictures(String category) async {

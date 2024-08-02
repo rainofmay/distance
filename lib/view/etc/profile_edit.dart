@@ -10,6 +10,7 @@ import 'package:mobile/view/mate/widget/status_manage_online.dart';
 import 'package:mobile/view/mate/widget/status_manage_schedulling.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 
 import '../../common/const/colors.dart';
@@ -126,7 +127,7 @@ class _ProfileEditState extends State<ProfileEdit> {
                         width: 100,
                         height: 100,
                         placeholder: (context, url) =>
-                            CircularProgressIndicator(),
+                            CustomCircularIndicator(size: 30.0),
                         // 로딩 표시
                         errorWidget: (context, url, error) => Image.asset(
                           'assets/images/themes/gomzy_theme.jpg',

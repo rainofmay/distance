@@ -14,6 +14,7 @@ import 'package:mobile/view/mate/widget/profile_card.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 
 import 'mate_request_screen/mate_request_screen.dart';
 
@@ -89,7 +90,7 @@ class _MateScreenState extends State<MateScreen> {
                                     width: 70,
                                     height: 70,
                                     placeholder: (context, url) =>
-                                        CircularProgressIndicator(),
+                                      CustomCircularIndicator(size: 30.0),
                                     // 로딩 표시
                                     errorWidget: (context, url, error) =>
                                         Image.asset(

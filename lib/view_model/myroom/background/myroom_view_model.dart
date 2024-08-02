@@ -1,12 +1,15 @@
+import 'dart:io' as io;
 import 'dart:math';
-
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/const/quotes.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
+import 'package:mobile/view/myroom/background/background_themes/themes/widget/theme_cache_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/model/quote_model.dart';
 
@@ -19,6 +22,7 @@ class MyroomViewModel extends GetxController {
       Rxn<CachedVideoPlayerController>();
   final RxString selectedItemUrl = ''.obs;
   final RxString selectedItemThumbnail = ''.obs;
+
   final RxBool isSimpleWindowEnabled = false.obs;
   // final RxBool isAudioSpectrumEnabled = false.obs;
   final RxBool isBackdropWordEnabled = false.obs;
@@ -28,8 +32,8 @@ class MyroomViewModel extends GetxController {
   final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
   final RxDouble quoteBackdropOpacity = 0.5.obs;
   final Rx<Color> quoteFontColor = Colors.white.obs;
-  final RxString quoteFont = 'GmarketSansTTFMedium'.obs;
-  final RxDouble quoteFontSize = 18.0.obs;
+  final RxString quoteFont = 'GmarketSansTTFLight'.obs;
+  final RxDouble quoteFontSize = 16.0.obs;
   final Rx<Offset> quotePosition = Offset(20, 40).obs;
 
   final RxBool isCustomQuote = false.obs;
@@ -45,6 +49,8 @@ class MyroomViewModel extends GetxController {
   String get currentThemeName => _currentThemeName.value;
   // final List<ThemePicture> themePictures = <ThemePicture>[];
   // final List<ThemeVideo> themeVideos = <ThemeVideo>[];
+  final ThemeCacheManager themeCacheManager = ThemeCacheManager();
+  late final io.File? imgFromGallery;
 
 
   @override
@@ -87,6 +93,27 @@ class MyroomViewModel extends GetxController {
     }
   }
 
+  Future<io.File> getImageFile(String url) async {
+    return await themeCacheManager.getImageFile(url, currentThemeName);
+  }
+
+  Future<void> getGalleryImage() async {
+    var image = await ImagePicker().pickImage(
+        source: ImageSource.gallery, imageQuality: 25); // maximum: 100
+    if (image != null) {
+      imgFromGallery = io.File(image.path);
+      // 선택된 이미지 파일의 경로를 selectedItemUrl에 저장
+      selectedItemUrl.value = imgFromGallery!.path;
+      selectedItemThumbnail.value = imgFromGallery!.path;
+      // 이미지가 선택되었음을 표시
+      isImage.value = true;
+
+      saveItemUrl(imgFromGallery!.path);
+      saveThumbnailUrl(imgFromGallery!.path);
+      saveIsImage(true);
+    }
+  }
+
   void setSelectedImageUrl(String url, String thumbnailUrl) {
     videoController.value?.dispose();
     videoController.value = null;
@@ -126,12 +153,13 @@ class MyroomViewModel extends GetxController {
   }
 
   void loadPreferences() async {
+    List<ThemePicture> firstPicture = await myroomBackgroundRepository.fetchFirstPicture();
+
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isImage.value = prefs.getBool('isImage') ?? true;
     selectedItemUrl.value =
-        prefs.getString('selectedItemUrl') ?? './assets/images/nature1.jpeg';
-    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ??
-        './assets/images/nature1.jpeg';
+        prefs.getString('selectedItemUrl') ?? firstPicture[0].highQualityUrl;
+    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ?? firstPicture[0].thumbnailUrl;
     isSimpleWindowEnabled.value =
         prefs.getBool('isSimpleWindowEnabled') ?? false;
     // isAudioSpectrumEnabled.value =

@@ -13,8 +13,10 @@ import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
 import 'package:mobile/widgets/action_buttons.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/expandable_fab.dart';
 import 'background/myroom_background_screen.dart';
+import 'dart:io' as io;
 
 class MyroomScreen extends StatefulWidget {
   MyroomScreen({super.key});
@@ -56,14 +58,25 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 ? SizedBox.expand(
                     child: FittedBox(
                     fit: BoxFit.cover,
-                    child: CachedNetworkImage(
-                      imageUrl:
-                          widget.backgroundViewModel.selectedItemUrl.value,
-                      fit: BoxFit.cover, // 추가: 이미지를 화면에 맞게 채우도록 설정
-                      placeholder: (context, url) =>
-                          Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => Icon(Icons.error),
-                    ),
+                    child: FutureBuilder<io.File>(
+                      future: widget.backgroundViewModel.getImageFile(
+                          widget.backgroundViewModel.selectedItemUrl.value
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
+                          return Image.file(
+                            snapshot.data!,
+                            fit: BoxFit.cover,
+                          );
+                        } else {
+                          return SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              child: Center(
+                              child: CustomCircularIndicator(size: 40)));
+                        }
+                      },
+                    )
                   ))
                 : VideoBackground(
                     videoController:
@@ -153,6 +166,6 @@ class VideoBackground extends StatelessWidget {
               ),
             ),
           )
-        : Center(child: CircularProgressIndicator());
+        : Center(child: CustomCircularIndicator(size: 30.0));
   }
 }

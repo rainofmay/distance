@@ -2,12 +2,18 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/util/ads/adController.dart';
+import 'package:mobile/view/mate/widget/custom_dialog.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/widgets/custom_alert_dialog.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
+import 'dart:io' as io;
+
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 Widget gridContents(List<dynamic> contents) {
-
   return GridView.builder(
     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
       crossAxisCount: 3,
@@ -18,23 +24,26 @@ Widget gridContents(List<dynamic> contents) {
     itemCount: contents.length,
     itemBuilder: (context, index) {
       final content = contents[index];
-      return content.runtimeType == ThemePicture ? gridPictures(context, content) : gridVideos(context, content);
+      return content.runtimeType == ThemePicture
+          ? gridPictures(context, content)
+          : gridVideos(context, content);
     },
   );
 }
+
 // 이미지 모음
 Widget gridPictures(BuildContext context, ThemePicture picture) {
   final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
   return GestureDetector(
-        onTap: () {
-          showDialog(
-            context: context,
-            builder: (_) =>
-                _buildImageDialog(context, picture, myroomViewModel), // 변경
-          );
-        },
-        child: _buildImagePreview(picture), // 변경
+    onTap: () {
+      showDialog(
+        context: context,
+        builder: (_) =>
+            _buildImageDialog(context, picture, myroomViewModel), // 변경
       );
+    },
+    child: _buildImagePreview(picture, myroomViewModel), // 변경
+  );
 }
 
 // 이미지 다이얼로그 빌더 함수
@@ -42,16 +51,24 @@ Widget _buildImageDialog(BuildContext context, ThemePicture picture,
     MyroomViewModel myroomViewModel) {
   final adController = Get.put(AdController());
   adController.loadInterstitialAd();
-  return AlertDialog(
-    title: const Text("배경 변경"),
-    content: CachedNetworkImage(imageUrl: picture.highQualityUrl),
-    // CachedNetworkImage 사용
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: const Text('Cancel'),
+  return CustomAlertDialog(
+      title: '배경 변경',
+      width: 200,
+      height: 200,
+      contents: FutureBuilder<io.File>(
+        future: myroomViewModel.getImageFile(picture.highQualityUrl),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done &&
+              snapshot.hasData) {
+            return Image.file(snapshot.data!);
+          } else {
+            return Center(child: CustomCircularIndicator(size: 30.0));
+          }
+        },
       ),
-      TextButton(
+      actionWidget: OkCancelButtons(
+        okText: '변경',
+        okTextColor: PRIMARY_COLOR,
         onPressed: () {
           myroomViewModel.setSelectedImageUrl(
               picture.highQualityUrl, picture.thumbnailUrl);
@@ -61,26 +78,35 @@ Widget _buildImageDialog(BuildContext context, ThemePicture picture,
             adController.interstitialAd.value?.show();
           }
         },
-        child: const Text('Change'),
-      ),
-    ],
-  );
+        cancelText: '취소',
+        onCancelPressed: () {
+          Navigator.pop(context);
+        },
+      ));
 }
 
-// 이미지 미리보기 빌더 함수
-Widget _buildImagePreview(ThemePicture picture) {
+// 테마별 사진들 미리보기
+Widget _buildImagePreview(
+    ThemePicture picture, MyroomViewModel myroomViewModel) {
   return Container(
     color: Colors.grey[300],
     child: Stack(
       children: [
-        CachedNetworkImage(
-          // CachedNetworkImage 사용
-          imageUrl: picture.thumbnailUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          errorWidget: (context, url, error) =>
-              const Icon(Icons.error), // 에러 시 표시
+        FutureBuilder<io.File>(
+          future: myroomViewModel.getImageFile(picture.thumbnailUrl),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done &&
+                snapshot.hasData) {
+              return Image.file(
+                snapshot.data!,
+                fit: BoxFit.cover,
+                width: double.infinity,
+                height: double.infinity,
+              );
+            } else {
+              return Center(child: Container());
+            }
+          },
         ),
         if (picture.isPaid) // 유료 이미지 표시 (기존 코드와 동일)
           Positioned(
@@ -102,33 +128,33 @@ Widget gridVideos(BuildContext context, ThemeVideo video) {
   final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
 
   return GestureDetector(
-        onTap: () async {
-          myroomViewModel.isVideoLoading.value = true;
-          CachedVideoPlayerController videoController_ =
-              CachedVideoPlayerController.network(video.highQualityUrl);
-          await videoController_.initialize();
-          myroomViewModel.isVideoLoading.value = false;
-          videoController_.play();
-          showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (_) => CustomVideoDialog(
-              videoController: videoController_,
-              onCancel: () {
-                videoController_.dispose();
-                Navigator.pop(context);
-              },
-              onChange: () {
-                myroomViewModel.setSelectedVideoUrl(
-                    video.highQualityUrl, video.thumbnailUrl);
-                videoController_.dispose();
-                Navigator.pop(context);
-              },
-            ),
-          ).then((value) => videoController_.dispose());
-        },
-        child: _buildVideoPreview(video), // 변경
-      );
+    onTap: () async {
+      myroomViewModel.isVideoLoading.value = true;
+      CachedVideoPlayerController videoController_ =
+          CachedVideoPlayerController.network(video.highQualityUrl);
+      await videoController_.initialize();
+      myroomViewModel.isVideoLoading.value = false;
+      videoController_.play();
+      showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (_) => CustomVideoDialog(
+          videoController: videoController_,
+          onCancel: () {
+            videoController_.dispose();
+            Navigator.pop(context);
+          },
+          onChange: () {
+            myroomViewModel.setSelectedVideoUrl(
+                video.highQualityUrl, video.thumbnailUrl);
+            videoController_.dispose();
+            Navigator.pop(context);
+          },
+        ),
+      ).then((value) => videoController_.dispose());
+    },
+    child: _buildVideoPreview(video), // 변경
+  );
 }
 
 // 비디오 미리보기 빌더 함수
@@ -192,7 +218,7 @@ class CustomVideoDialog extends StatelessWidget {
                         child: CachedVideoPlayer(videoController),
                       )
                     : Center(
-                        child: CircularProgressIndicator(),
+                        child: CustomCircularIndicator(size: 30),
                       )),
           ),
           Row(
@@ -212,6 +238,4 @@ class CustomVideoDialog extends StatelessWidget {
       ),
     );
   }
-
 }
-
