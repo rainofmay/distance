@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/view/myroom/widget/custom_dialog.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:mobile/view_model/mate/mate_view_model.dart';
@@ -15,14 +14,16 @@ class StatusManageSchedulling extends StatefulWidget {
   final _emojiController = TextEditingController();
   final _scrollController = ScrollController();
 
-  late bool _emojiShowing = false;
+
 
   @override
-  _StatusManageSchedullingState createState() =>
+  State<StatusManageSchedulling> createState() =>
       _StatusManageSchedullingState();
 }
 
 class _StatusManageSchedullingState extends State<StatusManageSchedulling> {
+  late bool _emojiShowing = false;
+
   @override
   void initState() {
     super.initState();
@@ -53,7 +54,7 @@ class _StatusManageSchedullingState extends State<StatusManageSchedulling> {
                     child: GestureDetector(
                       onTap: () => {
                         setState(() {
-                          widget._emojiShowing = !widget._emojiShowing;
+                          _emojiShowing = !_emojiShowing;
                         })
                       },
                       child: Text(
@@ -108,7 +109,7 @@ class _StatusManageSchedullingState extends State<StatusManageSchedulling> {
                 ],
               )),
           Offstage(
-            offstage: !widget._emojiShowing,
+            offstage: !_emojiShowing,
             child: EmojiPicker(
               onEmojiSelected: (category, emoji) {
     // Handle the selected emoji here

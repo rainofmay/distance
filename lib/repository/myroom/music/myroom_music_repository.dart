@@ -23,7 +23,7 @@ class MyRoomMusicRepository {
         bigTitle: '밤에 들으면 좋을 음악',
         info: 'Piano',
         theme: 'sleep',
-        numberOfSong: 3),
+        numberOfSong: 7),
     CurrentPlayList(
         id: 2,
         thumbnailUrl: 'assets/images/themes/music/music_consolation.jpg',

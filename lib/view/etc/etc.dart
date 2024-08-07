@@ -82,11 +82,7 @@ class Etc extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
               onTap: () {
                   pressed() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const PaymentScreen()),
-                    );
+                    Get.to(() => PaymentScreen(), preventDuplicates: true);
                   }
                   AuthHelper.navigateToLoginScreen(context, pressed);
               },
@@ -122,8 +118,7 @@ class Etc extends StatelessWidget {
               title: '내 정보 관리',
               onTap: () {
                 pressed() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => PersonalInformation()));
+                  Get.to(() => PersonalInformation(), preventDuplicates: true);
                 }
                 AuthHelper.navigateToLoginScreen(context, pressed);
               },
@@ -140,9 +135,8 @@ class Etc extends StatelessWidget {
               widget: Icon(CupertinoIcons.speaker_1),
               title: '앱 업데이트 공지',
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => UpdateNotification()));
-              },
+                Get.to(() => UpdateNotification(), preventDuplicates: true);
+                },
             ),
           ),
 

@@ -41,7 +41,7 @@ class CustomBackAppBar extends StatelessWidget implements PreferredSizeWidget {
         hoverColor: TRANSPARENT,
         splashColor: TRANSPARENT,
         highlightColor: TRANSPARENT,
-        onPressed: backFunction ?? () => Get.back(),
+        onPressed: backFunction ?? () => Navigator.of(context).pop(),
         icon: Icon(
           Icons.arrow_back,
           size: 24,

@@ -10,6 +10,12 @@ class AdController extends GetxController {
 
   RxBool isAdLoaded = false.obs;
 
+  @override
+  void onInit() {
+    loadBannerAd();
+    super.onInit();
+  }
+
   void loadInterstitialAd() {
     InterstitialAd.load(
       adUnitId: AdHelper.interstitialTestAdUnitId,
@@ -50,7 +56,7 @@ class AdController extends GetxController {
   }
 
 
-void showInterstitialAd() {
+  void showInterstitialAd() {
     if (interstitialAd.value != null) {
       interstitialAd.value!.show();
     }

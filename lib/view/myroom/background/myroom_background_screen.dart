@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:mobile/util/debouncer.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
@@ -18,43 +19,49 @@ class MyroomBackgroundScreen extends StatelessWidget {
   final MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
   MyroomBackgroundScreen({super.key});
 
+  Widget _progressing(BuildContext context) {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(child: CustomCircularIndicator(size: 30)));
+  }
 
   Widget _buildBackground(BuildContext context) {
     return ClipRRect(
-        borderRadius: BorderRadius.circular(10.0),
-        child: Obx(() {
+      borderRadius: BorderRadius.circular(10.0),
+      child: Obx(() {
+        final imageUrl = myroomViewModel.selectedItemThumbnail.value;
+        if (imageUrl.startsWith('http')) {
           return ConstrainedBox(
             constraints: BoxConstraints(
               maxHeight: MediaQuery.of(context).size.height * 0.5,
             ),
             child: AspectRatio(
               aspectRatio: 1.0,
-              child: FutureBuilder<io.File>(
-                future: myroomViewModel.getImageFile(myroomViewModel.selectedItemThumbnail.value),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                    return Image.file(
-                      snapshot.data!,
-                      width: MediaQuery.of(context).size.width * 0.56,
-                      fit: BoxFit.fitHeight,
-                      errorBuilder: (context, error, stackTrace) {
-                        print('Error loading image: $error');
-                        return Center(child: Icon(Icons.error));
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    print('Error: ${snapshot.error}');
-                    return Center(child: Icon(Icons.error));
-                  } else {
-                    return Center(
-                      child: CustomCircularIndicator(size: 30),
-                    );
-                  }
-                },
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                fit: BoxFit.cover,
+                placeholder: (context, url) => SizedBox(),
+                errorWidget: (context, url, error) => _progressing(context),
               ),
             ),
           );
-        }),
+        } else {
+          return ConstrainedBox(
+            constraints: BoxConstraints(
+              maxHeight: MediaQuery.of(context).size.height * 0.5,
+            ),
+            child: AspectRatio(
+              aspectRatio: 1.0,
+              child: Image.file(
+                io.File(imageUrl),
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => _progressing(context),
+              ),
+            ),
+          );
+        }
+      }),
     );
   }
 
@@ -70,9 +77,12 @@ class MyroomBackgroundScreen extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () {
-                Navigator.pop(context); // dialog 내리기
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => BackgroundThemes()));
+                Navigator.pop(context); // 다이얼로그 내리기
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BackgroundThemes()),
+                );
+                // Get.to(() => BackgroundThemes(), preventDuplicates: true);
               },
               child: Row(
                 children: [
@@ -83,8 +93,8 @@ class MyroomBackgroundScreen extends StatelessWidget {
             const SizedBox(height: 22),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {
-                myroomViewModel.getGalleryImage();
+              onTap: () async {
+                await myroomViewModel.getGalleryImage();
                 Future.delayed(Duration(seconds: 1), () {
                   Navigator.pop(context);
                 });
@@ -103,11 +113,17 @@ class MyroomBackgroundScreen extends StatelessWidget {
   Widget _editBackground(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        pressed() {
-          editDialog(context);
-        }
-        AuthHelper.navigateToLoginScreen(
-            context, pressed);
+          pressed() {
+            editDialog(context);
+          }
+
+          if (!myroomViewModel.isSettingDialogOpen) {
+            myroomViewModel.setDialogOpen(true);
+            AuthHelper.navigateToLoginScreen(
+                context, pressed).then((_) {
+              myroomViewModel.setDialogOpen(false);
+            });
+          }
       },
       child: Center(
           child: ClipRRect(

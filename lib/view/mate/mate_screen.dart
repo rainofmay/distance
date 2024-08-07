@@ -43,16 +43,17 @@ class _MateScreenState extends State<MateScreen> {
         contentColor: BLACK,
         titleSpacing: 25,
         actions: [
-          IconButton(
-              onPressed: () {
-                pressed() {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (c) => MateRequestsScreen()));
-                }
-                AuthHelper.navigateToLoginScreen(context, pressed);
-              },
-              icon: Icon(CupertinoIcons.person_add)),
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.search))
+          Padding(
+            padding: const EdgeInsets.only(right:8.0),
+            child: IconButton(
+                onPressed: () {
+                  pressed() {
+                    Get.to(() => MateRequestsScreen(), preventDuplicates: true);
+                  }
+                  AuthHelper.navigateToLoginScreen(context, pressed);
+                },
+                icon: Icon(CupertinoIcons.person_add)),
+          ),
         ],
       ),
       body: Column(
@@ -61,80 +62,70 @@ class _MateScreenState extends State<MateScreen> {
             height: 100,
             // color: Colors.grey[100],
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16),
+              padding: const EdgeInsets.only(top:8, left: 16.0, right: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Obx(
-                        () => GestureDetector(
-                          // 프로필 확대해서 보는 화면
-                          onTap: () {},
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(50.0),
-                            child: widget.viewModel.profileImageUrl.value ==
-                                    null
-                                ? Image.asset(
-                                    'assets/images/themes/gomzy_theme.jpg',
-                                    fit: BoxFit.cover,
-                                    width: 70,
-                                    height: 70,
-                                  )
-                                : CachedNetworkImage(
-                                    // CachedNetworkImage 사용
-                                    imageUrl:
-                                        widget.viewModel.profileImageUrl.value,
-                                    fit: BoxFit.cover,
-                                    width: 70,
-                                    height: 70,
-                                    placeholder: (context, url) =>
-                                      CustomCircularIndicator(size: 30.0),
-                                    // 로딩 표시
-                                    errorWidget: (context, url, error) =>
-                                        Image.asset(
+                  Obx(
+                    () => SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            // 프로필 확대해서 보는 화면
+                            onTap: () {},
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(50.0),
+                              child: widget.viewModel.profileImageUrl.value == null
+                                  ? Image.asset(
                                       'assets/images/themes/gomzy_theme.jpg',
                                       fit: BoxFit.cover,
-                                      width: 100,
-                                      height: 100,
-                                    ), // 에러 시 기본 이미지
-                                  ),
+                                      width: 60,
+                                      height: 60,
+                                    )
+                                  : CachedNetworkImage(
+                                      // CachedNetworkImage 사용
+                                      imageUrl:
+                                          widget.viewModel.profileImageUrl.value,
+                                      fit: BoxFit.cover,
+                                      width: 60,
+                                      height: 60,
+                                      placeholder: (context, url) =>
+                                        CustomCircularIndicator(size: 30.0),
+                                      // 로딩 표시
+                                      errorWidget: (context, url, error) =>
+                                          Image.asset(
+                                        'assets/images/themes/gomzy_theme.jpg',
+                                        fit: BoxFit.cover,
+                                        width: 100,
+                                        height: 100,
+                                      ), // 에러 시 기본 이미지
+                                    ),
+                            ),
                           ),
-                        ),
+                          const SizedBox(height: 8),
+                          Text(widget.viewModel.name.value,
+                              style: TextStyle(fontSize: 15)),
+                          // const SizedBox(height: 4),
+                          // Text(widget.viewModel.introduction.value,
+                          //     style: TextStyle(
+                          //         fontSize: 13, color: DARK_UNSELECTED)),
+                        ],
                       ),
-                      const SizedBox(width: 20),
-                      Obx(() => Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(widget.viewModel.name.value,
-                                  style: TextStyle(fontSize: 15)),
-                              const SizedBox(height: 8),
-                              Text(widget.viewModel.introduction.value,
-                                  style: TextStyle(
-                                      fontSize: 13, color: DARK_UNSELECTED)),
-                            ],
-                          ))
-                    ],
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   Obx(
-                    () => Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(widget.viewModel.userCurrentActivityEmoji.value,
-                            style: TextStyle(fontSize: 14, color: BLACK)),
-                        Text(widget.viewModel.userCurrentActivityText.value,
-                            style: TextStyle(fontSize: 14, color: BLACK)),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8, right: 16.0),
-                          child: Icon(
-                            Icons.circle,
-                            color: getStatusColor(
-                                widget.viewModel.isUserOnline.value),
-                          ),
-                        ),
-                      ],
+                    () => Expanded(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text(widget.viewModel.userCurrentActivityEmoji.value,
+                              style: TextStyle(fontSize: 14, color: BLACK)),
+                          Text(widget.viewModel.userCurrentActivityText.value,
+                              style: TextStyle(fontSize: 14, color: BLACK)),
+                        ],
+                      ),
                     ),
                   ),
                   Container(
@@ -150,8 +141,7 @@ class _MateScreenState extends State<MateScreen> {
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
                         pressed () {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (c) => ProfileEdit()));
+                          Get.to(() => ProfileEdit(), preventDuplicates: true);
                         }
                         AuthHelper.navigateToLoginScreen(context, pressed);
                       },
@@ -171,7 +161,7 @@ class _MateScreenState extends State<MateScreen> {
               ),
             ),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.only(left: 16),
             child: Row(
@@ -214,8 +204,7 @@ class _MateScreenState extends State<MateScreen> {
           child: GestureDetector(
             onTap: () {
               pressed() {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (c) => MateRequestsScreen()));
+                Get.to(() => MateRequestsScreen(), preventDuplicates: true);
               }
 
               AuthHelper.navigateToLoginScreen(context, pressed);

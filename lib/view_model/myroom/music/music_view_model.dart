@@ -21,7 +21,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   }
 
   /* PlayList */
-  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList.empty().obs;
+  final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList.first().obs;
   CurrentPlayList get currentPlayList => _currentPlayList.value;
 
   /* Music */
@@ -33,6 +33,9 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
 
   late final RxInt _currentIndex = 0.obs;
   int get currentIndex => _currentIndex.value;
+
+  final RxBool _isLoading = true.obs;
+  bool get isLoading => _isLoading.value;
 
   late final Rx<Duration> _currentMusicDuration = Duration.zero.obs;
   Duration get currentMusicDuration => _currentMusicDuration.value;
@@ -54,14 +57,20 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   @override
   void onInit() {
     setInitMusicState();
+    initLoadMusicSource();
     print('_musicInfoList $_musicInfoList');
     super.onInit();
   }
 
   /* Init */
   initLoadMusicSource() async {
+    _isLoading.value = true;
     await loadCurrentPlayList();
     await getThemeMusic(_currentPlayList.value.theme);
+    if (_musicInfoList.isNotEmpty) {
+      _currentIndex.value = 0;
+    }
+    _isLoading.value = false;
   }
 
   Future<void> loadCurrentPlayList() async {

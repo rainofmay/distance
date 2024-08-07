@@ -109,11 +109,7 @@ class ScheduleScreen extends StatelessWidget {
                                 onPressed: () {
                                   pressed() {
                                     viewModel.initializeForNewSchedule();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (c) =>
-                                                CreateScheduleScreen()));
+                                    Get.to(() => CreateScheduleScreen(), preventDuplicates: true);
                                   }
                                   AuthHelper.navigateToLoginScreen(
                                       context, pressed);

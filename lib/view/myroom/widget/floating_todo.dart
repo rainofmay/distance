@@ -31,7 +31,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
   Offset _startDragOffset = Offset(0, 0); // 상단 바 드래그 시작 오프셋
   double minWidth = 150; // 최소 너비
   double minHeight = 100; // 최소 높이
-  MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
+  MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
   ScheduleViewModel scheduleViewModel = Get.find<ScheduleViewModel>();
 
   bool isEmojiVisible = false;
@@ -124,85 +124,88 @@ class _FloatingTodoState extends State<FloatingTodo> {
                         onTap: () async {
                           _optionsDialog(scheduleViewModel.todaySchedules[index]);
                         },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(top: 2.0),
-                                child: Container(
-                                  width: 5,
-                                  height: 20,
-                                  decoration: BoxDecoration(
-                                      color: sectionColors[
+                        child: SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2.0),
+                                  child: Container(
+                                    width: 5,
+                                    height: 20,
+                                    decoration: BoxDecoration(
+                                        color: sectionColors[
+                                        scheduleViewModel
+                                            .todaySchedules[index]
+                                            .sectionColor],
+                                        borderRadius:
+                                        BorderRadius.circular(5)),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
                                       scheduleViewModel
                                           .todaySchedules[index]
-                                          .sectionColor],
-                                      borderRadius:
-                                      BorderRadius.circular(5)),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    scheduleViewModel
-                                        .todaySchedules[index]
-                                        .scheduleName,
-                                    style: scheduleViewModel
-                                        .todaySchedules[index].isDone ? TextStyle(
-                                        color: sectionColors[
-                                        scheduleViewModel
-                                            .todaySchedules[index]
-                                            .sectionColor],
-                                        fontSize: 17,
-                                        overflow: TextOverflow.ellipsis,
-                                        decoration: TextDecoration.lineThrough,
-                                        decorationColor: sectionColors[
-                                        scheduleViewModel
-                                            .todaySchedules[index]
-                                            .sectionColor]
-                                    ) : TextStyle(
-                                        color: sectionColors[
-                                        scheduleViewModel
-                                            .todaySchedules[index]
-                                            .sectionColor],
-                                        fontSize: 17,
-                                        overflow: TextOverflow.ellipsis),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  Text(
-                                    scheduleViewModel.todaySchedules[index].memo,
-                                    style: TextStyle(
-                                        color: BLACK,
-                                        fontSize: 13,
-                                        overflow: TextOverflow.ellipsis),
-                                  ),
-                                  const SizedBox(height: 6),
-                                  scheduleViewModel
-                                      .todaySchedules[index].isTimeSet
-                                      ? Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 4.0, right: 8.0),
-                                    child: Text(
-                                      '${DateFormat('hh:mm a').format(
-                                          scheduleViewModel.todaySchedules[index]
-                                              .startDate)}~${DateFormat('hh:mm a')
-                                          .format(
-                                          scheduleViewModel.todaySchedules[index]
-                                              .endDate)}',
-                                      style: TextStyle(
-                                          fontSize: 8, color: GREY),
+                                          .scheduleName,
+                                      style: scheduleViewModel
+                                          .todaySchedules[index].isDone ? TextStyle(
+                                          color: sectionColors[
+                                          scheduleViewModel
+                                              .todaySchedules[index]
+                                              .sectionColor],
+                                          fontSize: 17,
+                                          overflow: TextOverflow.ellipsis,
+                                          decoration: TextDecoration.lineThrough,
+                                          decorationColor: sectionColors[
+                                          scheduleViewModel
+                                              .todaySchedules[index]
+                                              .sectionColor]
+                                      ) : TextStyle(
+                                          color: sectionColors[
+                                          scheduleViewModel
+                                              .todaySchedules[index]
+                                              .sectionColor],
+                                          fontSize: 17,
+                                          overflow: TextOverflow.ellipsis),
                                     ),
-                                  )
-                                      : SizedBox(),
-                                  const SizedBox(height: 24),
-                                ],
-                              ),
-                            ],
+                                    const SizedBox(height: 6),
+                                    Text(
+                                      scheduleViewModel.todaySchedules[index].memo,
+                                      style: TextStyle(
+                                          color: BLACK,
+                                          fontSize: 13,
+                                          overflow: TextOverflow.ellipsis),
+                                    ),
+                                    const SizedBox(height: 6),
+                                    scheduleViewModel
+                                        .todaySchedules[index].isTimeSet
+                                        ? Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 4.0, right: 8.0),
+                                      child: Text(
+                                        '${DateFormat('hh:mm a').format(
+                                            scheduleViewModel.todaySchedules[index]
+                                                .startDate)}~${DateFormat('hh:mm a')
+                                            .format(
+                                            scheduleViewModel.todaySchedules[index]
+                                                .endDate)}',
+                                        style: TextStyle(
+                                            fontSize: 8, color: GREY),
+                                      ),
+                                    )
+                                        : SizedBox(),
+                                    const SizedBox(height: 24),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       );

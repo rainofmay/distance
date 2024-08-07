@@ -192,6 +192,7 @@ class ScheduleViewModel extends GetxController {
     try {
       _allSchedules.value = await _repository.fetchAllScheduleData();
       _isScheduleListLoaded.value = true;
+      print('_allSchedules $_allSchedules');
       update();
     } catch (e) {
       print('Error fetching schedule data: $e');

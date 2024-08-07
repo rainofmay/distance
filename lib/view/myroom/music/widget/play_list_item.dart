@@ -24,8 +24,8 @@ class PlayListItem extends StatelessWidget {
             child: Image.asset(
               thumbnailUrl,
               fit: BoxFit.cover,
-              width: 70,
-              height: 70,
+              width: 50,
+              height: 50,
             ),
           ),
           const SizedBox(width: 16),
@@ -34,7 +34,7 @@ class PlayListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(title, style: TextStyle(fontSize: 15, color: textColor)),
-              const SizedBox(height: 16),
+              const SizedBox(height: 8),
               Text('$info  |  $numberOfSongs곡',
                   style: TextStyle(fontSize: 11, color: textColor)),
             ],

@@ -57,9 +57,6 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
   final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
-  final MusicViewModel musicViewModel = Get.put(MusicViewModel(
-      repository:
-          MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
   final OnlineStatusManager onlineStatusManager = OnlineStatusManager();
 
   @override
@@ -68,7 +65,6 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
     // viewModel.initAllSchedules();
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
-    musicViewModel.initLoadMusicSource();
   }
 
   @override

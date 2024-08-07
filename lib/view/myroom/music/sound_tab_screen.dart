@@ -38,8 +38,7 @@ class SoundTabScreen extends StatelessWidget {
                   Sector(
                       onTap: () {
                         pressed() {
-                          Navigator.push(context,
-                              MaterialPageRoute(builder: (c) => SoundThemesScreen()));
+                          Get.to(() => SoundThemesScreen(), preventDuplicates: true);
                         }
                         AuthHelper.navigateToLoginScreen(
                             context, pressed);

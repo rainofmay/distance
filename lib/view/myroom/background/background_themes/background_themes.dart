@@ -11,26 +11,10 @@ import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 import 'package:mobile/widgets/custom_drawer.dart';
 
-class BackgroundThemes extends StatefulWidget {
+class BackgroundThemes extends StatelessWidget {
   BackgroundThemes({super.key});
   final viewModel = Get.put(MyroomViewModel());
-  @override
-  State<BackgroundThemes> createState() => _BackgroundThemesState();
-}
-
-class _BackgroundThemesState extends State<BackgroundThemes> {
   final adController = Get.put(AdController());
-
-  @override
-  void initState() {
-    super.initState();
-    adController.loadBannerAd();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -96,14 +80,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Spring',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('spring');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "spring",
-                                        )));
+                            await viewModel.setCurrentTheme('spring');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'spring'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -118,14 +96,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Summer',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('summer');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "summer",
-                                        )));
+                            await viewModel.setCurrentTheme('summer');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'summer'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -140,14 +112,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Fall',
                           onTap: () async {
-                            if (!context.mounted) return;
-                            widget.viewModel.setCurrentTheme('fall');
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "fall",
-                                        )));
+                            await viewModel.setCurrentTheme('fall');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'fall'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -162,14 +128,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Winter',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('winter');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "winter",
-                                        )));
+                            await viewModel.setCurrentTheme('winter');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'winter'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -202,14 +162,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Ocean',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('ocean');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "ocean",
-                                        )));
+                            await viewModel.setCurrentTheme('ocean');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'ocean'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -224,14 +178,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Sunset',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('sunset');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "sunset",
-                                        )));
+                            await viewModel.setCurrentTheme('sunset');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'sunset'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -246,14 +194,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Cafe',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('cafe');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "cafe",
-                                        )));
+                            await viewModel.setCurrentTheme('cafe');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'cafe'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -268,14 +210,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Camping',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('camping');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "camping",
-                                        )));
+                            await viewModel.setCurrentTheme('camping');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'camping'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -290,14 +226,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'City',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('city');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "city",
-                                        )));
+                            await viewModel.setCurrentTheme('city');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'city'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -328,16 +258,10 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                   child: Row(
                     children: [
                       ThemeBox(
-                          themeName: 'Animal',
+                          themeName: 'Pets',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('animal');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "animal",
-                                        )));
+                            await viewModel.setCurrentTheme('animal');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'animal'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,
@@ -352,14 +276,8 @@ class _BackgroundThemesState extends State<BackgroundThemes> {
                       ThemeBox(
                           themeName: 'Gomzy',
                           onTap: () async {
-                            await widget.viewModel.setCurrentTheme('gomzy');
-                            if (!context.mounted) return;
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (c) => ThemeDetailChoiceScreen(
-                                          category: "gomzy",
-                                        )));
+                            await viewModel.setCurrentTheme('gomzy');
+                            Get.to(() => ThemeDetailChoiceScreen(category: 'gomzy'), preventDuplicates: true);
                           },
                           left: 12,
                           right: 12,

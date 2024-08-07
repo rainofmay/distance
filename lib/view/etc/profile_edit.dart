@@ -16,8 +16,7 @@ import 'package:mobile/widgets/custom_text_form_field.dart';
 import '../../common/const/colors.dart';
 
 class ProfileEdit extends StatefulWidget {
-  final MateViewModel viewModel =
-      Get.find<MateViewModel>(); // Get the ViewModel instance
+  final MateViewModel viewModel = Get.find<MateViewModel>();
   final UserProvider userProvider = UserProvider();
 
   late final TextEditingController _nameController;
@@ -67,7 +66,7 @@ class _ProfileEditState extends State<ProfileEdit> {
   @override
   Widget build(BuildContext context) {
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    double fieldWidth = MediaQuery.of(context).size.width * 0.65;
+    double fieldWidth = MediaQuery.of(context).size.width * 0.6;
 
     return Scaffold(
       backgroundColor: WHITE,
@@ -86,7 +85,7 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 50),
             profileImgChoose(context),
             const SizedBox(height: 50),
-            nameAndIntroduce(),
+            nameEditor(fieldWidth),
             const SizedBox(height: 50),
             statusSelect(),
             const SizedBox(height: 50),
@@ -155,24 +154,14 @@ class _ProfileEditState extends State<ProfileEdit> {
     ));
   }
 
-  Widget nameAndIntroduce() {
-    double fieldWidth = MediaQuery.of(context).size.width * 0.65;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        nameEdittor(fieldWidth),
-        const SizedBox(height: 32),
-        introductionEdittor(fieldWidth),
-      ],
-    );
-  }
-
-  Widget nameEdittor(final fieldWidth) {
+  Widget nameEditor(final fieldWidth) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        const Icon(CupertinoIcons.person_alt_circle),
+        const SizedBox(width: 8),
         Text('이름'),
-        const SizedBox(width: 20),
+        const SizedBox(width: 16),
         CustomTextFormField(
           controller: widget._nameController,
           fieldWidth: fieldWidth,
@@ -198,7 +187,8 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('소개'),
+        const Icon(CupertinoIcons.pencil_circle),
+        Text('한 줄'),
         const SizedBox(width: 20),
         CustomTextFormField(
           controller: widget._introduceController,
@@ -225,13 +215,6 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          '상태 관리',
-          style: TextStyle(fontSize: 25),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
         Container(
           decoration: BoxDecoration(
               border: Border.all(color: Colors.black),
@@ -239,28 +222,6 @@ class _ProfileEditState extends State<ProfileEdit> {
           width: MediaQuery.of(context).size.width * 0.5,
           child: Column(
             children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  onTap: () => {
-                    showDialog(
-                      barrierColor: TRANSPARENT,
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return StatusManageOnline();
-                      },
-                    )
-                  },
-                  child: statusOnlineWidget(),
-                ),
-              ),
-              const Divider(
-                // Divider 추가
-                height: 1,
-                thickness: 1,
-                color: Colors.black,
-              ),
               GestureDetector(
                 onTap: () => {
                   showDialog(
@@ -283,18 +244,6 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 
-  Widget statusOnlineWidget() {
-    return Obx(() => Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          CircleAvatar(
-              radius: 15,
-              backgroundColor:
-                  getStatusColor(widget.viewModel.isUserOnline.value)),
-          const SizedBox(
-            width: 40,
-          ),
-          Text("${widget.viewModel.isUserOnline.value}")
-        ]));
-  }
 
   Widget statusScheduleWidget() {
     return Obx(() => Row(mainAxisAlignment: MainAxisAlignment.start, children: [
@@ -316,15 +265,15 @@ class _ProfileEditState extends State<ProfileEdit> {
   Widget buildSettingsToggle() {
     return Column(
       children: [
-        SwitchListTile(
-          title: Text('Word 공개'),
-          value: widget.viewModel.isWordOpen.value,
-          onChanged: (bool value) {
-            setState(() {
-              widget.viewModel.isWordOpen.value = !widget.viewModel.isWordOpen.value;
-            });
-          },
-        ),
+        // SwitchListTile(
+        //   title: Text('Word 공개'),
+        //   value: widget.viewModel.isWordOpen.value,
+        //   onChanged: (bool value) {
+        //     setState(() {
+        //       widget.viewModel.isWordOpen.value = !widget.viewModel.isWordOpen.value;
+        //     });
+        //   },
+        // ),
         SwitchListTile(
           title: Text('Schedule 공개'),
           value: widget.viewModel.isScheduleOpen.value,

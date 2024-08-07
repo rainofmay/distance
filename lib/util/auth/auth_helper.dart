@@ -64,8 +64,7 @@ class AuthHelper {
       return customDialog(context, 40, '로그인', Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
           OkCancelButtons(okText: '확인', okTextColor: PRIMARY_COLOR, onPressed: () {
             Navigator.of(context).pop();
-            Navigator.push(context,
-                MaterialPageRoute(builder: (c) => LoginScreen()));
+            Get.to(() => LoginScreen(), preventDuplicates: true);
           }, cancelText: '취소', onCancelPressed: () {
             Navigator.of(context).pop();
           }));

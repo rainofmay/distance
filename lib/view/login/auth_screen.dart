@@ -418,12 +418,7 @@ class _AuthScreenState extends State<AuthScreen> {
                                 children: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                RegisterScreen()),
-                                      );
+                                      Get.to(() => RegisterScreen(), preventDuplicates: true);
                                     },
                                     child: const Text('회원가입',
                                         style: TextStyle(

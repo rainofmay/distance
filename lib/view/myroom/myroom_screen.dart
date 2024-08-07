@@ -31,6 +31,13 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
   late UserProvider userProvider;
   late OnlineStatusManager onlineStatusManager;
 
+  Widget _progressing() {
+    return SizedBox(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Center(child: CustomCircularIndicator(size: 30)));
+  }
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +46,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
     userProvider = UserProvider();
     userProvider.editStatusOnline(OnlineStatus.online);
     WidgetsBinding.instance.addObserver(this);
+
   }
 
   @override
@@ -57,27 +65,27 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
             widget.backgroundViewModel.isImage.value
                 ? SizedBox.expand(
                     child: FittedBox(
-                    fit: BoxFit.cover,
-                    child: FutureBuilder<io.File>(
-                      future: widget.backgroundViewModel.getImageFile(
-                          widget.backgroundViewModel.selectedItemUrl.value
-                      ),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                          return Image.file(
-                            snapshot.data!,
+                      fit: BoxFit.cover,
+                      child: Obx(() {
+                        final imageUrl =
+                            widget.backgroundViewModel.selectedItemUrl.value;
+                        if (imageUrl.startsWith('http')) {
+                          return CachedNetworkImage(
+                            imageUrl: imageUrl,
                             fit: BoxFit.cover,
+                            placeholder: (context, url) => _progressing(),
+                            errorWidget: (context, url, error) => _progressing(),
                           );
                         } else {
-                          return SizedBox(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              child: Center(
-                              child: CustomCircularIndicator(size: 40)));
+                          return Image.file(
+                            io.File(imageUrl),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) => _progressing(),
+                          );
                         }
-                      },
-                    )
-                  ))
+                      }),
+                    ),
+                  )
                 : VideoBackground(
                     videoController:
                         widget.backgroundViewModel.videoController.value,
@@ -91,7 +99,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
             //       audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
             if (widget.backgroundViewModel.isBackdropWordEnabled.value)
               MotivationalQuote(),
-
           ],
         );
       }),
@@ -107,7 +114,8 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(Icons.format_color_text_rounded, size: 20, color: WHITE),
+            icon: const Icon(Icons.format_color_text_rounded,
+                size: 20, color: WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -120,8 +128,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(Icons.headphones_rounded,
-                size: 20, color: WHITE),
+            icon: const Icon(Icons.headphones_rounded, size: 20, color: WHITE),
           ),
           ActionButton(
             onPressed: () {
@@ -134,8 +141,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                 },
               );
             },
-            icon: const Icon(CupertinoIcons.photo_fill,
-                size: 20, color: WHITE),
+            icon: const Icon(CupertinoIcons.photo_fill, size: 20, color: WHITE),
           ),
         ],
       ),

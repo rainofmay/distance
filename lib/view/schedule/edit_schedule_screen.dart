@@ -48,7 +48,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           appBar: CustomBackAppBar(
             isLeading: true,
             appbarTitle: '',
-            backFunction: () => Get.back(),
+            backFunction: Navigator.of(context).pop,
             backgroundColor: BLACK,
             contentColor: WHITE,
             isCenterTitle: false,

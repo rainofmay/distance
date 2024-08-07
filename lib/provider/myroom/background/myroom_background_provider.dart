@@ -8,9 +8,9 @@ class MyroomBackgroundProvider {
     final response;
     try{
       response = await supabase
-          .from('background') // 테이블 이름
+          .from('background')
           .select("*")
-          .eq('id', '40'); // 카테고리 필터링
+          .eq('id', '505'); // 최초 배경 : Ocean 5번
     }
     catch(e){
       throw Exception('Error fetching data: ${e}');

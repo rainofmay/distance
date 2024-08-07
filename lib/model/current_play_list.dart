@@ -14,15 +14,14 @@ class CurrentPlayList {
     required this.numberOfSong});
 
   // 빈 값을 위한 팩토리 생성자
-  factory CurrentPlayList.empty() {
+  factory CurrentPlayList.first() {
     return CurrentPlayList(
-      id: 0,
-      thumbnailUrl: '',
-      bigTitle: '',
-      info: '',
-      theme: '',
-      numberOfSong: 0,
-    );
+        id: 1,
+        thumbnailUrl: 'assets/images/themes/music/music_sleep.jpg',
+        bigTitle: '밤에 들으면 좋을 음악',
+        info: 'Piano',
+        theme: 'sleep',
+        numberOfSong: 7);
   }
 
   CurrentPlayList copyWith({

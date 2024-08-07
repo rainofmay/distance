@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/current_play_list.dart';
 import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
 import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
+import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/myroom/music/widget/play_list_item.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -19,6 +21,7 @@ class MusicThemesScreen extends StatelessWidget {
           MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
   final MyRoomMusicRepository _repository = Get.put(
       MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider()));
+  final adController = Get.find<AdController>();
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +34,7 @@ class MusicThemesScreen extends StatelessWidget {
         contentColor: WHITE,
         isLeading: true,
         backFunction: () {
-          Get.back();
+          Navigator.of(context).pop();
         },
       ),
       body: Padding(
@@ -95,7 +98,14 @@ class MusicThemesScreen extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            })
+                            }),
+                        if (adController.isAdLoaded.value)
+                          SizedBox(
+                            height: adController.bannerAd.value!.size.height
+                                .toDouble(),
+                            child:
+                            AdWidget(ad: adController.bannerAd.value!),
+                          ),
                       ],
                     )),
               ),

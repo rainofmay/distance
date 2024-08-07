@@ -35,8 +35,7 @@ class ScheduleList extends StatelessWidget {
           // 수정 페이지 들어갈 때,
           onTap: () {
             viewModel.initializeForEditSchedule(schedule);
-            Navigator.push(context,
-                MaterialPageRoute(builder: (c) => EditScheduleScreen()));
+            Get.to(() => EditScheduleScreen(), preventDuplicates: true);
           },
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,

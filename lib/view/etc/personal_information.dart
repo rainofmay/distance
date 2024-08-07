@@ -38,8 +38,7 @@ class PersonalInformation extends StatelessWidget {
               widget: Icon(CupertinoIcons.person_circle),
               title: '프로필 수정',
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (c) => ProfileEdit()));
+                Get.to(() => ProfileEdit(), preventDuplicates: true);
               },
             ),
             const SizedBox(height: 20),
@@ -71,8 +70,6 @@ class PersonalInformation extends StatelessWidget {
                   await loginViewModel.signOut(context);
                   mateViewModel.updateMyProfile();
                   Navigator.of(context).pop();
-                  // final bottomBarViewModel = Get.find<BottomBarViewModel>();
-                  // bottomBarViewModel.setBottomIndex(0);
               },
             ),
             const SizedBox(height: 20),
@@ -83,8 +80,7 @@ class PersonalInformation extends StatelessWidget {
               widget: Icon(Icons.phonelink_erase_rounded),
               title: 'Distance 탈퇴',
               onTap: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (c) => Withdrawal()));
+                Get.to(() => Withdrawal(), preventDuplicates: true);
               },
             ),
           ],

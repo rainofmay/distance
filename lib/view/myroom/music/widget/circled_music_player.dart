@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
+import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:sleek_circular_slider/sleek_circular_slider.dart';
 
 class CircledMusicPlayer extends StatefulWidget {
@@ -60,6 +61,9 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
   Widget build(BuildContext context) {
     double mediaSize = MediaQuery.of(context).size.width;
     return Obx(() {
+      if (widget.viewModel.isLoading) {
+        return Center(child: CustomCircularIndicator(size: 30.0));
+      }
       return Column(
       children: [
             Stack(alignment: Alignment.center, children: [
@@ -130,10 +134,6 @@ class _CircledMusicPlayerState extends State<CircledMusicPlayer>
                         })),
               ),
             ]),
-            // const SizedBox(height: 15),
-            // Text(
-            // '${currentPositionSeconds.toStringAsFixed(1)} | ${remainingDurationSeconds.toStringAsFixed(1)}',
-            // style: TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
             const SizedBox(height: 24),
             Text(
                 widget.viewModel.musicInfoList[widget.viewModel.currentIndex]

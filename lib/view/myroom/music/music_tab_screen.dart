@@ -10,6 +10,7 @@ import 'package:mobile/view_model/myroom/music/music_view_model.dart';
 
 class MusicTabScreen extends StatelessWidget {
   final MusicViewModel viewModel;
+
   const MusicTabScreen({super.key, required this.viewModel});
 
   @override
@@ -28,23 +29,27 @@ class MusicTabScreen extends StatelessWidget {
             ),
           ),
           Obx(() => Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Sector(
-                  onTap: () {
-                      pressed() {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => MusicThemesScreen()));
-                      }
-                      AuthHelper.navigateToLoginScreen(
-                          context, pressed);
-                  },
-                  title: viewModel.currentPlayList.bigTitle,
-                  iconData: CupertinoIcons.music_note_2),
-              const SizedBox(height: 20),
-              Center(child: CircledMusicPlayer(viewModel: viewModel)),
-            ],
-          )),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Sector(
+                      onTap: () {
+                        pressed() {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      MusicThemesScreen()));
+                          // Get.to(() => MusicThemesScreen(), preventDuplicates: true);
+                        }
+
+                        AuthHelper.navigateToLoginScreen(context, pressed);
+                      },
+                      title: viewModel.currentPlayList.bigTitle,
+                      iconData: CupertinoIcons.music_note_2),
+                  const SizedBox(height: 20),
+                  Center(child: CircledMusicPlayer(viewModel: viewModel)),
+                ],
+              )),
           const SizedBox(height: 20),
         ],
       ),

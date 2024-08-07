@@ -2,14 +2,15 @@ import 'dart:io' as io;
 import 'dart:math';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/common/const/quotes.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
-import 'package:mobile/view/myroom/background/background_themes/themes/widget/theme_cache_manager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/model/quote_model.dart';
 
@@ -47,10 +48,10 @@ class MyroomViewModel extends GetxController {
 
   late final RxString _currentThemeName = ''.obs;
   String get currentThemeName => _currentThemeName.value;
-  // final List<ThemePicture> themePictures = <ThemePicture>[];
-  // final List<ThemeVideo> themeVideos = <ThemeVideo>[];
-  final ThemeCacheManager themeCacheManager = ThemeCacheManager();
   late final io.File? imgFromGallery;
+
+  late final RxBool _isSettingDialogOpen = false.obs;
+  bool get isSettingDialogOpen => _isSettingDialogOpen.value;
 
 
   @override
@@ -93,36 +94,62 @@ class MyroomViewModel extends GetxController {
     }
   }
 
-  Future<io.File> getImageFile(String url) async {
-    return await themeCacheManager.getImageFile(url, currentThemeName);
-  }
+  // Future<io.File> getOriginImageFile(String url) async {
+  //   return await themeCacheManager.getOriginImageFile(url, currentThemeName);
+  // }
+  //
+  // Future<io.File> getImageFile(String url) async {
+  //   return await themeCacheManager.getImageFile(url, currentThemeName);
+  // }
+
 
   Future<void> getGalleryImage() async {
-    var image = await ImagePicker().pickImage(
-        source: ImageSource.gallery, imageQuality: 25); // maximum: 100
-    if (image != null) {
-      imgFromGallery = io.File(image.path);
-      // 선택된 이미지 파일의 경로를 selectedItemUrl에 저장
-      selectedItemUrl.value = imgFromGallery!.path;
-      selectedItemThumbnail.value = imgFromGallery!.path;
-      // 이미지가 선택되었음을 표시
-      isImage.value = true;
-
-      saveItemUrl(imgFromGallery!.path);
-      saveThumbnailUrl(imgFromGallery!.path);
-      saveIsImage(true);
+    try {
+      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image != null) {
+        selectedItemUrl.value = image.path;
+        selectedItemThumbnail.value = image.path;
+        isImage.value = true;
+        await saveItemUrl(image.path);
+        await saveThumbnailUrl(image.path);
+        await saveIsImage(true);
+        update(); // UI 업데이트
+      }
+    } catch (e) {
+      print("Error in getGalleryImage: $e");
     }
   }
 
-  void setSelectedImageUrl(String url, String thumbnailUrl) {
+  Future<io.File> compressAndSaveImage(io.File file, String theme) async {
+    final dir = await getTemporaryDirectory();
+    final targetPath = path.join(dir.path, 'compressed_${path.basename(file.path)}');
+
+    var result = await FlutterImageCompress.compressAndGetFile(
+      file.absolute.path,
+      targetPath,
+      quality: 85,
+      // minWidth: 200,
+      // minHeight: 200,
+    );
+
+    if (result != null) {
+      return io.File(result.path);
+    } else {
+      return file; // 압축 실패 시 원본 반환
+    }
+  }
+
+  void setSelectedImageUrl(String url, String thumbnailUrl) async {
     videoController.value?.dispose();
     videoController.value = null;
     selectedItemUrl.value = url;
+    // final compressedFile = await themeCacheManager.getImageFile(url, currentThemeName);
+    // selectedItemThumbnail.value = compressedFile.path;
     selectedItemThumbnail.value = thumbnailUrl;
     isImage.value = true;
     isVideoLoading.value = true;
     saveItemUrl(url);
-    saveThumbnailUrl(thumbnailUrl);
+    saveThumbnailUrl(thumbnailUrl); // selectedItemThumbnail
     saveIsImage(true);
   }
 
@@ -140,6 +167,7 @@ class MyroomViewModel extends GetxController {
   }
 
   Future<void> setTheme(String category) async {
+    // _themeContents.clear();
     isThemeLoading.value = true; // 로딩 시작
     List<ThemePicture> themePictures = await myroomBackgroundRepository.fetchThemePictures(category);
     List<ThemeVideo> themeVideos =  await myroomBackgroundRepository.fetchThemeVideos(category);
@@ -283,5 +311,7 @@ class MyroomViewModel extends GetxController {
     customQuoteAuthor.value = author;
   }
 
-
+  void setDialogOpen(value) {
+    _isSettingDialogOpen.value = value;
+  }
 }

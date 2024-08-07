@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -41,8 +42,7 @@ class CustomDrawer extends StatelessWidget {
                       leading: val.key,
                       title: Text(val.value, style: TextStyle(fontSize: 15)),
                       onTap: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (c) => entry.value));
+                        Get.to(() => MaterialPageRoute(builder: (c) => entry.value), preventDuplicates: true);
                         Navigator.of(context).pop();
                       },
                       trailing: Icon(Icons.arrow_forward_ios, size: 15,),

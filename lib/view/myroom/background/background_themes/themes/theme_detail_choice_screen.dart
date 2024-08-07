@@ -5,6 +5,7 @@ import 'package:mobile/main.dart';
 import 'package:mobile/view/myroom/background/background_themes/themes/widget/gridItems.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
+import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 class ThemeDetailChoiceScreen extends StatelessWidget {
   final String category;
@@ -19,8 +20,10 @@ class ThemeDetailChoiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: WHITE,
-      appBar: CustomAppBar(
+      appBar: CustomBackAppBar(
         appbarTitle: capitalize(category),
+        isLeading: true,
+        backFunction: () => Navigator.of(context).pop(),
         isCenterTitle: true,
         backgroundColor: WHITE,
         contentColor: BLACK,

@@ -1,17 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
-
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 
 class CreateScheduleScreen extends StatelessWidget {
   CreateScheduleScreen({super.key});
-
+  final adController = Get.put(AdController());
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
@@ -60,9 +61,19 @@ class CreateScheduleScreen extends StatelessWidget {
           ],
         ),
         body: SingleChildScrollView(
-          child: SafeArea(
-            child: Form(key: viewModel.formKey, child: ScheduleForm()),
-          ),
+          child: Obx(() => Column(
+            children: [
+              Form(key: viewModel.formKey, child: ScheduleForm()),
+              const SizedBox(height: 16),
+              if (adController.isAdLoaded.value && viewModel.nowHandlingScheduleModel.repeatType == '반복없음')
+                SizedBox(
+                  height: adController.bannerAd.value!.size.height
+                      .toDouble(),
+                  child:
+                  AdWidget(ad: adController.bannerAd.value!),
+                ),
+            ],
+          )),
         ));
   }
 }

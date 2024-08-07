@@ -1,9 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
+import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -12,9 +14,9 @@ import 'package:mobile/widgets/borderline.dart';
 class SoundThemesScreen extends StatelessWidget {
   final StoreSoundViewModel storeSoundViewModel =
   Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
-  late final storeSoundInfoList = storeSoundViewModel.storeSoundInfoList;
-  final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
 
+  final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
+  final adController = Get.find<AdController>();
   SoundThemesScreen({super.key});
 
   @override
@@ -113,9 +115,9 @@ class SoundThemesScreen extends StatelessWidget {
                   ListView.builder(
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: storeSoundInfoList.length,
+                      itemCount: storeSoundViewModel.storeSoundInfoList.length,
                       itemBuilder: (context, index) {
-                        MusicInfo musicInfo = storeSoundInfoList[index];  // 스토어의 MUsicInfo
+                        MusicInfo musicInfo = storeSoundViewModel.storeSoundInfoList[index];  // 스토어의 MUsicInfo
 
                         return Padding(
                           padding: const EdgeInsets.symmetric(
@@ -161,6 +163,13 @@ class SoundThemesScreen extends StatelessWidget {
                           ),
                         );
                       }),
+                  if (adController.isAdLoaded.value)
+                    SizedBox(
+                      height: adController.bannerAd.value!.size.height
+                          .toDouble(),
+                      child:
+                      AdWidget(ad: adController.bannerAd.value!),
+                    ),
                 ],
               )),
         ));

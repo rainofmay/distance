@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player/cached_video_player.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
@@ -53,19 +54,9 @@ Widget _buildImageDialog(BuildContext context, ThemePicture picture,
   adController.loadInterstitialAd();
   return CustomAlertDialog(
       title: '배경 변경',
-      width: 200,
-      height: 200,
-      contents: FutureBuilder<io.File>(
-        future: myroomViewModel.getImageFile(picture.highQualityUrl),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done &&
-              snapshot.hasData) {
-            return Image.file(snapshot.data!);
-          } else {
-            return Center(child: CustomCircularIndicator(size: 30.0));
-          }
-        },
-      ),
+      width: 300,
+      height: 300,
+      contents: CachedNetworkImage(imageUrl: picture.highQualityUrl),
       actionWidget: OkCancelButtons(
         okText: '변경',
         okTextColor: PRIMARY_COLOR,
@@ -92,21 +83,12 @@ Widget _buildImagePreview(
     color: Colors.grey[300],
     child: Stack(
       children: [
-        FutureBuilder<io.File>(
-          future: myroomViewModel.getImageFile(picture.thumbnailUrl),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done &&
-                snapshot.hasData) {
-              return Image.file(
-                snapshot.data!,
-                fit: BoxFit.cover,
-                width: double.infinity,
-                height: double.infinity,
-              );
-            } else {
-              return Center(child: Container());
-            }
-          },
+        CachedNetworkImage( // CachedNetworkImage 사용
+          imageUrl: picture.thumbnailUrl,
+          fit: BoxFit.cover,
+          width: double.infinity,
+          height: double.infinity,
+          errorWidget: (context, url, error) => const Icon(Icons.error), // 에러 시 표시
         ),
         if (picture.isPaid) // 유료 이미지 표시 (기존 코드와 동일)
           Positioned(
@@ -172,6 +154,20 @@ Widget _buildVideoPreview(ThemeVideo video) {
           placeholder: (context, url) => const LinearProgressIndicator(),
           errorWidget: (context, url, error) => const Icon(Icons.error),
         ),
+        Positioned(
+          right: 5,
+          bottom: 5,
+          child: Container(
+              padding: EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: BLACK.withOpacity(0.7),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Icon(
+                CupertinoIcons.videocam_fill,
+                color: PRIMARY_COLOR,
+                size: 16,
+              ))),
         if (video.isPaid) // 유료 비디오 표시
           Positioned(
             right: 10,

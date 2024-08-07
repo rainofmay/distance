@@ -7,11 +7,7 @@ import 'package:mobile/provider/myroom/music/myroom_music_provider.dart';
 import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
 import 'package:mobile/view/myroom/music/music_tab_screen.dart';
 import 'package:mobile/view/myroom/music/sound_tab_screen.dart';
-import 'package:mobile/view/myroom/music/sound_themes_screen.dart';
-import 'package:mobile/view/myroom/music/widget/sector.dart';
-import 'package:mobile/view/myroom/music/widget/sound_volume.dart';
 import 'package:mobile/view_model/myroom/music/music_view_model.dart';
-import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
