@@ -47,6 +47,7 @@ dependencies:
   flutter_native_splash: ^2.4.1
   google_mobile_ads: ^5.1.0
   flutter_cache_manager: ^3.4.0
+  audio_service: ^0.18.15
 
 flutter_native_splash:
   color: "#000000"

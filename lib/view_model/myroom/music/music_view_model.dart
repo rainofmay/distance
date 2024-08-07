@@ -1,16 +1,23 @@
 import 'dart:math';
 
+import 'package:audio_service/audio_service.dart';
 import 'package:get/get.dart';
 import 'package:mobile/model/current_play_list.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
+import 'background_music_view_model.dart';
 
 class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   final MyRoomMusicRepository _repository;
+  late AudioPlayerHandler audioHandler;
 
   MusicViewModel({required MyRoomMusicRepository repository})
-      : _repository = repository;
+      : _repository = repository {
+    _initAudioHandler();
+  }
+
+
 
   /* Music Screen에서 Music <-> Sound 이동 탭 */
   late final RxInt _tabIndex = 0.obs;
@@ -27,6 +34,9 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   /* Music */
   late final Rx<AudioPlayer> _musicPlayer = AudioPlayer().obs;
   AudioPlayer get musicPlayer => _musicPlayer.value;
+
+  late final Rx<MediaItem?> _currentMediaItem = Rx<MediaItem?>(null);
+  MediaItem? get currentMediaItem => _currentMediaItem.value;
 
   late final RxList<MusicInfo> _musicInfoList = <MusicInfo>[].obs;
   List<MusicInfo> get musicInfoList => _musicInfoList;
@@ -51,11 +61,28 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   late final RxBool _isShuffled = false.obs;
   bool get isShuffled => _isShuffled.value;
 
+  void _initAudioHandler() {
+    audioHandler = AudioPlayerHandler(this, musicPlayer);
+    Get.put(audioHandler);
+  }
+
   @override
   void onInit() {
-    setInitMusicState();
-    print('_musicInfoList $_musicInfoList');
     super.onInit();
+    setInitMusicState();
+    _initAudioService();
+  }
+
+  void _initAudioService() {
+    setInitMusicState();
+    AudioService.init(
+      builder: () => AudioPlayerHandler(this, musicPlayer),
+      config: const AudioServiceConfig(
+        androidNotificationChannelId: 'com.distance.cled24.channel.audio',
+        androidNotificationChannelName: 'Audio playback',
+        androidNotificationOngoing: true,
+      ),
+    );
   }
 
   /* Init */
@@ -81,20 +108,6 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
       }
     } catch (e) {
       print('Failed to fetch theme music: $e');
-    }
-  }
-
-  setCurrentMusic(bool isShuffled) async {
-    if (_musicInfoList.isEmpty) return;
-
-    if (isShuffled) {
-      int newIndex;
-      //현재 음원이랑 다른 게 나올 때까지 반복 또 반복
-      do {
-        newIndex = Random().nextInt(_musicInfoList.length);
-      } while (newIndex != currentIndex);
-
-      _currentIndex.value = newIndex;
     }
   }
 
@@ -142,6 +155,8 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   }
 
   Future<void> musicPlayPause() async {
+    await _updateMediaItem();
+
     if (_musicPlayer().state == PlayerState.playing) {
       await _musicPlayer().pause();
       _isMusicPlaying.value = false;
@@ -157,21 +172,57 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
 
       _isMusicPlaying.value = true;
     }
-    update();
+  }
+
+  Future<void> setCurrentMusic(bool isShuffled) async {
+    if (_musicInfoList.isEmpty) return;
+    await _updateMediaItem();
+
+    if (isShuffled) {
+      int newIndex;
+      do {
+        newIndex = Random().nextInt(_musicInfoList.length);
+      } while (newIndex == currentIndex);
+
+      _currentIndex.value = newIndex;
+    }
+  }
+
+  Future<void> _updateMediaItem() async {
+    if (_musicInfoList.isNotEmpty && _currentIndex.value < _musicInfoList.length) {
+      final currentMusic = _musicInfoList[_currentIndex.value];
+      final mediaItem = MediaItem(
+        id: currentMusic.audioURL,
+        album: currentMusic.theme,
+        title: currentMusic.musicName,
+        artist: "Distance",
+        duration: _currentMusicDuration.value,
+        artUri: Uri.parse(currentPlayList.thumbnailUrl),
+      );
+      _currentMediaItem.value = mediaItem;
+      print(mediaItem);
+      // AudioPlayerHandler를 통해 MediaItem 업데이트
+      await audioHandler.addMediaItem(mediaItem);
+    }
   }
 
   Future<void> playCurrentTrack() async {
-    if (_musicInfoList.isEmpty) return;
-
+    if (_musicInfoList.isEmpty) {
+      print("musicInfoList is Empty");
+      return;
+    }
     try {
       final tempMusicFile = await _repository.downloadMusicFromUrl(_musicInfoList[_currentIndex.value].audioURL);
+      print("tempMusicFile : $tempMusicFile");
       await _musicPlayer.value.play(DeviceFileSource(tempMusicFile));
     } catch (e) {
       print('Failed to play music: $e');
     }
   }
 
+
   Future<void> nextTrack() async {
+    await _updateMediaItem();
     if (_musicInfoList.isNotEmpty) {
       if(isRepeated) {
         await _musicPlayer().stop();
@@ -186,8 +237,8 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
 
   Future<void> previousTrack() async {
     if (_musicInfoList.isEmpty) return;
-
     _currentIndex.value = (_currentIndex.value - 1 + _musicInfoList.length) % _musicInfoList.length;
+    await _updateMediaItem();
     await playCurrentTrack();
   }
 
