@@ -21,7 +21,7 @@ class MusicThemesScreen extends StatelessWidget {
           MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
   final MyRoomMusicRepository _repository = Get.put(
       MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider()));
-  final adController = Get.find<AdController>();
+  final adController = Get.put(AdController());
 
   @override
   Widget build(BuildContext context) {
