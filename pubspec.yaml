@@ -48,6 +48,7 @@ dependencies:
   google_mobile_ads: ^5.1.0
   flutter_cache_manager: ^3.4.0
   audio_service: ^0.18.15
+  flutter_image_compress: ^2.3.0
 
 flutter_native_splash:
   color: "#000000"
@@ -70,15 +71,10 @@ flutter:
   assets:
     - assets/
     - assets/images/
-    - assets/images/seas/
     - assets/images/themes/
     - assets/images/themes/music/
     - assets/icons/
     - assets/audios/nature/
-    - assets/audios/music/consolation/
-    - assets/videos/sea/
-    - assets/videos/gomji/
-    - assets/videos/
     - .env
 
 

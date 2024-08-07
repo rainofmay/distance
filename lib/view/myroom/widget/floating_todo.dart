@@ -124,10 +124,10 @@ class _FloatingTodoState extends State<FloatingTodo> {
                         onTap: () async {
                           _optionsDialog(scheduleViewModel.todaySchedules[index]);
                         },
-                        child: SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
