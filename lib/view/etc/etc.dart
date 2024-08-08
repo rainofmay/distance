@@ -2,15 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
-import 'package:mobile/view/etc/personal_information.dart';
-import 'package:mobile/view/etc/update_notification.dart';
-import 'package:mobile/view/login/login_screen.dart';
+import 'package:mobile/view/etc/notification_screen.dart';
+import 'package:mobile/view/etc/personal_information_screen.dart';
+import 'package:mobile/view/etc/update_screen.dart';
 import 'package:mobile/view/payment/payment_screen.dart';
-import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
-import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
@@ -27,7 +24,7 @@ class Etc extends StatelessWidget {
       backgroundColor: WHITE,
       appBar: CustomAppBar(
           appbarTitle: '더보기',
-          backgroundColor: TRANSPARENT,
+          backgroundColor: WHITE,
           contentColor: BLACK,
           isCenterTitle: false,
           titleSpacing: 15),
@@ -114,11 +111,11 @@ class Etc extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TapableRow(
-              widget: Icon(CupertinoIcons.lock),
+              widget: const Icon(CupertinoIcons.lock),
               title: '내 정보 관리',
               onTap: () {
                 pressed() {
-                  Get.to(() => PersonalInformation(), preventDuplicates: true);
+                  Get.to(() => PersonalInformationScreen(), preventDuplicates: true);
                 }
                 AuthHelper.navigateToLoginScreen(context, pressed);
               },
@@ -132,10 +129,10 @@ class Etc extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TapableRow(
-              widget: Icon(CupertinoIcons.speaker_1),
+              widget: const Icon(CupertinoIcons.speaker_1),
               title: '앱 업데이트 공지',
               onTap: () {
-                Get.to(() => UpdateNotification(), preventDuplicates: true);
+                Get.to(() => UpdateScreen(), preventDuplicates: true);
                 },
             ),
           ),
@@ -147,9 +144,14 @@ class Etc extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(left: 8.0),
             child: TapableRow(
-              widget: Icon(Icons.notifications_none_rounded),
+              widget: const Icon(Icons.notifications_none_rounded),
               title: '알림',
-              onTap: () {},
+              onTap: () {
+                pressed() {
+                  Get.to(() => NotificationScreen(), preventDuplicates: true);
+                }
+                AuthHelper.navigateToLoginScreen(context, pressed);
+              },
             ),
           ),
 

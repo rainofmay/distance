@@ -14,8 +14,8 @@ import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
 import 'package:mobile/widgets/tapable_row.dart';
 
-class PersonalInformation extends StatelessWidget {
-  PersonalInformation({super.key});
+class PersonalInformationScreen extends StatelessWidget {
+  PersonalInformationScreen({super.key});
   final LoginViewModel loginViewModel = Get.put(LoginViewModel(provider: LoginProvider()));
   final MateViewModel mateViewModel = Get.find<MateViewModel>();
   @override

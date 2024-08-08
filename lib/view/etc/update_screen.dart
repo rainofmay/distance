@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
-class UpdateNotification extends StatelessWidget {
-  const UpdateNotification({super.key});
+class UpdateScreen extends StatelessWidget {
+  const UpdateScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -106,6 +106,8 @@ class ScheduleScreen extends StatelessWidget {
                               ).createShader(bounds);
                             },
                             child: IconButton(
+                              splashColor: TRANSPARENT,
+                                highlightColor: TRANSPARENT,
                                 onPressed: () {
                                   pressed() {
                                     viewModel.initializeForNewSchedule();

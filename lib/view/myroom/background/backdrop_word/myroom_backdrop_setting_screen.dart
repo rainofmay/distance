@@ -244,7 +244,6 @@ class QuoteSettingsDialog extends StatelessWidget {
               },
               enableAlpha: true,
               displayThumbColor: true,
-              showLabel: true,
               pickerAreaHeightPercent: 0.8,
             ),
           ),

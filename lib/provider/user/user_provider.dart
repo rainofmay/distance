@@ -57,6 +57,7 @@ class UserProvider {
     } catch (e) {
       print("[EditProfileImage Error] $e");
     }
+    return null;
   }
 
   Future<void> editName(String newName) async {
@@ -139,7 +140,7 @@ class UserProvider {
     } catch (error) {
       print('에러 $error');
       // 에러 처리 (예: 에러 메시지 출력)
-      throw error; // 상위 호출자에게 에러 전달
+      rethrow; // 상위 호출자에게 에러 전달
     }
   }
 
@@ -151,10 +152,30 @@ class UserProvider {
           .update({'online_status': status.stringValue}).eq(
           'id', myId); // uid를 기준으로 업데이트
     }
-/* Delete */
+
 
   }
+  Future<void> editSchedulePush(String schedulePush) async {
+    try {
+      final myId = await AuthHelper.getMyId();
+      if (myId != null) {
+        await supabase
+            .from('user') // 테이블 이름 확인 (user 모델에 맞게 수정)
+            .update({'schedule_push': schedulePush}).eq(
+            'id', myId); // uid를 기준으로 업데이트
+        print("update schedule_push");
+      } else {
+        // 로그인되지 않은 경우 처리 (예: 에러 메시지 출력)
+        throw Exception('User not logged in');
+      }
+    } catch (error) {
+      print('에러 $error');
+      // 에러 처리 (예: 에러 메시지 출력)
+      rethrow; // 상위 호출자에게 에러 전달
+    }
+  }
 
+  /* Delete */
   Future<void> updateUserSettings(bool isWordOpen, bool isScheduleOpen) async {
     final userId = await AuthHelper.getMyId();
     if (userId != null) {

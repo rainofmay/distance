@@ -16,7 +16,7 @@ class SoundThemesScreen extends StatelessWidget {
   Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
 
   final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
-  final adController = Get.find<AdController>();
+  final adController = Get.put(AdController());
   SoundThemesScreen({super.key});
 
   @override

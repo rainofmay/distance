@@ -246,7 +246,7 @@ class ScheduleForm extends StatelessWidget {
                       ),
                       title: viewModel.nowHandlingScheduleModel.isDone
                           ? '일정 완료'
-                          : '일정 진행 중',
+                          : '일정 진행',
                       onTap: () {
                         viewModel.setIsDone(!viewModel
                             .nowHandlingScheduleModel.isDone);

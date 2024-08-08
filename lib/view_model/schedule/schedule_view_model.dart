@@ -1,26 +1,31 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/calendar_info_model.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
+import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
+import 'package:mobile/repository/user/user_repository.dart';
+import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view/schedule/widget/schedule/event.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:uuid/uuid.dart';
 
 class ScheduleViewModel extends GetxController {
-  final ScheduleRepository _repository;
+  late final ScheduleRepository _repository;
 
   /* constructor */
-  ScheduleViewModel({required ScheduleRepository repository})
-      : _repository = repository;
+  ScheduleViewModel({required ScheduleRepository repository
+  }) : _repository = repository;
 
   /* Provider */
   final ScheduleProvider scheduleProvider = ScheduleProvider();
-
+  final UserRepository userRepository = UserRepository(userProvider: UserProvider());
   /* Calendar */
   late final Rx<CalendarInfoModel> _calendarInfo;
   CalendarInfoModel get calendarInfo => _calendarInfo.value;
@@ -61,6 +66,27 @@ class ScheduleViewModel extends GetxController {
   final RxList<String> _repeatTypes = ['반복없음', '지정'].obs;
   List<String> get repeatTypes => _repeatTypes;
 
+  /* Notification */
+  final NotificationService _notificationService = Get.put(NotificationService());
+
+  late final RxString _selectedNotification = '5분 전'.obs;
+  String get selectedNotification => _selectedNotification.value;
+
+  List<String> get notificationOptions => [
+    '사용 안함',
+    '시작 시간에',
+    '5분 전',
+    '15분 전',
+    '30분 전',
+    '1시간 전',
+    '1일 전',
+  ];
+
+  late final RxBool _isExpanded = false.obs;
+  bool get isExpanded => _isExpanded.value;
+  void toggleExpansion() {
+    _isExpanded.value = !_isExpanded.value;
+  }
 
   /* '저장&수정' 버튼 활성화를 위한 유효성 검사 */
   final RxBool _isFormValid = false.obs;
@@ -113,6 +139,7 @@ class ScheduleViewModel extends GetxController {
     loadAllSchedules();
     _isScheduleListLoaded = false.obs;
     initColorSet();
+    initSchedulePush();
     super.onInit();
   }
 
@@ -203,6 +230,16 @@ class ScheduleViewModel extends GetxController {
 
   void initColorSet() {
     _selectedSectionColor = sectionColors[0].obs;
+  }
+
+  Future<void> initSchedulePush() async {
+      try {
+        var data = await userRepository.fetchMyProfile();
+        _selectedNotification.value = data.schedulePush;
+        await scheduleNotificationsForAllSchedules();
+      } catch (e) {
+        print('Error initializing schedule push: $e');
+      }
   }
 
 /* Update */
@@ -414,15 +451,20 @@ class ScheduleViewModel extends GetxController {
 
     // 플로팅 윈도우에 필요한 업데이트
     updateTodaySchedules();
+    // 알림 기능
+    scheduleNotificationsForAllSchedules();
     update();
   }
 
 
   List initEvents(DateTime day) {
-    return _allSchedules.where((schedule) =>
-    schedule.startDate.isBefore(day.add(Duration(days: 1))) &&
-        schedule.endDate.isAfter(day.subtract(Duration(days: 1)))
-    ).map((schedule) => [
+    return _allSchedules.where((schedule) {
+      DateTime scheduleStart = DateTime(schedule.startDate.year, schedule.startDate.month, schedule.startDate.day);
+      DateTime scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
+      DateTime dayStart = DateTime(day.year, day.month, day.day);
+
+      return !scheduleEnd.isBefore(dayStart) && !scheduleStart.isAfter(dayStart);
+    }).map((schedule) => [
       schedule.startDate,
       schedule.endDate,
       schedule.id,
@@ -435,19 +477,22 @@ class ScheduleViewModel extends GetxController {
     List<Event> events = [];
 
     for (var item in data) {
-      DateTime startDate = item[0];
-      DateTime endDate = item[1];
+      DateTime startDate = (item[0] as DateTime).toLocal();
+      DateTime endDate = (item[1] as DateTime).toLocal();
       String id = item[2];
 
-      if (day.isAfter(startDate.subtract(Duration(days: 1))) &&
-          day.isBefore(endDate)) {
+      // 날짜만 비교하기 위해 시간 정보를 제거
+      DateTime dayStart = DateTime(day.year, day.month, day.day);
+      DateTime eventStart = DateTime(startDate.year, startDate.month, startDate.day);
+      DateTime eventEnd = DateTime(endDate.year, endDate.month, endDate.day);
+
+      if (!dayStart.isBefore(eventStart) && !dayStart.isAfter(eventEnd)) {
         events.add(Event(id));
       }
     }
-
     return events;
-
   }
+
   Map<String, int> getEventsColor(day) {
     Map<String, int> idColorData = {};
     List data = initEvents(day);
@@ -471,26 +516,86 @@ class ScheduleViewModel extends GetxController {
       final scheduleStart = DateTime(schedule.startDate.year, schedule.startDate.month, schedule.startDate.day);
       final scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
 
-      // 반복 일정 처리
-      // if (schedule.repeatType == '지정') {
-      //   // 반복 일정이 오늘 해당하는지 확인
-      //   if (scheduleStart.isBefore(todayEnd) && scheduleEnd.isAfter(todayStart)) {
-      //     int daysSinceStart = todayStart.difference(scheduleStart).inDays;
-      //     int weeksSinceStart = daysSinceStart ~/ 7;
-      //     if (weeksSinceStart % schedule.repeatWeeks == 0 &&
-      //         schedule.repeatDays[today.weekday - 1] &&
-      //         todayStart.isBefore(schedule.repeatEndDate)) {
-      //       return true;
-      //     }
-      //   }
-      //   return false;
-      // }
-
       // 일반 일정 처리
       return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);
     }).toList();
     print('Today schedules updated: ${_todaySchedules.length}');
     update();
+  }
+
+  /* Notification */
+  Future<void> handleNotificationSettingChange(String setting) async {
+    if (_selectedNotification.value != setting) {
+      _selectedNotification.value = setting;
+      await scheduleNotificationsForAllSchedules();
+        try {
+          await userRepository.updateSchedulePush(setting);
+        } catch (e) {
+          print('Error updating schedule push: $e');
+        }
+      }
+  }
+
+  Future<void> scheduleNotificationsForAllSchedules() async {
+    // 먼저 모든 알림을 취소
+    await _notificationService.local.cancelAll();
+
+    if (_selectedNotification.value == '사용 안함') {
+      return; // 알림이 비활성화된 경우 여기서 종료
+    }
+
+    for (var schedule in _allSchedules) {
+      if (schedule.isTimeSet && schedule.startDate.isAfter(DateTime.now())) {
+        await _scheduleNotificationForSchedule(schedule);
+      }
+    }
+  }
+
+  Future<void> _scheduleNotificationForSchedule(ScheduleModel schedule) async {
+    Duration notificationOffset;
+    String notificationMessage;
+    switch (_selectedNotification.value) {
+      case '시작 시간에':
+        notificationOffset = Duration.zero;
+        notificationMessage = '시작됩니다.';
+        break;
+      case '5분 전':
+        notificationOffset = Duration(minutes: 5);
+        notificationMessage = '5분 전에 시작됩니다.';
+        break;
+      case '15분 전':
+        notificationOffset = Duration(minutes: 15);
+        notificationMessage = '15분 전에 시작됩니다.';
+        break;
+      case '30분 전':
+        notificationOffset = Duration(minutes: 30);
+        notificationMessage = '30분 전에 시작됩니다.';
+        break;
+      case '1시간 전':
+        notificationOffset = Duration(hours: 1);
+        notificationMessage = '1시간 전에 시작됩니다.';
+        break;
+      case '1일 전':
+        notificationOffset = Duration(days: 1);
+        notificationMessage = '1일 전입니다.';
+        break;
+      default:
+        return; // 알 수 없는 설정인 경우 알림을 설정하지 않음
+    }
+
+    DateTime notificationTime = schedule.startDate.subtract(notificationOffset);
+    if (notificationTime.isAfter(DateTime.now())) {
+      String truncatedName = schedule.scheduleName.length > 20
+          ? '${schedule.scheduleName.substring(0, 20)}...'
+          : schedule.scheduleName;
+
+      await _notificationService.scheduleNotification(
+        schedule.id.hashCode,
+        '일정 알림',
+        '$truncatedName 일정이 $notificationMessage',
+        notificationTime,
+      );
+    }
   }
 
   /* Create */
