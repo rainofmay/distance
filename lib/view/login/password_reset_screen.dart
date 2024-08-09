@@ -39,7 +39,7 @@ class PasswordResetScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text('비밀번호 초기화')),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -48,9 +48,9 @@ class PasswordResetScreen extends StatelessWidget {
               decoration: InputDecoration(labelText: '이메일'),
               keyboardType: TextInputType.emailAddress,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
-              child: Text('비밀번호 초기화 요청'),
+              child: const Text('비밀번호 초기화 요청'),
               onPressed: () => resetPassword(_emailController.text),
             ),
           ],

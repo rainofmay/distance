@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view/schedule/widget/schedule/omni_date_time_picker_theme.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 import 'package:mobile/widgets/custom_text_field.dart';
@@ -67,8 +66,8 @@ class RepeatScheduleWidget extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (viewModel.nowHandlingScheduleModel.repeatType == '지정') ...[
-                SizedBox(height: 16),
-                Text('반복할 요일 선택', style: TextStyle(fontSize: 14, color: BLACK)),
+                const SizedBox(height: 16),
+                const Text('반복할 요일 선택', style: TextStyle(fontSize: 14, color: BLACK)),
                 Wrap(
                   spacing: 5,
                   runSpacing: 8,
@@ -87,15 +86,15 @@ class RepeatScheduleWidget extends StatelessWidget {
                     );
                   }),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 Row(
                   children: [
-                    Text('반복 주기 ', style: TextStyle(color: BLACK, fontSize: 14)),
+                    const Text('반복 주기 ', style: TextStyle(color: BLACK, fontSize: 14)),
                     const SizedBox(width: 24),
                     DropdownButton<int>(
                       dropdownColor: WHITE,
                       value: viewModel.nowHandlingScheduleModel.repeatWeeks,
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.keyboard_arrow_down,
                         color: Colors.grey,
                       ),
@@ -104,7 +103,7 @@ class RepeatScheduleWidget extends StatelessWidget {
                       items: List.generate(12, (index) => index + 1).map((int value) {
                         return DropdownMenuItem<int>(
                           value: value,
-                          child: Text('$value주', style: TextStyle(color: BLACK, fontSize: 14)),
+                          child: Text('$value주', style: const TextStyle(color: BLACK, fontSize: 14)),
                         );
                       }).toList(),
                       onChanged: (int? newValue) {
@@ -133,8 +132,8 @@ class RepeatScheduleWidget extends StatelessWidget {
                   child: Row(
                     children: [
                       Text('반복 종료일 : ${viewModel.nowHandlingScheduleModel.repeatEndDate.toString().split(' ')[0]}'),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, bottom: 2.0),
+                      const Padding(
+                        padding: EdgeInsets.only(left: 8.0, bottom: 2.0),
                         child: Icon(CupertinoIcons.calendar, size: 20)
                       )
                     ],

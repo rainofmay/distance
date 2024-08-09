@@ -70,7 +70,7 @@ class SoundThemesScreen extends StatelessWidget {
                                         gradient: LinearGradient(
                                           begin: Alignment.topLeft,
                                           end: Alignment.bottomRight,
-                                          colors: [Color(0xff023C46), Color(0xff001824)],
+                                          colors: [const Color(0xff023C46), const Color(0xff001824)],
                                         ),
                                         borderRadius: BorderRadius.circular(40)
                                     ),
@@ -80,7 +80,7 @@ class SoundThemesScreen extends StatelessWidget {
                                         children: [
                                           Padding(
                                             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8),
-                                            child: Text('# ${musicInfo.musicName}', style: TextStyle(color: WHITE)),
+                                            child: Text('# ${musicInfo.musicName}', style: const TextStyle(color: WHITE)),
                                           ),
                                         ],
                                       ),
@@ -138,9 +138,9 @@ class SoundThemesScreen extends StatelessWidget {
                                             .storePlayingBoolList[
                                         index] ==
                                             false
-                                            ? Icon(CupertinoIcons.speaker_slash,
+                                            ? const Icon(CupertinoIcons.speaker_slash,
                                             size: 20, color: TRANSPARENT_WHITE,)
-                                            : Icon(CupertinoIcons.speaker_3,
+                                            : const Icon(CupertinoIcons.speaker_3,
                                             color: PRIMARY_COLOR, size: 20)),
                                     const SizedBox(width: 16),
                                     IconButton(
@@ -153,8 +153,8 @@ class SoundThemesScreen extends StatelessWidget {
                                             await soundViewModel.removeSoundFromUserList(newValue);
                                           }
                                         },
-                                        icon: _containsMusicInfoById(soundViewModel.soundInfoList, musicInfo.id) ? Icon(CupertinoIcons.heart_fill,
-                                            size: 20, color: PRIMARY_LIGHT) : Icon(CupertinoIcons.heart,
+                                        icon: _containsMusicInfoById(soundViewModel.soundInfoList, musicInfo.id) ? const Icon(CupertinoIcons.heart_fill,
+                                            size: 20, color: PRIMARY_LIGHT) : const Icon(CupertinoIcons.heart,
                                             size: 20, color: WHITE))
                                   ],
                                 ),

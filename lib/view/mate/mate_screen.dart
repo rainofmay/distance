@@ -21,8 +21,6 @@ import 'mate_request_screen/mate_request_screen.dart';
 class MateScreen extends StatefulWidget {
   MateScreen({super.key});
 
-  // final MateViewModel viewModel = Get.put(MateViewModel()); // ViewModel 인스턴스 생성
-
   final MateViewModel viewModel = Get.put(MateViewModel(
       userRepository: UserRepository(userProvider: UserProvider()),
       mateRepository:
@@ -105,11 +103,8 @@ class _MateScreenState extends State<MateScreen> {
                           ),
                           const SizedBox(height: 8),
                           Text(widget.viewModel.name.value,
-                              style: TextStyle(fontSize: 15)),
-                          // const SizedBox(height: 4),
-                          // Text(widget.viewModel.introduction.value,
-                          //     style: TextStyle(
-                          //         fontSize: 13, color: DARK_UNSELECTED)),
+                              style: const TextStyle(fontSize: 15)),
+
                         ],
                       ),
                     ),
@@ -121,9 +116,9 @@ class _MateScreenState extends State<MateScreen> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(widget.viewModel.userCurrentActivityEmoji.value,
-                              style: TextStyle(fontSize: 14, color: BLACK)),
+                              style: const TextStyle(fontSize: 14, color: BLACK)),
                           Text(widget.viewModel.userCurrentActivityText.value,
-                              style: TextStyle(fontSize: 14, color: BLACK)),
+                              style: const TextStyle(fontSize: 14, color: BLACK)),
                         ],
                       ),
                     ),
@@ -145,11 +140,11 @@ class _MateScreenState extends State<MateScreen> {
                         }
                         AuthHelper.navigateToLoginScreen(context, pressed);
                       },
-                      child: Row(
+                      child: const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.edit, size: 17, color: DARK_UNSELECTED),
-                          const SizedBox(width: 5),
+                          SizedBox(width: 5),
                           Text('Edit',
                               style: TextStyle(
                                   fontSize: 13, color: DARK_UNSELECTED))
@@ -166,7 +161,7 @@ class _MateScreenState extends State<MateScreen> {
             padding: const EdgeInsets.only(left: 16),
             child: Row(
               children: [
-                Text('Mates',
+                const Text('Mates',
                     style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                 const SizedBox(width: 10),
                 Text('(${widget.viewModel.mateProfiles.value.length})',

@@ -46,7 +46,7 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Obx(() => Text(
-                      controller.currentQuote.value.quote,
+                      controller.currentQuote.quote,
                       style: TextStyle(
                         color: controller.quoteFontColor.value,
                         fontSize: controller.quoteFontSize.value,
@@ -57,7 +57,7 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
                     )),
                 SizedBox(height: 8),
                 Obx(() => Text(
-                      "- ${controller.currentQuote.value.writer}",
+                      "- ${controller.currentQuote.writer}",
                       style: TextStyle(
                         color: controller.quoteFontColor.value,
                         fontSize: controller.quoteFontSize.value - 4,

@@ -40,7 +40,7 @@ class _WithdrawalState extends State<Withdrawal> {
                 color: BLACK,
                 fontFamily: 'GmarketSansTTFMedium',
               ),
-              child: Column(
+              child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: 16),

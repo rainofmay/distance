@@ -36,7 +36,7 @@ class ColorSelection extends StatelessWidget {
             child: CircleAvatar(
                 backgroundColor: sectionColors[index],
                 child: scheduleViewModel.nowHandlingScheduleModel.sectionColor == index
-                    ? Icon(
+                    ? const Icon(
                   Icons.check_rounded,
                   color: WHITE,
                   size: 19,

@@ -27,8 +27,8 @@ class NotificationScreen extends GetView<ScheduleViewModel> {
               onExpansionChanged: (expanded) {
                 controller.toggleExpansion();
               },
-              tilePadding: EdgeInsets.only(left: 8, right: 8),
-              childrenPadding: EdgeInsets.only(left: 16),
+              tilePadding: const EdgeInsets.only(left: 8, right: 8),
+              childrenPadding: const EdgeInsets.only(left: 16),
               dense: true,
               iconColor: BLACK,
               collapsedIconColor: BLACK,
@@ -36,7 +36,7 @@ class NotificationScreen extends GetView<ScheduleViewModel> {
               leading: Icon(CupertinoIcons.clock, color: BLACK, size: 16),
               title: Transform.translate(
                 offset: Offset(-16, 0),
-                child: Text('일정 알림',
+                child: const Text('일정 알림',
                     style: TextStyle(fontSize: 16, color: BLACK)),
               ),
               children: [

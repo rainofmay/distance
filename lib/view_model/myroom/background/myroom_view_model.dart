@@ -29,7 +29,8 @@ class MyroomViewModel extends GetxController {
   final RxBool isBackdropWordEnabled = false.obs;
   final RxBool isVideoLoading = true.obs;
 
-  final Rx<Quote> currentQuote = quotes[Random().nextInt(quotes.length)].obs;
+  final Rx<Quote> _currentQuote = quotes[Random().nextInt(quotes.length)].obs;
+  Quote get currentQuote => _currentQuote.value;
   final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
   final RxDouble quoteBackdropOpacity = 0.5.obs;
   final Rx<Color> quoteFontColor = Colors.white.obs;
@@ -207,7 +208,7 @@ class MyroomViewModel extends GetxController {
     String savedAuthor = prefs.getString('customQuoteAuthor') ?? '';
 
     if (savedQuote.isNotEmpty) {
-      currentQuote.value = Quote(quote: savedQuote, writer: savedAuthor);
+      _currentQuote.value = Quote(quote: savedQuote, writer: savedAuthor);
       isCustomQuote.value = true;
     } else {
       updateQuote();
@@ -290,22 +291,22 @@ class MyroomViewModel extends GetxController {
       Quote newQuote;
       do {
         newQuote = quotes[random.nextInt(quotes.length)];
-      } while (newQuote.quote == currentQuote.value.quote);
-      currentQuote.value = newQuote;
+      } while (newQuote.quote == _currentQuote.value.quote);
+      _currentQuote.value = newQuote;
       isCustomQuote.value = false;
   }
 
   void updateCustomQuote(String quote) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('customQuote', quote);
-    currentQuote.value = Quote(quote: quote, writer: customQuoteAuthor.value);
+    _currentQuote.value = Quote(quote: quote, writer: customQuoteAuthor.value);
     isCustomQuote.value = true;
   }
 
   void updateCustomQuoteAuthor(String author) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString('customQuoteAuthor', author);
-    currentQuote.update((val) {
+    _currentQuote.update((val) {
       val?.writer = author;
     });
     customQuoteAuthor.value = author;

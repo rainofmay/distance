@@ -31,7 +31,7 @@ class Etc extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -96,12 +96,12 @@ class Etc extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('「프리미엄 Distance」 이용하기',
+                      const Text('「프리미엄 Distance」 이용하기',
                           style: TextStyle(color: WHITE)),
-                      Text('1개월 무료 체험', style: TextStyle(color: WHITE)),
+                      const Text('1개월 무료 체험', style: TextStyle(color: WHITE)),
                     ],
                   ),
-                  Icon(Icons.arrow_forward_ios, size: 20, color: WHITE,)
+                  const Icon(Icons.arrow_forward_ios, size: 20, color: WHITE,)
                 ],
               ),
             ),

@@ -6,41 +6,28 @@ import 'package:mobile/common/const/colors.dart';
 
 import 'event.dart';
 
-class Calendar extends StatefulWidget {
+class Calendar extends StatelessWidget {
   final ScheduleViewModel viewModel;
 
   const Calendar({super.key, required this.viewModel});
 
   @override
-  State<Calendar> createState() => _CalendarState();
-}
-
-class _CalendarState extends State<Calendar> {
-  late final ScheduleViewModel _viewModel;
-  late Color _eventColor;
-  @override
-  void initState() {
-    super.initState();
-    _viewModel = widget.viewModel;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Obx(() => TableCalendar(
-          calendarFormat: _viewModel.calendarFormat,
+          calendarFormat: viewModel.calendarFormat,
           availableGestures: AvailableGestures.horizontalSwipe,
           // AvailableGestures.all 은 상위 제스쳐를 무시하므로 none으로 설정
           locale: 'ko_KR',
           daysOfWeekHeight: 50,
-          focusedDay: _viewModel.calendarInfo.focusedDate,
+          focusedDay: viewModel.calendarInfo.focusedDate,
 
           onDaySelected: (selectedDay, focusedDay) {
-            _viewModel.updateSelectedDate(selectedDay);
-            _viewModel.updateFocusedDate(focusedDay);
+            viewModel.updateSelectedDate(selectedDay);
+            viewModel.updateFocusedDate(focusedDay);
 
           },
 
-          selectedDayPredicate: (day) => isSameDay(_viewModel.calendarInfo.selectedDate, day),
+          selectedDayPredicate: (day) => isSameDay(viewModel.calendarInfo.selectedDate, day),
           firstDay: DateTime.now().subtract(const Duration(days: 365 * 10 + 5)),
           lastDay: DateTime.now().add(const Duration(days: 365 * 10 + 5)),
 
@@ -87,16 +74,16 @@ class _CalendarState extends State<Calendar> {
           },
             /* Event Builder */
             markerBuilder: (context, day, events) {
-              if (_viewModel.getEvents(day).isEmpty) {
+              if (viewModel.getEvents(day).isEmpty) {
               null;
-            } else if (_viewModel.getEvents(day).isNotEmpty && _viewModel.getEvents(day).length < 5) {
+            } else if (viewModel.getEvents(day).isNotEmpty && viewModel.getEvents(day).length < 5) {
               return ListView.builder(
                   shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: events.length,
                   itemBuilder: (context, index) {
                     Event event = events[index] as Event;
-                    int colorIndex = _viewModel.getEventsColor(day)[event.id] ?? 0;
+                    int colorIndex = viewModel.getEventsColor(day)[event.id] ?? 0;
                     Color eventColor = sectionColors[colorIndex];
                     return Container(
                       margin: const EdgeInsets.only(top: 35),
@@ -107,7 +94,7 @@ class _CalendarState extends State<Calendar> {
                       ),
                     );
                   });
-            } else if (_viewModel.getEvents(day).length >= 5) {
+            } else if (viewModel.getEvents(day).length >= 5) {
               return Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -121,7 +108,7 @@ class _CalendarState extends State<Calendar> {
                         color: THIRD,
                       ),
                       child: Text(
-                        '${_viewModel.getEvents(day).length}',
+                        '${viewModel.getEvents(day).length}',
                         style: const TextStyle(fontSize: 9, color: WHITE),
                         textAlign: TextAlign.center,
                       ),
@@ -134,7 +121,7 @@ class _CalendarState extends State<Calendar> {
           }),
 
           // 달력에 이벤트 업로드
-          eventLoader: _viewModel.getEvents,
+          eventLoader: viewModel.getEvents,
           headerStyle: const HeaderStyle(
             titleCentered: true,
             formatButtonVisible: false,
@@ -158,7 +145,7 @@ class _CalendarState extends State<Calendar> {
           ),
 
           //요일
-          daysOfWeekStyle: DaysOfWeekStyle(
+          daysOfWeekStyle: const DaysOfWeekStyle(
             weekdayStyle: TextStyle(
               color: BLACK,
               fontSize: 12.0,
@@ -181,17 +168,17 @@ class _CalendarState extends State<Calendar> {
               borderRadius: BorderRadius.circular(6.0),
               color: TRANSPARENT,
             ),
-            defaultTextStyle: TextStyle(
+            defaultTextStyle: const TextStyle(
               fontWeight: FontWeight.w100,
               fontSize: 12,
               color: BLACK,
             ),
-            weekendTextStyle: TextStyle(
+            weekendTextStyle: const TextStyle(
               fontWeight: FontWeight.w100,
               fontSize: 12,
               color: BLACK,
             ),
-            selectedTextStyle: TextStyle(
+            selectedTextStyle: const TextStyle(
               fontWeight: FontWeight.w300,
               fontSize: 12,
               color: PRIMARY_COLOR,

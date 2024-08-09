@@ -15,7 +15,7 @@ class UpdateScreen extends StatelessWidget {
           isCenterTitle: true,
           backgroundColor: WHITE,
           contentColor: BLACK),
-      body: Column(
+      body: const Column(
         children: [Text('v1.0.0.'), Text('앱 출시 및 업데이트 관련 공지')],
       ),
     );

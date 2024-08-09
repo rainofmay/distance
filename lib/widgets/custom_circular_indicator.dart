@@ -14,7 +14,7 @@ class CustomCircularIndicator extends StatelessWidget {
         child: CircularProgressIndicator(
           strokeWidth: 2.0, // 선의 두께
           backgroundColor: Colors.grey[200], // 배경색
-          valueColor: AlwaysStoppedAnimation<Color>(Colors.blue), // 진행 색상
+          valueColor: const AlwaysStoppedAnimation<Color>(Colors.blue), // 진행 색상
         ),
       ),
     );

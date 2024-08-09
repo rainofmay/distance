@@ -40,7 +40,7 @@ class CustomDialog extends StatelessWidget {
                               children: [
                                 Text(
                                   title,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.normal,
                                       color: WHITE),

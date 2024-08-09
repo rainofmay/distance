@@ -103,13 +103,13 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(6)),
           ),
-          title: Text('일정 삭제', style: TextStyle(color: WHITE, fontSize: 17)),
+          title: const Text('일정 삭제', style: TextStyle(color: WHITE, fontSize: 17)),
           content: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
               TextButton(
-                child: Text('반복되는 모든 일정 삭제',
+                child: const Text('반복되는 모든 일정 삭제',
                     style: TextStyle(color: WHITE, fontSize: 15)),
                 onPressed: () {
                   Navigator.of(context).pop(); // 다이얼로그 닫기
@@ -118,7 +118,7 @@ class _EditScheduleScreenState extends State<EditScheduleScreen> {
                 },
               ),
               TextButton(
-                child: Text('이 일정만 삭제',
+                child: const Text('이 일정만 삭제',
                     style: TextStyle(color: WHITE, fontSize: 15)),
                 onPressed: () {
                   Navigator.of(context).pop(); // 다이얼로그 닫기

@@ -23,7 +23,7 @@ class ScheduleForm extends StatelessWidget {
       child: Padding(
         padding:
         // appBar와 body 간의 간격
-        EdgeInsets.only(
+        const EdgeInsets.only(
           left: 8.0,
           top: 16.0,
         ),
@@ -45,8 +45,8 @@ class ScheduleForm extends StatelessWidget {
                       ColorSelection(scheduleViewModel: viewModel)
                     ]),
                     TextButton(
-                      child: Text('확인',
-                          style: TextStyle(color: WHITE)),
+                      child: const Text('확인',
+                          style: const TextStyle(color: WHITE)),
                       onPressed: () {
                         // _sectionColor = viewModel.colorIndex;
                         Navigator.of(context).pop();
@@ -68,7 +68,7 @@ class ScheduleForm extends StatelessWidget {
               textInputAction: TextInputAction.done,
               readOnly: false,
               controller: viewModel.memoController,
-              titleIcon: IconButton(
+              titleIcon: const IconButton(
                   icon: Icon(
                     Icons.sticky_note_2_outlined,
                     color: BLACK,
@@ -107,7 +107,7 @@ class ScheduleForm extends StatelessWidget {
                       getDateFromUser(
                           context: context, isStartTime: true, viewModel: viewModel);
                     },
-                    titleIcon: IconButton(
+                    titleIcon: const IconButton(
                         icon: Icon(
                           Icons.edit_calendar_outlined,
                           color: BLACK,
@@ -154,8 +154,8 @@ class ScheduleForm extends StatelessWidget {
                         onPressed: null),
                     hint: DateFormat.yMd().format(viewModel.nowHandlingScheduleModel.endDate),
                     hintStyle: viewModel.nowHandlingScheduleModel.endDate.isBefore(viewModel.nowHandlingScheduleModel.startDate)
-                        ? TextStyle(color: RED)
-                        : TextStyle(),
+                        ? const TextStyle(color: RED)
+                        : const TextStyle(),
                   ),
                 ),
                 viewModel.nowHandlingScheduleModel.isTimeSet
@@ -172,8 +172,8 @@ class ScheduleForm extends StatelessWidget {
                         readOnly: true,
                         hint: DateFormat('hh:mm a').format(viewModel.nowHandlingScheduleModel.endDate),
                         hintStyle: viewModel.nowHandlingScheduleModel.endDate.isBefore(viewModel.nowHandlingScheduleModel.startDate) || viewModel.nowHandlingScheduleModel.endDate.isAtSameMomentAs(viewModel.nowHandlingScheduleModel.startDate)
-                            ? TextStyle(color: RED)
-                            : TextStyle(),
+                            ? const TextStyle(color: RED)
+                            : const TextStyle(),
                       ),
                     ))
                     : const SizedBox(),
@@ -195,7 +195,7 @@ class ScheduleForm extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     errorMessage,
-                    style: TextStyle(color: Colors.red, fontSize: 14),
+                    style: const TextStyle(color: Colors.red, fontSize: 14),
                   ),
                 )
                     : SizedBox.shrink();
@@ -237,11 +237,11 @@ class ScheduleForm extends StatelessWidget {
                           .nowHandlingScheduleModel.isDone
                           ? Padding(
                         padding: const EdgeInsets.only(right:16.0),
-                        child: Icon(Icons.check_box_rounded),
+                        child: const Icon(Icons.check_box_rounded),
                       )
                           : Padding(
                         padding: const EdgeInsets.only(right:16.0),
-                        child: Icon(
+                        child: const Icon(
                             Icons.check_box_outline_blank_rounded),
                       ),
                       title: viewModel.nowHandlingScheduleModel.isDone

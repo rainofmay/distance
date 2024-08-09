@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
 import 'package:mobile/common/const/colors.dart';
@@ -25,7 +25,7 @@ class ScheduleViewModel extends GetxController {
 
   /* Provider */
   final ScheduleProvider scheduleProvider = ScheduleProvider();
-  final UserRepository userRepository = UserRepository(userProvider: UserProvider());
+
   /* Calendar */
   late final Rx<CalendarInfoModel> _calendarInfo;
   CalendarInfoModel get calendarInfo => _calendarInfo.value;
@@ -234,12 +234,19 @@ class ScheduleViewModel extends GetxController {
 
   Future<void> initSchedulePush() async {
       try {
-        var data = await userRepository.fetchMyProfile();
-        _selectedNotification.value = data.schedulePush;
+        await loadNotificationSetting();
         await scheduleNotificationsForAllSchedules();
       } catch (e) {
         print('Error initializing schedule push: $e');
       }
+  }
+
+  Future<void> loadNotificationSetting() async {
+    final prefs = await SharedPreferences.getInstance();
+    final savedSetting = prefs.getString('selectedNotification');
+    if (savedSetting != null) {
+      _selectedNotification.value = savedSetting;
+    }
   }
 
 /* Update */
@@ -529,7 +536,7 @@ class ScheduleViewModel extends GetxController {
       _selectedNotification.value = setting;
       await scheduleNotificationsForAllSchedules();
         try {
-          await userRepository.updateSchedulePush(setting);
+          await saveNotificationSetting(setting);
         } catch (e) {
           print('Error updating schedule push: $e');
         }
@@ -805,6 +812,11 @@ class ScheduleViewModel extends GetxController {
         a.repeatDays.toString() == b.repeatDays.toString() &&
         a.repeatWeeks == b.repeatWeeks &&
         a.repeatEndDate == b.repeatEndDate;
+  }
+
+  Future<void> saveNotificationSetting(String value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedNotification', value);
   }
 
   /* Delete */

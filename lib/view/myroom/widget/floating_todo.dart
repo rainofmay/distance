@@ -5,7 +5,6 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
-import 'package:flutter/foundation.dart' as foundation;
 
 class FloatingTodo extends StatefulWidget {
   const FloatingTodo({super.key});
@@ -99,8 +98,8 @@ class _FloatingTodoState extends State<FloatingTodo> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0, left: 8.0),
+                        const Padding(
+                          padding: EdgeInsets.only(top: 8.0, left: 8.0),
                           child: Text(
                             'TODAY',
                             style: TextStyle(
@@ -176,13 +175,12 @@ class _FloatingTodoState extends State<FloatingTodo> {
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                     const SizedBox(height: 6),
-                                    Text(
-                                      scheduleViewModel.todaySchedules[index].memo,
-                                      style: TextStyle(
+                                    scheduleViewModel.todaySchedules[index].memo != '' ? Text(
+                                      '# ${scheduleViewModel.todaySchedules[index].memo}',
+                                      style: const TextStyle(
                                           color: BLACK,
                                           fontSize: 13,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
+                                          overflow: TextOverflow.ellipsis)) : const SizedBox(),
                                     const SizedBox(height: 6),
                                     scheduleViewModel
                                         .todaySchedules[index].isTimeSet
@@ -369,7 +367,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                     Navigator.of(context).pop();
                   },
                   behavior: HitTestBehavior.opaque,
-                  child: Text(schedule.isDone ? '진행으로 변경' : '완료로 변경', style: TextStyle(color: WHITE))),
+                  child: Text(schedule.isDone ? '진행으로 변경' : '완료로 변경', style: const TextStyle(color: WHITE))),
               const SizedBox(height: 28),
               GestureDetector(
                   onTap: () async {
@@ -378,7 +376,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                     Navigator.of(context).pop();
                   },
                   behavior: HitTestBehavior.opaque,
-                  child: Text('일정에서 완전 삭제', style: TextStyle(color: WHITE))),
+                  child: const Text('일정에서 완전 삭제', style: TextStyle(color: WHITE))),
             ]
           )));
     },);

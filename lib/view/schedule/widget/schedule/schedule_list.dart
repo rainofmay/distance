@@ -56,8 +56,8 @@ class ScheduleList extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.only(
                         // 카드 안에서 텍스트의 패딩 간격
-                        left: 12,
-                        right: 12,
+                        left: 8,
+                        right: 8,
                         top: 12,
                         bottom: 0),
                     child: Column(
@@ -95,12 +95,12 @@ class ScheduleList extends StatelessWidget {
                           ],
                         ),
                         Container(
-                            padding: const EdgeInsets.only(top: 10, left: 10),
+                            padding: const EdgeInsets.only(top: 8, left: 8),
                             alignment: Alignment.topLeft,
-                            child: Text('# ${schedule.memo}',
+                            child: Text(schedule.memo != '' ? '# ${schedule.memo}' : schedule.memo,
                                 style:
                                     const TextStyle(fontSize: 12, color: BLACK),
-                                overflow: TextOverflow.ellipsis)),
+                                overflow: TextOverflow.ellipsis))
                       ],
                     ),
                   ),

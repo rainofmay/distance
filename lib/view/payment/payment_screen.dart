@@ -4,7 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 class PaymentScreen extends StatelessWidget {
-  const PaymentScreen({Key? key}) : super(key: key);
+  const PaymentScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

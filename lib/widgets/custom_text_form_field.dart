@@ -64,14 +64,14 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         maxLines: widget.maxLines,
         cursorColor: THIRD,
         decoration: InputDecoration(
-            focusedBorder: UnderlineInputBorder(
+            focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: THIRD), // 포커스 시 밑줄 색상
             ),
-            enabledBorder: UnderlineInputBorder(
+            enabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(color: GREY), // 포커스 시 밑줄 색상
             ),
           isDense: true,
-            contentPadding: EdgeInsets.all(10),
+            contentPadding: const EdgeInsets.all(10),
           prefix: widget.prefix,
             prefixIcon: widget.prefixIcon,
             suffix: widget.suffixWidget,
@@ -79,7 +79,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             labelText: widget.labelText,
             hintText: widget.hintText,
             counter: widget.counter,
-            labelStyle: TextStyle(color: GREY),
+            labelStyle: const TextStyle(color: GREY),
         ),
         obscureText: widget.isPasswordField,
       ),

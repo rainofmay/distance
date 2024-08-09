@@ -68,7 +68,7 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Obx(() => CustomTextFormField(
-                              prefixIcon: Icon(CupertinoIcons.mail),
+                              prefixIcon: const Icon(CupertinoIcons.mail),
                               labelText: 'E-mail',
                               maxLines: 1,
                               fieldWidth: widthOfLog,
@@ -83,7 +83,7 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(height: 20),
 
                             Obx(() => CustomTextFormField(
-                              prefixIcon: Icon(Icons.key_rounded),
+                              prefixIcon: const Icon(Icons.key_rounded),
                               labelText: 'Password',
                               maxLines: 1,
                               fieldWidth: widthOfLog,

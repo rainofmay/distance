@@ -7,17 +7,12 @@ import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 
-class ProfileCard extends StatefulWidget {
+class ProfileCard extends StatelessWidget {
   final UserModel profile;
 
   ProfileCard({super.key, required this.profile});
 
-  @override
-  State<ProfileCard> createState() => _ProfileCardState();
-}
-
-class _ProfileCardState extends State<ProfileCard> {
-  _selectOptionDialog() async {
+  _selectOptionDialog(BuildContext context) async {
     customDialog(
         context,
         160,
@@ -67,18 +62,18 @@ class _ProfileCardState extends State<ProfileCard> {
       child: GestureDetector(
           behavior: HitTestBehavior.opaque,
           onLongPress: () {
-            _selectOptionDialog();
+            _selectOptionDialog(context);
           },
           onTap: () {
             Get.to(
                 () => MateRoomScreen(
-                      profileImageUrl: widget.profile.profileUrl ?? '',
-                      mateName: widget.profile.name ?? '이름이 없습니다.',
-                      imageUrl: widget.profile.backgroundUrl ?? '',
+                      profileImageUrl: profile.profileUrl ?? '',
+                      mateName: profile.name ?? '이름이 없습니다.',
+                      imageUrl: profile.backgroundUrl ?? '',
                       audioUrl: 'audios/nature/defaultMainMusic2.mp3',
                       // 예: 'https://example.com/music.mp3'
-                      isWordOpen: widget.profile.isWordOpen ?? false,
-                      isScheduleOpen: widget.profile.isScheduleOpen ?? false,
+                      isWordOpen: profile.isWordOpen ?? false,
+                      isScheduleOpen: profile.isScheduleOpen ?? false,
                     ),
                 preventDuplicates: true);
           },
@@ -91,16 +86,16 @@ class _ProfileCardState extends State<ProfileCard> {
                       radius: 20,
                       backgroundColor: GREY.withOpacity(0.5),
                       backgroundImage: NetworkImage(
-                          widget.profile.profileUrl ?? ''), // null 처리
+                          profile.profileUrl ?? ''), // null 처리
                     ),
                     const SizedBox(width: 10),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.profile.name ?? '이름이 없습니다.', // null 처리
+                        Text(profile.name ?? '이름이 없습니다.', // null 처리
                             style: TextStyle(fontSize: 13, color: BLACK)),
                         const SizedBox(height: 5),
-                        Text(widget.profile.introduction ?? '소개가 없습니다.',
+                        Text(profile.introduction ?? '소개가 없습니다.',
                             // null 처리
                             style: TextStyle(
                                 fontSize: 11, color: DARK_UNSELECTED)),
@@ -113,15 +108,15 @@ class _ProfileCardState extends State<ProfileCard> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Text(widget.profile.statusEmoji ?? '', // null 처리
+                    Text(profile.statusEmoji ?? '', // null 처리
                         style: TextStyle(fontSize: 11, color: BLACK)),
-                    Text(widget.profile.statusText ?? '', // null 처리
+                    Text(profile.statusText ?? '', // null 처리
                         style: TextStyle(fontSize: 11, color: BLACK)),
                     Padding(
                       padding: const EdgeInsets.only(left: 8, right: 16.0),
                       child: Icon(
                         Icons.circle,
-                        color: getStatusColor(widget.profile.onlineStatus),
+                        color: getStatusColor(profile.onlineStatus),
                       ),
                     ),
                   ],

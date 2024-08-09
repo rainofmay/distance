@@ -1,10 +1,7 @@
 import 'package:get/get.dart';
-import 'package:mobile/util/auth/auth_helper.dart';
-import 'package:mobile/view/login/login_screen.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/schedule/schedule_screen.dart';
 import '../../view/etc/etc.dart';
-import '../../view/login/auth_screen.dart';
 import '../../view/mate/mate_screen.dart';
 import '../../view/myroom/myroom_screen.dart';
 

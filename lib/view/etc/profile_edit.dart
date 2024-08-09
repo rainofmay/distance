@@ -172,7 +172,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('이름'),
+        const Text('이름'),
         const SizedBox(width: 20),
         CustomTextFormField(
           controller: widget._nameController,
@@ -199,7 +199,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('소개'),
+        const Text('소개'),
         const SizedBox(width: 20),
         CustomTextFormField(
           controller: widget._introduceController,
@@ -226,7 +226,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
+        const Text(
           '상태 관리',
           style: TextStyle(fontSize: 25),
         ),

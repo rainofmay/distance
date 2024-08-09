@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 Future<void> customDialog(BuildContext context, double height, String title,
     Widget contents, Widget? actionWidget) async {
@@ -14,7 +13,7 @@ Future<void> customDialog(BuildContext context, double height, String title,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(6)),
         ),
-        title: Text(title, style: TextStyle(color: WHITE, fontSize: 17)),
+        title: Text(title, style: const TextStyle(color: WHITE, fontSize: 17)),
         content: SizedBox(
             height: height,
             child: contents),
@@ -24,7 +23,7 @@ Future<void> customDialog(BuildContext context, double height, String title,
                 actionWidget,
                 // OkCancelButtons(okText: '확인', cancelText: '취소', onPressed: (){},),
               ],
-        actionsPadding: EdgeInsets.only(top: 0, bottom: 5, left: 0, right: 20),
+        actionsPadding: const EdgeInsets.only(top: 0, bottom: 5, left: 0, right: 20),
       );
     },
   );

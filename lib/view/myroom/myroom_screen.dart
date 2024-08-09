@@ -48,7 +48,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
     userProvider = UserProvider();
     userProvider.editStatusOnline(OnlineStatus.online);
     WidgetsBinding.instance.addObserver(this);
-
   }
 
   @override
@@ -96,9 +95,6 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                   ),
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
-            // if (widget.backgroundViewModel.isAudioSpectrumEnabled.value)
-            //   AudioSpectrumWidget(
-            //       audioFilePath: './assets/audios/nature/defaultMainMusic.mp3'),
             if (widget.backgroundViewModel.isBackdropWordEnabled.value)
               MotivationalQuote(),
           ],

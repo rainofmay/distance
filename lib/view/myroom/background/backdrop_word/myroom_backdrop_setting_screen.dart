@@ -11,15 +11,6 @@ class QuoteSettingsDialog extends StatelessWidget {
   final MyroomViewModel viewModel = Get.find<MyroomViewModel>();
 
   QuoteSettingsDialog({super.key});
-  late String savedQuote = "";
-  late String savedAuthor = "";
-
-  @override
-  void initState() async{
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    savedQuote = prefs.getString('customQuote') ?? '';
-    savedAuthor = prefs.getString('customQuoteAuthor') ?? '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +18,7 @@ class QuoteSettingsDialog extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom,
-          ),
+            bottom: MediaQuery.of(context).viewInsets.bottom),
           child: GlassMorphism(
             blur: 1,
             opacity: 0.65,
@@ -162,8 +152,8 @@ class QuoteSettingsDialog extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('Words of the day', style: TextStyle(color: WHITE)),
-        TextFormField(
-          initialValue: savedQuote,
+        Obx(() => TextFormField(
+          initialValue: viewModel.currentQuote.quote,
           style: TextStyle(color: WHITE, fontSize: 12),
           cursorColor: PRIMARY_LIGHT,
           decoration: InputDecoration(
@@ -177,11 +167,11 @@ class QuoteSettingsDialog extends StatelessWidget {
           autocorrect: false,
           // 자동 수정 비활성화
           enableSuggestions: false, // 추천 단어 기능 비활성화
-        ),
+        )),
         SizedBox(height: 8),
         Text('Who', style: TextStyle(color: WHITE)),
-        TextFormField(
-          initialValue: savedAuthor,
+        Obx(() => TextFormField(
+          initialValue: viewModel.currentQuote.writer,
           style: TextStyle(color: WHITE, fontSize: 12),
           decoration: InputDecoration(
             hintText: '누구의 말인가요?',
@@ -194,7 +184,7 @@ class QuoteSettingsDialog extends StatelessWidget {
           autocorrect: false,
           // 자동 수정 비활성화
           enableSuggestions: false, // 추천 단어 기능 비활성화
-        ),
+        )),
       ],
     );
   }

@@ -15,13 +15,4 @@ class UserRepository {
     final json = await _userProvider.getMyProfileJson();
     return UserModel.fromJson(json as Map<String, dynamic>);
   }
-  /* Update */
-  Future updateSchedulePush(String schedulePush) async {
-    try {
-      await _userProvider.editSchedulePush(schedulePush);
-    } catch (e) {
-      print('Error in updateSchedulePush: $e');
-      rethrow;
-    }
-  }
 }

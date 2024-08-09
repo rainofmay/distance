@@ -83,7 +83,7 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0, bottom: 5),
-                    child: Icon(Icons.search),
+                    child: const Icon(Icons.search),
                   ),
                 )
               ],
