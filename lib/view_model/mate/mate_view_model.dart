@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/model/online_status.dart';
 import 'package:mobile/model/user_model.dart';
@@ -25,7 +26,6 @@ class MateViewModel extends GetxController {
   late final RxBool isWordOpen = false.obs;
   late final RxBool isScheduleOpen = false.obs;
 
-
   late final RxBool isPaid = false.obs;
   // Initialize mateProfiles with empty list
   final pendingMateProfiles = <Rx<UserModel>>[].obs;
@@ -33,6 +33,8 @@ class MateViewModel extends GetxController {
   // Methods for updating profile data are simplified
   final searchingProfiles = <Rx<UserModel>>[].obs;
 
+  late final Rx<TextEditingController> _emailController = TextEditingController().obs;
+  TextEditingController get emailController => _emailController.value;
 
   @override
   onInit() {
@@ -41,6 +43,13 @@ class MateViewModel extends GetxController {
     getPendingMates();
     getMyMate();
   }
+
+  @override
+  void dispose() {
+    _emailController.value.dispose();
+    super.dispose();
+  }
+
 
   void updateName(String newName) => name.value = newName;
 

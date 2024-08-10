@@ -6,29 +6,11 @@ import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 
-class MateRequestsScreen extends StatefulWidget {
-  final MateViewModel viewModel = Get.find<MateViewModel>();
-  final TextEditingController _emailController = TextEditingController();
-
+class MateRequestsScreen extends StatelessWidget {
   MateRequestsScreen({super.key});
+  final MateViewModel viewModel = Get.find<MateViewModel>();
+  String? _validator(value) {}
 
-  @override
-  State<MateRequestsScreen> createState() => _MateRequestsScreenState();
-}
-
-class _MateRequestsScreenState extends State<MateRequestsScreen> {
-  final int _maxLength = 20;
-
-  @override
-  initState() {
-    super.initState();
-  }
-
-  @override
-  dispose() {
-    super.dispose();
-    widget._emailController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,7 +33,7 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
               children: [
                 Expanded(
                   child: CustomTextFormField(
-                    controller: widget._emailController,
+                    controller: viewModel.emailController,
                     fieldWidth: MediaQuery.of(context).size.width * 0.9,
                     isPasswordField: false,
                     isReadOnly: false,
@@ -62,9 +44,9 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
                     hintText: "메이트 ID를 입력해 주세요",
                     suffixWidget: GestureDetector(
                       onTap: () {
-                        widget._emailController.text = "";
+                        viewModel.emailController.text = "";
                       },
-                      child: Icon(Icons.cancel_rounded, size: 15, color: GREY),
+                      child: const Icon(Icons.cancel_rounded, size: 15, color: GREY),
                     ),
                   ),
                   // suffixIcon: Icon(Icons.cancel_rounded, size: 15, color: GREY),
@@ -72,11 +54,11 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
                 GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onTap: () async {
-                    final email = widget._emailController.text.trim();
+                    final email = viewModel.emailController.text.trim();
                     if (email.isNotEmpty) {
-                      await widget.viewModel
+                      await viewModel
                           .sendMateRequestByEmail(email); // 이메일로 친구 요청
-                      widget._emailController.clear();
+                      viewModel.emailController.clear();
                     } else {
                       // TODO: 이메일 입력 필드가 비어있을 때 처리
                     }
@@ -107,10 +89,10 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
           Expanded(
             child: Obx(() {
               // Obx 위젯으로 pendingMateProfiles 변경 감지
-              final requests = widget.viewModel.pendingMateProfiles;
+              final requests = viewModel.pendingMateProfiles;
               return RefreshIndicator(
                 onRefresh: () async {
-                  await widget.viewModel.getPendingMates();
+                  await viewModel.getPendingMates();
                 },
                 child: ListView.builder(
                   itemCount: requests.length,
@@ -130,17 +112,17 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
                                   backgroundImage: NetworkImage(
                                       request.profileUrl ?? ''), // null 처리
                                 ),
-                                SizedBox(width: 10),
+                                const SizedBox(width: 10),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(request.name ?? '',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 13, color: BLACK)),
                                     // null 처리
-                                    SizedBox(height: 5),
+                                    const SizedBox(height: 5),
                                     Text(request.introduction ?? '',
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             fontSize: 11,
                                             color: DARK_UNSELECTED)),
                                     // null 처리
@@ -151,19 +133,19 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
                           ),
                           ElevatedButton(
                             onPressed: () =>
-                                widget.viewModel.acceptMate(request.id!),
+                                viewModel.acceptMate(request.id!),
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: PRIMARY_COLOR), // ID 전달
-                            child: Text('승인'),
+                            child: const Text('승인'),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           ElevatedButton(
                             onPressed: () =>
-                                widget.viewModel.rejectMate(request.id!),
+                                viewModel.rejectMate(request.id!),
                             style:
                                 ElevatedButton.styleFrom(backgroundColor: GREY),
                             // ID 전달
-                            child: Text('거절'),
+                            child: const Text('거절'),
                           ),
                         ],
                       ),
@@ -177,6 +159,4 @@ class _MateRequestsScreenState extends State<MateRequestsScreen> {
       ),
     );
   }
-
-  String? _validator(value) {}
 }
