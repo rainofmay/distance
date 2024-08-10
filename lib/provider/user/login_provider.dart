@@ -97,7 +97,7 @@ class LoginProvider {
       );
 
     } catch (error) {
-      print('Google 로그인 중 오류 발생: $error');
+      // print('Google 로그인 중 오류 발생: $error');
       rethrow;
     }
   }
@@ -163,7 +163,7 @@ class LoginProvider {
 
     } catch (error) {
       print('카카오 로그인 실패 $error');
-      Get.snackbar('오류', '로그인 중 문제가 발생했습니다.');
+      Get.snackbar('오류', '로그인을 다시 시도해 주세요.');
     }
   }
 

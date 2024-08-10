@@ -20,7 +20,6 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     double widthOfLog = MediaQuery.of(context).size.width * 0.8;
     double heightOfLog = 48;
-
     return Scaffold(
       backgroundColor: WHITE,
       body: SafeArea(
@@ -71,7 +70,7 @@ class LoginScreen extends StatelessWidget {
                               prefixIcon: const Icon(CupertinoIcons.mail),
                               labelText: 'E-mail',
                               maxLines: 1,
-                              fieldWidth: widthOfLog,
+                              fieldWidth: MediaQuery.of(context).size.width * 0.8,
                               isPasswordField: false,
                               isReadOnly: false,
                               keyboardType: TextInputType.emailAddress,
@@ -86,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                               prefixIcon: const Icon(Icons.key_rounded),
                               labelText: 'Password',
                               maxLines: 1,
-                              fieldWidth: widthOfLog,
+                              fieldWidth: MediaQuery.of(context).size.width * 0.8,
                               isPasswordField: true,
                               isReadOnly: false,
                               keyboardType: TextInputType.visiblePassword,
@@ -106,7 +105,7 @@ class LoginScreen extends StatelessWidget {
                                 backgroundColor: WHITE,
                                 foregroundColor: TRANSPARENT,
                                 overlayColor: TRANSPARENT,
-                                fixedSize: Size(widthOfLog, heightOfLog),
+                                fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 48),
                               ),
                               onPressed: () async {
                                 await loginViewModel.signIn(context);
@@ -150,69 +149,79 @@ class LoginScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 35),
 
-                    // KAKAO 로그인
+                    //Google로 로그인
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
-                            overlayColor: TRANSPARENT,
-                            foregroundColor: TRANSPARENT,
-                            fixedSize: Size(widthOfLog, heightOfLog),
-                            backgroundColor: Color(0xffFFE812)),
-                        onPressed: () async {
-                          await loginViewModel.signInWithKakao();
-                          await mateViewModel.updateMyProfile();
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                        ),
+                        overlayColor: TRANSPARENT,
+                        foregroundColor: TRANSPARENT,
+                        fixedSize: Size(widthOfLog, heightOfLog),
+                        backgroundColor: WHITE,
+                      ),
+                      onPressed: () async {
+                        await loginViewModel.signInWithGoogle(context);
+                        await mateViewModel.updateMyProfile();
 
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        },
-                        child: Row(
-                          children: [
-                            SvgPicture.asset(
-                              'assets/icons/kakao.svg',
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Text(
+                            '구글로 시작하기',
+                            style: TextStyle(color: BLACK, fontSize: 16),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Image.asset(
+                              'assets/images/google.png',
                               width: 24,
                               height: 24,
-                              // colorFilter:
-                              // const ColorFilter.mode(TRANSPARENT, BlendMode.srcIn),
                             ),
-                            const SizedBox(width: 20),
-                            const Text('Kakao로 로그인',
-                                style: TextStyle(color: BLACK, fontSize: 16)),
-                          ],
-                        )),
+                          ),
+                        ],
+                      ),
+                    ),
 
                     const SizedBox(height: 16),
 
-                    //Google로 로그인
+                    // KAKAO 로그인
                     ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
-                            overlayColor: TRANSPARENT,
-                            foregroundColor: TRANSPARENT,
-                            fixedSize: Size(widthOfLog, heightOfLog),
-                            backgroundColor: BLACK),
-                        onPressed: () async {
-                          await loginViewModel.signInWithGoogle(context);
-                          await mateViewModel.updateMyProfile();
+                      style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8))),
+                          overlayColor: TRANSPARENT,
+                          foregroundColor: TRANSPARENT,
+                          fixedSize: Size(widthOfLog, heightOfLog),
+                          backgroundColor: Color(0xffFFE812)),
+                      onPressed: () async {
+                        await loginViewModel.signInWithKakao();
+                        await mateViewModel.updateMyProfile();
 
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        },
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              'assets/icons/google.png',
-                              width: 20,
-                              height: 20,
+                        if (!context.mounted) return;
+                        Navigator.of(context).pop();
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          const Text(
+                            '카카오로 시작하기',
+                            style: TextStyle(color: BLACK, fontSize: 16),
+                          ),
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Image.asset(
+                              'assets/images/kakao.png',
+                              width: 21,
+                              height: 21,
                             ),
-                            const SizedBox(width: 20),
-                            const Text('Google로 로그인',
-                                style: TextStyle(color: WHITE, fontSize: 16)),
-                          ],
-                        )),
+                          ),
+                        ],
+                      )),
                   ],
                 ),
               ),
