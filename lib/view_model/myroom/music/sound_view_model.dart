@@ -9,8 +9,9 @@ class SoundPlayer {
   final String musicName;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying;
+  final RxDouble volume;
 
-  SoundPlayer(this.id, this.musicName, this.audioPlayer) : isPlaying = false.obs;
+  SoundPlayer(this.id, this.musicName, this.audioPlayer) : isPlaying = false.obs, volume = 0.5.obs;
 }
 
 
@@ -256,10 +257,12 @@ class SoundViewModel extends GetxController {
   }
 
   double getVolume(int index) {
-    return _soundPlayersList[index].audioPlayer.volume;
+    return _soundPlayersList[index].volume.value;
   }
 
   void setVolume(int index, double volume) {
     _soundPlayersList[index].audioPlayer.setVolume(volume);
+    _soundPlayersList[index].volume.value = volume;
+    update();
   }
 }

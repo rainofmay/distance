@@ -5,28 +5,19 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
-class SoundVolume extends StatelessWidget {
+class SoundVolume extends GetView<SoundViewModel> {
   final int playerIndex;
 
-  SoundVolume(
-      {super.key,
-      required this.playerIndex,
-      });
-
-
-  final viewModel = Get.find<SoundViewModel>();
+  SoundVolume({super.key, required this.playerIndex});
 
   @override
   Widget build(BuildContext context) {
-
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical : 8.0),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(
           width: 130,
-          child: Text(viewModel.soundPlayersList[playerIndex].musicName,
+          child: Text(controller.soundPlayersList[playerIndex].musicName,
               style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
@@ -54,22 +45,23 @@ class SoundVolume extends StatelessWidget {
                         highlightColor: TRANSPARENT,
                         hoverColor: TRANSPARENT,
                         icon: Icon(
-                          viewModel.soundPlayersList[playerIndex].isPlaying.value
+                          controller
+                                  .soundPlayersList[playerIndex].isPlaying.value
                               ? CupertinoIcons.speaker_2
                               : CupertinoIcons.speaker_slash,
                           color: WHITE,
                         ),
                         iconSize: 16.0,
-                      onPressed: () => viewModel.togglePlay(playerIndex)
-                    ),
+                        onPressed: () => controller.togglePlay(playerIndex)),
                   ),
                   Obx(() => SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    child: Slider(
-                      value: viewModel.getVolume(playerIndex),
-                      onChanged: (volume) => viewModel.setVolume(playerIndex, volume),
-                    ),
-                  )),
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Slider(
+                          value: controller.getVolume(playerIndex),
+                          onChanged: (volume) =>
+                              controller.setVolume(playerIndex, volume),
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -79,4 +71,3 @@ class SoundVolume extends StatelessWidget {
     );
   }
 }
-
