@@ -9,49 +9,49 @@ class MyRoomSoundProvider {
         id: 0,
         musicName: '풀벌레',
         theme: 'nature',
-        audioURL: 'audios/nature/bugSound.mp3',
+        audioURL: 'audios/nature/bug_sound.mp3',
         isLiked: false),
     MusicInfo(
         id: 1,
         musicName: '파도',
         theme: 'nature',
-        audioURL: 'audios/nature/waveSound.mp3',
+        audioURL: 'audios/nature/wave_sound.mp3',
         isLiked: false),
     MusicInfo(
         id: 2,
         musicName: '장작',
         theme: 'nature',
-        audioURL: 'audios/nature/campingFireSound.mp3',
+        audioURL: 'audios/nature/campingfire_sound.mp3',
         isLiked: false),
     MusicInfo(
         id: 3,
-        musicName: '영월 저녁의 풀벌레',
+        musicName: '소래습지 내리는 비',
         theme: 'nature',
-        audioURL: 'audios/nature/youngwall_bug.mp3',
+        audioURL: 'audios/nature/sorae_rain.mp3',
         isLiked: false),
     MusicInfo(
         id: 4,
-        musicName: '비오는 계곡',
+        musicName: '소요산 계곡 울리는 매미',
         theme: 'nature',
-        audioURL: 'audios/nature/rain_valley.mp3',
+        audioURL: 'audios/nature/soyo_valley.mp3',
         isLiked: false),
     MusicInfo(
         id: 5,
-        musicName: '한여름의 매미',
+        musicName: '아침 들깨밭 깨우는 참새',
         theme: 'nature',
-        audioURL: 'audios/nature/summer_insect.mp3',
+        audioURL: 'audios/nature/bird.mp3',
         isLiked: false),
     MusicInfo(
         id: 6,
-        musicName: '우수에 내리는 비',
+        musicName: '연인산 흐르는 물소리',
         theme: 'nature',
-        audioURL: 'audios/nature/spring_rain.mp3',
+        audioURL: 'audios/nature/yeonin_valley.mp3',
         isLiked: false),
     MusicInfo(
         id: 7,
-        musicName: '비 내리는 펜션',
+        musicName: '비닐하우스에 내리는 비',
         theme: 'nature',
-        audioURL: 'audios/nature/rain_house.mp3',
+        audioURL: 'audios/nature/house_rain.mp3',
         isLiked: false),
     MusicInfo(
         id: 8,
@@ -61,15 +61,9 @@ class MyRoomSoundProvider {
         isLiked: false),
     MusicInfo(
         id: 9,
-        musicName: '공원 폭포',
+        musicName: '섬유도에 오는 파도',
         theme: 'nature',
-        audioURL: 'audios/nature/parkfall.mp3',
-        isLiked: false),
-    MusicInfo(
-        id: 10,
-        musicName: '시냇물 흐르는 서운산',
-        theme: 'nature',
-        audioURL: 'audios/nature/stream_water.mp3',
+        audioURL: 'audios/nature/island_wave.mp3',
         isLiked: false),
   ];
 
@@ -80,23 +74,17 @@ class MyRoomSoundProvider {
   /* User 즐겨찾기 목록 */
   static List<MusicInfo> soundListOfUser = [
     MusicInfo(
-        id: 3,
-        musicName: '영월 저녁의 풀벌레',
+        id: 0,
+        musicName: '풀벌레',
         theme: 'nature',
-        audioURL: 'audios/nature/youngwall_bug.mp3',
-        isLiked: true),
+        audioURL: 'audios/nature/bug_sound.mp3',
+        isLiked: false),
     MusicInfo(
-        id: 6,
-        musicName: '우수에 내리는 비',
+        id: 1,
+        musicName: '파도',
         theme: 'nature',
-        audioURL: 'audios/nature/spring_rain.mp3',
-        isLiked: true),
-    MusicInfo(
-        id: 10,
-        musicName: '시냇물 흐르는 서운산',
-        theme: 'nature',
-        audioURL: 'audios/nature/stream_water.mp3',
-        isLiked: true),
+        audioURL: 'audios/nature/wave_sound.mp3',
+        isLiked: false),
   ];
 
 
