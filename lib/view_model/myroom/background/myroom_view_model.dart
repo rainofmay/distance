@@ -285,12 +285,16 @@ class MyroomViewModel extends GetxController {
     prefs.setInt('quoteFontColor', color.value);
   }
 
-  void updateQuote() {
+  void updateQuote() async{
       // 현재 custom quote가 표시중이라면 랜덤 quote로 변경
       final random = Random();
       Quote newQuote;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
       do {
         newQuote = quotes[random.nextInt(quotes.length)];
+        prefs.setString('customQuote', newQuote.quote);
+        prefs.setString('customQuoteAuthor', newQuote.writer);
       } while (newQuote.quote == _currentQuote.value.quote);
       _currentQuote.value = newQuote;
       isCustomQuote.value = false;
