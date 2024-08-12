@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/user_model.dart';
-import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 

@@ -8,7 +8,6 @@ import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
-import 'package:mobile/util/responsiveStyle.dart';
 import 'package:mobile/view/etc/profile_edit.dart';
 import 'package:mobile/view/mate/widget/profile_card.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';

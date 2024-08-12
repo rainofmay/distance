@@ -5,7 +5,6 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view/login/login_screen.dart';
 import 'package:mobile/view/mate/widget/custom_dialog.dart';
-import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
