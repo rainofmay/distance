@@ -31,6 +31,14 @@ class MateScreen extends StatefulWidget {
 }
 
 class _MateScreenState extends State<MateScreen> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,10 +123,13 @@ class _MateScreenState extends State<MateScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          const SizedBox(width: 20,),
                           Text(widget.viewModel.userCurrentActivityEmoji.value,
-                              style: const TextStyle(fontSize: 14, color: BLACK)),
+                              style: const TextStyle(fontSize: 16, color: BLACK)),
+                          const SizedBox(width: 16,),
+
                           Text(widget.viewModel.userCurrentActivityText.value,
-                              style: const TextStyle(fontSize: 14, color: BLACK)),
+                              style: const TextStyle(fontSize: 16, color: BLACK)),
                         ],
                       ),
                     ),
@@ -182,58 +193,62 @@ class _MateScreenState extends State<MateScreen> {
   Widget profileList() {
     return Expanded(
       child: Obx(() => RefreshIndicator(
-            onRefresh: () async {
-              await widget.viewModel.updateMyProfile();
-              await widget.viewModel.getMyMate();
-            },
-            child: friendsWidget(),
-          )),
+        onRefresh: () async {
+          await widget.viewModel.updateMyProfile();
+          await widget.viewModel.getMyMate();
+        },
+        child: friendsWidget(),
+      )),
     );
   }
 
-  Widget friendsWidget() {
-    if (widget.viewModel.mateProfiles.value.isEmpty) {
-      return SingleChildScrollView(
-        child: Center(
-          // 친구 없을 때 버튼 표시
-          child: GestureDetector(
-            onTap: () {
-              pressed() {
-                Get.to(() => MateRequestsScreen(), preventDuplicates: true);
-              }
 
-              AuthHelper.navigateToLoginScreen(context, pressed);
-            },
-            child: Padding(
-              padding: const EdgeInsets.only(top: 0),
-              child: Container(
-                width: 120,
-                height: 50,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: DARK,
+  Widget friendsWidget() {
+    return ListView(
+      controller: _scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        if (widget.viewModel.mateProfiles.value.isEmpty)
+          SizedBox(
+            height: MediaQuery.of(context).size.height - 600, // Adjust as needed
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  pressed() {
+                    Get.to(() => MateRequestsScreen(), preventDuplicates: true);
+                  }
+
+                  AuthHelper.navigateToLoginScreen(context, pressed);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: Container(
+                    width: 120,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: DARK,
+                    ),
+                    child: Center(
+                      child: Text('메이트 찾기',
+                          style: TextStyle(color: PRIMARY_LIGHT),
+                          textAlign: TextAlign.center),
+                    ),
+                  ),
                 ),
-                child: Center(
-                    child: Text('메이트 찾기',
-                        style: TextStyle(color: PRIMARY_LIGHT),
-                        textAlign: TextAlign.center)),
               ),
             ),
-          ),
-        ),
-      );
-    } else {
-      return ListView.builder(
-        itemCount: widget.viewModel.mateProfiles.value.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: ProfileCard(
-              profile: widget.viewModel.mateProfiles[index].value,
-            ),
-          );
-        },
-      );
-    }
+          )
+        else
+          ...widget.viewModel.mateProfiles.value.map((profile) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: ProfileCard(
+                profile: profile.value,
+              ),
+            );
+          }).toList(),
+      ],
+    );
   }
 }
