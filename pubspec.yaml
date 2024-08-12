@@ -50,6 +50,9 @@ dependencies:
   audio_service: ^0.18.15
   flutter_image_compress: ^2.3.0
   flutter_local_notifications: ^17.2.1+2
+  just_audio: ^0.9.39
+  just_audio_background: ^0.0.1-beta.13
+  path_provider: ^2.1.4
 
 flutter_native_splash:
   color: "#282828"
@@ -78,7 +81,6 @@ flutter:
     - assets/images/
     - assets/images/themes/
     - assets/images/themes/music/
-    - assets/icons/
     - assets/audios/nature/
     - .env
 

@@ -2,19 +2,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/util/mate/online_status_manager.dart';
 import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
@@ -37,6 +35,11 @@ Future<void> main() async {
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
   KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
   _initGoogleMobileAds();
+  await JustAudioBackground.init(
+    androidNotificationChannelId: 'com.distance.cled24.channel.audio',
+    androidNotificationChannelName: 'Audio playback',
+    androidNotificationOngoing: true,
+  );
 
   runApp(const MainPage());
   FlutterNativeSplash.remove();

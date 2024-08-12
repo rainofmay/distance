@@ -1,96 +1,167 @@
+import 'dart:io';
 import 'dart:math';
-
-import 'package:audio_service/audio_service.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:mobile/model/current_play_list.dart';
 import 'package:mobile/model/music_info.dart';
-import 'package:audioplayers/audioplayers.dart';
 import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
-import 'background_music_view_model.dart';
+import 'package:path_provider/path_provider.dart';
 
-class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
+class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
   final MyRoomMusicRepository _repository;
-  late AudioPlayerHandler audioHandler;
+  late AudioPlayer _audioPlayer;
 
   MusicViewModel({required MyRoomMusicRepository repository})
       : _repository = repository {
-    _initAudioHandler();
+    _initAudioPlayer();
   }
 
-
-
-  /* Music Screen에서 Music <-> Sound 이동 탭 */
   late final RxInt _tabIndex = 0.obs;
+
   int get tabIndex => _tabIndex.value;
 
-  changeTabIndex(int index) {
-    _tabIndex.value = index;
-  }
+  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList
+      .first()
+      .obs;
 
-  /* PlayList */
-  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList.first().obs;
   CurrentPlayList get currentPlayList => _currentPlayList.value;
 
-  /* Music */
   late final Rx<AudioPlayer> _musicPlayer = AudioPlayer().obs;
+
   AudioPlayer get musicPlayer => _musicPlayer.value;
 
   late final Rx<MediaItem?> _currentMediaItem = Rx<MediaItem?>(null);
+
   MediaItem? get currentMediaItem => _currentMediaItem.value;
 
   late final RxList<MusicInfo> _musicInfoList = <MusicInfo>[].obs;
+
   List<MusicInfo> get musicInfoList => _musicInfoList;
 
   late final RxInt _currentIndex = 0.obs;
+
   int get currentIndex => _currentIndex.value;
 
   final RxBool _isLoading = true.obs;
+
   bool get isLoading => _isLoading.value;
 
   late final Rx<Duration> _currentMusicDuration = Duration.zero.obs;
+
   Duration get currentMusicDuration => _currentMusicDuration.value;
 
   late final Rx<Duration> _currentMusicPosition = Duration.zero.obs;
+
   Duration get currentMusicPosition => _currentMusicPosition.value;
 
   late final RxBool _isMusicPlaying = false.obs;
+
   bool get isMusicPlaying => _isMusicPlaying.value;
 
   late final Rx<double> _volume = 0.5.obs;
 
   late final RxBool _isRepeated = false.obs;
+
   bool get isRepeated => _isRepeated.value;
 
   late final RxBool _isShuffled = false.obs;
+
   bool get isShuffled => _isShuffled.value;
 
-  void _initAudioHandler() {
-    audioHandler = AudioPlayerHandler(this, musicPlayer);
-    Get.put(audioHandler);
+  void _initAudioPlayer() {
+    _audioPlayer = AudioPlayer();
+    _setupAudioPlayer();
   }
+
+
+  void _setupAudioPlayer() {
+    _audioPlayer.playerStateStream.listen((playerState) {
+      _isMusicPlaying.value = playerState.playing;
+      if (playerState.processingState == ProcessingState.completed) {
+        nextTrack();
+      }
+    });
+
+    _audioPlayer.positionStream.listen((position) {
+      _currentMusicPosition.value = position;
+    });
+
+    _audioPlayer.durationStream.listen((duration) {
+      _currentMusicDuration.value = duration ?? Duration.zero;
+    });
+
+    // Listen to changes in current playing track
+    _audioPlayer.currentIndexStream.listen((index) {
+      if (index != null && index != _currentIndex.value) {
+        _currentIndex.value = index;
+        _updateCurrentMediaItem();
+        update(); // Trigger UI update
+      }
+    });
+
+    // Listen to changes in _musicInfoList and update background playback
+    ever(_musicInfoList, (_) => _setupBackgroundPlayback());
+  }
+
+
+  Future<void> _setupBackgroundPlayback() async {
+    if (_musicInfoList.isEmpty) return;
+
+    final audioSources = await Future.wait(
+        _musicInfoList.map((music) async {
+          final artUri = await _getAssetUri(currentPlayList.thumbnailUrl);
+          return AudioSource.uri(
+            Uri.parse(music.audioURL),
+            tag: MediaItem(
+              id: music.audioURL,
+              album: music.theme,
+              title: music.musicName,
+              artist: "Distance",
+              artUri: artUri,
+            ),
+          );
+        })
+    );
+
+    await _audioPlayer.setAudioSource(
+      ConcatenatingAudioSource(children: audioSources),
+      initialIndex: _currentIndex.value,
+      preload: false,
+    );
+  }
+
+
+
 
   @override
   void onInit() {
     super.onInit();
     setInitMusicState();
-    _initAudioService();
     initLoadMusicSource();
   }
 
-  void _initAudioService() {
-    setInitMusicState();
-    AudioService.init(
-      builder: () => AudioPlayerHandler(this, musicPlayer),
-      config: const AudioServiceConfig(
-        androidNotificationChannelId: 'com.distance.cled24.channel.audio',
-        androidNotificationChannelName: 'Audio playback',
-        androidNotificationOngoing: true,
-      ),
-    );
+  @override
+  void onReady() {
+    super.onReady();
+    ever(_isMusicPlaying, (_) {
+      if (_isMusicPlaying.value) {
+        _syncWithCurrentPlayingTrack();
+      }
+    });
   }
 
-  /* Init */
-  initLoadMusicSource() async {
+  void _syncWithCurrentPlayingTrack() {
+    final currentIndex = _audioPlayer.currentIndex;
+    if (currentIndex != null && currentIndex != _currentIndex.value) {
+      _currentIndex.value = currentIndex;
+      _updateCurrentMediaItem();
+      update(); // Trigger UI update
+    }
+  }
+
+  Future<void> initLoadMusicSource() async {
     _isLoading.value = true;
     await loadCurrentPlayList();
     await getThemeMusic(_currentPlayList.value.theme);
@@ -103,7 +174,9 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
   Future<void> loadCurrentPlayList() async {
     final theme = await _repository.loadCurrentPlayListIndex();
     if (theme != null) {
-      _currentPlayList.value = _repository.playListTheme.firstWhere((playList) => playList.theme == theme);
+      _currentPlayList.value =
+          _repository.playListTheme.firstWhere((playList) => playList.theme ==
+              theme);
     } else {
       _currentPlayList.value = _repository.playListTheme[0];
     }
@@ -120,82 +193,53 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
     }
   }
 
-  setInitMusicState() {
-    _musicPlayer().onDurationChanged.listen((Duration duration) {
-      _currentMusicDuration.value = duration;
-    });
+  Future<void> setCurrentMusic(bool isShuffled) async {
+    if (_musicInfoList.isEmpty) return;
 
-    _musicPlayer().onPositionChanged.listen((Duration position) {
-      _currentMusicPosition.value = position;
-    });
+    if (isShuffled) {
+      _currentIndex.value = _getRandomIndex();
+    }
 
-    _musicPlayer().onPlayerStateChanged.listen((state) {
-      _isMusicPlaying.value = state == PlayerState.playing;
-    });
+    await _audioPlayer.seek(Duration.zero, index: _currentIndex.value);
+    _updateCurrentMediaItem();
+  }
 
-    _musicPlayer().onPlayerComplete.listen((_) {
-      nextTrack();
-    });
 
+  void setInitMusicState() {
     setVolume(0.5);
   }
 
   void setVolume(double volume) {
-    _musicPlayer().setVolume(_volume.value);
+    _audioPlayer.setVolume(volume);
+    _volume.value = volume;
   }
 
   @override
   void dispose() {
-
+    _audioPlayer.dispose();
     super.dispose();
   }
 
-
-  /* update */
-  toggleShuffle() async {
+  void toggleShuffle() {
     _isShuffled.value = !_isShuffled.value;
-
-    // 반복을 설정하면 1회 반복이 안 되게끔.
-    if(isShuffled) {
+    if (isShuffled) {
       _isRepeated.value = false;
+      _audioPlayer.setShuffleModeEnabled(true);
+    } else {
+      _audioPlayer.setShuffleModeEnabled(false);
     }
-    // setCurrentMusic(isShuffled);
     update();
   }
 
   Future<void> musicPlayPause() async {
-    await _updateMediaItem();
-
-    if (_musicPlayer().state == PlayerState.playing) {
-      await _musicPlayer().pause();
-      _isMusicPlaying.value = false;
+    if (_audioPlayer.playing) {
+      await _audioPlayer.pause();
     } else {
       if (_musicInfoList.isEmpty) return;
-
-      if (_musicPlayer().state == PlayerState.paused) {
-        // 일시정지 상태에서는 현재 위치에서 다시 재생
-        await _musicPlayer().resume();
-      } else {
-        await playCurrentTrack();
-      }
-
-      _isMusicPlaying.value = true;
+      await _audioPlayer.play();
     }
   }
 
-  Future<void> setCurrentMusic(bool isShuffled) async {
-    if (_musicInfoList.isEmpty) return;
-    await _updateMediaItem();
-
-    if (isShuffled) {
-      int newIndex;
-      do {
-        newIndex = Random().nextInt(_musicInfoList.length);
-      } while (newIndex == currentIndex);
-
-      _currentIndex.value = newIndex;
-    }
-  }
 
   Future<void> _updateMediaItem() async {
     if (_musicInfoList.isNotEmpty && _currentIndex.value < _musicInfoList.length) {
@@ -206,14 +250,19 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
         title: currentMusic.musicName,
         artist: "Distance",
         duration: _currentMusicDuration.value,
-        artUri: Uri.parse(currentPlayList.thumbnailUrl),
+        artUri: Uri.file(currentPlayList.thumbnailUrl),
       );
       _currentMediaItem.value = mediaItem;
-      print(mediaItem);
-      // AudioPlayerHandler를 통해 MediaItem 업데이트
-      await audioHandler.addMediaItem(mediaItem);
+      await _audioPlayer.setAudioSource(
+        AudioSource.uri(
+          Uri.file(currentMusic.audioURL),
+          tag: mediaItem,
+        ),
+      );
     }
   }
+
+
 
   Future<void> playCurrentTrack() async {
     if (_musicInfoList.isEmpty) {
@@ -221,62 +270,88 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin{
       return;
     }
     try {
-      final tempMusicFile = await _repository.downloadMusicFromUrl(_musicInfoList[_currentIndex.value].audioURL);
-      print("tempMusicFile : $tempMusicFile");
-      await _musicPlayer.value.play(DeviceFileSource(tempMusicFile));
+      await _updateMediaItem();
+      await _audioPlayer.play();
     } catch (e) {
       print('Failed to play music: $e');
     }
   }
 
-
   Future<void> nextTrack() async {
-    await _updateMediaItem();
-    if (_musicInfoList.isNotEmpty) {
-      if(isRepeated) {
-        await _musicPlayer().stop();
-        await playCurrentTrack();
-      } else{
-        _currentIndex.value = (_currentIndex.value + 1) % _musicInfoList.length;
-        await setCurrentMusic(isShuffled);
-        await playCurrentTrack();
-      }
+    if (_musicInfoList.isEmpty) return;
+    if (isRepeated) {
+      await _audioPlayer.seek(Duration.zero);
+    } else {
+      await _audioPlayer.seekToNext();
     }
+    await _audioPlayer.play();
   }
 
   Future<void> previousTrack() async {
     if (_musicInfoList.isEmpty) return;
-    _currentIndex.value = (_currentIndex.value - 1 + _musicInfoList.length) % _musicInfoList.length;
-    await _updateMediaItem();
-    await playCurrentTrack();
+    await _audioPlayer.seekToPrevious();
+    await _audioPlayer.play();
+  }
+  //assetPath에서 추출 후에, Uri 형태로 사용하기 위해서 만든 구조
+  Future<Uri> _getAssetUri(String assetPath) async {
+    final byteData = await rootBundle.load(assetPath);
+    final buffer = byteData.buffer;
+    final tempDir = await getTemporaryDirectory();
+    final tempFile = File('${tempDir.path}/${assetPath.split('/').last}');
+    await tempFile.writeAsBytes(
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes));
+    return Uri.file(tempFile.path);
   }
 
-  void toggleRepeat() async{
-    _isRepeated.value = !_isRepeated.value;
-
-    // 반복을 설정하면 셔플이 안 되게끔.
-    if(isRepeated) {
-      _isShuffled.value = false;
+  void _updateCurrentMediaItem() async {
+    if (_musicInfoList.isNotEmpty && _currentIndex.value < _musicInfoList.length) {
+      final currentMusic = _musicInfoList[_currentIndex.value];
+      final artUri = await _getAssetUri(currentPlayList.thumbnailUrl);
+      _currentMediaItem.value = MediaItem(
+        id: currentMusic.audioURL,
+        album: currentMusic.theme,
+        title: currentMusic.musicName,
+        artist: "Distance",
+        duration: _currentMusicDuration.value,
+        artUri: artUri,
+      );
     }
   }
 
-  /* 플레이리스트 변경 */
-  setCurrentPlayList(CurrentPlayList newList) async {
-    // 현재 재생 중인 음악 정지
-    await _musicPlayer().stop();
-    _isMusicPlaying.value = false;
 
-    // 재생 시간 초기화
+
+  int _getRandomIndex() {
+    if (_musicInfoList.length <= 1) return 0;
+    int newIndex;
+    do {
+      newIndex = Random().nextInt(_musicInfoList.length);
+    } while (newIndex == _currentIndex.value);
+    return newIndex;
+  }
+
+  void toggleRepeat() {
+    _isRepeated.value = !_isRepeated.value;
+    if (isRepeated) {
+      _isShuffled.value = false;
+      _audioPlayer.setLoopMode(LoopMode.one);
+    } else {
+      _audioPlayer.setLoopMode(LoopMode.off);
+    }
+  }
+
+  Future<void> setCurrentPlayList(CurrentPlayList newList) async {
+    await _audioPlayer.stop();
+    _isMusicPlaying.value = false;
     _currentMusicPosition.value = Duration.zero;
     _currentMusicDuration.value = Duration.zero;
-
     _currentPlayList.value = newList;
     _repository.saveCurrentPlayListIndex(newList.theme);
     await getThemeMusic(newList.theme);
-
-    // 현재 인덱스 초기화
     _currentIndex.value = 0;
-
     update();
+  }
+
+  void changeTabIndex(int index) {
+    _tabIndex.value = index;
   }
 }
