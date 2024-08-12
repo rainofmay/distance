@@ -69,10 +69,9 @@ class ProfileCard extends StatelessWidget {
                 () => MateRoomScreen(
                       profileImageUrl: profile.profileUrl ?? '',
                       mateName: profile.name ?? '이름이 없습니다.',
-                      imageUrl: profile.backgroundUrl ?? '',
+                      imageUrl: profile.backgroundUrl ?? 'https://24cledbucket.s3.ap-northeast-2.amazonaws.com/sea/image/sea_1.JPG',
                       audioUrl: 'audios/nature/defaultMainMusic2.mp3',
                       // 예: 'https://example.com/music.mp3'
-                      isWordOpen: profile.isWordOpen ?? false,
                       isScheduleOpen: profile.isScheduleOpen ?? false,
                     ),
                 preventDuplicates: true);
@@ -94,32 +93,34 @@ class ProfileCard extends StatelessWidget {
                       children: [
                         Text(profile.name ?? '이름이 없습니다.', // null 처리
                             style: TextStyle(fontSize: 13, color: BLACK)),
-                        const SizedBox(height: 5),
-                        Text(profile.introduction ?? '소개가 없습니다.',
-                            // null 처리
-                            style: TextStyle(
-                                fontSize: 11, color: DARK_UNSELECTED)),
+                        Text(
+                          profile.introduction?.isEmpty == false
+                              ? profile.introduction!
+                              : '소개가 없습니다.',
+                          style: TextStyle(fontSize: 11, color: DARK_UNSELECTED),
+                        ),
                       ],
                     ),
+
                   ],
                 ),
               ),
               Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(profile.statusEmoji ?? '', // null 처리
-                        style: TextStyle(fontSize: 11, color: BLACK)),
-                    Text(profile.statusText ?? '', // null 처리
-                        style: TextStyle(fontSize: 11, color: BLACK)),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 8, right: 16.0),
-                      child: Icon(
-                        Icons.circle,
-                        color: getStatusColor(profile.onlineStatus),
-                      ),
-                    ),
-                  ],
+                child: Padding(
+                  padding: EdgeInsets.only(right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(profile.statusEmoji?.isEmpty == false
+                          ? profile.statusEmoji!
+                          : '🫥', // null 처리
+                          style: TextStyle(fontSize: 11, color: BLACK)),
+                      Text(profile.statusText?.isEmpty == false
+                          ? profile.statusText!
+                          : '상태가 없습니다.', // null 처리
+                          style: TextStyle(fontSize: 11, color: DARK_UNSELECTED)),
+                    ],
+                  ),
                 ),
               ),
             ],

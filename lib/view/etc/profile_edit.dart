@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/provider/user/user_provider.dart';
-import 'package:mobile/util/responsiveStyle.dart';
-import 'package:mobile/view/mate/widget/status_manage_online.dart';
-import 'package:mobile/view/mate/widget/status_manage_schedulling.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
@@ -30,55 +28,63 @@ class ProfileEdit extends StatefulWidget {
   State<ProfileEdit> createState() => _ProfileEditState();
 }
 
+
 class _ProfileEditState extends State<ProfileEdit> {
   File? profileImg;
+  final TextEditingController _statusController = TextEditingController();
+  final TextEditingController _emojiController = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  bool _emojiShowing = false;
 
   @override
   void initState() {
-    // TODO: implement initState
-
-    widget._nameController =
-        TextEditingController(text: widget.viewModel.name.value);
-    widget._introduceController =
-        TextEditingController(text: widget.viewModel.introduction.value);
-
     super.initState();
+    widget._nameController = TextEditingController(text: widget.viewModel.name.value);
+    widget._introduceController = TextEditingController(text: widget.viewModel.introduction.value);
+    _statusController.text = widget.viewModel.userCurrentActivityText.value;
+    _emojiController.text = widget.viewModel.userCurrentActivityEmoji.value;
   }
 
-  onSavePressed() {
-    // 저장 눌렀을 때 실행할 함수
+  @override
+  void dispose() {
+    _statusController.dispose();
+    _emojiController.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+  void onSavePressed() {
     widget.viewModel.updateName(widget._nameController.text);
     widget.viewModel.updateIntroduction(widget._introduceController.text);
+    widget.viewModel.onTapCurrentActivity(_emojiController.text, _statusController.text);
 
-    //viewModel로 통합 필요!
     widget.userProvider.editName(widget._nameController.text);
     widget.userProvider.editIntroduction(widget._introduceController.text);
-    //viewModel로 통합 필요!
-    widget.userProvider
-        .editStatusEmoji(widget.viewModel.userCurrentActivityEmoji.value);
-    widget.userProvider
-        .editStatusText(widget.viewModel.userCurrentActivityText.value);
-    widget.userProvider.updateUserSettings(widget.viewModel.isWordOpen.value,
+    widget.userProvider.editStatusEmoji(_emojiController.text);
+    widget.userProvider.editStatusText(_statusController.text);
+    widget.userProvider.updateUserSettings(
+        widget.viewModel.isWordOpen.value,
         widget.viewModel.isScheduleOpen.value);
 
-    if (!mounted) return;
+    // 저장 완료 메시지 표시
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('프로필이 저장되었습니다.')),
+    );
+
+    // 저장 후 이전 화면으로 돌아가기
     Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    double fieldWidth = MediaQuery.of(context).size.width * 0.65;
-
     return Scaffold(
-      backgroundColor: WHITE,
+      backgroundColor: Colors.white,
       appBar: CustomBackAppBar(
         appbarTitle: '프로필 수정',
         isLeading: true,
         isCenterTitle: true,
         backFunction: () => onSavePressed(),
-        backgroundColor: WHITE,
-        contentColor: BLACK,
+        backgroundColor: Colors.white,
+        contentColor: Colors.black,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -89,9 +95,9 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 50),
             nameAndIntroduce(),
             const SizedBox(height: 50),
-            statusSelect(),
-            const SizedBox(height: 50),
             buildSettingsToggle(),
+            const SizedBox(height: 50),
+            saveButton(),
           ],
         ),
       ),
@@ -164,6 +170,8 @@ class _ProfileEditState extends State<ProfileEdit> {
         nameEdittor(fieldWidth),
         const SizedBox(height: 32),
         introductionEdittor(fieldWidth),
+        const SizedBox(height: 32),
+        statusEdittor(fieldWidth)
       ],
     );
   }
@@ -222,122 +230,124 @@ class _ProfileEditState extends State<ProfileEdit> {
     );
   }
 
-  Widget statusSelect() {
+  Widget statusEdittor(final fieldWidth) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
-          '상태 관리',
-          style: TextStyle(fontSize: 25),
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Container(
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black),
-              borderRadius: BorderRadius.circular(20)),
-          width: MediaQuery.of(context).size.width * 0.5,
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: GestureDetector(
-                  onTap: () => {
-                    showDialog(
-                      barrierColor: TRANSPARENT,
-                      barrierDismissible: false,
-                      context: context,
-                      builder: (context) {
-                        return StatusManageOnline();
-                      },
-                    )
-                  },
-                  child: statusOnlineWidget(),
-                ),
-              ),
-              const Divider(
-                // Divider 추가
-                height: 1,
-                thickness: 1,
-                color: Colors.black,
-              ),
-              GestureDetector(
-                onTap: () => {
-                  showDialog(
-                    barrierColor: TRANSPARENT,
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (context) {
-                      return StatusManageSchedulling();
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const SizedBox(
+              child: Text('상태', style: TextStyle(fontSize: 16)),
+            ),
+            const SizedBox(width: 20),
+            Container(
+              width: fieldWidth,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _emojiShowing = !_emojiShowing;
+                      });
                     },
-                  )
-                },
-                child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: statusScheduleWidget()),
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[100],
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Center(
+                        child: Text(
+                          _emojiController.text.isNotEmpty
+                              ? _emojiController.text
+                              : '😀',
+                          style: TextStyle(fontSize: 24),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Expanded(
+                    child: CustomTextFormField(
+                      controller: _statusController,
+                      fieldWidth: fieldWidth - 50,
+                      isPasswordField: false,
+                      isReadOnly: false,
+                      keyboardType: TextInputType.text,
+                      textInputAction: TextInputAction.done,
+                      validator: (value) {
+                        var newValue = value.toString().length;
+                        if (newValue > 20) {
+                          return "20자 이내로 입력하세요.";
+                        }
+                        return null;
+                      },
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
+        if (_emojiShowing)
+          Container(
+            height: 250,
+            margin: EdgeInsets.only(left: 70, top: 10),
+            child: EmojiPicker(
+              onEmojiSelected: (category, emoji) {
+                setState(() {
+                  _emojiController.text = emoji.emoji;
+                  _emojiShowing = false;
+                });
+              },
+              textEditingController: _emojiController,
+              config: Config(),
+            ),
+          ),
+
       ],
     );
-  }
-
-  Widget statusOnlineWidget() {
-    return Obx(() => Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          CircleAvatar(
-              radius: 15,
-              backgroundColor:
-                  getStatusColor(widget.viewModel.isUserOnline.value)),
-          const SizedBox(
-            width: 40,
-          ),
-          Text("${widget.viewModel.isUserOnline.value}")
-        ]));
-  }
-
-  Widget statusScheduleWidget() {
-    return Obx(() => Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-          Text(
-            widget.viewModel.userCurrentActivityEmoji.value.isNotEmpty
-                ? widget.viewModel.userCurrentActivityEmoji.value
-                : "⊕",
-            style: TextStyle(fontSize: 16),
-          ),
-          const SizedBox(width: 40),
-          Text(
-              widget.viewModel.userCurrentActivityText.value.isNotEmpty
-                  ? widget.viewModel.userCurrentActivityText.value
-                  : "사용자 상태 지정",
-              style: TextStyle(fontSize: 16)),
-        ]));
   }
 
   Widget buildSettingsToggle() {
     return Column(
       children: [
         SwitchListTile(
-          title: Text('Word 공개'),
-          value: widget.viewModel.isWordOpen.value,
-          onChanged: (bool value) {
-            setState(() {
-              widget.viewModel.isWordOpen.value =
-                  !widget.viewModel.isWordOpen.value;
-            });
-          },
-        ),
-        SwitchListTile(
           title: Text('Schedule 공개'),
           value: widget.viewModel.isScheduleOpen.value,
           onChanged: (bool value) {
             setState(() {
               widget.viewModel.isScheduleOpen.value =
-                  !widget.viewModel.isScheduleOpen.value;
+              !widget.viewModel.isScheduleOpen.value;
             });
           },
         ),
       ],
     );
   }
+
+  Widget saveButton() {
+    return  GestureDetector(
+      onTap: onSavePressed,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 0),
+        child: Container(
+          width: 120,
+          height: 50,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: DARK,
+          ),
+          child: Center(
+            child: Text('저장',
+                style: TextStyle(color: PRIMARY_LIGHT),
+                textAlign: TextAlign.center),
+          ),
+        ),
+      ),
+    );
+  }
+
 }
