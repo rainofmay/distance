@@ -7,7 +7,6 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
