@@ -40,7 +40,7 @@ class UserModel {
   Map<String, dynamic> toMap() {
     return {
       'profile_url': profileUrl,
-      'name': name,
+      'nickname': name,
       'introduction' : introduction,
       'email': email,
       'uid': uid,
@@ -61,7 +61,7 @@ class UserModel {
     return UserModel(
       id: json['id']?.toString(), // null일 경우 빈 문자열로 변환
       profileUrl: json['profile_url'] ?? '', // null일 경우 빈 문자열로 설정
-      name: json['name'] ?? '',
+      name: json['nickname'] ?? '',
       introduction: json['introduction'] ?? '',
       email: json['email'] ?? '', // null일 경우 빈 문자열로 설정
       uid: json['uid'] ?? '',
