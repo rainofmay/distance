@@ -12,18 +12,19 @@ class AuthHelper {
   // 클래스로 만들어 재사용성 높이기
   static final _supabase = Supabase.instance.client;
 
-  static User? getCurrentUser() {
+  static User? getCurrentSessionUser() {
     final session = _supabase.auth.currentSession;
     return session?.user; // 세션이 있으면 user 반환, 없으면 null 반환
   }
 
   static String? getCurrentUserId() {
-    final user = getCurrentUser();
+    final user = getCurrentSessionUser();
+    print("getCurrentUserId : ${user?.id}");
     return user?.id; // user가 있으면 id 반환, 없으면 null 반환
   }
 
   static bool isLoggedIn() {
-    return getCurrentUser() != null;
+    return getCurrentSessionUser() != null;
   }
 
 
@@ -33,36 +34,28 @@ class AuthHelper {
       print("로그인이 안 되어있습니다.");
       return null;
     }
-    final userId = getCurrentUserId();
-    if (userId != null) {
+    final userEmail = getCurrentUserEmail();
+    if (userEmail != null) {
       final response = await _supabase
           .from('user')
           .select('id')
-          .eq('uid', userId)
+          .eq('email', userEmail)
           .single();
       return response['id']; // 문자열 형태로 반환
     } else {
+      print("getCurrentUserId: error");
       return null;
     }
   }
 
-  static Future<Map<String, dynamic>?> fetchUserData(String userId) async {
-    final response = await _supabase
-        .from('user') // 사용자 정보 테이블 이름
-        .select()
-        .eq('id', userId) // 사용자 ID로 필터링
-        .single();
-
-    return response;
-  }
   static String? getCurrentUserEmail() {
-    final user = getCurrentUser();
+    final user = getCurrentSessionUser();
     return user?.email; // user가 있으면 email 반환, 없으면 null 반환
   }
 
   static Future<void> navigateToLoginScreen(BuildContext context, void Function() navigate) async {
-    String? myId = await getMyId();
-    if (myId == null) {
+    String? userEmail = await getCurrentUserEmail();
+    if (userEmail == null) {
       if (!context.mounted) return;
       return customDialog(context, 40, '로그인', Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
           OkCancelButtons(okText: '확인', okTextColor: PRIMARY_COLOR, onPressed: () {
@@ -73,7 +66,7 @@ class AuthHelper {
           }));
     } else {
       navigate();
-      print("로그인 된 사용자 ID: $myId");
+      print("로그인 된 사용자 Email: $userEmail");
     }
   }
 }

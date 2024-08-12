@@ -220,13 +220,13 @@ class LoginProvider {
       await supabase.from('user').insert({
         'id': response.user!.id,
         'email': email,
-        'name': nickname,
+        'nickname': nickname,
         'profile_url': profileUrl,
         'created_at': DateTime.now().toIso8601String(),
       });
 
     } catch (error) {
-      print('회원가입 중 오류 발생: $error');
+      print('카카오 회원가입 중 오류 발생: $error');
       rethrow;
     }
   }

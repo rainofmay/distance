@@ -9,29 +9,49 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class UserProvider {
   static final supabase = Supabase.instance.client;
 
-  /* Get */
+
   Future<Map<String, dynamic>?> getMyProfileJson() async {
     try {
-      final myId = await AuthHelper.getMyId();
-      if (myId != null) {
-        final response =
-        await supabase.from('user').select().eq('id', myId).single();
-        if (response != null) {
-          return response;
-        } else {
-          // 데이터 조회 실패 시 에러 처리 (예: 빈 UserModel 객체 반환)
-          return null;
-        }
-      } else {
-        // 로그인되지 않은 경우 처리 (예: null 반환)
-        return null;
+      final sessionEmail = AuthHelper.getCurrentUserEmail();
+      if (sessionEmail != null) {
+        final response = await supabase
+            .from('user') // 사용자 정보 테이블 이름
+            .select()
+            .eq('email', sessionEmail) // 사용자 이메일로 필터링
+            .single();
+
+        return response;
       }
-    } catch (error) {
-      print('에러 $error');
-      // 에러 처리 (예: 에러 메시지 출력 또는 null 반환)
       return null;
+    }catch(err){
+      print("[getMyProfileJson] Error : $err");
     }
+    return null;
   }
+  //
+  // /* Get */
+  // Future<Map<String, dynamic>?> getMyProfileJson() async {
+  //   try {
+  //     final myId = AuthHelper.getCurrentUserId();
+  //     if (myId != null) {
+  //       final response =
+  //       await supabase.from('user').select().eq('id', myId).single();
+  //       if (response != null) {
+  //         return response;
+  //       } else {
+  //         // 데이터 조회 실패 시 에러 처리 (예: 빈 UserModel 객체 반환)
+  //         return null;
+  //       }
+  //     } else {
+  //       // 로그인되지 않은 경우 처리 (예: null 반환)
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     print('getMyProfileJson 에러 $error');
+  //     // 에러 처리 (예: 에러 메시지 출력 또는 null 반환)
+  //     return null;
+  //   }
+  // }
 
   /* UPDATE */
   Future<String?> editProfileImage(BuildContext context) async {

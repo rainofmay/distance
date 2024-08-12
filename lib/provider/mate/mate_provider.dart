@@ -7,8 +7,14 @@ class MateProvider {
   final userId = AuthHelper.getMyId();
 
   /* Get */
-  // 요청 안 받은 친구 리스트 띄우기
-  Future<List<Map<String, dynamic>>> getPendingRequests(String userId) async {
+  Future<List<Map<String, dynamic>>> getPendingRequests(String userEmail) async {
+    final userId = await supabase
+        .from('user')
+        .select('id')
+        .eq('email', userEmail)
+        .single()
+        .then((response) => response['id']);
+
     return await supabase
         .from('mate_relationships')
         .select()
@@ -16,6 +22,7 @@ class MateProvider {
         .eq('is_friend', false)
         .order('created_at');
   }
+
 
   // 요청 받은 친구 리스트 띄우기
   Future<List<Map<String, dynamic>>> getFriendsList(String userId) async {

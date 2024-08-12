@@ -60,8 +60,8 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id']?.toString(), // null일 경우 빈 문자열로 변환
-      profileUrl: json['profile_url'] ?? '', // null일 경우 빈 문자열로 설정
-      name: json['nickname'] ?? '',
+      profileUrl: json['profile_url'] ?? 'https://t1.kakaocdn.net/account_images/default_profile.jpeg.twg.thumb.R640x640', // null일 경우 빈 문자열로 설정
+      name: json['nickname'] ?? '닉네임',
       introduction: json['introduction'] ?? '',
       email: json['email'] ?? '', // null일 경우 빈 문자열로 설정
       uid: json['uid'] ?? '',

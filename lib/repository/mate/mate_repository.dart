@@ -20,8 +20,8 @@ class MateRepository {
   //친구 요청을 받지 않은 친구들
   Future<List<UserModel>> fetchPendingRequests() async {
     late final List<UserModel> data;
-    final userId = await AuthHelper.getMyId();
-    final response = await _mateProvider.getPendingRequests(userId!);
+    final userEmail = await AuthHelper.getCurrentUserEmail();
+    final response = await _mateProvider.getPendingRequests(userEmail!);
 
     // 친구 ID 목록 생성
     final friendIds = response.map((mate) {
@@ -79,24 +79,24 @@ class MateRepository {
   //친구요청 보내기
   Future<void> sendMateRequestByEmail(String email) async {
     try {
-      final myId = await AuthHelper.getMyId(); // 현재 사용자 ID 가져오기
-      final requestUserId = await getUserIdByEmail(email);
-
-      if (requestUserId != null && requestUserId != myId) { // 사용자가 존재하고, 자신에게 요청을 보내는 것이 아닌 경우
+      final userEmail = await AuthHelper.getCurrentUserEmail();
+      final receiverUserId = await getUserIdByEmail(email);
+      final senderUserId = await getUserIdByEmail(userEmail!);
+      if (receiverUserId != null && email != userEmail) { // 사용자가 존재하고, 자신에게 요청을 보내는 것이 아닌 경우
         // 이미 친구 요청을 보냈는지 확인
         final existingRequest = await supabase
             .from('mate_relationships')
             .select()
-            .eq('sender_id', myId as String)
-            .eq('receiver_id', requestUserId);
+            .eq('sender_id', senderUserId as String)
+            .eq('receiver_id', receiverUserId);
 
         if (existingRequest?.isNotEmpty ?? false) { // 이미 요청을 보낸 경우
           Get.snackbar('이미 요청됨', '이미 해당 사용자에게 메이트 요청을 보냈습니다.');
         } else { // 새로운 요청을 보내는 경우
-          await _mateProvider.sendMateRequest(myId!, requestUserId);
+          await _mateProvider.sendMateRequest(senderUserId, receiverUserId);
           Get.snackbar('요청 완료', '메이트 요청을 보냈습니다.');
         }
-      } else if (requestUserId == myId) { // 자신에게 요청을 보내는 경우
+      } else if (email == userEmail) { // 자신에게 요청을 보내는 경우
         Get.snackbar('오류', '자신에게 메이트 요청을 보낼 수 없습니다.');
       } else { // 사용자를 찾을 수 없는 경우
         Get.snackbar('오류', '해당 이메일의 사용자를 찾을 수 없습니다.');
@@ -107,6 +107,7 @@ class MateRepository {
       Get.snackbar('오류', '메이트 요청 중 오류가 발생했습니다.');
     }
   }
+
   Future<String?> getUserIdByEmail(String email) async {
     final response = await MateProvider.supabase
         .from('user')

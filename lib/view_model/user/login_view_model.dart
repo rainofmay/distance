@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 
 class LoginViewModel extends GetxController {
   final LoginProvider _provider;
@@ -59,6 +60,8 @@ class LoginViewModel extends GetxController {
     try {
       await _provider.signInWithKakao();
       // Get.snackbar('성공', '카카오 로그인 되었습니다.');
+      update();
+      update();
     } catch (e) {
       Get.snackbar('오류', '카카오 로그인에 실패했습니다.');
     }
@@ -68,15 +71,19 @@ class LoginViewModel extends GetxController {
     try {
       await _provider.signInWithGoogle(context);
       // Get.snackbar('성공', '구글 로그인 되었습니다.');
+      update();
+
     } catch (e) {
       Get.snackbar('오류', '구글 로그인에 실패했습니다.');
     }
   }
 
   Future<void> signOut(BuildContext context) async {
+    final viewModel = Get.find<MateViewModel>();
     try {
       await _provider.signOut(context);
-      // Get.snackbar('성공', '로그아웃 되었습니다.');
+      viewModel.logout();
+      update();
     } catch (e) {
       Get.snackbar('오류', '로그아웃에 실패했습니다.');
     }

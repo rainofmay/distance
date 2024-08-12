@@ -185,5 +185,37 @@ class MateViewModel extends GetxController {
     final users = await _mateRepository.searchMatesByEmail(email);
     //미완
   }
+  void logout() {
+    // 기본 사용자 정보 초기화
+    name.value = "";
+    introduction.value = "";
+    imageUrl.value = "";
+    profileImageUrl.value = "";
+    backgroundUrl.value = "";
+    musicUrl.value = "";
+    userCurrentActivityEmoji.value = '';
+    userCurrentActivityText.value = '';
+    isScheduleOpen.value = false;
+    isPaid.value = false;
+
+    // 리스트 초기화
+    pendingMateProfiles.clear();
+    mateProfiles.clear();
+    searchingProfiles.clear();
+
+    // TextEditingController 초기화
+    _emailController.value.clear();
+
+    // 추가적인 초기화가 필요한 경우 여기에 작성
+
+    // 변경 사항 알림
+    update();
+
+    // 로그아웃 성공 메시지 표시 (선택사항)
+    Get.snackbar("로그아웃", "성공적으로 로그아웃되었습니다.");
+
+    // 로그인 페이지로 이동 (필요한 경우)
+    // Get.offAll(() => LoginPage());
+  }
 
 }
