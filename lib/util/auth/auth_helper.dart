@@ -56,6 +56,10 @@ class AuthHelper {
 
     return response;
   }
+  static String? getCurrentUserEmail() {
+    final user = getCurrentUser();
+    return user?.email; // user가 있으면 email 반환, 없으면 null 반환
+  }
 
   static Future<void> navigateToLoginScreen(BuildContext context, void Function() navigate) async {
     String? myId = await getMyId();
