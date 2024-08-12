@@ -7,7 +7,6 @@ class MateRoomScreen extends StatelessWidget {
   final String profileImageUrl;
   final String imageUrl;
   final String audioUrl;
-  final bool isWordOpen;
   final bool isScheduleOpen;
 
   const MateRoomScreen({
@@ -16,7 +15,6 @@ class MateRoomScreen extends StatelessWidget {
     required this.imageUrl,
     required this.audioUrl,
     required this.profileImageUrl,
-    required this.isWordOpen,
     required this.isScheduleOpen,
   });
 
@@ -24,7 +22,6 @@ class MateRoomScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('$mateName의 방'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
@@ -41,14 +38,6 @@ class MateRoomScreen extends StatelessWidget {
           ),
 
           // isWordOpen이 true일 때 MotivationalQuote 표시
-          if (isWordOpen)
-            Positioned(
-              top: 20,
-              left: 20,
-              right: 20,
-              child: MotivationalQuote(),
-            ),
-
           // isScheduleOpen이 true일 때 FloatingTodo 표시
           if (isScheduleOpen)
             Positioned(
