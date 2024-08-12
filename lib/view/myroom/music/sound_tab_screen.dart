@@ -13,40 +13,43 @@ class SoundTabScreen extends StatelessWidget {
   SoundTabScreen({super.key});
 
   final SoundViewModel soundViewModel =
-  Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
+      Get.put(SoundViewModel(provider: Get.put(MyRoomSoundProvider())));
 
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 10.0),
-                child: Text(
-                  'Sound',
-                  style: TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
-                ),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10.0),
+            child: Text(
+              'Sound',
+              style: TextStyle(
+                  fontSize: 18, fontWeight: FontWeight.normal, color: WHITE),
+            ),
+          ),
 
-              // Sound 아래 화면
-              Obx(() => Column(
+          // Sound 아래 화면
+          Obx(() => Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Sector(
                       onTap: () {
                         pressed() {
-                          Get.to(() => SoundThemesScreen(), preventDuplicates: true);
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SoundThemesScreen()));
+                          // Get.to(() => SoundThemesScreen(), preventDuplicates: true);
                         }
-                        AuthHelper.navigateToLoginScreen(
-                            context, pressed);
+
+                        AuthHelper.navigateToLoginScreen(context, pressed);
                       },
                       title: '주변 소리',
                       iconData: CupertinoIcons.headphones),
                   const SizedBox(height: 20),
-
                   ListView.builder(
                       shrinkWrap: true,
                       itemCount: soundViewModel.soundInfoList.length,
@@ -57,8 +60,8 @@ class SoundTabScreen extends StatelessWidget {
                       })
                 ],
               )),
-            ],
-          ),
-        ));
+        ],
+      ),
+    ));
   }
 }

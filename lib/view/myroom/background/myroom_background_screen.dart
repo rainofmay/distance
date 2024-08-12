@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
-import 'package:mobile/util/debouncer.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';

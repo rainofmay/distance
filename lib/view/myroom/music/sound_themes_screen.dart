@@ -6,6 +6,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
 import 'package:mobile/util/ads/adController.dart';
+import 'package:mobile/view/myroom/music/sound_copyright.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -93,8 +94,20 @@ class SoundThemesScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   BorderLine(lineHeight: 1, lineColor: WHITE.withOpacity(0.2)),
                   Padding(
-                    padding: const EdgeInsets.only(top: 16, bottom: 8),
-                    child: const Text('전 체', style: TextStyle(color: WHITE)),
+                    padding: const EdgeInsets.only(top: 8, bottom: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text('전 체', style: TextStyle(color: WHITE)),
+                        IconButton(onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SoundCopyright()));
+                          // Get.to(SoundCopyright());
+                        }, icon: const Icon(Icons.copyright, color: TRANSPARENT_WHITE, size: 18))
+                      ],
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 16.0, bottom: 8),

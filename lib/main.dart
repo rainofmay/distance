@@ -7,7 +7,9 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
+import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
+import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
@@ -17,6 +19,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'firebase_options.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<InitializationStatus> _initGoogleMobileAds() {
   // TODO: Initialize Google Mobile Ads SDK
@@ -31,6 +36,7 @@ Future<void> main() async {
   //await OnlineStatusManager.initializeBackgroundFetch();
   await initializeDateFormatting();
   await dotenv.load();
+
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
   KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
@@ -39,6 +45,10 @@ Future<void> main() async {
     androidNotificationChannelId: 'com.distance.cled24.channel.audio',
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
+  );
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
   );
 
   runApp(const MainPage());
@@ -60,6 +70,26 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
   final notificationService = NotificationService();
 
+  void _initializeFCM() async {
+    // FCM 권한 요청
+    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission();
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      // FCM 토큰 가져오기
+      String? token = await FirebaseMessaging.instance.getToken();
+
+      if (token != null) {
+        // Supabase에 토큰 저장
+        final user = UserProvider.supabase.auth.currentUser;
+        if (user != null) {
+          await UserProvider.supabase.from('user').upsert({
+            'id': user.id,
+            'fcm_token': token, // fcm token nullable 맞는지?
+          });
+        }
+      }
+    }
+  }
 
   @override
   void initState() {

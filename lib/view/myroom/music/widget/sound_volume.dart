@@ -5,43 +5,19 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 
-class SoundVolume extends StatefulWidget {
+class SoundVolume extends GetView<SoundViewModel> {
   final int playerIndex;
 
-  const SoundVolume(
-      {super.key,
-      required this.playerIndex,
-      });
-
-
-  @override
-  State<SoundVolume> createState() => _SoundVolumeState();
-}
-
-class _SoundVolumeState extends State<SoundVolume> {
-  double _volume = 0.5;
-  final viewModel = Get.find<SoundViewModel>();
-
-  void _adjustVolume(double value) {
-    setState(() {
-      _volume = value;
-    });
-    viewModel.setVolume(
-        widget.playerIndex, _volume); // ViewModel을 통해 오디오 플레이어의 볼륨을 설정
-  }
+  SoundVolume({super.key, required this.playerIndex});
 
   @override
   Widget build(BuildContext context) {
-    _volume = viewModel.soundPlayersList[widget.playerIndex].audioPlayer.volume;
-
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical : 8.0),
-      child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(
           width: 130,
-          child: Text(viewModel.soundPlayersList[widget.playerIndex].musicName,
+          child: Text(controller.soundPlayersList[playerIndex].musicName,
               style: const TextStyle(fontSize: 13, color: LIGHT_WHITE),
               overflow: TextOverflow.ellipsis),
         ),
@@ -69,35 +45,23 @@ class _SoundVolumeState extends State<SoundVolume> {
                         highlightColor: TRANSPARENT,
                         hoverColor: TRANSPARENT,
                         icon: Icon(
-                          viewModel.soundPlayersList[widget.playerIndex].isPlaying.value
+                          controller
+                                  .soundPlayersList[playerIndex].isPlaying.value
                               ? CupertinoIcons.speaker_2
                               : CupertinoIcons.speaker_slash,
                           color: WHITE,
                         ),
                         iconSize: 16.0,
-                        onPressed: () {
-                          if (viewModel.soundPlayersList[widget.playerIndex].isPlaying.value == true) {
-                            viewModel.musicPause(widget.playerIndex);
-                          } else {
-                            if (viewModel
-                                    .soundPlayersList[widget.playerIndex].audioPlayer.state == PlayerState.paused) {
-                              viewModel
-                                  .soundPlayersList[widget.playerIndex].audioPlayer.resume();
-                            } else {
-                              viewModel.musicPlay(widget.playerIndex);
-                            }
-                          }
-                        }),
+                        onPressed: () => controller.togglePlay(playerIndex)),
                   ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.25,
-                    child: Slider(
-                      value: _volume,
-                      onChanged: (volume) {
-                        _adjustVolume(volume);
-                      },
-                    ),
-                  ),
+                  Obx(() => SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.25,
+                        child: Slider(
+                          value: controller.getVolume(playerIndex),
+                          onChanged: (volume) =>
+                              controller.setVolume(playerIndex, volume),
+                        ),
+                      )),
                 ],
               ),
             ),
@@ -107,4 +71,3 @@ class _SoundVolumeState extends State<SoundVolume> {
     );
   }
 }
-

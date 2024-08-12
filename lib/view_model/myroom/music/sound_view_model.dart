@@ -9,8 +9,9 @@ class SoundPlayer {
   final String musicName;
   final AudioPlayer audioPlayer;
   final RxBool isPlaying;
+  final RxDouble volume;
 
-  SoundPlayer(this.id, this.musicName, this.audioPlayer) : isPlaying = false.obs;
+  SoundPlayer(this.id, this.musicName, this.audioPlayer) : isPlaying = false.obs, volume = 0.5.obs;
 }
 
 
@@ -27,65 +28,142 @@ class SoundViewModel extends GetxController {
   List<SoundPlayer> get soundPlayersList => _soundPlayersList;
 
   final _isAnyPlaying = false.obs;
+  bool get isAnyPlaying => _isAnyPlaying.value;
 
   @override
   void onInit() async {
-    _soundInfoList = (await _provider.loadUserSounds()).obs; // 초기 데이터 로드
+    await _loadSounds();
     _updateSoundPlayers();
 
     // 초기 볼륨 값
-    initSetting((int i) {
-      setVolume(i, 0.5);
-    });
+    _initializeVolumes();
     super.onInit();
   }
 
   @override
   void dispose() {
-    for (var value in _soundPlayersList) {
-      value.audioPlayer.dispose();
+    for (var player in _soundPlayersList) {
+      player.audioPlayer.dispose();
     }
     super.dispose();
   }
 
+  Future<void> _loadSounds() async {
+    _soundInfoList.value = await _provider.loadUserSounds();
+  }
+
+  void _initializeVolumes() {
+    for (var player in _soundPlayersList) {
+      setVolume(_soundPlayersList.indexOf(player), 0.5);
+    }
+  }
+
   void _updateSoundPlayers() {
+    // 기존 플레이어들 정리
+    for (var player in _soundPlayersList) {
+      player.audioPlayer.dispose();
+    }
+
     _soundPlayersList.value = _soundInfoList
         .map((info) => SoundPlayer(info.id, info.musicName, AudioPlayer()))
         .toList();
+
+    for (var player in _soundPlayersList) {
+      _setupPlayerListeners(player);
+    }
   }
 
+  void _setupPlayerListeners(SoundPlayer player) {
+    player.audioPlayer.onPlayerStateChanged.listen((state) {
+      if (state == PlayerState.playing) {
+        player.isPlaying.value = true;
+        _updateOverallPlayingState();
+      } else if (state == PlayerState.stopped || state == PlayerState.completed) {
+        player.isPlaying.value = false;
+        _updateOverallPlayingState();
+      }
+    });
+  }
+
+  void _updateOverallPlayingState() {
+    _isAnyPlaying.value = _soundPlayersList.any((player) => player.isPlaying.value);
+  }
 
   Future<void> updateSounds(MusicInfo musicInfo) async {
-    final newSoundInfoList = await _provider.loadUserSounds();
-    _soundInfoList.value = newSoundInfoList;
-    _soundInfoList.refresh();
+    List<int> playingIds = _soundPlayersList
+        .where((player) => player.isPlaying.value)
+        .map((player) => player.id)
+        .toList();
 
-    // 리스트 동기화 확인 및 조정
-    while (_soundPlayersList.length < _soundInfoList.length) {
-      SoundPlayer newPlayer = SoundPlayer(musicInfo.id, musicInfo.musicName, AudioPlayer());
-      _soundPlayersList.add(newPlayer);
-      setVolume(_soundPlayersList.length-1, 0.5);
-    }
-    while (_soundPlayersList.length > _soundInfoList.length) {
-      int index = _soundPlayersList.indexWhere((index) =>
-      index.id == musicInfo.id);
+    await _loadSounds();
+    _syncSoundPlayersWithInfo();
 
-      await _soundPlayersList[index].audioPlayer.stop()
-          .then((value) => _soundPlayersList[index].audioPlayer.dispose());
-      _soundPlayersList.removeWhere((index) => index.id == musicInfo.id);
+    // 이전에 재생 중이던 소리 다시 재생
+    for (var id in playingIds) {
+      int index = _soundPlayersList.indexWhere((player) => player.id == id);
+      if (index != -1) {
+        musicPlay(index);
+      }
     }
+
+    _updateOverallPlayingState();
     update();
   }
 
   /* 즐겨찾기 추가 */
   Future<void> addSoundToUserList(MusicInfo musicInfo) async {
     await _provider.addSoundToUserSoundList(musicInfo);
-    await updateSounds(musicInfo);
+    await _loadSounds();
+    if (!_soundPlayersList.any((player) => player.id == musicInfo.id)) {
+      _soundPlayersList.add(SoundPlayer(musicInfo.id, musicInfo.musicName, AudioPlayer()));
+      _setupPlayerListeners(_soundPlayersList.last);
+    }
+    update();
   }
 
   Future<void> removeSoundFromUserList(MusicInfo musicInfo) async {
+    int index = _soundPlayersList.indexWhere((player) => player.id == musicInfo.id);
+    if (index != -1) {
+      // 해당 플레이어만 중지 및 제거
+      await musicStop(index);
+      await _soundPlayersList[index].audioPlayer.dispose();
+      _soundPlayersList.removeAt(index);
+    }
+
+    // 프로바이더에서 제거
     await _provider.removeSoundFromUserSoundList(musicInfo);
-    await updateSounds(musicInfo);
+
+    // 사운드 정보 리스트 업데이트
+    await _loadSounds();
+
+    // 플레이어 리스트와 사운드 정보 리스트 동기화
+    _syncSoundPlayersWithInfo();
+
+    update();
+  }
+
+  void _syncSoundPlayersWithInfo() {
+    List<SoundPlayer> newPlayersList = [];
+    for (var info in _soundInfoList) {
+      int existingIndex = _soundPlayersList.indexWhere((player) => player.id == info.id);
+      if (existingIndex != -1) {
+        newPlayersList.add(_soundPlayersList[existingIndex]);
+      } else {
+        newPlayersList.add(SoundPlayer(info.id, info.musicName, AudioPlayer()));
+      }
+    }
+
+    // 사용하지 않는 플레이어 정리
+    for (var player in _soundPlayersList) {
+      if (!newPlayersList.contains(player)) {
+        player.audioPlayer.dispose();
+      }
+    }
+
+    _soundPlayersList.value = newPlayersList;
+    for (var player in _soundPlayersList) {
+      _setupPlayerListeners(player);
+    }
   }
 
   void initSetting([Function(int)? additionalFunction]) async {
@@ -141,17 +219,23 @@ class SoundViewModel extends GetxController {
     }
   }
 
-  void musicPlay(int index) async {
-    List<String> nowAudioGroup =
-    _soundInfoList.map((musicInfo) => musicInfo.audioURL).toList();
+  void togglePlay(int index)  {
+    final player = _soundPlayersList[index];
+    if (player.isPlaying.value) {
+      musicPause(index);
+    } else {
+      musicPlay(index);
+    }
+  }
 
+  void musicPlay(int index) async {
     try {
-      await _soundPlayersList[index].audioPlayer.play(
-          AssetSource(nowAudioGroup[index]));
-      await _soundPlayersList[index].audioPlayer.setReleaseMode(
-          ReleaseMode.loop);
-      _soundPlayersList[index].isPlaying.value = true;
-      print("Play(loop on):  $index");
+      final player = _soundPlayersList[index];
+      final audioSource = _soundInfoList[index].audioURL;
+      await player.audioPlayer.play(AssetSource(audioSource));
+      await player.audioPlayer.setReleaseMode(ReleaseMode.loop);
+      player.isPlaying.value = true;
+      _updateOverallPlayingState();
     } catch (e) {
       print("Error $e");
     }
@@ -164,18 +248,21 @@ class SoundViewModel extends GetxController {
     update();
   }
 
-  void musicStop(int index) async {
-    await _soundPlayersList[index].audioPlayer.stop();
-    _soundPlayersList[index].isPlaying.value = false;
-    _isAnyPlaying.value = !areAllPlayersStopped();
-    update();
+  Future<void> musicStop(int index) async {
+    if (index >= 0 && index < _soundPlayersList.length) {
+      await _soundPlayersList[index].audioPlayer.stop();
+      _soundPlayersList[index].isPlaying.value = false;
+      _updateOverallPlayingState();
+    }
   }
 
   double getVolume(int index) {
-    return _soundPlayersList[index].audioPlayer.volume;
+    return _soundPlayersList[index].volume.value;
   }
 
   void setVolume(int index, double volume) {
     _soundPlayersList[index].audioPlayer.setVolume(volume);
+    _soundPlayersList[index].volume.value = volume;
+    update();
   }
 }
