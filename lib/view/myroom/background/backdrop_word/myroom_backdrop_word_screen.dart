@@ -13,12 +13,13 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
         top: controller.quotePosition.value.dy,
         child: GestureDetector(
           onTap: () {
-            controller.updateQuote();
+            _showConfirmationDialog(context);
           },
           child: Draggable(
             feedback: _buildQuoteContainer(context),
             childWhenDragging: Opacity(
               opacity: 0.1,
+              child: _buildQuoteContainer(context),
             ),
             onDragEnd: (details) {
               controller.updateQuotePosition(details.offset);
@@ -28,6 +29,33 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
         ),
       );
     });
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('인용문 변경'),
+          content: Text('인용문을 랜덤으로 변경하시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('취소'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('확인'),
+              onPressed: () {
+                controller.updateQuote();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildQuoteContainer(BuildContext context) {
@@ -46,26 +74,26 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Obx(() => Text(
-                      controller.currentQuote.quote,
-                      style: TextStyle(
-                        color: controller.quoteFontColor.value,
-                        fontSize: controller.quoteFontSize.value,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: controller.quoteFont.value,
-                      ),
-                      textAlign: TextAlign.center,
-                    )),
+                  controller.currentQuote.quote,
+                  style: TextStyle(
+                    color: controller.quoteFontColor.value,
+                    fontSize: controller.quoteFontSize.value,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: controller.quoteFont.value,
+                  ),
+                  textAlign: TextAlign.center,
+                )),
                 SizedBox(height: 8),
                 Obx(() => Text(
-                      "- ${controller.currentQuote.writer}",
-                      style: TextStyle(
-                        color: controller.quoteFontColor.value,
-                        fontSize: controller.quoteFontSize.value - 4,
-                        fontStyle: FontStyle.italic,
-                        fontFamily: controller.quoteFont.value,
-                      ),
-                      textAlign: TextAlign.right,
-                    )),
+                  "- ${controller.currentQuote.writer}",
+                  style: TextStyle(
+                    color: controller.quoteFontColor.value,
+                    fontSize: controller.quoteFontSize.value - 4,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: controller.quoteFont.value,
+                  ),
+                  textAlign: TextAlign.right,
+                )),
               ],
             ),
           );
