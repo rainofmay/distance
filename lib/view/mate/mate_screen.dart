@@ -49,7 +49,7 @@ class _MateScreenState extends State<MateScreen> {
         titleSpacing: 25,
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right:8.0),
+            padding: const EdgeInsets.only(right: 8.0),
             child: IconButton(
                 onPressed: () {
                   pressed() {
@@ -67,7 +67,7 @@ class _MateScreenState extends State<MateScreen> {
             height: 100,
             // color: Colors.grey[100],
             child: Padding(
-              padding: const EdgeInsets.only(top:8, left: 16.0, right: 16),
+              padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -81,7 +81,8 @@ class _MateScreenState extends State<MateScreen> {
                             onTap: () {},
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(50.0),
-                              child: widget.viewModel.profileImageUrl.value == null
+                              child: widget.viewModel.profileImageUrl.value ==
+                                      null
                                   ? Image.asset(
                                       'assets/images/themes/gomzy_theme.jpg',
                                       fit: BoxFit.cover,
@@ -90,13 +91,13 @@ class _MateScreenState extends State<MateScreen> {
                                     )
                                   : CachedNetworkImage(
                                       // CachedNetworkImage 사용
-                                      imageUrl:
-                                          widget.viewModel.profileImageUrl.value,
+                                      imageUrl: widget
+                                          .viewModel.profileImageUrl.value,
                                       fit: BoxFit.cover,
                                       width: 60,
                                       height: 60,
                                       placeholder: (context, url) =>
-                                        CustomCircularIndicator(size: 30.0),
+                                          CustomCircularIndicator(size: 30.0),
                                       // 로딩 표시
                                       errorWidget: (context, url, error) =>
                                           Image.asset(
@@ -109,9 +110,11 @@ class _MateScreenState extends State<MateScreen> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          Text(widget.viewModel.name.value,
+                          Text(
+                              widget.viewModel.name.value.isEmpty
+                                  ? ""
+                                  : widget.viewModel.name.value,
                               style: const TextStyle(fontSize: 15)),
-
                         ],
                       ),
                     ),
@@ -122,13 +125,32 @@ class _MateScreenState extends State<MateScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const SizedBox(width: 20,),
-                          Text(widget.viewModel.userCurrentActivityEmoji.value,
-                              style: const TextStyle(fontSize: 16, color: BLACK)),
-                          const SizedBox(width: 16,),
-
-                          Text(widget.viewModel.userCurrentActivityText.value,
-                              style: const TextStyle(fontSize: 16, color: BLACK)),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Text(
+                              widget.viewModel.userCurrentActivityText.value
+                                      .isEmpty
+                                  ? "⭐️"
+                                  : widget
+                                      .viewModel.userCurrentActivityEmoji.value,
+                              style:
+                                  const TextStyle(fontSize: 16, color: BLACK)),
+                          const SizedBox(
+                            width: 12,
+                          ),
+                          Flexible(
+                            child: Text(
+                              widget.viewModel.userCurrentActivityText.value
+                                      .isEmpty
+                                  ? "소개를 작성해주세요!"
+                                  : widget
+                                      .viewModel.userCurrentActivityText.value,
+                              style: const TextStyle(fontSize: 16, color: BLACK),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -145,9 +167,10 @@ class _MateScreenState extends State<MateScreen> {
                     child: GestureDetector(
                       behavior: HitTestBehavior.opaque,
                       onTap: () {
-                        pressed () {
+                        pressed() {
                           Get.to(() => ProfileEdit(), preventDuplicates: true);
                         }
+
                         AuthHelper.navigateToLoginScreen(context, pressed);
                       },
                       child: const Row(
@@ -192,15 +215,14 @@ class _MateScreenState extends State<MateScreen> {
   Widget profileList() {
     return Expanded(
       child: Obx(() => RefreshIndicator(
-        onRefresh: () async {
-          await widget.viewModel.updateMyProfile();
-          await widget.viewModel.getMyMate();
-        },
-        child: friendsWidget(),
-      )),
+            onRefresh: () async {
+              await widget.viewModel.updateMyProfile();
+              await widget.viewModel.getMyMate();
+            },
+            child: friendsWidget(),
+          )),
     );
   }
-
 
   Widget friendsWidget() {
     return ListView(
@@ -209,7 +231,8 @@ class _MateScreenState extends State<MateScreen> {
       children: [
         if (widget.viewModel.mateProfiles.value.isEmpty)
           SizedBox(
-            height: MediaQuery.of(context).size.height - 600, // Adjust as needed
+            height:
+                MediaQuery.of(context).size.height - 600, // Adjust as needed
             child: Center(
               child: GestureDetector(
                 onTap: () {

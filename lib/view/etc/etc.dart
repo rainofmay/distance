@@ -6,6 +6,7 @@ import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/etc/notification_screen.dart';
 import 'package:mobile/view/etc/personal_information_screen.dart';
 import 'package:mobile/view/etc/update_screen.dart';
+import 'package:mobile/view/login/login_screen.dart';
 import 'package:mobile/view/payment/payment_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_appbar.dart';
@@ -15,9 +16,17 @@ import 'package:mobile/widgets/tapable_row.dart';
 
 import 'package:mobile/common/const/colors.dart';
 
+import '../../provider/user/login_provider.dart';
+import '../../view_model/user/login_view_model.dart';
+
 class Etc extends StatelessWidget {
   Etc({super.key});
-  final MateViewModel viewModel = Get.find<MateViewModel>(); // Get the ViewModel instance
+
+  final MateViewModel viewModel =
+      Get.find<MateViewModel>(); // Get the ViewModel instance
+  final LoginViewModel loginViewModel =
+      Get.put(LoginViewModel(provider: LoginProvider()));
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,35 +47,37 @@ class Etc extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Obx(()=> ClipRRect(
-                      borderRadius: BorderRadius.circular(50.0),
-                      child: viewModel.profileImageUrl.value == ''
-                          ? Image.asset(
-                        'assets/images/themes/gomzy_theme.jpg',
-                        fit: BoxFit.cover,
-                        width: 40,
-                        height:40,
-                      )
-                          : CachedNetworkImage(
-                        // CachedNetworkImage 사용
-                        imageUrl: viewModel.profileImageUrl.value,
-                        fit: BoxFit.cover,
-                        width: 40,
-                        height: 40,
-                        placeholder: (context, url) =>
-                            CustomCircularIndicator(size: 30.0),
-                        // 로딩 표시
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/themes/gomzy_theme.jpg',
-                          fit: BoxFit.cover,
-                          width: 40,
-                          height: 40,
-                        ), // 에러 시 기본 이미지
+                    Obx(
+                      () => ClipRRect(
+                        borderRadius: BorderRadius.circular(50.0),
+                        child: viewModel.profileImageUrl.value == ''
+                            ? Image.asset(
+                                'assets/images/themes/gomzy_theme.jpg',
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                              )
+                            : CachedNetworkImage(
+                                // CachedNetworkImage 사용
+                                imageUrl: viewModel.profileImageUrl.value,
+                                fit: BoxFit.cover,
+                                width: 40,
+                                height: 40,
+                                placeholder: (context, url) =>
+                                    CustomCircularIndicator(size: 30.0),
+                                // 로딩 표시
+                                errorWidget: (context, url, error) =>
+                                    Image.asset(
+                                  'assets/images/themes/gomzy_theme.jpg',
+                                  fit: BoxFit.cover,
+                                  width: 40,
+                                  height: 40,
+                                ), // 에러 시 기본 이미지
+                              ),
                       ),
-                    ),),
-
+                    ),
                     const SizedBox(width: 10),
-                    Text(viewModel.name.value)
+                    Text(viewModel.name.value.isEmpty ? "✅ 로그인 후 사용 가능합니다." : viewModel.name.value)
                   ],
                 ),
               ],
@@ -76,36 +87,42 @@ class Etc extends StatelessWidget {
 
           // 구독 프리미엄
           GestureDetector(
-            behavior: HitTestBehavior.opaque,
+              behavior: HitTestBehavior.opaque,
               onTap: () {
-                  pressed() {
-                    Get.to(() => PaymentScreen(), preventDuplicates: true);
-                  }
-                  AuthHelper.navigateToLoginScreen(context, pressed);
+                pressed() {
+                  Get.to(() => PaymentScreen(), preventDuplicates: true);
+                }
+
+                AuthHelper.navigateToLoginScreen(context, pressed);
               },
               child: Container(
-            width: double.infinity,
-            height: 70,
-            decoration: BoxDecoration(color: BLACK),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                width: double.infinity,
+                height: 70,
+                decoration: BoxDecoration(color: BLACK),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('「프리미엄 Distance」 이용하기',
-                          style: TextStyle(color: WHITE)),
-                      const Text('1개월 무료 체험', style: TextStyle(color: WHITE)),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('「프리미엄 Distance」 이용하기',
+                              style: TextStyle(color: WHITE)),
+                          const Text('1개월 무료 체험',
+                              style: TextStyle(color: WHITE)),
+                        ],
+                      ),
+                      const Icon(
+                        Icons.arrow_forward_ios,
+                        size: 20,
+                        color: WHITE,
+                      )
                     ],
                   ),
-                  const Icon(Icons.arrow_forward_ios, size: 20, color: WHITE,)
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
           const SizedBox(height: 16),
 
           Padding(
@@ -115,8 +132,10 @@ class Etc extends StatelessWidget {
               title: '내 정보 관리',
               onTap: () {
                 pressed() {
-                  Get.to(() => PersonalInformationScreen(), preventDuplicates: true);
+                  Get.to(() => PersonalInformationScreen(),
+                      preventDuplicates: true);
                 }
+
                 AuthHelper.navigateToLoginScreen(context, pressed);
               },
             ),
@@ -133,7 +152,7 @@ class Etc extends StatelessWidget {
               title: '앱 업데이트 공지',
               onTap: () {
                 Get.to(() => UpdateScreen(), preventDuplicates: true);
-                },
+              },
             ),
           ),
 
@@ -150,6 +169,7 @@ class Etc extends StatelessWidget {
                 pressed() {
                   Get.to(() => NotificationScreen(), preventDuplicates: true);
                 }
+
                 AuthHelper.navigateToLoginScreen(context, pressed);
               },
             ),
@@ -158,6 +178,21 @@ class Etc extends StatelessWidget {
           const SizedBox(height: 16),
           BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
           const SizedBox(height: 16),
+          Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: TapableRow(
+                widget: Icon(Icons.logout),
+                title: AuthHelper.isLoggedIn() ? '로그아웃' : "로그인",
+                onTap: () async {
+                  if(AuthHelper.isLoggedIn()){
+                    await loginViewModel.signOut(context);
+                    viewModel.updateMyProfile();
+                  } else{
+                    Get.to(LoginScreen());
+                  }
+
+                },
+              ))
         ],
       ),
     );

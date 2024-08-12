@@ -113,11 +113,17 @@ class ProfileCard extends StatelessWidget {
                       Text(profile.statusEmoji?.isEmpty == false
                           ? profile.statusEmoji!
                           : '🫥', // null 처리
-                          style: TextStyle(fontSize: 11, color: BLACK)),
+                          style: TextStyle(fontSize: 11, color: BLACK),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                       Text(profile.statusText?.isEmpty == false
                           ? profile.statusText!
                           : '상태가 없습니다.', // null 처리
-                          style: TextStyle(fontSize: 11, color: DARK_UNSELECTED)),
+                          style: TextStyle(fontSize: 11, color: DARK_UNSELECTED),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
+                      ),
                     ],
                   ),
                 ),
