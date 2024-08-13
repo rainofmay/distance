@@ -12,6 +12,10 @@ class ScheduleList extends StatelessWidget {
 
   ScheduleList({super.key, required this.viewModel});
 
+  void onInit() {
+    viewModel.loadAllSchedules();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() => viewModel.isScheduleListLoaded

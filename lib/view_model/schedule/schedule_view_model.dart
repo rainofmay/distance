@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -67,6 +68,9 @@ class ScheduleViewModel extends GetxController {
   /* Notification */
   final NotificationService _notificationService = Get.put(NotificationService());
 
+  Future<void> resetSchedule() async{
+    _allSchedules.value = [];
+  }
   late final RxString _selectedNotification = '5분 전'.obs;
   String get selectedNotification => _selectedNotification.value;
 
@@ -178,6 +182,7 @@ class ScheduleViewModel extends GetxController {
 
     return ScheduleModel(
       id: Uuid().v4(),
+      uid: Uuid().v4(),
       groupId: Uuid().v4(),
       scheduleName: '',
       startDate: initialStartDate,
@@ -233,6 +238,8 @@ class ScheduleViewModel extends GetxController {
     } catch (e) {
       print('Error fetching schedule data: $e');
       _isScheduleListLoaded.value = false;
+      _allSchedules.value=[];
+      update();
       rethrow; // 상위 메서드에서 처리할 수 있도록 예외를 다시 던집니다.
     }
   }

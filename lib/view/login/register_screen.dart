@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mobile/model/user_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -35,11 +34,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await supabase.auth.signUp(email: emailValue, password: passwordValue);
     if (response.user != null) {
       isRegisterSuccess = true;
-
+      print(response.user);
       // supabase DB에 등록
-      await supabase
-          .from('user')
-          .insert(UserModel(email: emailValue, uid: response.user!.id).toMap());
+      // await supabase
+      //     .from('user')
+      //     .insert(UserModel(email: emailValue, uid: response.user!.id, name:'').toMap());
+      // 사용자 정보 저장
+      await supabase.from('user').insert({
+        'id': response.user!.id,
+        'email': emailValue,
+        'nickname': '',
+        'profile_url': '',
+        'created_at': DateTime.now().toIso8601String(),
+      });
+
     } else {
       isRegisterSuccess = false;
     }
