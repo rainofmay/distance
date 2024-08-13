@@ -10,8 +10,7 @@ class PasswordResetScreen extends StatelessWidget {
   Future<void> resetPassword(String email) async {
     try {
       // Supabase 비밀번호 초기화 로직
-      await Supabase.instance.client.auth.resetPasswordForEmail(email);
-
+      await Supabase.instance.client.auth.resetPasswordForEmail(email, );
       // 성공 메시지 스낵바
       Get.snackbar(
         '성공',

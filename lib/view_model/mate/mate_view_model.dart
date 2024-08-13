@@ -4,6 +4,7 @@ import 'package:mobile/model/online_status.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
+import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 class MateViewModel extends GetxController {
   // Rx variables for user profile data
   late final UserRepository _userRepository;
@@ -103,6 +104,7 @@ class MateViewModel extends GetxController {
 
   // 상태 업데이트 함수
   Future<void> updateMyProfile() async {
+    final scheduleViewModel = Get.find<ScheduleViewModel>();
     super.onInit(); // 먼저 super.onInit() 호출
 
     try {
@@ -185,7 +187,8 @@ class MateViewModel extends GetxController {
     final users = await _mateRepository.searchMatesByEmail(email);
     //미완
   }
-  void logout() {
+  void logout() async{
+    final scheduleViewModel = Get.find<ScheduleViewModel>();
     // 기본 사용자 정보 초기화
     name.value = "";
     introduction.value = "";
@@ -207,7 +210,7 @@ class MateViewModel extends GetxController {
     _emailController.value.clear();
 
     // 추가적인 초기화가 필요한 경우 여기에 작성
-
+    await scheduleViewModel.loadAllSchedules();
     // 변경 사항 알림
     update();
 
