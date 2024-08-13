@@ -20,28 +20,28 @@ class CustomTextFormField extends StatefulWidget {
   final Icon? suffixIcon;
   final Widget? counter;
   final String? labelText;
+  final Color? prefixIconColor;
 
-
-  CustomTextFormField({
-    required this.fieldWidth,
-    this.defaultText,
-    this.hintText,
-    required this.isPasswordField,
-    this.isEnabled,
-    this.maxLines,
-    required this.isReadOnly,
-    required this.keyboardType,
-    required this.textInputAction,
-    this.controller,
-    required this.validator,
-    this.prefix,
-    this.prefixIcon,
-    this.suffixWidget,
-    this.labelText,
-    this.counter,
-    this.suffixIcon,
-    super.key
-  });
+  CustomTextFormField(
+      {required this.fieldWidth,
+        this.defaultText,
+        this.hintText,
+        required this.isPasswordField,
+        this.isEnabled,
+        this.maxLines,
+        required this.isReadOnly,
+        required this.keyboardType,
+        required this.textInputAction,
+        this.controller,
+        required this.validator,
+        this.prefix,
+        this.prefixIcon,
+        this.suffixWidget,
+        this.labelText,
+        this.counter,
+        this.suffixIcon,
+        this.prefixIconColor,
+        super.key});
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -62,24 +62,27 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         enabled: widget.isEnabled,
         readOnly: widget.isReadOnly ? true : false,
         maxLines: widget.maxLines,
-        cursorColor: THIRD,
+        cursorColor: PRIMARY_COLOR,
         decoration: InputDecoration(
-            focusedBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: THIRD), // 포커스 시 밑줄 색상
-            ),
-            enabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(color: GREY), // 포커스 시 밑줄 색상
-            ),
+          focusedBorder: const UnderlineInputBorder(
+            borderSide: BorderSide(color: PRIMARY_COLOR), // 포커스 시 밑줄 색상
+          ),
+          enabledBorder: UnderlineInputBorder(
+            borderSide:
+            BorderSide(color: GREY.withOpacity(0.5)), // 아웃포커스 시 밑줄 색상
+          ),
           isDense: true,
-            contentPadding: const EdgeInsets.all(10),
+          contentPadding: const EdgeInsets.all(10),
+          prefixIconColor: widget.prefixIconColor,
+          hintStyle: TextStyle(color: GREY.withOpacity(0.5)),
           prefix: widget.prefix,
-            prefixIcon: widget.prefixIcon,
-            suffix: widget.suffixWidget,
-            suffixIcon: widget.suffixIcon,
-            labelText: widget.labelText,
-            hintText: widget.hintText,
-            counter: widget.counter,
-            labelStyle: const TextStyle(color: GREY),
+          prefixIcon: widget.prefixIcon,
+          suffix: widget.suffixWidget,
+          suffixIcon: widget.suffixIcon,
+          labelText: widget.labelText,
+          hintText: widget.hintText,
+          counter: widget.counter,
+          labelStyle: TextStyle(color: GREY.withOpacity(0.5)),
         ),
         obscureText: widget.isPasswordField,
       ),

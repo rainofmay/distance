@@ -8,9 +8,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/calendar_info_model.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
-import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
-import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view/schedule/widget/schedule/event.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -164,22 +162,33 @@ class ScheduleViewModel extends GetxController {
   /* Init */
   ScheduleModel createInitialScheduleModel() {
     final now = DateTime.now();
-    final initialDate = DateTime(now.year, now.month, now.day, 8, 0); // 8:00 AM
+    final selectedDate = _calendarInfo.value.selectedDate;
+    DateTime initialStartDate;
+    DateTime initialEndDate;
+
+    if (now.hour >= 22) {
+      // 22시 이후라면 선택된 날짜의 00:00부터 02:00까지로 설정
+      initialStartDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 22, 0);
+      initialEndDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, 23, 0);
+    } else {
+      // 그 외의 경우 현재 시간부터 2시간 후로 설정
+      initialStartDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, now.hour, 0);
+      initialEndDate = DateTime(selectedDate.year, selectedDate.month, selectedDate.day, now.hour + 2, 0);
+    }
+
     return ScheduleModel(
       id: Uuid().v4(),
       groupId: Uuid().v4(),
       scheduleName: '',
-      startDate: DateTime(_calendarInfo.value.selectedDate.year, _calendarInfo.value.selectedDate.month,
-          _calendarInfo.value.selectedDate.day, DateTime.now().hour, 0),
-      endDate: DateTime(_calendarInfo.value.selectedDate.year, _calendarInfo.value.selectedDate.month,
-          _calendarInfo.value.selectedDate.day, DateTime.now().hour+2, 0),
+      startDate: initialStartDate,
+      endDate: initialEndDate,
       isTimeSet: false,
       memo: '',
       sectionColor: 0,
       repeatType: _repeatTypes[0],
       repeatDays: List.filled(7, false),
       repeatWeeks: 1,
-      repeatEndDate: initialDate.add(Duration(days: 91)),
+      repeatEndDate: initialEndDate.add(Duration(days: 91)),
       isDone : false,
     );
   }
@@ -208,10 +217,10 @@ class ScheduleViewModel extends GetxController {
   Future<void> initCalendarInfo() async {
     _calendarInfo = CalendarInfoModel.selectedDate(
         selectedDate: DateTime.utc(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-    )).obs;
+          DateTime.now().year,
+          DateTime.now().month,
+          DateTime.now().day,
+        )).obs;
     _calendarFormat = CalendarFormat.week.obs;
   }
 
@@ -233,12 +242,12 @@ class ScheduleViewModel extends GetxController {
   }
 
   Future<void> initSchedulePush() async {
-      try {
-        await loadNotificationSetting();
-        await scheduleNotificationsForAllSchedules();
-      } catch (e) {
-        print('Error initializing schedule push: $e');
-      }
+    try {
+      await loadNotificationSetting();
+      await scheduleNotificationsForAllSchedules();
+    } catch (e) {
+      print('Error initializing schedule push: $e');
+    }
   }
 
   Future<void> loadNotificationSetting() async {
@@ -432,12 +441,12 @@ class ScheduleViewModel extends GetxController {
     // 선택된 날짜에 해당하는 일정들을 필터링
     _selectedDateSchedules.value = allSchedules
         .where((schedule) =>
-            (schedule.startDate.year <= _calendarInfo.value.selectedDate.year &&
-                schedule.startDate.month <= _calendarInfo.value.selectedDate.month &&
-                schedule.startDate.day <= _calendarInfo.value.selectedDate.day) &&
-            (schedule.endDate.year >= _calendarInfo.value.selectedDate.year &&
-                schedule.endDate.month >= _calendarInfo.value.selectedDate.month &&
-                schedule.endDate.day >= _calendarInfo.value.selectedDate.day))
+    (schedule.startDate.year <= _calendarInfo.value.selectedDate.year &&
+        schedule.startDate.month <= _calendarInfo.value.selectedDate.month &&
+        schedule.startDate.day <= _calendarInfo.value.selectedDate.day) &&
+        (schedule.endDate.year >= _calendarInfo.value.selectedDate.year &&
+            schedule.endDate.month >= _calendarInfo.value.selectedDate.month &&
+            schedule.endDate.day >= _calendarInfo.value.selectedDate.day))
         .toList();
     update();
   }
@@ -535,12 +544,12 @@ class ScheduleViewModel extends GetxController {
     if (_selectedNotification.value != setting) {
       _selectedNotification.value = setting;
       await scheduleNotificationsForAllSchedules();
-        try {
-          await saveNotificationSetting(setting);
-        } catch (e) {
-          print('Error updating schedule push: $e');
-        }
+      try {
+        await saveNotificationSetting(setting);
+      } catch (e) {
+        print('Error updating schedule push: $e');
       }
+    }
   }
 
   Future<void> scheduleNotificationsForAllSchedules() async {

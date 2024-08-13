@@ -20,16 +20,16 @@ class LoginScreen extends StatelessWidget {
     double widthOfLog = MediaQuery.of(context).size.width * 0.8;
     double heightOfLog = 48;
     return Scaffold(
-      backgroundColor: WHITE,
+      backgroundColor: DARK_BACKGROUND,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                padding: const EdgeInsets.only(left: 20, top: 24, bottom: 8),
                 child: const Text('DISTANCE',
-                    style: TextStyle(color: THIRD, fontSize: 15)),
+                    style: TextStyle(color: PRIMARY_LIGHT, fontSize: 16, fontWeight: FontWeight.bold)),
               ),
               Padding(
                   padding: const EdgeInsets.only(left: 20.0),
@@ -41,17 +41,17 @@ class LoginScreen extends StatelessWidget {
                                 width: 1.0, color: Colors.grey.withOpacity(0)),
                           )))),
               Padding(
-                padding: const EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                padding: const EdgeInsets.only(left: 20, top: 8, bottom: 10),
                 child: const Text(
                     'Log in and experience Distance.',
-                    style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
+                    style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
                     textAlign: TextAlign.start),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
                 child: const Text(
                     'You can listen to music from your own background.',
-                    style: TextStyle(fontSize: 13, color: DARK_UNSELECTED),
+                    style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
                     textAlign: TextAlign.start),
               ),
               const SizedBox(height: 100),
@@ -67,6 +67,7 @@ class LoginScreen extends StatelessWidget {
                           children: <Widget>[
                             Obx(() => CustomTextFormField(
                               prefixIcon: const Icon(CupertinoIcons.mail),
+                              prefixIconColor: PRIMARY_LIGHT,
                               labelText: 'E-mail',
                               maxLines: 1,
                               fieldWidth: MediaQuery.of(context).size.width * 0.8,
@@ -82,6 +83,7 @@ class LoginScreen extends StatelessWidget {
 
                             Obx(() => CustomTextFormField(
                               prefixIcon: const Icon(Icons.key_rounded),
+                              prefixIconColor: PRIMARY_LIGHT,
                               labelText: 'Password',
                               maxLines: 1,
                               fieldWidth: MediaQuery.of(context).size.width * 0.8,
@@ -97,11 +99,11 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(height: 20.0),
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: THIRD),
+                                side: BorderSide(color: PRIMARY_COLOR),
                                 shape: RoundedRectangleBorder(
                                     borderRadius:
                                     BorderRadius.all(Radius.circular(8))),
-                                backgroundColor: WHITE,
+                                backgroundColor: DARK_BACKGROUND,
                                 foregroundColor: TRANSPARENT,
                                 overlayColor: TRANSPARENT,
                                 fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 48),
@@ -115,7 +117,7 @@ class LoginScreen extends StatelessWidget {
                               },
                               child: const Text('로그인',
                                   style: TextStyle(
-                                      color: THIRD, fontSize: 16)),
+                                      color: PRIMARY_LIGHT, fontSize: 16)),
                             ),
                             const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
                             Padding(
@@ -129,7 +131,7 @@ class LoginScreen extends StatelessWidget {
                                     },
                                     child: const Text('회원가입',
                                         style: TextStyle(
-                                            color: BLACK, fontSize: 12)),
+                                            color: WHITE, fontSize: 12)),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -137,7 +139,7 @@ class LoginScreen extends StatelessWidget {
                                     },
                                     child: const Text('비밀번호 찾기',
                                         style: TextStyle(
-                                            color: BLACK, fontSize: 12)),
+                                            color: WHITE, fontSize: 12)),
                                   ),
                                 ],
                               ),
@@ -189,38 +191,38 @@ class LoginScreen extends StatelessWidget {
 
                     // KAKAO 로그인
                     ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(8))),
-                          overlayColor: TRANSPARENT,
-                          foregroundColor: TRANSPARENT,
-                          fixedSize: Size(widthOfLog, heightOfLog),
-                          backgroundColor: Color(0xffFFE812)),
-                      onPressed: () async {
-                        await loginViewModel.signInWithKakao();
-                        await mateViewModel.updateMyProfile();
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(8))),
+                            overlayColor: TRANSPARENT,
+                            foregroundColor: TRANSPARENT,
+                            fixedSize: Size(widthOfLog, heightOfLog),
+                            backgroundColor: Color(0xffFFE812)),
+                        onPressed: () async {
+                          await loginViewModel.signInWithKakao();
+                          await mateViewModel.updateMyProfile();
 
-                        if (!context.mounted) return;
-                        Navigator.of(context).pop();
-                      },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const Text(
-                            '카카오로 시작하기',
-                            style: TextStyle(color: BLACK, fontSize: 16),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              'assets/images/kakao.png',
-                              width: 21,
-                              height: 21,
+                          if (!context.mounted) return;
+                          Navigator.of(context).pop();
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            const Text(
+                              '카카오로 시작하기',
+                              style: TextStyle(color: BLACK, fontSize: 16),
                             ),
-                          ),
-                        ],
-                      )),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Image.asset(
+                                'assets/images/kakao.png',
+                                width: 21,
+                                height: 21,
+                              ),
+                            ),
+                          ],
+                        )),
                   ],
                 ),
               ),

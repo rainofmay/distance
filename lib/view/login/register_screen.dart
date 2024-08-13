@@ -32,7 +32,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<bool> registerAccount(String emailValue, String passwordValue) async {
     bool isRegisterSuccess = false;
     final AuthResponse response =
-        await supabase.auth.signUp(email: emailValue, password: passwordValue);
+    await supabase.auth.signUp(email: emailValue, password: passwordValue);
     if (response.user != null) {
       isRegisterSuccess = true;
 
@@ -62,7 +62,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
       try {
         bool isRegisterSuccess =
-            await registerAccount(emailValue, passwordValue);
+        await registerAccount(emailValue, passwordValue);
 
         if (!context.mounted) return;
         if (!isRegisterSuccess) {
@@ -107,14 +107,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final double fieldWidth = MediaQuery.of(context).size.width * 0.8;
     return Scaffold(
-      backgroundColor: WHITE,
+      backgroundColor: DARK_BACKGROUND,
       appBar: CustomBackAppBar(
           appbarTitle: '회원가입',
           isLeading: true,
           isCenterTitle: true,
           backFunction : Navigator.of(context).pop,
-          backgroundColor: WHITE,
-          contentColor: BLACK),
+          backgroundColor: DARK_BACKGROUND,
+          contentColor: WHITE),
       body: Form(
         key: _formKey,
         child: Center(
@@ -162,17 +162,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
               const SizedBox(height: 50),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  side: BorderSide(color: THIRD),
+                  side: BorderSide(color: PRIMARY_LIGHT),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(8))),
-                  backgroundColor: WHITE,
+                  backgroundColor: DARK_BACKGROUND,
                   foregroundColor: TRANSPARENT,
                   overlayColor: TRANSPARENT,
                   fixedSize: Size(fieldWidth, 48),
                 ),
                 onPressed: signUp,
-                child: const Text('회원가입',
-                    style: TextStyle(color: THIRD, fontSize: 16)),
+                child: const Text('가입하기',
+                    style: TextStyle(color: PRIMARY_LIGHT, fontSize: 16)),
               ),
             ],
           ),

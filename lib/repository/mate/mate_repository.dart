@@ -94,6 +94,7 @@ class MateRepository {
           Get.snackbar('이미 요청됨', '이미 해당 사용자에게 메이트 요청을 보냈습니다.');
         } else { // 새로운 요청을 보내는 경우
           await _mateProvider.sendMateRequest(senderUserId, receiverUserId);
+          await mateRequestNotification(senderUserId, receiverUserId); // Notification
           Get.snackbar('요청 완료', '메이트 요청을 보냈습니다.');
         }
       } else if (email == userEmail) { // 자신에게 요청을 보내는 경우
@@ -151,4 +152,19 @@ class MateRepository {
     fetchMyMates();
   }
 
+  /* 친구 요청 시 Notificartion */
+  Future<void> mateRequestNotification(String senderId, String reveiverId) async {
+    try {
+      await supabase.from('notifications').insert({
+        'sender_id': senderId,  // 요청을 보내는 사용자
+        'receiver_id': reveiverId,   // 요청을 받는 사용자
+        'body': '$senderId님께서 메이트 요청을 보냈습니다.'
+        // 필요한 경우 추가 필드를 포함할 수 있습니다.
+      });
+
+      print('Friend request notification sent successfully');
+    } catch (error) {
+      print('Error sending friend request notification: $error');
+    }
+  }
 }

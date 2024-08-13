@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
@@ -40,8 +39,8 @@ class ScheduleScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appbarTitle: '일 정',
-        backgroundColor: WHITE,
-        contentColor: BLACK,
+        backgroundColor: DARK_BACKGROUND,
+        contentColor: PRIMARY_COLOR,
         titleSpacing: 25,
       ),
       body: SafeArea(
@@ -76,7 +75,7 @@ class ScheduleScreen extends StatelessWidget {
                 ),
               ),
               Obx(
-                () => GestureDetector(
+                    () => GestureDetector(
                   behavior: HitTestBehavior.opaque,
                   onVerticalDragUpdate: (details) {
                     final double delta = details.primaryDelta ?? 0;
@@ -94,45 +93,37 @@ class ScheduleScreen extends StatelessWidget {
                               top: 20, left: 30, right: 30),
                           child: Calendar(viewModel: viewModel)),
                       Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: ListTile(
-                          horizontalTitleGap: 3,
-                          leading: ShaderMask(
-                            shaderCallback: (Rect bounds) {
-                              return LinearGradient(
-                                colors: [WHITE, THIRD],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ).createShader(bounds);
-                            },
-                            child: IconButton(
-                              splashColor: TRANSPARENT,
-                                highlightColor: TRANSPARENT,
-                                onPressed: () {
-                                  pressed() {
-                                    viewModel.initializeForNewSchedule();
-                                    Get.to(() => CreateScheduleScreen(), preventDuplicates: true);
-                                  }
-                                  AuthHelper.navigateToLoginScreen(
-                                      context, pressed);
-                                },
-                                icon: const Icon(CupertinoIcons.add_circled,
-                                    color: THIRD, size: 22),
-                                color: BLACK),
-                          ),
-                          title: Row(
-                            children: [
-                              const SizedBox(width: 5),
-                              Text(
-                                  viewModel.calendarInfo.selectedDate.day ==
-                                          DateTime.now().day
-                                      ? '오늘'
-                                      : '${viewModel.calendarInfo.selectedDate.month}월 ${viewModel.calendarInfo.selectedDate.day}일',
-                                  style: const TextStyle(
-                                      color: BLACK,
-                                      fontWeight: FontWeight.w100,
-                                      fontSize: 16)),
-                            ],
+                        padding: const EdgeInsets.only(top: 20, left:8),
+                        child: GestureDetector(
+                          onTap: () {
+                            pressed() {
+                              viewModel.initializeForNewSchedule();
+                              Get.to(() => CreateScheduleScreen(), preventDuplicates: true);
+                            }
+                            AuthHelper.navigateToLoginScreen(
+                                context, pressed);
+                          },
+                          child: ListTile(
+                            horizontalTitleGap: 0,
+                            leading: Image.asset(
+                              'assets/images/add_icon.png',
+                              width: 17,
+                              height: 17,
+                            ),
+                            title: Row(
+                              children: [
+                                // const SizedBox(width: 5),
+                                Text(
+                                    viewModel.calendarInfo.selectedDate.day ==
+                                        DateTime.now().day
+                                        ? '오늘'
+                                        : '${viewModel.calendarInfo.selectedDate.month}월 ${viewModel.calendarInfo.selectedDate.day}일',
+                                    style: const TextStyle(
+                                        color: BLACK,
+                                        fontWeight: FontWeight.w100,
+                                        fontSize: 16)),
+                              ],
+                            ),
                           ),
                         ),
                       ),

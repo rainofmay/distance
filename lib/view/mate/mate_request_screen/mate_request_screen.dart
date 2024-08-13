@@ -20,7 +20,7 @@ class MateRequestsScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomBackAppBar(
-        appbarTitle: '메이트 관리',
+        appbarTitle: '메이트 찾기',
         isLeading: true,
         isCenterTitle: true,
         backgroundColor: WHITE,
@@ -44,14 +44,14 @@ class MateRequestsScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             '메이트 추가',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: PRIMARY_COLOR),
+            style: TextStyle(fontSize: 16, color: BLACK),
           ),
           const SizedBox(height: 8),
           Text(
-            userEmail != null ? "내 E-mail: ${userEmail}" : "로그인 후 이용해주세요!",
-            style: TextStyle(fontSize: 14, color: DARK_UNSELECTED),
+            userEmail != null ? "내 E-mail: $userEmail" : "로그인 후 이용해주세요!",
+            style: const TextStyle(fontSize: 11, color: DARK_UNSELECTED),
           ),
           const SizedBox(height: 16),
           Row(
@@ -78,6 +78,7 @@ class MateRequestsScreen extends StatelessWidget {
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () async {
+                  // email : 상대방 이메일
                   final email = viewModel.emailController.text.trim();
                   if (email.isNotEmpty) {
                     await viewModel.sendMateRequestByEmail(email);
@@ -85,10 +86,10 @@ class MateRequestsScreen extends StatelessWidget {
                   }
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: PRIMARY_COLOR,
+                  backgroundColor: DARK_BACKGROUND,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                 ),
-                child: Text('추가', style: TextStyle(color: WHITE)),
+                child: const Text('추가', style: TextStyle(color: PRIMARY_LIGHT)),
               ),
             ],
           ),
@@ -99,7 +100,7 @@ class MateRequestsScreen extends StatelessWidget {
 
   Widget _buildDivider() {
     return Container(
-      height: 8,
+      height: 3,
       color: Colors.grey[200],
     );
   }
@@ -111,9 +112,9 @@ class MateRequestsScreen extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Text(
+            child: const Text(
               '메이트 요청 목록',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: PRIMARY_COLOR),
+              style: TextStyle(fontSize: 16, color: BLACK),
             ),
           ),
           Expanded(
@@ -144,13 +145,13 @@ class MateRequestsScreen extends StatelessWidget {
                           ElevatedButton(
                             onPressed: () => viewModel.acceptMate(request.id!),
                             style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-                            child: Text('승인', style: TextStyle(color: WHITE)),
+                            child: const Text('승인', style: TextStyle(color: WHITE)),
                           ),
-                          SizedBox(width: 8),
+                          const SizedBox(width: 8),
                           OutlinedButton(
                             onPressed: () => viewModel.rejectMate(request.id!),
                             style: OutlinedButton.styleFrom(side: BorderSide(color: GREY)),
-                            child: Text('거절', style: TextStyle(color: GREY)),
+                            child: const Text('거절', style: TextStyle(color: GREY)),
                           ),
                         ],
                       ),
@@ -169,22 +170,22 @@ class MateRequestsScreen extends StatelessWidget {
     return ListView(
       physics: const AlwaysScrollableScrollPhysics(),
       children: [
-        SizedBox(height: 100),
+        const SizedBox(height: 100),
         Center(
-          child: Column(
+          child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.people_outline, size: 64, color: DARK_UNSELECTED),
+              Icon(CupertinoIcons.person_2_fill, size: 52, color: DARK_UNSELECTED),
               SizedBox(height: 16),
               Text(
                 '메이트 요청이 없습니다.',
-                style: TextStyle(fontSize: 16, color: DARK_UNSELECTED),
+                style: TextStyle(fontSize: 14, color: DARK_UNSELECTED),
               ),
               SizedBox(height: 16),
-              Text(
-                '아래로 당겨서 새로고침',
-                style: TextStyle(fontSize: 14, color: GREY),
-              ),
+              // Text(
+              //   '아래로 당겨서 새로고침',
+              //   style: TextStyle(fontSize: 14, color: GREY),
+              // ),
             ],
           ),
         ),
