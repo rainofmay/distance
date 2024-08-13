@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class ScheduleModel {
   final String id;
+  final String uid; // 추가된 Supabase UID
   final String groupId;
   final String scheduleName;
   final DateTime startDate;
@@ -16,28 +15,30 @@ class ScheduleModel {
   final DateTime repeatEndDate;
   final bool isDone;
 
-  ScheduleModel(
-      {required this.id,
-      required this.groupId,
-      required this.scheduleName,
-      required this.startDate,
-      required this.endDate,
-      required this.isTimeSet,
-      required this.memo,
-      required this.sectionColor,
-      this.repeatType = '반복 없음',
-      this.repeatDays = const [],
-      this.repeatWeeks = 1,
-      required this.repeatEndDate,
-      required this.isDone});
+  ScheduleModel({
+    required this.id,
+    required this.uid, // 추가된 Supabase UID
+    required this.groupId,
+    required this.scheduleName,
+    required this.startDate,
+    required this.endDate,
+    required this.isTimeSet,
+    required this.memo,
+    required this.sectionColor,
+    this.repeatType = '반복 없음',
+    this.repeatDays = const [],
+    this.repeatWeeks = 1,
+    required this.repeatEndDate,
+    required this.isDone
+  });
 
-//JSON으로부터 모델을 만들어내는 생성자
   ScheduleModel.fromJson({required Map<String, dynamic> json})
       : id = json['id'],
+        uid = json['uid'], // 추가된 Supabase UID
         groupId = json['group_id'],
         scheduleName = json['schedule_name'],
-        startDate = _parseDateTime(json['start_date']),
-        endDate = _parseDateTime(json['end_date']),
+        startDate = parseDateTime(json['start_date']),
+        endDate = parseDateTime(json['end_date']),
         isTimeSet = json['is_time_set'],
         memo = json['memo'],
         sectionColor = json['section_color'],
@@ -47,7 +48,7 @@ class ScheduleModel {
         repeatEndDate = DateTime.parse(json['repeat_end_date']),
         isDone = json['is_done'];
 
-  static DateTime _parseDateTime(String dateTimeString) {
+  static DateTime parseDateTime(String dateTimeString) {
     if (dateTimeString.length == 12) {
       int year = int.parse(dateTimeString.substring(0, 4));
       int month = int.parse(dateTimeString.substring(4, 6));
@@ -63,26 +64,25 @@ class ScheduleModel {
   Map<String, dynamic> toJson() {
     return {
       'id': id,
+      'uid': uid, // 추가된 Supabase UID
       'group_id': groupId,
       'schedule_name': scheduleName,
-      'start_date':
-          '${startDate.year}${startDate.month.toString().padLeft(2, '0')}${startDate.day.toString().padLeft(2, '0')}${startDate.hour.toString().padLeft(2, '0')}${startDate.minute.toString().padLeft(2, '0')}',
-      'end_date':
-          '${endDate.year}${endDate.month.toString().padLeft(2, '0')}${endDate.day.toString().padLeft(2, '0')}${endDate.hour.toString().padLeft(2, '0')}${endDate.minute.toString().padLeft(2, '0')}',
+      'start_date': '${startDate.year}${startDate.month.toString().padLeft(2, '0')}${startDate.day.toString().padLeft(2, '0')}${startDate.hour.toString().padLeft(2, '0')}${startDate.minute.toString().padLeft(2, '0')}',
+      'end_date': '${endDate.year}${endDate.month.toString().padLeft(2, '0')}${endDate.day.toString().padLeft(2, '0')}${endDate.hour.toString().padLeft(2, '0')}${endDate.minute.toString().padLeft(2, '0')}',
       'is_time_set': isTimeSet,
       'memo': memo,
       'section_color': sectionColor,
       'repeat_type': repeatType,
       'repeat_days': repeatDays,
       'repeat_weeks': repeatWeeks,
-      'repeat_end_date':
-          '${repeatEndDate.year}${repeatEndDate.month.toString().padLeft(2, '0')}${repeatEndDate.day.toString().padLeft(2, '0')}',
-      'is_done' : isDone,
+      'repeat_end_date': '${repeatEndDate.year}${repeatEndDate.month.toString().padLeft(2, '0')}${repeatEndDate.day.toString().padLeft(2, '0')}',
+      'is_done': isDone,
     };
   }
 
   ScheduleModel copyWith({
     String? id,
+    String? uid, // 추가된 Supabase UID
     String? groupId,
     String? scheduleName,
     DateTime? startDate,
@@ -98,6 +98,7 @@ class ScheduleModel {
   }) {
     return ScheduleModel(
       id: id ?? this.id,
+      uid: uid ?? this.uid, // 추가된 Supabase UID
       groupId: groupId ?? this.groupId,
       scheduleName: scheduleName ?? this.scheduleName,
       startDate: startDate ?? this.startDate,
@@ -109,7 +110,7 @@ class ScheduleModel {
       repeatDays: repeatDays ?? this.repeatDays,
       repeatWeeks: repeatWeeks ?? this.repeatWeeks,
       repeatEndDate: repeatEndDate ?? this.repeatEndDate,
-      isDone : isDone ?? this.isDone,
+      isDone: isDone ?? this.isDone,
     );
   }
 }
