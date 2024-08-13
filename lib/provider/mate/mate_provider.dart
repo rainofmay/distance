@@ -41,8 +41,10 @@ class MateProvider {
         .insert({
       'sender_id': senderId,
       'receiver_id': receiverId,
+      'body' : '$senderId님이 메이트를 요청했습니다.'
     });
   }
+
   /* Update */
   Future<void> acceptMateRequest(String requestId) async {
     final myId = await AuthHelper.getMyId(); // 현재 사용자 ID 가져오기
