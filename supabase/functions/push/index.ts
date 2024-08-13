@@ -3,8 +3,8 @@ import { JWT } from 'npm:google-auth-library@9'
 import serviceAccount from '../service-account.json' with { type: 'json' }
 
 interface Notification {
-  id: string
-  user_id: string
+  sender_id: string
+  receiver_id: string
   body: string
 }
 
@@ -23,13 +23,21 @@ const supabase = createClient(
 Deno.serve(async (req) => {
   const payload: WebhookPayload = await req.json()
 
-  const { data } = await supabase
+  const { data: receiverData, error: receiverError } = await supabase
     .from('profiles')
     .select('fcm_token')
-    .eq('id', payload.record.user_id)
+    .eq('id', payload.record.receiver_id)
     .single()
 
-  const fcmToken = data!.fcm_token as string
+  if (receiverError || !receiverData?.fcm_token) {
+      console.error('Receiver FCM token not found:', receiverError)
+      return new Response(JSON.stringify({ error: 'Receiver FCM token not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    }
+
+  const fcmToken = receiverData.fcm_token as string
 
   const accessToken = await getAccessToken({
     clientEmail: serviceAccount.client_email,
@@ -48,7 +56,7 @@ Deno.serve(async (req) => {
         message: {
           token: fcmToken,
           notification: {
-            title: `Notification from Supabase`,
+            title: `Mate 알림`,
             body: payload.record.body,
           },
         },
