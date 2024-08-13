@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +21,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 Future<InitializationStatus> _initGoogleMobileAds() {
   // TODO: Initialize Google Mobile Ads SDK
@@ -46,9 +46,7 @@ Future<void> main() async {
     androidNotificationOngoing: true,
   );
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   runApp(const MainPage());
   FlutterNativeSplash.remove();
@@ -68,27 +66,7 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
   final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
   final notificationService = NotificationService();
-
-  void _initializeFCM() async {
-    // FCM 권한 요청
-    NotificationSettings settings = await FirebaseMessaging.instance.requestPermission();
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      // FCM 토큰 가져오기
-      String? token = await FirebaseMessaging.instance.getToken();
-
-      if (token != null) {
-        // Supabase에 토큰 저장
-        final user = UserProvider.supabase.auth.currentUser;
-        if (user != null) {
-          await UserProvider.supabase.from('user').upsert({
-            'id': user.id,
-            'fcm_token': token, // fcm token nullable 맞는지?
-          });
-        }
-      }
-    }
-  }
+  final supabase = Supabase.instance.client;
 
   @override
   void initState() {
@@ -97,6 +75,44 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
     notificationService.init();
+
+    supabase.auth.onAuthStateChange.listen((event) async {
+      if (event.event == AuthChangeEvent.signedIn) {
+        await FirebaseMessaging.instance.requestPermission(
+          badge: true,
+          alert: true,
+          sound: true,
+        );
+
+        await FirebaseMessaging.instance.getAPNSToken();
+        final fcmToken = await FirebaseMessaging.instance.getToken();
+        if (fcmToken != null) {
+          _setFcmToken(fcmToken);
+        }
+      }
+    });
+    FirebaseMessaging.instance.onTokenRefresh.listen((fcmToken) async {
+      await _setFcmToken(fcmToken);
+    });
+
+    //fore ground??
+    FirebaseMessaging.onMessage.listen((payload) {
+      final notification = payload.notification;
+
+      if (notification != null) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('${notification.title} ${notification.body}')));
+      }
+    });
+  }
+
+  Future<void> _setFcmToken(String fcmToken) async {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId != null) {
+      await supabase
+          .from('profiles')
+          .upsert({'id': userId, 'fcm_token': fcmToken});
+    }
   }
 
   @override
@@ -104,7 +120,6 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {

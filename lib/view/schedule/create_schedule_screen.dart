@@ -9,9 +9,11 @@ import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CreateScheduleScreen extends StatelessWidget {
   CreateScheduleScreen({super.key});
+
   final adController = Get.put(AdController());
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
@@ -46,34 +48,37 @@ class CreateScheduleScreen extends StatelessWidget {
           backgroundColor: BLACK,
           contentColor: WHITE,
           actions: [
-            Obx(() =>
-                TextButton(
-                  onPressed: () {
+            Obx(() => TextButton(
+                  onPressed: () async {
+                    final supabase = Supabase.instance.client;
+                    await supabase.from('notifications').insert({
+                      'user_id': supabase.auth.currentUser!.id,
+                      'body': '테스트입니다.'
+                    });
                     viewModel.isFormValid ? _onSavePressed(context) : null;
                   },
                   child: Text(
                     '저장',
                     style: TextStyle(
-                        color: viewModel.isFormValid ? PRIMARY_LIGHT : GREY
-                    ),
+                        color: viewModel.isFormValid ? PRIMARY_LIGHT : GREY),
                   ),
                 ))
           ],
         ),
         body: SingleChildScrollView(
           child: Obx(() => Column(
-            children: [
-              Form(key: viewModel.formKey, child: ScheduleForm()),
-              const SizedBox(height: 16),
-              if (adController.isAdLoaded.value && viewModel.nowHandlingScheduleModel.repeatType == '반복없음')
-                SizedBox(
-                  height: adController.bannerAd.value!.size.height
-                      .toDouble(),
-                  child:
-                  AdWidget(ad: adController.bannerAd.value!),
-                ),
-            ],
-          )),
+                children: [
+                  Form(key: viewModel.formKey, child: ScheduleForm()),
+                  const SizedBox(height: 16),
+                  if (adController.isAdLoaded.value &&
+                      viewModel.nowHandlingScheduleModel.repeatType == '반복없음')
+                    SizedBox(
+                      height:
+                          adController.bannerAd.value!.size.height.toDouble(),
+                      child: AdWidget(ad: adController.bannerAd.value!),
+                    ),
+                ],
+              )),
         ));
   }
 }
