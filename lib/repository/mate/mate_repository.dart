@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/provider/mate/mate_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MateRepository {
@@ -91,21 +92,21 @@ class MateRepository {
             .eq('receiver_id', receiverUserId);
 
         if (existingRequest?.isNotEmpty ?? false) { // 이미 요청을 보낸 경우
-          Get.snackbar('이미 요청됨', '이미 해당 사용자에게 메이트 요청을 보냈습니다.');
+          CustomSnackbar.show(title: '알림', message: '이미 해당 사용자에게 메이트 요청을 보냈습니다.');
         } else { // 새로운 요청을 보내는 경우
           await _mateProvider.sendMateRequest(senderUserId, receiverUserId);
           await mateRequestNotification(senderUserId, receiverUserId); // Notification
-          Get.snackbar('요청 완료', '메이트 요청을 보냈습니다.');
+          CustomSnackbar.show(title: '완료', message: '메이트 요청을 보냈습니다.');
         }
       } else if (email == userEmail) { // 자신에게 요청을 보내는 경우
-        Get.snackbar('오류', '자신에게 메이트 요청을 보낼 수 없습니다.');
+        CustomSnackbar.show(title: '오류', message: '자신에게 메이트 요청을 보낼 수 없습니다.');
       } else { // 사용자를 찾을 수 없는 경우
-        Get.snackbar('오류', '해당 이메일의 사용자를 찾을 수 없습니다.');
+        CustomSnackbar.show(title: '오류', message: '해당 이메일의 사용자를 찾을 수 없습니다.');
       }
     } catch (e) {
       // 에러 처리
       print('Error sending mate request: $e');
-      Get.snackbar('오류', '메이트 요청 중 오류가 발생했습니다.');
+      CustomSnackbar.show(title: '오류', message: '메이트 요청 중 오류가 발생했습니다.');
     }
   }
 

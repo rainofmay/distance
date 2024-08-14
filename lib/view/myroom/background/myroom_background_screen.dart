@@ -15,7 +15,7 @@ import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class MyroomBackgroundScreen extends StatelessWidget {
-  final MyroomViewModel myroomViewModel = Get.put(MyroomViewModel());
+  final MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
   MyroomBackgroundScreen({super.key});
 
   Widget _progressing(BuildContext context) {
@@ -177,9 +177,9 @@ class MyroomBackgroundScreen extends StatelessWidget {
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
               children: [
-                Icon(Icons.text_format_rounded, size: 17, color: WHITE),
+                const Icon(Icons.text_format_rounded, size: 17, color: WHITE),
                 const SizedBox(width: 8),
-                Text('Words', style: TextStyle(color: WHITE)),
+                const Text('Words', style: TextStyle(color: WHITE)),
               ],
             ),
             Transform.scale(
@@ -188,7 +188,6 @@ class MyroomBackgroundScreen extends StatelessWidget {
                 activeColor: PRIMARY_COLOR,
                 value: myroomViewModel.isBackdropWordEnabled.value,
                 onChanged: (value) {
-                  // update as necessary
                   myroomViewModel.updateBackdropWordChange(value);
                 },
               )),
@@ -207,7 +206,7 @@ class MyroomBackgroundScreen extends StatelessWidget {
           opacity: 0.65,
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.75,
+            height: MediaQuery.of(context).size.height * 0.68,
             child: Stack(children: [
               Positioned.fill(
                   child: SingleChildScrollView(
@@ -235,16 +234,10 @@ class MyroomBackgroundScreen extends StatelessWidget {
                 right: 0,
                 child: OkCancelButtons(
                   onPressed: () {
-                    // 현재 화면을 pop하여 이전 화면으로 이동
                     Navigator.pop(context);
                   },
-                  onCancelPressed: () {
-                    // 저장요소 취소
-                    Navigator.pop(context);
-                  },
-                  okText: '저장',
-                  okTextColor: WHITE,
-                  cancelText: '취소',
+                  okText: '확인',
+                  okTextColor: PRIMARY_LIGHT,
                 ),
               ),
             ]),

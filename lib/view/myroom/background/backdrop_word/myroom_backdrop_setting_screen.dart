@@ -1,11 +1,14 @@
+import 'dart:typed_data';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/widgets/custom_alert_dialog.dart';
 import 'package:mobile/widgets/glass_morphism.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class QuoteSettingsDialog extends StatelessWidget {
   final MyroomViewModel viewModel = Get.find<MyroomViewModel>();
@@ -17,8 +20,8 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Center(
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: GlassMorphism(
             blur: 1,
             opacity: 0.65,
@@ -54,11 +57,18 @@ class QuoteSettingsDialog extends StatelessWidget {
                           )),
                     ),
                     OkCancelButtons(
-                      onPressed: () {
+                      cancelText: '닫기',
+                      onCancelPressed: () {
                         Navigator.pop(context);
                       },
-                      okText: '확인',
-                      okTextColor: WHITE,
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if (viewModel.isBackdropWordEnabled.value == false) {
+                          _optionDialog(context);
+                        }
+                      },
+                      okText: '보이기',
+                      okTextColor: PRIMARY_LIGHT,
                     ),
                   ],
                 ),
@@ -151,40 +161,46 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Words of the day', style: TextStyle(color: WHITE)),
+        const Text('Words of the day', style: TextStyle(color: WHITE)),
         Obx(() => TextFormField(
-          initialValue: viewModel.currentQuote.quote,
-          style: TextStyle(color: WHITE, fontSize: 12),
-          cursorColor: PRIMARY_LIGHT,
-          decoration: InputDecoration(
-            hintText: '보이고 싶은 말을 적어보세요.',
-            hintStyle: TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
-            ),
-          ),
-          onChanged: (value) => viewModel.updateCustomQuote(value),
-          autocorrect: false,
-          // 자동 수정 비활성화
-          enableSuggestions: false, // 추천 단어 기능 비활성화
-        )),
+              // controller: viewModel.wordsController,
+              initialValue: viewModel.currentQuote.quote,
+              style: TextStyle(color: WHITE, fontSize: 12),
+              cursorColor: PRIMARY_LIGHT,
+              decoration: InputDecoration(
+                hintText: '보이고 싶은 말을 적어보세요.',
+                hintStyle: const TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
+                ),
+              ),
+              onChanged: (value) {
+                viewModel.updateCustomQuote(value);
+              },
+              autocorrect: false,
+              // 자동 수정 비활성화
+              enableSuggestions: false, // 추천 단어 기능 비활성화
+            )),
         SizedBox(height: 8),
-        Text('Who', style: TextStyle(color: WHITE)),
+        Text('Who', style: const TextStyle(color: WHITE)),
         Obx(() => TextFormField(
-          initialValue: viewModel.currentQuote.writer,
-          style: TextStyle(color: WHITE, fontSize: 12),
-          decoration: InputDecoration(
-            hintText: '누구의 말인가요?',
-            hintStyle: TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
-            focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
-            ),
-          ),
-          onChanged: (value) => viewModel.updateCustomQuoteAuthor(value),
-          autocorrect: false,
-          // 자동 수정 비활성화
-          enableSuggestions: false, // 추천 단어 기능 비활성화
-        )),
+              // controller: viewModel.writerController,
+              initialValue: viewModel.currentQuote.writer,
+              style: const TextStyle(color: WHITE, fontSize: 12),
+              decoration: InputDecoration(
+                hintText: '누구의 말인가요?',
+                hintStyle: const TextStyle(color: TRANSPARENT_WHITE, fontSize: 12),
+                focusedBorder: UnderlineInputBorder(
+                  borderSide:
+                      BorderSide(color: PRIMARY_LIGHT), // 활성 상태일 때의 밑줄 색상
+                ),
+              ),
+              onChanged: (value) => viewModel.updateCustomQuoteAuthor(value),
+              autocorrect: false,
+              // 자동 수정 비활성화
+              enableSuggestions: false, // 추천 단어 기능 비활성화
+            )),
       ],
     );
   }
@@ -193,7 +209,7 @@ class QuoteSettingsDialog extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('폰트 크기', style: TextStyle(color: WHITE)),
+        const Text('폰트 크기', style: TextStyle(color: WHITE)),
         SliderTheme(
           data: SliderThemeData(
             activeTrackColor: PRIMARY_LIGHT,
@@ -213,7 +229,36 @@ class QuoteSettingsDialog extends StatelessWidget {
       ],
     );
   }
-
+  void _optionDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+            title: '설정',
+            width: 120,
+            height: 30,
+            contents: Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: const Text('설정하신 문구를 화면에 띄울까요?',
+                  style: TextStyle(color: WHITE)),
+            ),
+            actionWidget: OkCancelButtons(
+                okText: '확인',
+                okTextColor: PRIMARY_LIGHT,
+                cancelText: '취소',
+                onPressed: () {
+                  viewModel.updateBackdropWordChange(
+                      !viewModel
+                          .isBackdropWordEnabled.value);
+                  Navigator.of(context).pop();
+                },
+              onCancelPressed: () {
+                Navigator.of(context).pop();
+              }
+            ));
+      },
+    );
+  }
   void _showColorPicker(BuildContext context, {required bool isBackdrop}) {
     showDialog(
       context: context,
@@ -241,7 +286,9 @@ class QuoteSettingsDialog extends StatelessWidget {
             OkCancelButtons(
                 okText: '확인',
                 okTextColor: BLACK,
-                onPressed: () => Navigator.of(context).pop())
+                onPressed: () {
+                  Navigator.of(context).pop();
+                })
           ],
         );
       },

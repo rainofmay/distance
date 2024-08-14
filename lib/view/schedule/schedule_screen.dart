@@ -41,7 +41,7 @@ class ScheduleScreen extends StatelessWidget {
         appbarTitle: '일 정',
         backgroundColor: DARK_BACKGROUND,
         contentColor: PRIMARY_COLOR,
-        titleSpacing: 25,
+        titleSpacing: 20,
       ),
       body: SafeArea(
         child: SingleChildScrollView(

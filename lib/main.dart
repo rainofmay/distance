@@ -9,12 +9,12 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
-import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'style.dart' as mainstyle;
 import 'package:intl/date_symbol_data_local.dart';
@@ -64,14 +64,13 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
-  final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel());
+  final MyroomViewModel myRoomViewModel = Get.put(MyroomViewModel(), permanent: true);
   final notificationService = NotificationService();
   final supabase = Supabase.instance.client;
 
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
     notificationService.init();

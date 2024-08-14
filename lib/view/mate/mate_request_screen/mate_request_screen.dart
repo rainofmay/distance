@@ -137,21 +137,21 @@ class MateRequestsScreen extends StatelessWidget {
                         backgroundColor: GREY.withOpacity(0.5),
                         backgroundImage: NetworkImage(request.profileUrl ?? ''),
                       ),
-                      title: Text(request.name ?? '', style: TextStyle(fontWeight: FontWeight.bold)),
-                      subtitle: Text(request.introduction ?? '', style: TextStyle(color: DARK_UNSELECTED)),
+                      title: Text(request.name ?? '', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                      subtitle: Text(request.introduction ?? '', style: const TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           ElevatedButton(
                             onPressed: () => viewModel.acceptMate(request.id!),
                             style: ElevatedButton.styleFrom(backgroundColor: PRIMARY_COLOR),
-                            child: const Text('승인', style: TextStyle(color: WHITE)),
+                            child: const Text('승인', style: TextStyle(color: BLACK)),
                           ),
                           const SizedBox(width: 8),
                           OutlinedButton(
                             onPressed: () => viewModel.rejectMate(request.id!),
                             style: OutlinedButton.styleFrom(side: BorderSide(color: GREY)),
-                            child: const Text('거절', style: TextStyle(color: GREY)),
+                            child: const Text('거절', style: TextStyle(color: BLACK)),
                           ),
                         ],
                       ),

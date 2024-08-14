@@ -81,6 +81,7 @@ class MusicThemesScreen extends StatelessWidget {
                                                 child: Text('이 음악을 내 플레이리스트로 바꿀까요?', style: TextStyle(color: WHITE)),
                                               ),
                                               OkCancelButtons(
+                                                okTextColor: PRIMARY_LIGHT,
                                                   okText: '확인', onPressed: () async {
                                                 await musicViewModel.setCurrentPlayList(item);
                                                 if (!context.mounted) return;

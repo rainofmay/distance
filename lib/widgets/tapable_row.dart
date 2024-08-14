@@ -28,7 +28,7 @@ class TapableRow extends StatelessWidget {
         child: Row(
           children: [
             widget,
-            const SizedBox(width: 10),
+            const SizedBox(width: 12),
             Text(title,
                 style: TextStyle(
                     fontSize: fontSize ?? 16, color: fontColor ?? BLACK)),

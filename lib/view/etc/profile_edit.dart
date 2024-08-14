@@ -9,6 +9,7 @@ import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 
 import '../../common/const/colors.dart';
@@ -66,9 +67,7 @@ class _ProfileEditState extends State<ProfileEdit> {
         widget.viewModel.isScheduleOpen.value);
 
     // 저장 완료 메시지 표시
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('프로필이 저장되었습니다.')),
-    );
+    CustomSnackbar.show(title: '프로필 저장', message: '프로필이 저장되었습니다.');
 
     // 저장 후 이전 화면으로 돌아가기
     Navigator.of(context).pop();
@@ -97,7 +96,6 @@ class _ProfileEditState extends State<ProfileEdit> {
             const SizedBox(height: 50),
             buildSettingsToggle(),
             const SizedBox(height: 50),
-            saveButton(),
           ],
         ),
       ),
@@ -327,27 +325,4 @@ class _ProfileEditState extends State<ProfileEdit> {
       ],
     );
   }
-
-  Widget saveButton() {
-    return  GestureDetector(
-      onTap: onSavePressed,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 0),
-        child: Container(
-          width: 120,
-          height: 50,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: DARK,
-          ),
-          child: Center(
-            child: Text('저장',
-                style: TextStyle(color: PRIMARY_LIGHT),
-                textAlign: TextAlign.center),
-          ),
-        ),
-      ),
-    );
-  }
-
 }

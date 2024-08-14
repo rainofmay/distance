@@ -46,7 +46,7 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
           opacity: 0.65,
           child: SizedBox(
             width: MediaQuery.of(context).size.width * 0.8,
-            height: MediaQuery.of(context).size.height * 0.69,
+            height: MediaQuery.of(context).size.height * 0.68,
             child: Obx(() => Stack(children: [
               Positioned(
                   child: Row(
@@ -96,6 +96,7 @@ class _MyroomMusicScreenState extends State<MyroomMusicScreen> {
                 right: 0,
                 child: OkCancelButtons(
                   okText: '확인',
+                  okTextColor: PRIMARY_LIGHT,
                   onPressed: () {
                     Navigator.of(context).pop();
                   },

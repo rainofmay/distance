@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
+import 'package:mobile/widgets/custom_alert_dialog.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class MotivationalQuote extends GetView<MyroomViewModel> {
   MotivationalQuote({super.key});
@@ -35,25 +38,25 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('인용문 변경'),
-          content: Text('인용문을 랜덤으로 변경하시겠습니까?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('취소'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+        return CustomAlertDialog(
+            title: '변경',
+            width: 120,
+            height: 30,
+            contents: Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Text('문구를 무작위로 변경하시겠어요?', style: TextStyle(color: WHITE)),
             ),
-            TextButton(
-              child: Text('확인'),
-              onPressed: () {
-                controller.updateQuote();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+            actionWidget: OkCancelButtons(
+                okText: '확인',
+                okTextColor: PRIMARY_LIGHT,
+                cancelText: '취소',
+                onCancelPressed: () {
+                  Navigator.of(context).pop();
+                },
+                onPressed: () {
+                  controller.updateQuote();
+                  Navigator.of(context).pop();
+                }));
       },
     );
   }
@@ -74,26 +77,26 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Obx(() => Text(
-                  controller.currentQuote.quote,
-                  style: TextStyle(
-                    color: controller.quoteFontColor.value,
-                    fontSize: controller.quoteFontSize.value,
-                    fontWeight: FontWeight.bold,
-                    fontFamily: controller.quoteFont.value,
-                  ),
-                  textAlign: TextAlign.center,
-                )),
+                      controller.currentQuote.quote,
+                      style: TextStyle(
+                        color: controller.quoteFontColor.value,
+                        fontSize: controller.quoteFontSize.value,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: controller.quoteFont.value,
+                      ),
+                      textAlign: TextAlign.center,
+                    )),
                 SizedBox(height: 8),
                 Obx(() => Text(
-                  "- ${controller.currentQuote.writer}",
-                  style: TextStyle(
-                    color: controller.quoteFontColor.value,
-                    fontSize: controller.quoteFontSize.value - 4,
-                    fontStyle: FontStyle.italic,
-                    fontFamily: controller.quoteFont.value,
-                  ),
-                  textAlign: TextAlign.right,
-                )),
+                      "- ${controller.currentQuote.writer}",
+                      style: TextStyle(
+                        color: controller.quoteFontColor.value,
+                        fontSize: controller.quoteFontSize.value - 4,
+                        fontStyle: FontStyle.italic,
+                        fontFamily: controller.quoteFont.value,
+                      ),
+                      textAlign: TextAlign.right,
+                    )),
               ],
             ),
           );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 
 class LoginViewModel extends GetxController {
   final LoginProvider _provider;
@@ -44,37 +45,31 @@ class LoginViewModel extends GetxController {
 
     bool isLoginSuccess = await _provider.loginWithEmail(emailValue, passwordValue);
 
-    // if (!context.mounted) return;
-    // if (!isLoginSuccess) {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     content: Text('로그인에 실패했습니다.'),
-    //   ));
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    //     content: Text('로그인 되었습니다.'),
-    //   ));
-    // }
+    if (!context.mounted) return;
+    if (isLoginSuccess) {
+      CustomSnackbar.show(title: 'Email 로그인', message: 'Email 계정으로 로그인 되었습니다.');
+    } else {
+      CustomSnackbar.showLoginError();
+    }
   }
 
   Future<void> signInWithKakao() async {
     try {
       await _provider.signInWithKakao();
-      // Get.snackbar('성공', '카카오 로그인 되었습니다.');
       update();
       update();
     } catch (e) {
-      Get.snackbar('오류', '카카오 로그인에 실패했습니다.');
+      CustomSnackbar.showLoginError();
     }
   }
 
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       await _provider.signInWithGoogle(context);
-      // Get.snackbar('성공', '구글 로그인 되었습니다.');
       update();
 
     } catch (e) {
-      Get.snackbar('오류', '구글 로그인에 실패했습니다.');
+      CustomSnackbar.showLoginError();
     }
   }
 
@@ -85,7 +80,7 @@ class LoginViewModel extends GetxController {
       viewModel.logout();
       update();
     } catch (e) {
-      Get.snackbar('오류', '로그아웃에 실패했습니다.');
+      print('$e');
     }
   }
 

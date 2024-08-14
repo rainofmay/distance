@@ -160,7 +160,7 @@ class MateViewModel extends GetxController {
       await _mateRepository.handleAccept(requestId);
       pendingMateProfiles.removeWhere((mate) => mate.value.id == requestId); // 요청 제거
       pendingMateProfiles.refresh(); // 변경 사항 알림
-      Get.snackbar("친구 요청", "승인 완료!");
+      // Get.snackbar("친구 요청", "승인 완료!");
     } catch (e) {
       // 에러 처리
       print('Error accepting mate request: $e');
@@ -172,7 +172,7 @@ class MateViewModel extends GetxController {
       await _mateRepository.handleReject(requestId);
       pendingMateProfiles.removeWhere((mate) => mate.value.id == requestId); // 요청 제거
       pendingMateProfiles.refresh(); // 변경 사항 알림
-      Get.snackbar("친구 요청", "거절");
+      // Get.snackbar("친구 요청", "거절");
     } catch (e) {
       // 에러 처리
       print('Error accepting mate request: $e');
@@ -215,7 +215,7 @@ class MateViewModel extends GetxController {
     update();
 
     // 로그아웃 성공 메시지 표시 (선택사항)
-    Get.snackbar("로그아웃", "성공적으로 로그아웃되었습니다.");
+    // Get.snackbar("로그아웃", "성공적으로 로그아웃되었습니다.");
 
     // 로그인 페이지로 이동 (필요한 경우)
     // Get.offAll(() => LoginPage());

@@ -46,7 +46,7 @@ class ScheduleForm extends StatelessWidget {
                     ]),
                     TextButton(
                       child: const Text('확인',
-                          style: const TextStyle(color: WHITE)),
+                          style: TextStyle(color: WHITE)),
                       onPressed: () {
                         // _sectionColor = viewModel.colorIndex;
                         Navigator.of(context).pop();

@@ -44,9 +44,9 @@ class _MateScreenState extends State<MateScreen> {
       backgroundColor: WHITE,
       appBar: CustomAppBar(
         appbarTitle: '메이트',
-        backgroundColor: WHITE,
-        contentColor: BLACK,
-        titleSpacing: 25,
+        backgroundColor: DARK_BACKGROUND,
+        contentColor: PRIMARY_LIGHT,
+        titleSpacing: 20,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
@@ -57,7 +57,7 @@ class _MateScreenState extends State<MateScreen> {
                   }
                   AuthHelper.navigateToLoginScreen(context, pressed);
                 },
-                icon: Icon(CupertinoIcons.person_add)),
+                icon: const Icon(CupertinoIcons.person_add, color: PRIMARY_LIGHT, size: 21)),
           ),
         ],
       ),
@@ -67,7 +67,7 @@ class _MateScreenState extends State<MateScreen> {
             height: 100,
             // color: Colors.grey[100],
             child: Padding(
-              padding: const EdgeInsets.only(top: 8, left: 16.0, right: 16),
+              padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -77,36 +77,55 @@ class _MateScreenState extends State<MateScreen> {
                       child: Column(
                         children: [
                           GestureDetector(
-                            // 프로필 확대해서 보는 화면
-                            onTap: () {},
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: widget.viewModel.profileImageUrl.value ==
-                                      null
-                                  ? Image.asset(
-                                      'assets/images/themes/gomzy_theme.jpg',
-                                      fit: BoxFit.cover,
-                                      width: 60,
-                                      height: 60,
-                                    )
-                                  : CachedNetworkImage(
-                                      // CachedNetworkImage 사용
-                                      imageUrl: widget
-                                          .viewModel.profileImageUrl.value,
-                                      fit: BoxFit.cover,
-                                      width: 60,
-                                      height: 60,
-                                      placeholder: (context, url) =>
-                                          CustomCircularIndicator(size: 30.0),
-                                      // 로딩 표시
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
+                            onTap: () async {
+                              pressed() {
+                                Get.to(() => ProfileEdit(), preventDuplicates: true);
+                              }
+
+                              AuthHelper.navigateToLoginScreen(context, pressed);
+                            },
+                            child: Stack(
+                              children: [ClipRRect(
+                                borderRadius: BorderRadius.circular(50.0),
+                                child: widget.viewModel.profileImageUrl.value == null
+                                    ? Image.asset(
                                         'assets/images/themes/gomzy_theme.jpg',
                                         fit: BoxFit.cover,
-                                        width: 100,
-                                        height: 100,
-                                      ), // 에러 시 기본 이미지
+                                        width: 55,
+                                        height: 55,
+                                      )
+                                    : CachedNetworkImage(
+                                        // CachedNetworkImage 사용
+                                        imageUrl: widget
+                                            .viewModel.profileImageUrl.value,
+                                        fit: BoxFit.cover,
+                                        width: 60,
+                                        height: 60,
+                                        placeholder: (context, url) =>
+                                            CustomCircularIndicator(size: 30.0),
+                                        // 로딩 표시
+                                        errorWidget: (context, url, error) =>
+                                            Image.asset(
+                                          'assets/images/themes/gomzy_theme.jpg',
+                                          fit: BoxFit.cover,
+                                          width: 100,
+                                          height: 100,
+                                        ), // 에러 시 기본 이미지
+                                      ),
+                              ),
+                                Positioned(
+                                  right: 3,
+                                  bottom: 3,
+                                  child: Container(
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      color: DARK_UNSELECTED,
+                                      shape: BoxShape.circle,
                                     ),
+                                    child: Icon(Icons.edit_rounded, size: 12, color: WHITE),
+                                  ),
+                                ),
+                              ]
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -119,34 +138,30 @@ class _MateScreenState extends State<MateScreen> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 8),
+                  // const SizedBox(width: 8),
                   Obx(
                     () => Expanded(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          const SizedBox(
-                            width: 20,
-                          ),
+                          const SizedBox(width: 16),
                           Text(
                               widget.viewModel.userCurrentActivityText.value
                                       .isEmpty
-                                  ? "⭐️"
+                                  ? ""
                                   : widget
                                       .viewModel.userCurrentActivityEmoji.value,
                               style:
                                   const TextStyle(fontSize: 16, color: BLACK)),
-                          const SizedBox(
-                            width: 12,
-                          ),
+                          const SizedBox(width: 12),
                           Flexible(
                             child: Text(
                               widget.viewModel.userCurrentActivityText.value
                                       .isEmpty
-                                  ? "소개를 작성해주세요!"
+                                  ? ""
                                   : widget
                                       .viewModel.userCurrentActivityText.value,
-                              style: const TextStyle(fontSize: 16, color: BLACK),
+                              style: TextStyle(fontSize: 14, color: BLACK),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),
@@ -155,36 +170,6 @@ class _MateScreenState extends State<MateScreen> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 80,
-                    height: 35,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: GREY.withOpacity(0.3),
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: GestureDetector(
-                      behavior: HitTestBehavior.opaque,
-                      onTap: () {
-                        pressed() {
-                          Get.to(() => ProfileEdit(), preventDuplicates: true);
-                        }
-
-                        AuthHelper.navigateToLoginScreen(context, pressed);
-                      },
-                      child: const Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.edit, size: 17, color: DARK_UNSELECTED),
-                          SizedBox(width: 5),
-                          Text('Edit',
-                              style: TextStyle(
-                                  fontSize: 13, color: DARK_UNSELECTED))
-                        ],
-                      ),
-                    ),
-                  )
                 ],
               ),
             ),

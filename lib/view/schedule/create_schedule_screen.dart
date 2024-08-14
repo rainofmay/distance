@@ -9,6 +9,7 @@ import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CreateScheduleScreen extends StatelessWidget {
@@ -49,13 +50,10 @@ class CreateScheduleScreen extends StatelessWidget {
           contentColor: WHITE,
           actions: [
             Obx(() => TextButton(
-                  onPressed: () async {
-                    final supabase = Supabase.instance.client;
-                    await supabase.from('notifications').insert({
-                      'user_id': supabase.auth.currentUser!.id,
-                      'body': '테스트입니다.'
-                    });
+                  onPressed: () {
+                    if (!context.mounted) return;
                     viewModel.isFormValid ? _onSavePressed(context) : null;
+                    CustomSnackbar.show(title: '테스트', message: '메세지');
                   },
                   child: Text(
                     '저장',

@@ -11,6 +11,8 @@ import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/borderline.dart';
+import 'package:mobile/widgets/custom_alert_dialog.dart';
+import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 class SoundThemesScreen extends StatelessWidget {
   final StoreSoundViewModel storeSoundViewModel =
@@ -105,7 +107,7 @@ class SoundThemesScreen extends StatelessWidget {
                               MaterialPageRoute(
                                   builder: (context) => SoundCopyright()));
                           // Get.to(SoundCopyright());
-                        }, icon: const Icon(Icons.copyright, color: TRANSPARENT_WHITE, size: 18))
+                        }, icon: const Icon(Icons.copyright, color: TRANSPARENT_WHITE, size: 19))
                       ],
                     ),
                   ),
@@ -114,10 +116,10 @@ class SoundThemesScreen extends StatelessWidget {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('미리듣기',
+                        Text('듣기',
                             style: TextStyle(
                                 fontSize: 10, color: TRANSPARENT_WHITE)),
-                        SizedBox(width: 28),
+                        SizedBox(width: 45),
                         Text('담기',
                             style: TextStyle(
                                 fontSize: 10, color: TRANSPARENT_WHITE)),
@@ -159,7 +161,11 @@ class SoundThemesScreen extends StatelessWidget {
                                     IconButton(
                                         onPressed: () async {
                                           if (_containsMusicInfoById(soundViewModel.soundInfoList, musicInfo.id) == false) {
-                                          await soundViewModel.addSoundToUserList(musicInfo);
+                                            if (soundViewModel.soundInfoList.length < 4) {
+                                              await soundViewModel.addSoundToUserList(musicInfo); }
+                                            else {
+                                              return _cautionDialog(context);
+                                            }
                                           }
                                           else {
                                             MusicInfo newValue = findMusicInfoById(soundViewModel.soundInfoList, musicInfo.id)!;
@@ -202,53 +208,26 @@ bool _containsMusicInfoById(List<MusicInfo> musicList, int targetId) {
   return musicList.any((musicInfo) => musicInfo.id == targetId);
 }
 
-// void _alertDialog(BuildContext context, MusicInfo musicInfo) {
-//   final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
-//   showDialog(
-//       context: context,
-//       barrierDismissible: false,
-//       builder: (BuildContext context) {
-//         return AlertDialog(
-//           shape: RoundedRectangleBorder(
-//             borderRadius: BorderRadius.all(Radius.circular(6)),
-//           ),
-//           backgroundColor: BLACK,
-//           contentPadding: EdgeInsets.only(left: 8, top: 15),
-//           actionsPadding: EdgeInsets.only(top: 15),
-//           title: Text('담 기', style: TextStyle(fontSize: 15, color: WHITE)),
-//           content: StatefulBuilder(
-//               builder: (BuildContext context, StateSetter setState) {
-//                 return SingleChildScrollView(
-//                   child: Column(
-//                     mainAxisAlignment: MainAxisAlignment.end,
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Padding(
-//                         padding: const EdgeInsets.only(left: 16.0),
-//                         child: const Text('내 리스트에 담으시겠습니까?',
-//                             style: TextStyle(fontSize: 13, color: WHITE)),
-//                       ),
-//                     ],
-//                   ),
-//                 );
-//               }),
-//           actions: [
-//             OkCancelButtons(
-//               okText: '확인',
-//               okTextColor: PRIMARY_COLOR,
-//               onPressed: () async {
-//                 await soundViewModel.addSoundToUserList(musicInfo);
-//                 if (!context.mounted) return;
-//                 Navigator.of(context).pop();
-//               },
-//               cancelText: '취소',
-//             )
-//           ],
-//         );
-//       });
-// }
-
-void addMySound() {
-  // 내 사운드 즐겨찾기에 추가
-  // Pro는 3개 ~ 10개, 일반은 2개
+void _cautionDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return CustomAlertDialog(
+          title: '알림',
+          width: 110,
+          height: 20,
+          contents: Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: const Text('최대 4개까지 담을 수 있습니다.',
+                style: TextStyle(color: WHITE)),
+          ),
+          actionWidget: OkCancelButtons(
+              okText: '확인',
+              okTextColor: PRIMARY_LIGHT,
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+          ));
+    },
+  );
 }

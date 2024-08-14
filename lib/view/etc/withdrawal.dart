@@ -49,12 +49,10 @@ class _WithdrawalState extends State<Withdrawal> {
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                   SizedBox(height: 32),
                   Text(
-                      '1. 사용자가 구매 및 설정한 배경, 음악, 프로필, 메이트 등에 관한 모든 정보는 사라지며 복구할 수 없습니다.',
+                      '1. 사용자가 설정한 배경, 음악, 프로필, 메이트 등에 관한 모든 정보는 사라지며 복구할 수 없습니다.',
                       style: TextStyle(fontSize: 16),
                       softWrap: true),
-                  SizedBox(height: 32),
-                  Text('2. 프리미엄 모델을 구매했더라도 탈퇴 시에는 프리미엄에서 해지되며, 복구할 수 없습니다.',
-                      style: TextStyle(fontSize: 16), softWrap: true),
+
                   SizedBox(height: 32),
                   Text('3. 본 애플리케이션 서비스는 귀하의 개인정보 저장, 활용 등의 행위를 일체 하지 않습니다.',
                       style: TextStyle(fontSize: 16), softWrap: true),

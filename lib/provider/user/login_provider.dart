@@ -1,11 +1,10 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 
 class LoginProvider {
   static final supabase = Supabase.instance.client;
@@ -41,7 +40,6 @@ class LoginProvider {
     try {
       GoogleSignInAccount? account = await googleSignIn.signIn();
       final GoogleSignInAuthentication? googleAuth = await account?.authentication;
-
       if (googleAuth == null || googleAuth.idToken == null || googleAuth.accessToken == null) {
         throw Exception('로그인 실패');
       }
@@ -52,7 +50,7 @@ class LoginProvider {
       String? profileUrl = account?.photoUrl;
 
       if (email == null) {
-        Get.snackbar('오류', '이메일 정보를 가져올 수 없습니다.');
+        CustomSnackbar.show(title: '오류', message: '이메일 정보를 가져올 수 없습니다.');
         return;
       }
 
@@ -60,20 +58,15 @@ class LoginProvider {
 
       if (userExists) {
         await loginUserWithGoogle(email, googleAuth.idToken!, googleAuth.accessToken!);
-        // Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+        CustomSnackbar.show(title: 'Google 로그인', message: 'Google 계정으로 로그인 되었습니다.');
       } else {
         await registerUserWithGoogle(email, name, profileUrl, googleAuth.idToken!, googleAuth.accessToken!);
-        Get.snackbar('회원가입 성공', 'Google 계정으로 회원가입되었습니다.');
+        CustomSnackbar.show(title: '회원가입 완료', message: 'Google 계정으로 회원가입 되었습니다.');
       }
-
-
-      // Get.offAll(() => HomeScreen());
 
     } catch (error) {
       print(error);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그인 실패'),
-      ));
+      // CustomSnackbar.show(title: '실패', message: '다시 시도해 주세요.');
     }
   }
 
@@ -97,7 +90,7 @@ class LoginProvider {
       );
 
     } catch (error) {
-      // print('Google 로그인 중 오류 발생: $error');
+      print('Google 로그인 중 오류 발생: $error');
       rethrow;
     }
   }
@@ -147,7 +140,7 @@ class LoginProvider {
       String? nickname = user.kakaoAccount?.profile?.nickname;
       String? profileUrl = user.kakaoAccount?.profile?.profileImageUrl;
       if (email == null) {
-        Get.snackbar('오류', '이메일 정보를 가져올 수 없습니다.');
+        CustomSnackbar.show(title: '오류', message: '이메일 정보를 가져올 수 없습니다.');
         return;
       }
 
@@ -155,15 +148,15 @@ class LoginProvider {
 
       if (userExists) {
         await loginKaKaoUser(email, token.accessToken);
-        // Get.snackbar('로그인 성공', '기존 계정으로 로그인되었습니다.');
+        CustomSnackbar.show(title: 'Kakao 로그인', message: 'Kakao 계정으로 로그인 되었습니다.');
       } else {
         await registerKaKaoUser(email, nickname, profileUrl ,token.accessToken);
-        Get.snackbar('회원가입 성공', '카카오 계정으로 회원가입되었습니다.');
+        CustomSnackbar.show(title: '회원가입 완료', message: 'Kakao 계정으로 회원가입 되었습니다.');
       }
 
     } catch (error) {
       print('카카오 로그인 실패 $error');
-      Get.snackbar('오류', '로그인을 다시 시도해 주세요.');
+      // CustomSnackbar.show(title: '오류', message: '로그인을 다시 시도해 주세요.');
     }
   }
 
@@ -255,14 +248,10 @@ class LoginProvider {
   Future<void> signOut(BuildContext context) async {
     try {
       await supabase.auth.signOut();
-      // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      //   content: Text('로그아웃 되었습니다.'),
-      // ));
+      CustomSnackbar.show(title: '로그아웃', message: '로그아웃 되었습니다.');
     } catch (error) {
       print(error);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('로그아웃에 실패했습니다.'),
-      ));
+      CustomSnackbar.show(title: '오류', message: '로그아웃에 실패했습니다.');
     }
   }
 }
