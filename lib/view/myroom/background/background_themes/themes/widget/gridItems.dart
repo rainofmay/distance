@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/util/ads/adController.dart';
-import 'package:mobile/view/mate/widget/custom_dialog.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_alert_dialog.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
@@ -81,26 +80,16 @@ Widget _buildImagePreview(
     ThemePicture picture, MyroomViewModel myroomViewModel) {
   return Container(
     color: Colors.grey[300],
-    child: Stack(
-      children: [
-        CachedNetworkImage( // CachedNetworkImage 사용
-          imageUrl: picture.thumbnailUrl,
-          fit: BoxFit.cover,
-          width: double.infinity,
-          height: double.infinity,
-          errorWidget: (context, url, error) => const Icon(Icons.error), // 에러 시 표시
-        ),
-        if (picture.isPaid) // 유료 이미지 표시 (기존 코드와 동일)
-          Positioned(
-            right: 10,
-            top: 10,
-            child: Icon(
-              Icons.lock,
-              color: Colors.yellow,
-              size: 20,
-            ),
-          ),
-      ],
+    child: CachedNetworkImage( // CachedNetworkImage 사용
+      imageUrl: picture.thumbnailUrl,
+      fit: BoxFit.cover,
+      width: double.infinity,
+      height: double.infinity,
+      errorWidget: (context, url, error) {
+        print("Image loading error: $url, $error");
+        return CustomCircularIndicator(size: 30);
+        //return RetryWidget();
+      }
     ),
   );
 }

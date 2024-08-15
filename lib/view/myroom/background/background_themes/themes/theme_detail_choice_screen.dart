@@ -32,7 +32,7 @@ class ThemeDetailChoiceScreen extends StatelessWidget {
               onPressed: () {
                 _exitDialog(context);
               },
-              icon: Icon(Icons.close_rounded))
+              icon: const Icon(Icons.close_rounded))
         ],
       ),
       body: Obx(() => gridContents(viewModel.themeContents)),

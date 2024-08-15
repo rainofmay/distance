@@ -71,7 +71,7 @@ class AuthHelper {
     String? userEmail = await getCurrentUserEmail();
     if (userEmail == null) {
       if (!context.mounted) return;
-      return customDialog(context, 40, '로그인', Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
+      return customDialog(context, 40, '로그인', const Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
           OkCancelButtons(okText: '확인', okTextColor: PRIMARY_COLOR, onPressed: () {
             Navigator.of(context).pop();
             Get.to(() => LoginScreen(), preventDuplicates: true);

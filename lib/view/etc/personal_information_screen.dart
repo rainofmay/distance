@@ -34,7 +34,7 @@ class PersonalInformationScreen extends StatelessWidget {
             const SizedBox(height: 20),
             TapableRow(
               widget: const Icon(CupertinoIcons.person_circle),
-              title: '프로필 수정',
+              title: '프로필 편집',
               onTap: () {
                 Get.to(() => ProfileEdit(), preventDuplicates: true);
               },

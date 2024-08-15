@@ -45,7 +45,7 @@ class _StatusManageSchedullingState extends State<StatusManageSchedulling> {
     return CustomDialog(title: "사용자 상태 지정", children: [
       Column(
         children: [
-          Container(
+          SizedBox(
               height: 66.0,
               child: Row(
                 children: [

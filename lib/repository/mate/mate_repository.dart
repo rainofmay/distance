@@ -1,5 +1,4 @@
-
-import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/provider/mate/mate_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
@@ -14,8 +13,22 @@ class MateRepository {
     required MateProvider mateProvider,
   }) : _mateProvider = mateProvider;
 
-  onInit() {
 
+  Future<List<Map<String, String>>> fetchNotificationList() async {
+    try {
+      final rawNotifications = await _mateProvider.getNotificationList();
+
+      return rawNotifications.map((n) {
+        final DateTime date = DateTime.parse(n['created_at']);
+        return {
+          'body': n['body'] as String,
+          'date': DateFormat('yyyy. MM. dd.').format(date),
+        };
+      }).toList();
+    } catch (error) {
+      print('Repository error fetching notifications: $error');
+      rethrow;
+    }
   }
 
   //친구 요청을 받지 않은 친구들
@@ -77,7 +90,7 @@ class MateRepository {
   }
 
 
-  //친구요청 보내기
+  //친구 요청 보내기
   Future<void> sendMateRequestByEmail(String email) async {
     try {
       final userEmail = await AuthHelper.getCurrentUserEmail();
@@ -144,9 +157,17 @@ class MateRepository {
 
   //친구 승인
   Future<void> handleAccept(String requestId) async {
+    try {
     await _mateProvider.acceptMateRequest(requestId);
+    await mateAcceptNotification(requestId); // 승인 Notification
+    CustomSnackbar.show(title: '완료', message: '메이트 요청이 승인되었습니다.');
     fetchMyMates();
-  }
+    }
+        catch (e) {
+          print('$e');
+        }
+   }
+
   //친구 거절
   Future<void> handleReject(String requestId) async {
     await _mateProvider.rejectMateRequest(requestId);
@@ -163,9 +184,39 @@ class MateRepository {
         'body': '$senderNickname님께서 메이트 요청을 보냈습니다.'
       });
 
-      print('Friend request notification sent successfully');
+      print('Mate request notification sent successfully');
     } catch (error) {
-      print('Error sending friend request notification: $error');
+      print('Error sending mate request notification: $error');
+    }
+  }
+
+  /* 친구 승인 시 Notification */
+  Future<void> mateAcceptNotification(String requestId) async {
+    final accepterEmail = await AuthHelper.getCurrentUserEmail();
+    final acceptId = await getUserIdByEmail(accepterEmail!);
+    final acceptName = await AuthHelper.getOtherUserNickname(acceptId!);
+
+    try {
+      // final requestData = await supabase
+      //     .from('users')
+      //     .select('nickname')
+      //     .eq('id', requestId)
+      //     .single();
+      //
+      // if (requestData == null) {
+      //   throw Exception('Requester not found');
+      // }
+      //
+      // final requesterName = requestData['nickname'] as String;
+
+      await supabase.from('notifications').insert({
+        'sender_id': acceptId,  // 승인하는 사용자
+        'receiver_id': requestId,   // 요청했던 사용자(에게 알림이 가야함)
+        'body': '$acceptName님이 메이트 요청을 승인했습니다.'
+      });
+
+  } catch(error) {
+      print('Error requesting mate request notification: $error');
     }
   }
 
@@ -174,3 +225,4 @@ class MateRepository {
     await fetchMyMates();
   }
 }
+
