@@ -73,100 +73,101 @@ class _MateScreenState extends State<MateScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Obx(
-                    () => SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              pressed() {
-                                Get.to(() => ProfileEdit(), preventDuplicates: true);
-                              }
+                    () => GestureDetector(
+                      onTap: () async {
+                        pressed() {
+                          Get.to(() => ProfileEdit(), preventDuplicates: true);
+                        }
 
-                              AuthHelper.navigateToLoginScreen(context, pressed);
-                            },
-                            child: Stack(
-                              children: [ClipRRect(
-                                borderRadius: BorderRadius.circular(50.0),
-                                child: widget.viewModel.profileImageUrl.value == null
-                                    ? Image.asset(
-                                        'assets/images/themes/gomzy_theme.jpg',
-                                        fit: BoxFit.cover,
-                                        width: 55,
-                                        height: 55,
-                                      )
-                                    : CachedNetworkImage(
-                                        // CachedNetworkImage 사용
-                                        imageUrl: widget
-                                            .viewModel.profileImageUrl.value,
-                                        fit: BoxFit.cover,
-                                        width: 60,
-                                        height: 60,
-                                        placeholder: (context, url) =>
-                                            CustomCircularIndicator(size: 30.0),
-                                        // 로딩 표시
-                                        errorWidget: (context, url, error) =>
-                                            Image.asset(
-                                          'assets/images/themes/gomzy_theme.jpg',
-                                          fit: BoxFit.cover,
-                                          width: 100,
-                                          height: 100,
-                                        ), // 에러 시 기본 이미지
-                                      ),
-                              ),
-                                Positioned(
-                                  right: 3,
-                                  bottom: 3,
-                                  child: Container(
-                                    padding: EdgeInsets.all(2),
-                                    decoration: BoxDecoration(
-                                      color: DARK_UNSELECTED,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: Icon(Icons.edit_rounded, size: 12, color: WHITE),
-                                  ),
+                        AuthHelper.navigateToLoginScreen(context, pressed);
+                      },
+                      child: Stack(
+                        children: [ClipRRect(
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: widget.viewModel.profileImageUrl.value == null
+                              ? Image.asset(
+                                  'assets/images/themes/gomzy_theme.jpg',
+                                  fit: BoxFit.cover,
+                                  width: 55,
+                                  height: 55,
+                                )
+                              : CachedNetworkImage(
+                                  // CachedNetworkImage 사용
+                                  imageUrl: widget
+                                      .viewModel.profileImageUrl.value,
+                                  fit: BoxFit.cover,
+                                  width: 60,
+                                  height: 60,
+                                  placeholder: (context, url) =>
+                                      CustomCircularIndicator(size: 30.0),
+                                  // 로딩 표시
+                                  errorWidget: (context, url, error) =>
+                                      Image.asset(
+                                    'assets/images/themes/gomzy_theme.jpg',
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                  ), // 에러 시 기본 이미지
                                 ),
-                              ]
+                        ),
+                          Positioned(
+                            right: 3,
+                            bottom: 3,
+                            child: Container(
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: DARK_UNSELECTED,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Icon(Icons.edit_rounded, size: 12, color: PRIMARY_COLOR),
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          Text(
-                              widget.viewModel.name.value.isEmpty
-                                  ? ""
-                                  : widget.viewModel.name.value,
-                              style: const TextStyle(fontSize: 15)),
-                        ],
+                        ]
                       ),
                     ),
                   ),
-                  // const SizedBox(width: 8),
                   Obx(
                     () => Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          const SizedBox(width: 16),
-                          Text(
-                              widget.viewModel.userCurrentActivityText.value
-                                      .isEmpty
-                                  ? ""
-                                  : widget
-                                      .viewModel.userCurrentActivityEmoji.value,
-                              style:
-                                  const TextStyle(fontSize: 16, color: BLACK)),
-                          const SizedBox(width: 12),
-                          Flexible(
-                            child: Text(
-                              widget.viewModel.userCurrentActivityText.value
-                                      .isEmpty
-                                  ? ""
-                                  : widget
-                                      .viewModel.userCurrentActivityText.value,
-                              style: TextStyle(fontSize: 14, color: BLACK),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left:16.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                                widget.viewModel.name.value.isEmpty
+                                    ? ""
+                                    : widget.viewModel.name.value,
+                                style: const TextStyle(fontSize: 16)),
+                            const SizedBox(height: 6),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                    widget.viewModel.userCurrentActivityText.value
+                                            .isEmpty
+                                        ? ""
+                                        : widget
+                                            .viewModel.userCurrentActivityEmoji.value,
+                                    style:
+                                        const TextStyle(fontSize: 15, color: BLACK)),
+                                const SizedBox(width: 12),
+                                Flexible(
+                                  child: Text(
+                                    widget.viewModel.userCurrentActivityText.value
+                                            .isEmpty
+                                        ? ""
+                                        : widget
+                                            .viewModel.userCurrentActivityText.value,
+                                    style: TextStyle(fontSize: 14, color: BLACK),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),

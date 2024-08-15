@@ -37,12 +37,17 @@ class MateViewModel extends GetxController {
   late final Rx<TextEditingController> _emailController = TextEditingController().obs;
   TextEditingController get emailController => _emailController.value;
 
+  /* notification */
+  late final RxList<Map<String, String>> _notificationList = <Map<String, String>>[].obs;
+  List<Map<String, String>> get notificationList => _notificationList;
+
   @override
   onInit() {
     super.onInit();
     updateMyProfile();
     getPendingMates();
     getMyMate();
+    loadNotifications();
   }
 
   @override
@@ -51,6 +56,14 @@ class MateViewModel extends GetxController {
     super.dispose();
   }
 
+  Future<void> loadNotifications() async {
+    try {
+      _notificationList.value = await _mateRepository.fetchNotificationList();
+    } catch (error) {
+      print('Error in ViewModel loading notifications: $error');
+      // 에러 처리 (예: 사용자에게 에러 메시지 표시)
+    }
+  }
 
   void updateName(String newName) => name.value = newName;
 
@@ -154,13 +167,14 @@ class MateViewModel extends GetxController {
     updateCurrentActivityText(text);
     // showBottomSheet 또는 다른 UI 요소를 통해 현재 활동 변경 UI를 표시
   }
+
   /*친구 요청 */
   void acceptMate(String requestId) async {
     try {
       await _mateRepository.handleAccept(requestId);
       pendingMateProfiles.removeWhere((mate) => mate.value.id == requestId); // 요청 제거
       pendingMateProfiles.refresh(); // 변경 사항 알림
-      // Get.snackbar("친구 요청", "승인 완료!");
+      loadNotifications();
     } catch (e) {
       // 에러 처리
       print('Error accepting mate request: $e');
@@ -181,12 +195,14 @@ class MateViewModel extends GetxController {
 
   Future<void> sendMateRequestByEmail(String email) async{
     await _mateRepository.sendMateRequestByEmail(email);
+    loadNotifications();
   }
 
   Future<void> searchMateByEmail(String email) async {
     final users = await _mateRepository.searchMatesByEmail(email);
     //미완
   }
+
   void logout() async{
     final scheduleViewModel = Get.find<ScheduleViewModel>();
     // 기본 사용자 정보 초기화

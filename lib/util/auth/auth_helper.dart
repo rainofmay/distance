@@ -27,7 +27,19 @@ class AuthHelper {
     return getCurrentSessionUser() != null;
   }
 
+  static Future<String?> getOtherUserNickname(String id) async {
+    try {
+      final response = await _supabase.from('user')
+          .select('nickname')
+          .eq('id', id)
+          .single();
 
+      return response['nickname'] as String;
+    } catch (error) {
+      print('Error fetching nickname: $error');
+      rethrow;
+    }
+  }
   //토큰이 있으면 그걸로 식별을 하고, 그게 아니면 로그인 창으로 내보낸다.
   static Future<String?> getMyId() async {
     if (!isLoggedIn()) {
@@ -57,7 +69,7 @@ class AuthHelper {
     String? userEmail = await getCurrentUserEmail();
     if (userEmail == null) {
       if (!context.mounted) return;
-      return customDialog(context, 40, '로그인', Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
+      return customDialog(context, 40, '로그인', const Text('로그인이 필요합니다. 하시겠습니까?', style: TextStyle(color: WHITE)),
           OkCancelButtons(okText: '확인', okTextColor: PRIMARY_COLOR, onPressed: () {
             Navigator.of(context).pop();
             Get.to(() => LoginScreen(), preventDuplicates: true);

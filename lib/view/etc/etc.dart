@@ -169,7 +169,7 @@ class Etc extends StatelessWidget {
                   padding: const EdgeInsets.only(left: 16.0),
                   child: TapableRow(
                     widget: const Icon(Icons.notifications_none_rounded),
-                    title: '알림',
+                    title: '알 림',
                     onTap: () {
                       pressed() {
                         Get.to(() => NotificationScreen(), preventDuplicates: true);

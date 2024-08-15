@@ -41,9 +41,9 @@ var theme = ThemeData(
   ),
 
     textSelectionTheme: TextSelectionThemeData(
-      selectionHandleColor: THIRD, // 텍스트 선택 핸들 색상
-      cursorColor: THIRD, // 커서 색상
-      selectionColor: THIRD.withOpacity(0.5), // 선택된 텍스트 배경색
+      selectionHandleColor: PRIMARY_COLOR, // 텍스트 선택 핸들 색상
+      cursorColor: PRIMARY_COLOR, // 커서 색상
+      selectionColor: PRIMARY_COLOR.withOpacity(0.5), // 선택된 텍스트 배경색
 
     ),
 

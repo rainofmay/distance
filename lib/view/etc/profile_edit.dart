@@ -11,8 +11,7 @@ import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
-
-import '../../common/const/colors.dart';
+import 'package:mobile/common/const/colors.dart';
 
 class ProfileEdit extends StatefulWidget {
   final MateViewModel viewModel =
@@ -29,7 +28,6 @@ class ProfileEdit extends StatefulWidget {
   State<ProfileEdit> createState() => _ProfileEditState();
 }
 
-
 class _ProfileEditState extends State<ProfileEdit> {
   File? profileImg;
   final TextEditingController _statusController = TextEditingController();
@@ -40,8 +38,10 @@ class _ProfileEditState extends State<ProfileEdit> {
   @override
   void initState() {
     super.initState();
-    widget._nameController = TextEditingController(text: widget.viewModel.name.value);
-    widget._introduceController = TextEditingController(text: widget.viewModel.introduction.value);
+    widget._nameController =
+        TextEditingController(text: widget.viewModel.name.value);
+    widget._introduceController =
+        TextEditingController(text: widget.viewModel.introduction.value);
     _statusController.text = widget.viewModel.userCurrentActivityText.value;
     _emojiController.text = widget.viewModel.userCurrentActivityEmoji.value;
   }
@@ -53,21 +53,22 @@ class _ProfileEditState extends State<ProfileEdit> {
     _scrollController.dispose();
     super.dispose();
   }
+
   void onSavePressed() {
     widget.viewModel.updateName(widget._nameController.text);
     widget.viewModel.updateIntroduction(widget._introduceController.text);
-    widget.viewModel.onTapCurrentActivity(_emojiController.text, _statusController.text);
+    widget.viewModel
+        .onTapCurrentActivity(_emojiController.text, _statusController.text);
 
     widget.userProvider.editName(widget._nameController.text);
     widget.userProvider.editIntroduction(widget._introduceController.text);
     widget.userProvider.editStatusEmoji(_emojiController.text);
     widget.userProvider.editStatusText(_statusController.text);
-    widget.userProvider.updateUserSettings(
-        widget.viewModel.isWordOpen.value,
+    widget.userProvider.updateUserSettings(widget.viewModel.isWordOpen.value,
         widget.viewModel.isScheduleOpen.value);
 
     // 저장 완료 메시지 표시
-    CustomSnackbar.show(title: '프로필 저장', message: '프로필이 저장되었습니다.');
+    // CustomSnackbar.show(title: '프로필 저장', message: '프로필이 저장되었습니다.');
 
     // 저장 후 이전 화면으로 돌아가기
     Navigator.of(context).pop();
@@ -78,7 +79,7 @@ class _ProfileEditState extends State<ProfileEdit> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: CustomBackAppBar(
-        appbarTitle: '프로필 수정',
+        appbarTitle: '프로필 편집',
         isLeading: true,
         isCenterTitle: true,
         backFunction: () => onSavePressed(),
@@ -236,10 +237,10 @@ class _ProfileEditState extends State<ProfileEdit> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const SizedBox(
-              child: Text('상태', style: TextStyle(fontSize: 16)),
+              child: Text('상태'),
             ),
             const SizedBox(width: 20),
-            Container(
+            SizedBox(
               width: fieldWidth,
               child: Row(
                 children: [
@@ -261,12 +262,12 @@ class _ProfileEditState extends State<ProfileEdit> {
                           _emojiController.text.isNotEmpty
                               ? _emojiController.text
                               : '😀',
-                          style: TextStyle(fontSize: 24),
+                          style: const TextStyle(fontSize: 24),
                         ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: CustomTextFormField(
                       controller: _statusController,
@@ -301,10 +302,24 @@ class _ProfileEditState extends State<ProfileEdit> {
                 });
               },
               textEditingController: _emojiController,
-              config: Config(),
+              config: Config(
+                swapCategoryAndBottomBar: true,
+                emojiViewConfig: EmojiViewConfig(
+                    recentsLimit: 10,
+                    replaceEmojiOnLimitExceed: true,
+                  noRecents: const Text('최근 사용하신 이모티콘이 없습니다.', style: TextStyle(fontSize: 20, color: Colors.black26), textAlign: TextAlign.center)
+                ),
+                categoryViewConfig: const CategoryViewConfig(
+                    initCategory: Category.RECENT,
+                    indicatorColor: PRIMARY_COLOR,
+                  iconColorSelected : PRIMARY_COLOR,
+                ),
+                bottomActionBarConfig:
+                    const BottomActionBarConfig(showSearchViewButton: false, showBackspaceButton:false),
+                searchViewConfig: const SearchViewConfig(),
+              ),
             ),
           ),
-
       ],
     );
   }
@@ -318,7 +333,7 @@ class _ProfileEditState extends State<ProfileEdit> {
           onChanged: (bool value) {
             setState(() {
               widget.viewModel.isScheduleOpen.value =
-              !widget.viewModel.isScheduleOpen.value;
+                  !widget.viewModel.isScheduleOpen.value;
             });
           },
         ),

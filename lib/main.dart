@@ -94,13 +94,12 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
       await _setFcmToken(fcmToken);
     });
 
-    //fore ground??
+    //Foreground
     FirebaseMessaging.onMessage.listen((payload) {
       final notification = payload.notification;
 
       if (notification != null) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text('${notification.title} ${notification.body}')));
+        CustomSnackbar.show(title: '${notification.title}', message: '${notification.body}');
       }
     });
   }

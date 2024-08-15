@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
@@ -10,6 +11,7 @@ class CustomSnackbar {
     // Color textColor = PRIMARY_LIGHT,
     Duration duration = const Duration(seconds: 2),
     SnackPosition position = SnackPosition.BOTTOM,
+    Curve animationCurve = Curves.easeInOut,  // 부드러운 애니메이션 곡선
     Widget? icon,
     VoidCallback? onTap,
   }) {
@@ -41,6 +43,7 @@ class CustomSnackbar {
           fontSize: 12,  // 메시지 텍스트 크기
         ),
       ),
+      instantInit: false,  // 즉시 초기화하지 않음
     );
   }
 

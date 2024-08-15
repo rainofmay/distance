@@ -7,6 +7,26 @@ class MateProvider {
   final userId = AuthHelper.getMyId();
 
   /* Get */
+  Future<List<Map<String, dynamic>>> getNotificationList() async {
+    final userId = await AuthHelper.getMyId();
+
+    try {
+      final response = await supabase
+          .from('notifications')
+          .select('')
+          .eq('receiver_id', '$userId')
+          .order('created_at', ascending: false)
+          .limit(10); // 최신 알림부터 최대 10개 정렬
+
+      return response;
+
+    } catch (error) {
+      print('Error fetching notifications: $error');
+      rethrow;
+    }
+  }
+
+
   Future<List<Map<String, dynamic>>> getPendingRequests(String userEmail) async {
     final userId = await supabase
         .from('user')
