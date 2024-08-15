@@ -153,19 +153,24 @@ class MateRepository {
     fetchMyMates();
   }
 
-  /* 친구 요청 시 Notificartion */
-  Future<void> mateRequestNotification(String senderId, String reveiverId) async {
+가  /* 친구 요청 시 Notification - 수정된 버전 */
+  Future<void> mateRequestNotification(String senderId, String receiverId) async {
     try {
+      String senderNickname = await AuthHelper.getNicknameById(senderId);
       await supabase.from('notifications').insert({
-        'sender_id': senderId,  // 요청을 보내는 사용자
-        'receiver_id': reveiverId,   // 요청을 받는 사용자
-        'body': '$senderId님께서 메이트 요청을 보냈습니다.'
-        // 필요한 경우 추가 필드를 포함할 수 있습니다.
+        'sender_id': senderId,
+        'receiver_id': receiverId,
+        'body': '$senderNickname님께서 메이트 요청을 보냈습니다.'
       });
 
       print('Friend request notification sent successfully');
     } catch (error) {
       print('Error sending friend request notification: $error');
     }
+  }
+
+  Future<void> deleteMate(String deleteUid) async{
+    await _mateProvider.deleteMate(deleteUid);
+    await fetchMyMates();
   }
 }

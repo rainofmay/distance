@@ -1,5 +1,6 @@
 
 import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class MateProvider {
@@ -95,6 +96,23 @@ class MateProvider {
       return [] ;
     }
   }
+  Future<void> deleteMate(String deleteUid) async {
+    final myId = await AuthHelper.getCurrentUserId();
+    try {
+      final response = await supabase
+          .from('mate_relationships')
+          .delete()
+          .filter('is_friend', 'eq', true)
+          .or('sender_id.eq.$myId,receiver_id.eq.$deleteUid,sender_id.eq.$deleteUid,receiver_id.eq.$myId');
+
+      print("메이트 삭제 완료!");
+      CustomSnackbar.show(title: '성공', message: '메이트가 삭제되었습니다.');
+    } catch (e) {
+      print('Error deleting mate: $e');
+      CustomSnackbar.show(title: '오류', message: '메이트 삭제 중 오류가 발생했습니다.');
+    }
+  }
+
 }
 
 
