@@ -194,10 +194,6 @@ class MateViewModel extends GetxController {
     }
   }
 
-  Future<void> sendMateRequestByEmail(String email) async {
-    await _mateRepository.sendMateRequestByEmail(email);
-    loadNotifications();
-  }
 
   Future<void> deleteMate(String mateId) async {
     try {
@@ -230,6 +226,7 @@ class MateViewModel extends GetxController {
     // 이메일 유효성 검사를 통과한 경우에만 요청 전송
     try {
       await _mateRepository.sendMateRequestByEmail(email);
+      loadNotifications();
     } catch (e) {
       CustomSnackbar.show(title: '오류', message: '메이트 요청 중 오류가 발생했습니다.');
       print('Error in sendMateRequestByEmail: $e');
