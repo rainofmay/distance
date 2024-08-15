@@ -4,12 +4,13 @@ import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/view/mate/mate_room_screen.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/functions/custom_dialog.dart';
 
 class ProfileCard extends StatelessWidget {
   final UserModel profile;
-
-  ProfileCard({super.key, required this.profile});
+  final MateViewModel viewModel;
+  ProfileCard({super.key, required this.profile, required this.viewModel});
 
   _selectOptionDialog(BuildContext context) async {
     customDialog(
@@ -20,19 +21,22 @@ class ProfileCard extends StatelessWidget {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const SizedBox(height: 22),
-            GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () {},
-              child: Row(
-                children: [
-                  Text('프로필 보기', style: TextStyle(color: WHITE)),
-                ],
-              ),
-            ),
+            //TODO- 메이트 관련 함수 구현
+            // GestureDetector(
+            //   behavior: HitTestBehavior.opaque,
+            //   onTap: () {},
+            //   child: Row(
+            //     children: [
+            //       Text('프로필 보기', style: TextStyle(color: WHITE)),
+            //     ],
+            //   ),
+            // ),
             const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {},
+              onTap: () {
+
+              },
               child: Row(
                 children: [
                   Text('Mate방 들어가기', style: TextStyle(color: WHITE)),
@@ -42,7 +46,10 @@ class ProfileCard extends StatelessWidget {
             const SizedBox(height: 35),
             GestureDetector(
               behavior: HitTestBehavior.opaque,
-              onTap: () {},
+              onTap: () {
+                viewModel.deleteMate(profile.uid);
+                Navigator.pop(context);
+              },
               child: Row(
                 children: [
                   Text('Mate 삭제하기', style: TextStyle(color: WHITE)),

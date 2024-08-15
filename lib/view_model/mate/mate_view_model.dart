@@ -5,6 +5,7 @@ import 'package:mobile/model/user_model.dart';
 import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 class MateViewModel extends GetxController {
   // Rx variables for user profile data
   late final UserRepository _userRepository;
@@ -94,7 +95,7 @@ class MateViewModel extends GetxController {
       final myMates = await _mateRepository.fetchMyMates();
       mateProfiles.value = myMates.map((mate) => Rx(mate)).toList(); // mateProfiles를 업데이트
       print("[Get myMates] $myMates");
-
+      mateProfiles.refresh();
     } catch (e) {
       // 에러 처리 (예: 사용자에게 에러 메시지 표시)
       print('Error fetching my mate profiles: $e');
@@ -179,9 +180,43 @@ class MateViewModel extends GetxController {
     }
   }
 
-  Future<void> sendMateRequestByEmail(String email) async{
-    await _mateRepository.sendMateRequestByEmail(email);
+  Future<void> deleteMate(String mateId) async {
+    try {
+      await _mateRepository.deleteMate(mateId);
+      // 리스트에서 메이트 제거 후 전체 리스트를 새로 할당
+      mateProfiles.value = mateProfiles.where((profile) => profile.value.id != mateId).toList();
+      // 또는 아래와 같이 할 수 있습니다:
+      // mateProfiles.assignAll(mateProfiles.where((profile) => profile.value.id != mateId).toList());
+    } catch (e) {
+      print('Error deleting mate: $e');
+    }
   }
+
+  // 이메일 유효성 검사를 위한 정규표현식
+  final RegExp emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+  Future<void> sendMateRequestByEmail(String email) async {
+    // 빈 문자열 체크
+    if (email.isEmpty) {
+      CustomSnackbar.show(title: '오류', message: '이메일을 입력해주세요.');
+      return;
+    }
+
+    // 이메일 형식 검사
+    if (!emailRegex.hasMatch(email)) {
+      CustomSnackbar.show(title: '오류', message: '올바른 이메일 형식이 아닙니다.');
+      return;
+    }
+
+    // 이메일 유효성 검사를 통과한 경우에만 요청 전송
+    try {
+      await _mateRepository.sendMateRequestByEmail(email);
+    } catch (e) {
+      CustomSnackbar.show(title: '오류', message: '메이트 요청 중 오류가 발생했습니다.');
+      print('Error in sendMateRequestByEmail: $e');
+    }
+  }
+
 
   Future<void> searchMateByEmail(String email) async {
     final users = await _mateRepository.searchMatesByEmail(email);
