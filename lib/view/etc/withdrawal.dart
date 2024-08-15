@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mobile/view/mate/widget/custom_dialog.dart';
+import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
 import '../../common/const/colors.dart';
@@ -14,8 +16,9 @@ class Withdrawal extends StatefulWidget {
 }
 
 class _WithdrawalState extends State<Withdrawal> {
-  bool _isChecked = false;
 
+  final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
+  bool _isChecked = false;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -54,7 +57,7 @@ class _WithdrawalState extends State<Withdrawal> {
                       softWrap: true),
 
                   SizedBox(height: 32),
-                  Text('3. 본 애플리케이션 서비스는 귀하의 개인정보 저장, 활용 등의 행위를 일체 하지 않습니다.',
+                  Text('2. 본 애플리케이션 서비스는 귀하의 개인정보 저장, 활용 등의 행위를 일체 하지 않습니다.',
                       style: TextStyle(fontSize: 16), softWrap: true),
                 ],
               ),
@@ -94,9 +97,11 @@ class _WithdrawalState extends State<Withdrawal> {
                       ? customDialog(
                           context,
                           40,
-                          '탈퇴하시겠습니까?',
+                          '정말 탈퇴하시겠습니까?',
                           Text('탈퇴하면 모든 정보가 삭제됩니다.', style: TextStyle(color: TRANSPARENT_WHITE)),
-                          OkCancelButtons(okText: '확인', onPressed: () {}, cancelText: '취소',))
+                          OkCancelButtons(okText: '확인', onPressed: () {
+                            loginViewModel.deleteAccount(context);
+                          }, cancelText: '취소',))
                       : null;
                 },
               )
