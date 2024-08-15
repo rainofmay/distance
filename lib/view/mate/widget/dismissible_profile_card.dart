@@ -2,11 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile/model/user_model.dart';
 import 'package:mobile/view/mate/widget/profile_card.dart';
+import 'package:mobile/view_model/mate/mate_view_model.dart';
 
 class DismissibleProfileCard extends StatelessWidget {
   final UserModel profile; // Profile 객체
   final Function onDelete; // 삭제 로직을 위한 콜백 함수
   final int index; // 삭제할 Profile의 인덱스
+  final MateViewModel viewModel;
 
   // 생성자를 통해 필요한 데이터와 함수를 초기화
   const DismissibleProfileCard({
@@ -14,18 +16,21 @@ class DismissibleProfileCard extends StatelessWidget {
     required this.profile,
     required this.onDelete,
     required this.index,
+    required this.viewModel,
   });
-
 
   @override
   Widget build(BuildContext context) {
     return Dismissible(
-      key: Key(profile.uid), // 고유한 key 지정
-      direction: DismissDirection.endToStart, // 오른쪽에서 왼쪽으로 스와이프
+      key: Key(profile.uid),
+      // 고유한 key 지정
+      direction: DismissDirection.endToStart,
+      // 오른쪽에서 왼쪽으로 스와이프
       onDismissed: (direction) {
         onDelete(index); // 실제 삭제 로직을 실행하는 콜백 함수 호출
       },
-      confirmDismiss: (direction) async { // 삭제 전 확인 대화 상자
+      confirmDismiss: (direction) async {
+        // 삭제 전 확인 대화 상자
         return await showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -54,7 +59,10 @@ class DismissibleProfileCard extends StatelessWidget {
           child: Icon(Icons.delete, color: Colors.white),
         ),
       ),
-      child: ProfileCard(profile: profile), // ProfileCard 위젯
+      child: ProfileCard(
+        profile: profile,
+        viewModel: viewModel,
+      ), // ProfileCard 위젯
     );
   }
 }

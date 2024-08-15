@@ -27,19 +27,21 @@ class AuthHelper {
     return getCurrentSessionUser() != null;
   }
 
-  static Future<String?> getOtherUserNickname(String id) async {
+  // 새로운 함수: senderId로 nickname 조회
+  static Future<String> getNicknameById(String userId) async {
     try {
-      final response = await _supabase.from('user')
+      final response = await _supabase
+          .from('user')
           .select('nickname')
-          .eq('id', id)
+          .eq('id', userId)
           .single();
-
       return response['nickname'] as String;
-    } catch (error) {
-      print('Error fetching nickname: $error');
-      rethrow;
+    } catch (e) {
+      print('Error fetching nickname: $e');
+      return 'Unknown User';
     }
   }
+
   //토큰이 있으면 그걸로 식별을 하고, 그게 아니면 로그인 창으로 내보낸다.
   static Future<String?> getMyId() async {
     if (!isLoggedIn()) {

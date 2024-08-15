@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
@@ -118,8 +119,8 @@ class LoginProvider {
       await supabase.from('user').insert({
         'id': response.user!.id,
         'email': email,
-        'name': name,
-        'profile_url': profileUrl,
+        'nickname': name,
+        'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -214,7 +215,7 @@ class LoginProvider {
         'id': response.user!.id,
         'email': email,
         'nickname': nickname,
-        'profile_url': profileUrl,
+        'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -254,4 +255,28 @@ class LoginProvider {
       CustomSnackbar.show(title: '오류', message: '로그아웃에 실패했습니다.');
     }
   }
+  // 사용자 탈퇴 기능
+  // 간소화된 사용자 계정 삭제 기능
+  Future<void> deleteAccount(BuildContext context, String currentUserId) async {
+    try {
+      // 현재 로그인된 사용자 정보 가져오기
+      if (currentUserId == null) {
+        throw Exception('로그인된 사용자가 없습니다.');
+      }
+      print(currentUserId);
+      // user 테이블에서 사용자 데이터 삭제
+      await supabase.from('user').delete().eq('id', currentUserId);
+
+
+      CustomSnackbar.show(title: '계정 삭제', message: '계정이 성공적으로 삭제되었습니다.');
+      // 로그인 화면으로 이동
+      Navigator.pop(context);
+    } catch (error) {
+      print('계정 삭제 중 오류 발생: $error');
+      CustomSnackbar.show(title: '오류', message: '계정 삭제에 실패했습니다. 다시 시도해주세요.');
+    }
+  }
+
+
+
 }

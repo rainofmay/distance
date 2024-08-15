@@ -84,6 +84,33 @@ class LoginViewModel extends GetxController {
     }
   }
 
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      final currentUserId = await AuthHelper.getMyId();
+      if (currentUserId == null) {
+        throw Exception('사용자 ID를 가져올 수 없습니다.');
+      }
+
+      // 로그아웃 처리
+      await signOut(context);
+
+      // 사용자 데이터 삭제
+      await _provider.deleteAccount(context, currentUserId);
+
+      // 성공 메시지 표시
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('계정이 성공적으로 삭제되었습니다.')),
+      );
+
+    } catch (e) {
+      print('계정 삭제 중 오류 발생: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('계정 삭제에 실패했습니다. 다시 시도해주세요.')),
+      );
+    }
+  }
+
+
   @override
   void onClose() {
     emailController.dispose();

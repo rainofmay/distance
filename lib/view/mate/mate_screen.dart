@@ -228,21 +228,22 @@ class _MateScreenState extends State<MateScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(left: 16),
-            child: Row(
-              children: [
-                const Text('Mates',
-                    style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
-                const SizedBox(width: 10),
-                Text('(${widget.viewModel.mateProfiles.value.length})',
-                    style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
-                const SizedBox(width: 16),
-                Expanded(
-                    child: Container(color: GREY.withOpacity(0.3), height: 1))
-              ],
-            ),
-          ),
+          Obx(() => Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: Row(
+                  children: [
+                    const Text('Mates',
+                        style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
+                    const SizedBox(width: 10),
+                    Text('(${widget.viewModel.mateProfiles.length})',
+                        style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
+                    const SizedBox(width: 16),
+                    Expanded(
+                        child:
+                            Container(color: GREY.withOpacity(0.3), height: 1))
+                  ],
+                ),
+              )),
           const SizedBox(height: 15),
           profileList(),
         ],
@@ -304,7 +305,7 @@ class _MateScreenState extends State<MateScreen> {
             return Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ProfileCard(
-                profile: profile.value,
+                profile: profile.value, viewModel: widget.viewModel,
               ),
             );
           }).toList(),

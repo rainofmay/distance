@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         'id': response.user!.id,
         'email': emailValue,
         'nickname': '',
-        'profile_url': '',
+        'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
