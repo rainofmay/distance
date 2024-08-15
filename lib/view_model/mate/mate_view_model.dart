@@ -99,7 +99,6 @@ class MateViewModel extends GetxController {
     } catch (e) {
       print('Error fetching pending mate profiles: $e');
     }
-
   }
 
   Future<void> getMyMate() async {
