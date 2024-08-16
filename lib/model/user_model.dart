@@ -17,6 +17,7 @@ class UserModel {
   bool isWordOpen;
   bool isScheduleOpen;
   String schedulePush;
+  bool isImage;
 
   UserModel({
     this.id,
@@ -33,7 +34,8 @@ class UserModel {
     this.statusText = '', // 기본값 설정
     this.isWordOpen = false,
     this.isScheduleOpen = false,
-    this.schedulePush = '5분 전'
+    this.schedulePush = '5분 전',
+    this.isImage = true,
   });
 
   // UserModel 객체를 데이터베이스에 저장하기 위해 필요한 형식으로 변환하는 역할
@@ -53,6 +55,7 @@ class UserModel {
       'is_word_open': isWordOpen,
       'is_schedule_open': isScheduleOpen,
       'schedule_push' : schedulePush,
+      'is_image' : isImage,
     };
   }
 
@@ -74,6 +77,7 @@ class UserModel {
       isWordOpen : json['is_word_open'] ?? false,
       isScheduleOpen : json['is_schedule_open'] ?? false,
       schedulePush: json['schedule_push'] ?? '',
+      isImage: json['is_image'] ?? true
     );
   }
 

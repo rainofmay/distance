@@ -44,6 +44,20 @@ class ScheduleProvider {
     return response.map<ScheduleModel>((json) => ScheduleModel.fromJson(json: json)).toList();
   }
 
+  Future<List<Map<String, dynamic>>> getMateSchedule(String mateId) async {
+    if (mateId == null){
+      return [];
+    }else{
+      final response = await supabase
+          .from('schedule')
+          .select()
+          .eq('uid', mateId)
+          .order('created_at', ascending: false);
+      return response;
+    }
+
+  }
+
   /* Create */
   Future createScheduleData(ScheduleModel scheduleModel) async {
     if (_userId == null) throw Exception('User not authenticated');
