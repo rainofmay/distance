@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
-
 class SoundVolume extends GetView<SoundViewModel> {
   final int playerIndex;
 
@@ -39,29 +38,37 @@ class SoundVolume extends GetView<SoundViewModel> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Obx(
-                    () => IconButton(
-                        splashColor: TRANSPARENT,
-                        highlightColor: TRANSPARENT,
-                        hoverColor: TRANSPARENT,
-                        icon: Icon(
-                          controller
-                                  .soundPlayersList[playerIndex].isPlaying.value
-                              ? CupertinoIcons.speaker_2
-                              : CupertinoIcons.speaker_slash,
-                          color: WHITE,
-                        ),
-                        iconSize: 16.0,
-                        onPressed: () => controller.togglePlay(playerIndex)),
-                  ),
+                  Obx(() {
+                    final isPlaying = controller.soundPlayersList[playerIndex].isPlaying.value;
+                    final volume = controller.getVolume(playerIndex);
+                    return IconButton(
+                      splashColor: TRANSPARENT,
+                      highlightColor: TRANSPARENT,
+                      hoverColor: TRANSPARENT,
+                      icon: Icon(
+                        isPlaying && volume > 0
+                            ? CupertinoIcons.speaker_2
+                            : CupertinoIcons.speaker_slash,
+                        color: WHITE,
+                      ),
+                      iconSize: 16.0,
+                      onPressed: () => controller.togglePlay(playerIndex),
+                    );
+                  }),
                   Obx(() => SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.25,
-                        child: Slider(
-                          value: controller.getVolume(playerIndex),
-                          onChanged: (volume) =>
-                              controller.setVolume(playerIndex, volume),
-                        ),
-                      )),
+                    width: MediaQuery.of(context).size.width * 0.25,
+                    child: Slider(
+                      value: controller.getVolume(playerIndex),
+                      onChanged: (volume) {
+                        controller.setVolume(playerIndex, volume);
+                        if (volume > 0 && !controller.soundPlayersList[playerIndex].isPlaying.value) {
+                          controller.musicPlay(playerIndex);
+                        } else if (volume == 0 && controller.soundPlayersList[playerIndex].isPlaying.value) {
+                          controller.musicPause(playerIndex);
+                        }
+                      },
+                    ),
+                  )),
                 ],
               ),
             ),

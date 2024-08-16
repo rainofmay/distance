@@ -77,12 +77,15 @@ class SoundViewModel extends GetxController {
     player.audioPlayer.onPlayerStateChanged.listen((state) {
       if (state == PlayerState.playing) {
         player.isPlaying.value = true;
-        _updateOverallPlayingState();
       } else if (state == PlayerState.stopped || state == PlayerState.completed) {
         player.isPlaying.value = false;
-        _updateOverallPlayingState();
+        // 재생이 완료되면 다시 재생 시작
+        musicPlay(_soundPlayersList.indexWhere((p) => p.id == player.id));
       }
+      _updateOverallPlayingState();
     });
+
+    // 에러 발생 시 처리
   }
 
   void _updateOverallPlayingState() {
@@ -237,7 +240,9 @@ class SoundViewModel extends GetxController {
       player.isPlaying.value = true;
       _updateOverallPlayingState();
     } catch (e) {
-      print("Error $e");
+      print("Error playing audio: $e");
+      _soundPlayersList[index].isPlaying.value = false;
+      _updateOverallPlayingState();
     }
   }
 
