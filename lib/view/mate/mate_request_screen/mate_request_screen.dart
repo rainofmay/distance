@@ -121,6 +121,8 @@ class MateRequestsScreen extends StatelessWidget {
             child: Obx(() {
               final requests = viewModel.pendingMateProfiles;
               return RefreshIndicator(
+                backgroundColor: WHITE,
+                color: PRIMARY_COLOR,
                 onRefresh: () async {
                   await viewModel.getPendingMates();
                 },

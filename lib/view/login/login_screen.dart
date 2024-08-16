@@ -66,6 +66,7 @@ class LoginScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             Obx(() => CustomTextFormField(
+                              textColor: WHITE,
                               prefixIcon: const Icon(CupertinoIcons.mail),
                               prefixIconColor: PRIMARY_LIGHT,
                               labelText: 'E-mail',
@@ -82,6 +83,7 @@ class LoginScreen extends StatelessWidget {
                             const SizedBox(height: 20),
 
                             Obx(() => CustomTextFormField(
+                              textColor: WHITE,
                               prefixIcon: const Icon(Icons.key_rounded),
                               prefixIconColor: PRIMARY_LIGHT,
                               labelText: 'Password',

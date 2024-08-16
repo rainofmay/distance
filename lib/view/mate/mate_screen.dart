@@ -17,26 +17,13 @@ import 'package:mobile/widgets/custom_circular_indicator.dart';
 
 import 'mate_request_screen/mate_request_screen.dart';
 
-class MateScreen extends StatefulWidget {
+class MateScreen extends StatelessWidget {
   MateScreen({super.key});
 
   final MateViewModel viewModel = Get.put(MateViewModel(
       userRepository: UserRepository(userProvider: UserProvider()),
       mateRepository:
           MateRepository(mateProvider: MateProvider()))); // ViewModel 인스턴스 생성
-
-  @override
-  State<MateScreen> createState() => _MateScreenState();
-}
-
-class _MateScreenState extends State<MateScreen> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +79,7 @@ class _MateScreenState extends State<MateScreen> {
                             child: Stack(children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
-                                child: widget.viewModel.profileImageUrl.value ==
+                                child: viewModel.profileImageUrl.value ==
                                         null
                                     ? Image.asset(
                                         'assets/images/themes/gomzy_theme.jpg',
@@ -102,8 +89,7 @@ class _MateScreenState extends State<MateScreen> {
                                       )
                                     : CachedNetworkImage(
                                         // CachedNetworkImage 사용
-                                        imageUrl: widget
-                                            .viewModel.profileImageUrl.value,
+                                        imageUrl: viewModel.profileImageUrl.value,
                                         fit: BoxFit.cover,
                                         width: 60,
                                         height: 60,
@@ -144,48 +130,20 @@ class _MateScreenState extends State<MateScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                      widget.viewModel.name.value.isEmpty
+                                      viewModel.name.value.isEmpty
                                           ? ""
-                                          : widget.viewModel.name.value,
-                                      style: const TextStyle(fontSize: 16)),
+                                          : viewModel.name.value,
+                                      style: const TextStyle(fontSize: 15)),
                                   const SizedBox(height: 6),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                          widget
-                                                  .viewModel
-                                                  .userCurrentActivityText
-                                                  .value
-                                                  .isEmpty
-                                              ? ""
-                                              : widget
-                                                  .viewModel
-                                                  .userCurrentActivityEmoji
-                                                  .value,
-                                          style: const TextStyle(
-                                              fontSize: 15, color: BLACK)),
-                                      const SizedBox(width: 12),
-                                      Flexible(
-                                        child: Text(
-                                          widget
-                                                  .viewModel
-                                                  .userCurrentActivityText
-                                                  .value
-                                                  .isEmpty
-                                              ? ""
-                                              : widget
-                                                  .viewModel
-                                                  .userCurrentActivityText
-                                                  .value,
-                                          style: TextStyle(
-                                              fontSize: 14, color: BLACK),
-                                          overflow: TextOverflow.ellipsis,
-                                          maxLines: 2,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  Text(
+                                    viewModel.introduction.value
+                                        .isEmpty
+                                        ? "소개를 작성해 보세요."
+                                        : viewModel.introduction.value,
+                                    style: const TextStyle(fontSize: 11, color: GREY),
+                                    overflow: TextOverflow.ellipsis,
+                                    maxLines: 2,
+                                  )
                                 ],
                               ),
                             ),
@@ -197,24 +155,32 @@ class _MateScreenState extends State<MateScreen> {
                   Obx(
                     () => Expanded(
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                              widget.viewModel.userCurrentActivityText.value
-                                      .isEmpty
+                              viewModel
+                                  .userCurrentActivityText
+                                  .value
+                                  .isEmpty
                                   ? ""
-                                  : widget
-                                      .viewModel.userCurrentActivityEmoji.value,
-                              style: const TextStyle(fontSize: 15, color: BLACK)),
-                          const SizedBox(width: 12),
+                                  : viewModel
+                                  .userCurrentActivityEmoji
+                                  .value,
+                              style: const TextStyle(
+                                  fontSize: 15, color: BLACK)),
+                          const SizedBox(width: 8),
                           Flexible(
                             child: Text(
-                              widget.viewModel.userCurrentActivityText.value
-                                      .isEmpty
+                              viewModel
+                                  .userCurrentActivityText
+                                  .value
+                                  .isEmpty
                                   ? ""
-                                  : widget
-                                      .viewModel.userCurrentActivityText.value,
-                              style: TextStyle(fontSize: 14, color: BLACK),
+                                  : viewModel
+                                  .userCurrentActivityText
+                                  .value,
+                              style: TextStyle(
+                                  fontSize: 14, color: BLACK),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),
@@ -235,7 +201,7 @@ class _MateScreenState extends State<MateScreen> {
                     const Text('Mates',
                         style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                     const SizedBox(width: 10),
-                    Text('(${widget.viewModel.mateProfiles.length})',
+                    Text('(${viewModel.mateProfiles.length})',
                         style: TextStyle(color: DARK_UNSELECTED, fontSize: 12)),
                     const SizedBox(width: 16),
                     Expanded(
@@ -245,71 +211,77 @@ class _MateScreenState extends State<MateScreen> {
                 ),
               )),
           const SizedBox(height: 15),
-          profileList(),
+          profileList(context),
         ],
       ),
     );
   }
 
-  Widget profileList() {
+  Widget profileList(BuildContext context) {
     return Expanded(
       child: Obx(() => RefreshIndicator(
+            backgroundColor: WHITE,
+            color: PRIMARY_COLOR,
             onRefresh: () async {
-              await widget.viewModel.updateMyProfile();
-              await widget.viewModel.getMyMate();
+              await viewModel.updateMyProfile();
+              await viewModel.getMyMate();
             },
-            child: friendsWidget(),
+            child: friendsWidget(context),
           )),
     );
   }
 
-  Widget friendsWidget() {
-    return ListView(
-      controller: _scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        if (widget.viewModel.mateProfiles.value.isEmpty)
-          SizedBox(
-            height:
-                MediaQuery.of(context).size.height - 600, // Adjust as needed
-            child: Center(
-              child: GestureDetector(
-                onTap: () {
-                  pressed() {
-                    Get.to(() => MateRequestsScreen(), preventDuplicates: true);
-                  }
-
-                  AuthHelper.navigateToLoginScreen(context, pressed);
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0),
-                  child: Container(
-                    width: 120,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: DARK,
-                    ),
-                    child: Center(
-                      child: Text('메이트 찾기',
-                          style: TextStyle(color: PRIMARY_LIGHT),
-                          textAlign: TextAlign.center),
+  Widget friendsWidget(BuildContext context) {
+    return Scrollbar(
+      thickness: 10.0, // 스크롤바의 두께
+      radius: Radius.circular(10), // 스크롤바의 모서리 둥글기
+      child: ListView(
+        controller: viewModel.scrollController,
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          if (viewModel.mateProfiles.value.isEmpty)
+            SizedBox(
+              height:
+                  MediaQuery.of(context).size.height - 600, // Adjust as needed
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    pressed() {
+                      Get.to(() => MateRequestsScreen(), preventDuplicates: true);
+                    }
+      
+                    AuthHelper.navigateToLoginScreen(context, pressed);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 0),
+                    child: Container(
+                      width: 120,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: DARK,
+                      ),
+                      child: const Center(
+                        child: Text('메이트 찾기',
+                            style: TextStyle(color: PRIMARY_LIGHT),
+                            textAlign: TextAlign.center),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )
-        else
-          ...widget.viewModel.mateProfiles.value.map((profile) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: ProfileCard(
-                profile: profile.value, viewModel: widget.viewModel,
-              ),
-            );
-          }).toList(),
-      ],
+            )
+          else
+            ...viewModel.mateProfiles.value.map((profile) {
+              return Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: ProfileCard(
+                  profile: profile.value, viewModel: viewModel,
+                ),
+              );
+            }).toList(),
+        ],
+      ),
     );
   }
 }

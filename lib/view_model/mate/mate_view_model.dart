@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/model/online_status.dart';
 import 'package:mobile/model/user_model.dart';
+import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/repository/mate/mate_repository.dart';
 import 'package:mobile/repository/user/user_repository.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -15,6 +16,7 @@ class MateViewModel extends GetxController {
     _userRepository = userRepository;
     _mateRepository = mateRepository;
 }
+  final UserProvider userProvider = UserProvider();
 
   late final RxString name = "".obs;
   late final RxString introduction = "".obs;
@@ -35,12 +37,38 @@ class MateViewModel extends GetxController {
   // Methods for updating profile data are simplified
   final searchingProfiles = <Rx<UserModel>>[].obs;
 
+
+  final RxString nameError = RxString('');
+  final RxString introductionError = RxString('');
+  final RxString statusError = RxString('');
+
+  late final RxBool _emojiShowing = false.obs;
+  bool get emojiShowing => _emojiShowing.value;
+  late final Rx<TextEditingController> _nameController = TextEditingController(text: name.value).obs;
+  TextEditingController get nameController => _nameController.value;
+  late final Rx<TextEditingController> _introduceController = TextEditingController(text: introduction.value).obs;
+  TextEditingController get introduceController => _introduceController.value;
+  late final Rx<TextEditingController> _statusController = TextEditingController(text: userCurrentActivityText.value).obs;
+  TextEditingController get statusController => _statusController.value;
+  late final Rx<TextEditingController> _emojiController = TextEditingController(text: userCurrentActivityEmoji.value).obs;
+  TextEditingController get emojiController => _emojiController.value;
+
+
   late final Rx<TextEditingController> _emailController = TextEditingController().obs;
   TextEditingController get emailController => _emailController.value;
+  late final Rx<ScrollController> _scrollController = ScrollController().obs;
+  ScrollController get scrollController => _scrollController.value;
+
 
   /* notification */
   late final RxList<Map<String, String>> _notificationList = <Map<String, String>>[].obs;
   List<Map<String, String>> get notificationList => _notificationList;
+
+  late final RxBool _isExpanded = false.obs;
+  bool get isExpanded => _isExpanded.value;
+  void toggleExpansion() {
+    _isExpanded.value = !_isExpanded.value;
+  }
 
   @override
   onInit() {
@@ -54,6 +82,7 @@ class MateViewModel extends GetxController {
   @override
   void dispose() {
     _emailController.value.dispose();
+    _scrollController.value.dispose();
     super.dispose();
   }
 
@@ -79,8 +108,10 @@ class MateViewModel extends GetxController {
   void updateOnlineStatus(OnlineStatus newStatus) =>
       isUserOnline.value = newStatus;
 
-  void updateCurrentActivityEmoji(String newActivity) =>
-      userCurrentActivityEmoji.value = newActivity;
+  void updateCurrentActivityEmoji(String newEmoji) {
+    userCurrentActivityEmoji.value = newEmoji;
+    emojiController.text = newEmoji;  // emojiController도 업데이트
+  }
 
   void updateCurrentActivityText(String newActivity) =>
       userCurrentActivityText.value = newActivity;
@@ -115,9 +146,67 @@ class MateViewModel extends GetxController {
     }
   }
 
+  void setEmojiShowing(newValue) {
+    _emojiShowing.value = newValue;
+  }
+
+  void setScheduleOpen(newValue) {
+    isScheduleOpen.value = newValue;
+  }
+
+  void validateName(String value) {
+    if (value.isEmpty) {
+      nameError.value = "이름을 입력해 주세요.";
+    } else if (value.length > 7) {
+      nameError.value = "7자 이내로 입력하세요.";
+    } else {
+      nameError.value = '';
+    }
+  }
+
+  void validateIntroduction(String value) {
+    if (value.length > 20) {
+      introductionError.value = "20 이내로 입력하세요.";
+    } else {
+      introductionError.value = '';
+    }
+  }
+
+  void validateStatus(String value) {
+    if (value.length > 20) {
+      statusError.value = "20 이내로 입력하세요.";
+    } else {
+      statusError.value = '';
+    }
+  }
+
+  void onSavePressed() async {
+    // 모든 필드의 유효성을 다시 한 번 검사
+    validateName(_nameController.value.text);
+    validateIntroduction(_introduceController.value.text);
+    validateStatus(_statusController.value.text);
+
+    // 모든 필드가 유효한 경우에만 저장 진행
+    if (nameError.isEmpty && introductionError.isEmpty && statusError.isEmpty) {
+      updateName(_nameController.value.text);
+      updateIntroduction(_introduceController.value.text);
+      onTapCurrentActivity(userCurrentActivityEmoji.value, _statusController.value.text);
+
+      await userProvider.editName(_nameController.value.text);
+      await userProvider.editIntroduction(_introduceController.value.text);
+      await userProvider.editStatusEmoji(_emojiController.value.text);
+      await userProvider.editStatusText(_statusController.value.text);
+      await userProvider.updateUserSettings(isWordOpen.value, isScheduleOpen.value);
+
+      Get.back(); // 이전 화면으로 돌아가기
+    } else {
+      // 유효하지 않은 필드가 있는 경우 사용자에게 알림
+      Get.snackbar('오류', '입력 정보를 확인해주세요.');
+    }
+  }
+
   // 상태 업데이트 함수
   Future<void> updateMyProfile() async {
-    final scheduleViewModel = Get.find<ScheduleViewModel>();
     super.onInit(); // 먼저 super.onInit() 호출
 
     try {

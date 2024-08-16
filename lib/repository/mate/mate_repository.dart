@@ -188,7 +188,7 @@ class MateRepository {
       await supabase.from('notifications').insert({
         'sender_id': senderId,
         'receiver_id': receiverId,
-        'body': '$senderNickname님께서 메이트 요청을 보냈습니다.'
+        'body': '$senderNickname님이 메이트 요청을 보냈습니다.'
       });
 
       print('Mate request notification sent successfully');

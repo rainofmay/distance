@@ -17,6 +17,7 @@ import 'package:mobile/widgets/tapable_row.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Etc extends StatelessWidget {
   Etc({super.key});
@@ -26,6 +27,15 @@ class Etc extends StatelessWidget {
   final LoginViewModel loginViewModel =
       Get.put(LoginViewModel(provider: LoginProvider()));
   final adController = Get.put(AdController());
+
+  final Uri surveyUrl = Uri.parse(
+      'https://docs.google.com/forms/d/1S5UknqwWtZLJZzctmjYqqTxzHSqbrNEUrcjL2fjzjhQ/edit');
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(surveyUrl)) {
+      throw Exception('Could not launch $surveyUrl');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +54,8 @@ class Etc extends StatelessWidget {
             child: Column(
               children: [
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -63,7 +74,8 @@ class Etc extends StatelessWidget {
                                     )
                                   : CachedNetworkImage(
                                       // CachedNetworkImage 사용
-                                      imageUrl: mateViewModel.profileImageUrl.value,
+                                      imageUrl:
+                                          mateViewModel.profileImageUrl.value,
                                       fit: BoxFit.cover,
                                       width: 40,
                                       height: 40,
@@ -81,7 +93,9 @@ class Etc extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Obx(() => Text(mateViewModel.name.value.isEmpty ? "로그인 후 이용하실 수 있습니다." : mateViewModel.name.value)),
+                          Obx(() => Text(mateViewModel.name.value.isEmpty
+                              ? "로그인 후 이용하실 수 있습니다."
+                              : mateViewModel.name.value)),
                         ],
                       ),
                     ],
@@ -127,7 +141,8 @@ class Etc extends StatelessWidget {
                 //       ),
                 //     )),
                 const SizedBox(height: 16),
-                BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                BorderLine(
+                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
                 const SizedBox(height: 16),
 
                 Padding(
@@ -147,7 +162,8 @@ class Etc extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 16),
-                BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                BorderLine(
+                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
                 const SizedBox(height: 16),
 
                 Padding(
@@ -162,7 +178,8 @@ class Etc extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 16),
-                BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                BorderLine(
+                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
                 const SizedBox(height: 16),
 
                 Padding(
@@ -172,7 +189,8 @@ class Etc extends StatelessWidget {
                     title: '알 림',
                     onTap: () {
                       pressed() {
-                        Get.to(() => NotificationScreen(), preventDuplicates: true);
+                        Get.to(() => NotificationScreen(),
+                            preventDuplicates: true);
                       }
 
                       AuthHelper.navigateToLoginScreen(context, pressed);
@@ -181,27 +199,45 @@ class Etc extends StatelessWidget {
                 ),
 
                 const SizedBox(height: 16),
-                BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                BorderLine(
+                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
                 const SizedBox(height: 16),
 
-                Obx(() => mateViewModel.name.value.isEmpty ? Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: TapableRow(
-                      widget: const Icon(Icons.logout),
-                      title: "로그인",
-                      onTap: () async {
-                        Get.to(LoginScreen());
-                      },
-                    )) : const SizedBox()),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: TapableRow(
+                    widget: const Icon(Icons.sticky_note_2_outlined),
+                    title: 'Distance에 제안하기',
+                    onTap: () {
+                      pressed() => _launchUrl();
+                      AuthHelper.navigateToLoginScreen(context, pressed);
+                    },
+                  ),
+                ),
+
+                const SizedBox(height: 16),
+                BorderLine(
+                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+                const SizedBox(height: 16),
+
+                Obx(() => mateViewModel.name.value.isEmpty
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: TapableRow(
+                          widget: const Icon(Icons.logout),
+                          title: "로그인",
+                          onTap: () async {
+                            Get.to(LoginScreen());
+                          },
+                        ))
+                    : const SizedBox()),
               ],
             ),
           ),
           if (adController.isAdLoaded.value)
             SizedBox(
-              height: adController.bannerAd.value!.size.height
-                  .toDouble(),
-              child:
-              AdWidget(ad: adController.bannerAd.value!),
+              height: adController.bannerAd.value!.size.height.toDouble(),
+              child: AdWidget(ad: adController.bannerAd.value!),
             ),
         ],
       ),

@@ -86,7 +86,7 @@ class UserProvider {
       if (myId != null) {
         final response = await supabase
             .from('user')
-            .update({'name': newName}).eq('id', myId);
+            .update({'nickname': newName}).eq('id', myId);
 
         if (response != null && response.error != null) {
           // null 확인 추가

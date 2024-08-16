@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
@@ -14,7 +15,7 @@ class NotificationList extends GetView<MateViewModel> {
       itemBuilder: (context, index) {
         final notification = controller.notificationList[index];
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

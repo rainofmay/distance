@@ -12,7 +12,7 @@ class CustomTextFormField extends StatefulWidget {
   final bool isReadOnly;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
-  final FormFieldValidator validator;
+  final FormFieldValidator? validator;
   final TextEditingController? controller;
   final Widget? prefix;
   final Icon? prefixIcon;
@@ -21,7 +21,11 @@ class CustomTextFormField extends StatefulWidget {
   final Widget? counter;
   final String? labelText;
   final Color? prefixIconColor;
-
+  final Color? textColor;
+  final void Function(String)? onChanged;
+  final String? errorText;
+  final bool hasError;
+  final int? maxLength;
   CustomTextFormField(
       {required this.fieldWidth,
         this.defaultText,
@@ -33,7 +37,7 @@ class CustomTextFormField extends StatefulWidget {
         required this.keyboardType,
         required this.textInputAction,
         this.controller,
-        required this.validator,
+        this.validator,
         this.prefix,
         this.prefixIcon,
         this.suffixWidget,
@@ -41,6 +45,11 @@ class CustomTextFormField extends StatefulWidget {
         this.counter,
         this.suffixIcon,
         this.prefixIconColor,
+        this.textColor,
+        this.onChanged,
+        this.errorText,
+        this.hasError = false,
+        this.maxLength,
         super.key});
 
   @override
@@ -53,24 +62,38 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return SizedBox(
       width: widget.fieldWidth,
       child: TextFormField(
+        style: TextStyle(color: widget.textColor),
         initialValue: widget.defaultText,
-        validator: (value) => widget.validator(value),
-        // onSaved: (value) => widget.onSaved,
+        maxLength: widget.maxLength,
+        validator: widget.validator != null ? (value) => widget.validator!(value) : null,
+        onChanged: widget.onChanged,
         controller: widget.controller,
         keyboardType: widget.keyboardType,
         textInputAction: widget.textInputAction,
         enabled: widget.isEnabled,
-        readOnly: widget.isReadOnly ? true : false,
+        readOnly: widget.isReadOnly,
         maxLines: widget.maxLines,
         cursorColor: PRIMARY_COLOR,
         decoration: InputDecoration(
+          counterText: "",
           focusedBorder: const UnderlineInputBorder(
-            borderSide: BorderSide(color: PRIMARY_COLOR), // 포커스 시 밑줄 색상
+            borderSide: BorderSide(color: PRIMARY_COLOR),
           ),
           enabledBorder: UnderlineInputBorder(
-            borderSide:
-            BorderSide(color: GREY.withOpacity(0.5)), // 아웃포커스 시 밑줄 색상
+            borderSide: BorderSide(color: GREY.withOpacity(0.5)),
           ),
+          errorText: widget.hasError ? widget.errorText : null,
+          errorStyle: const TextStyle(color: Color(0xff790F07)),
+          errorBorder: widget.hasError
+              ? const UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff790F07)),
+          )
+              : null,
+          focusedErrorBorder: widget.hasError
+              ? const UnderlineInputBorder(
+            borderSide: BorderSide(color: Color(0xff790F07), width: 1),
+          )
+              : null,
           isDense: true,
           contentPadding: const EdgeInsets.all(10),
           prefixIconColor: widget.prefixIconColor,
