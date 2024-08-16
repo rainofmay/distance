@@ -9,8 +9,6 @@ import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_alert_dialog.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
-import 'dart:io' as io;
-
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
 Widget gridContents(List<dynamic> contents) {

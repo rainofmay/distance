@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/model/schedule_model.dart';
-import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 
 class MateFloatingTodo extends StatefulWidget {

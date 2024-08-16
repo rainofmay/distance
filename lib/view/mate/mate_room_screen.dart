@@ -2,12 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_video_player/cached_video_player.dart';
-import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:mobile/common/const/colors.dart';
-import 'package:mobile/view/mate/mate_screen.dart';
 import 'package:mobile/view/mate/widget/mate_floating_todo.dart';
-import 'package:mobile/view/myroom/widget/floating_todo.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
 
