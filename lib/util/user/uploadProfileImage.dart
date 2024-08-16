@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path/path.dart' as path;
 
 Future<void> requestPermissions(BuildContext context) async {
   if (Platform.isIOS) {

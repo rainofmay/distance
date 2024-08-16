@@ -1,15 +1,12 @@
 import 'dart:io';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
-import 'package:mobile/widgets/custom_circular_indicator.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
 import 'package:mobile/common/const/colors.dart';
 
@@ -87,7 +84,6 @@ class ProfileEdit extends StatelessWidget {
                   fit: BoxFit.cover,
                   width: 100,
                   height: 100,
-                  placeholder: (context, url) => CustomCircularIndicator(size: 30.0),
                   errorWidget: (context, url, error) => Image.asset(
                     'assets/images/themes/gomzy_theme.jpg',
                     fit: BoxFit.cover,
