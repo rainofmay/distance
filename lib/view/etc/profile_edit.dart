@@ -52,9 +52,10 @@ class ProfileEdit extends StatelessWidget {
   Widget profileImgChoose(BuildContext context) {
     return GestureDetector(onTap: () async {
       final profileUrl;
-      profileUrl = await userProvider.editProfileImage(context);
+      profileUrl = await userProvider.editProfileImage(context); // db에 새로운 url 저장
       if (profileUrl != null) {
         await viewModel.updateProfileImageUrl(profileUrl);
+        await viewModel.updateMyProfile();
       }
     }, child: Obx(
       () {
@@ -63,31 +64,32 @@ class ProfileEdit extends StatelessWidget {
             alignment: Alignment.bottomRight,
             fit: StackFit.loose,
             children: [
-              ClipRRect(
+               ClipRRect(
                 borderRadius: BorderRadius.circular(50.0),
                 child: viewModel.profileImageUrl.value == null
                     ? Image.asset(
-                        'assets/images/themes/gomzy_theme.jpg',
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                      )
+                  'assets/images/themes/gomzy_theme.jpg',
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
+                )
                     : CachedNetworkImage(
-                        // CachedNetworkImage 사용
-                        imageUrl: viewModel.profileImageUrl.value,
-                        fit: BoxFit.cover,
-                        width: 100,
-                        height: 100,
-                        placeholder: (context, url) =>
-                            CustomCircularIndicator(size: 30.0),
-                        // 로딩 표시
-                        errorWidget: (context, url, error) => Image.asset(
-                          'assets/images/themes/gomzy_theme.jpg',
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: 100,
-                        ), // 에러 시 기본 이미지
-                      ),
+                  // CachedNetworkImage 사용
+                  key: ValueKey(viewModel.profileImageUrl.value),
+                  imageUrl: viewModel.profileImageUrl.value,
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
+                  placeholder: (context, url) =>
+                      CustomCircularIndicator(size: 30.0),
+                  // 로딩 표시
+                  errorWidget: (context, url, error) => Image.asset(
+                    'assets/images/themes/gomzy_theme.jpg',
+                    fit: BoxFit.cover,
+                    width: 100,
+                    height: 100,
+                  ), // 에러 시 기본 이미지
+                ),
               ),
               Container(
                   width: 29,
@@ -158,7 +160,7 @@ class ProfileEdit extends StatelessWidget {
           isReadOnly: false,
           keyboardType: TextInputType.name,
           textInputAction: TextInputAction.next,
-          maxLength: 20,
+          maxLength: 15,
           hasError: viewModel.introductionError.isNotEmpty,
           errorText: viewModel.introductionError.value,
           onChanged: (value) {

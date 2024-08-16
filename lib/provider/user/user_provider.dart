@@ -57,27 +57,31 @@ class UserProvider {
   Future<String?> editProfileImage(BuildContext context) async {
     try {
       final url = await uploadImage(context);
+      if (url == null) {
+        print("Failed to upload image");
+        return null;
+      }
+
       final myId = await AuthHelper.getMyId();
-      if (myId != null && url != null) {
-        final response = await supabase
-            .from('user')
-            .update({'profile_url': url}).eq('id', myId);
-
-        return url;
-
-        if (response != null && response.error != null) {
-          // null 확인 추가
-          throw response.error!;
-        } else {
-          print("update ProfileImage to $url");
-        }
-      } else {
+      if (myId == null) {
         throw Exception('User not logged in');
       }
+
+      final response = await supabase
+          .from('user')
+          .update({'profile_url': url}).eq('id', myId);
+
+      if (response.error != null) {
+        throw response.error!;
+      }
+
+      print("Updated ProfileImage to $url");
+      return url;
     } catch (e) {
       print("[EditProfileImage Error] $e");
+      // 여기서 사용자에게 에러 메시지를 표시할 수 있습니다.
+      return null;
     }
-    return null;
   }
 
   Future<void> editName(String newName) async {

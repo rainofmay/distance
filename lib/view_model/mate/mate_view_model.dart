@@ -81,6 +81,11 @@ class MateViewModel extends GetxController {
 
   @override
   void dispose() {
+    _nameController.value.dispose();
+    _introduceController.value.dispose();
+    _statusController.value.dispose();
+    _emojiController.value.dispose();
+
     _emailController.value.dispose();
     _scrollController.value.dispose();
     super.dispose();
@@ -102,8 +107,10 @@ class MateViewModel extends GetxController {
 
   void updateImageUrl(String newImageUrl) => imageUrl.value = newImageUrl;
 
-  Future<void> updateProfileImageUrl(String newProfileImageUrl) async =>
-      profileImageUrl.value = newProfileImageUrl;
+  Future<void> updateProfileImageUrl(String newProfileImageUrl) async {
+    profileImageUrl.value = newProfileImageUrl;
+    update();
+  }
 
   void updateOnlineStatus(OnlineStatus newStatus) =>
       isUserOnline.value = newStatus;
@@ -158,15 +165,15 @@ class MateViewModel extends GetxController {
     if (value.isEmpty) {
       nameError.value = "이름을 입력해 주세요.";
     } else if (value.length > 7) {
-      nameError.value = "7자 이내로 입력하세요.";
+      nameError.value = "7자 이내로 입력해 주세요.";
     } else {
       nameError.value = '';
     }
   }
 
   void validateIntroduction(String value) {
-    if (value.length > 20) {
-      introductionError.value = "20 이내로 입력하세요.";
+    if (value.length > 15) {
+      introductionError.value = "15자 이내로 입력해 주세요.";
     } else {
       introductionError.value = '';
     }
@@ -174,7 +181,7 @@ class MateViewModel extends GetxController {
 
   void validateStatus(String value) {
     if (value.length > 20) {
-      statusError.value = "20 이내로 입력하세요.";
+      statusError.value = "20자 이내로 입력해 주세요.";
     } else {
       statusError.value = '';
     }
@@ -201,7 +208,7 @@ class MateViewModel extends GetxController {
       Get.back(); // 이전 화면으로 돌아가기
     } else {
       // 유효하지 않은 필드가 있는 경우 사용자에게 알림
-      Get.snackbar('오류', '입력 정보를 확인해주세요.');
+      Get.snackbar('오류', '입력 정보를 확인해 주세요.');
     }
   }
 

@@ -83,7 +83,7 @@ class MyroomBackgroundScreen extends StatelessWidget {
                 );
                 // Get.to(() => BackgroundThemes(), preventDuplicates: true);
               },
-              child: Row(
+              child: const Row(
                 children: [
                   Text('테마 고르기', style: TextStyle(color: WHITE)),
                 ],
@@ -98,7 +98,7 @@ class MyroomBackgroundScreen extends StatelessWidget {
                   Navigator.pop(context);
                 });
               },
-              child: Row(
+              child: const Row(
                 children: [
                   Text('내 앨범에서 사진/영상 선택', style: TextStyle(color: WHITE)),
                 ],

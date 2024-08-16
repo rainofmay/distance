@@ -57,7 +57,7 @@
 		<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
 		<key>LSApplicationQueriesSchemes</key>
 		<array>
-            <string>https</string>
+			<string>https</string>
 			<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
 		<string>kakaokompassauth</string>
 		<string>storykompassauth</string>

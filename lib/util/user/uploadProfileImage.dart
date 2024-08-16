@@ -5,11 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
 
 Future<void> requestPermissions(BuildContext context) async {
   if (Platform.isIOS) {
-      var photosStatus = await Permission.photos.request();
+    var photosStatus = await Permission.photos.request();
     if (photosStatus.isPermanentlyDenied) {
       showPermissionDialog(context, "사진");
     }
@@ -22,6 +27,31 @@ Future<void> requestPermissions(BuildContext context) async {
     if (storageStatus.isPermanentlyDenied) {
       showPermissionDialog(context, "저장소");
     }
+  }
+}
+
+String sanitizeFileName(String fileName) {
+// 파일 확장자 분리
+  final parts = fileName.split('.');
+  String name = parts.first;
+  String extension = parts.length > 1 ? '.${parts.last}' : '';
+
+// 특수 문자 제거 및 공백을 언더스코어로 대체
+  name = name.replaceAll(RegExp(r'[^\w\s-]'), '').replaceAll(RegExp(r'\s+'), '_');
+
+// 현재 시간을 파일 이름에 추가하여 유니크성 보장
+  String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+
+// 정규화된 파일 이름 생성
+  return '${name}_$timestamp$extension'.toLowerCase();
+}
+
+Future<bool> _requestPermission(Permission permission) async {
+  if (await permission.isGranted) {
+    return true;
+  } else {
+    var result = await permission.request();
+    return result == PermissionStatus.granted;
   }
 }
 
@@ -54,7 +84,7 @@ Future<String?> uploadImage(BuildContext context) async {
   if (Platform.isIOS) {
     hasPermission = await Permission.photos.isGranted;
   } else if (Platform.isAndroid) {
-    hasPermission = await Permission.storage.isGranted;
+    hasPermission = await Permission.photos.isGranted;
   }
 
   if (hasPermission) {
@@ -62,11 +92,17 @@ Future<String?> uploadImage(BuildContext context) async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       final file = File(pickedFile.path);
-      final credentials = AWS.AwsClientCredentials(accessKey: dotenv.get("AWS_S3_ACCESS_KEY"), secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
-      final s3 = AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
-      
+
+
+      final credentials = AWS.AwsClientCredentials(
+          accessKey: dotenv.get("AWS_S3_ACCESS_KEY"),
+          secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
+      final s3 =
+          AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
+
       try {
-        final key = 'user-profile/${DateTime.now().millisecondsSinceEpoch}_${file.path.split('/').last}';
+        final sanitizedFileName = sanitizeFileName(file.path.split('/').last);
+        final key = 'user-profile/$sanitizedFileName';
         final response = await s3.putObject(
           bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
           key: key,
@@ -76,7 +112,8 @@ Future<String?> uploadImage(BuildContext context) async {
         if (response.eTag != null) {
           print('업로드 성공');
           // S3 객체의 URL 생성
-          final url = 'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
+          final url =
+              'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
           return url;
         } else {
           print('업로드 실패: ${response.eTag}');
@@ -86,8 +123,10 @@ Future<String?> uploadImage(BuildContext context) async {
       }
     }
   } else {
-    Get.snackbar("권한 설정", "이미지 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.");
+    CustomSnackbar.show(
+        title: '권한 설정', message: '이미지 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.');
+    final permission = _requestPermission(Permission.photos);
+    debugPrint('permission : $permission');
   }
   return null;
 }
-

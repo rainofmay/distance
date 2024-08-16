@@ -181,7 +181,7 @@ class MateScreen extends StatelessWidget {
                                   : viewModel
                                   .userCurrentActivityText
                                   .value,
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 14, color: BLACK),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
@@ -234,56 +234,52 @@ class MateScreen extends StatelessWidget {
   }
 
   Widget friendsWidget(BuildContext context) {
-    return Scrollbar(
-      thickness: 10.0, // 스크롤바의 두께
-      radius: Radius.circular(10), // 스크롤바의 모서리 둥글기
-      child: ListView(
-        controller: viewModel.scrollController,
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          if (viewModel.mateProfiles.value.isEmpty)
-            SizedBox(
-              height:
-                  MediaQuery.of(context).size.height - 600, // Adjust as needed
-              child: Center(
-                child: GestureDetector(
-                  onTap: () {
-                    pressed() {
-                      Get.to(() => MateRequestsScreen(), preventDuplicates: true);
-                    }
-      
-                    AuthHelper.navigateToLoginScreen(context, pressed);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 0),
-                    child: Container(
-                      width: 120,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: DARK,
-                      ),
-                      child: const Center(
-                        child: Text('메이트 찾기',
-                            style: TextStyle(color: PRIMARY_LIGHT),
-                            textAlign: TextAlign.center),
-                      ),
+    return ListView(
+      controller: viewModel.scrollController,
+      physics: const AlwaysScrollableScrollPhysics(),
+      children: [
+        if (viewModel.mateProfiles.value.isEmpty)
+          SizedBox(
+            height:
+                MediaQuery.of(context).size.height - 600, // Adjust as needed
+            child: Center(
+              child: GestureDetector(
+                onTap: () {
+                  pressed() {
+                    Get.to(() => MateRequestsScreen(), preventDuplicates: true);
+                  }
+
+                  AuthHelper.navigateToLoginScreen(context, pressed);
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 0),
+                  child: Container(
+                    width: 120,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: DARK,
+                    ),
+                    child: const Center(
+                      child: Text('메이트 찾기',
+                          style: TextStyle(color: PRIMARY_LIGHT),
+                          textAlign: TextAlign.center),
                     ),
                   ),
                 ),
               ),
-            )
-          else
-            ...viewModel.mateProfiles.value.map((profile) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 16.0),
-                child: ProfileCard(
-                  profile: profile.value, viewModel: viewModel,
-                ),
-              );
-            }).toList(),
-        ],
-      ),
+            ),
+          )
+        else
+          ...viewModel.mateProfiles.value.map((profile) {
+            return Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: ProfileCard(
+                profile: profile.value, viewModel: viewModel,
+              ),
+            );
+          }).toList(),
+      ],
     );
   }
 }

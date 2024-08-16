@@ -57,10 +57,10 @@ dependencies:
 
 flutter_native_splash:
   color: "#282828"
-  image: "assets/images/splash.jpg"
+  image: "assets/images/splash.png"
 #  background_image: "assets/images/logo.png"
   android_12:
-    image: "assets/images/splash.jpg"
+    image: "assets/images/splash.png"
     color: "#282828"
 #    background_image: "assets/images/logo.jpg"
   
