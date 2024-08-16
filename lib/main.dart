@@ -11,6 +11,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/notification_service.dart';
+  import 'package:mobile/view/login/password_reset_request_screen.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -51,6 +52,34 @@ Future<void> main() async {
   runApp(const MainPage());
   FlutterNativeSplash.remove();
 }
+//
+// class RouteObserver extends GetxController {
+//   static RouteObserver get to => Get.find();
+//
+//   void handleDeepLink(Routing? routing) {
+//     if (routing?.current == null) return;
+//
+//     final Uri? uri = Uri.tryParse(routing!.current);
+//     if (uri != null && uri.scheme == 'distance') {
+//       if (uri.host == 'resetPassword') {
+//         Get.toNamed('/resetPassword');
+//       }
+//       // 다른 딥링크 처리 로직을 여기에 추가할 수 있습니다.
+//     }
+//   }
+// }
+//
+//
+// void handleDeepLink(_) {
+//   final String currentRoute = Get.currentRoute;
+//   final Uri? uri = Uri.tryParse(currentRoute);
+//   if (uri != null && uri.scheme == 'distance') {
+//     if (uri.host == 'resetPassword') {
+//       Get.toNamed('/resetPassword');
+//     }
+//     }
+//   }
+
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -125,6 +154,20 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
       systemNavigationBarColor: BLACK, // 하단 시스템UI 검정색
     ));
     return GetMaterialApp(
+        // initialBinding: BindingsBuilder(() {
+        //   Get.put(RouteObserver());
+        // }),
+        // routingCallback: (routing) {
+        //   RouteObserver.to.handleDeepLink(routing);
+        // },
+        // getPages: [
+        //   GetPage(
+        //     name: '/resetPassword',
+        //     page: () => PasswordResetScreen(),
+        //   ),
+        //   // 다른 라우트들...
+        // ],
+
         debugShowCheckedModeBanner: false,
         theme: mainstyle.theme,
         home: Obx(() => Scaffold(

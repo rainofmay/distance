@@ -27,6 +27,8 @@ class MateScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    viewModel.getMyMate();
+    viewModel.getPendingMates();
     return Scaffold(
       backgroundColor: WHITE,
       appBar: CustomAppBar(
