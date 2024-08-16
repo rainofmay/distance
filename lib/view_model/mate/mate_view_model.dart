@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/model/online_status.dart';
@@ -59,6 +61,13 @@ class MateViewModel extends GetxController {
   late final Rx<ScrollController> _scrollController = ScrollController().obs;
   ScrollController get scrollController => _scrollController.value;
 
+  final Rx<File?> localProfileImage = Rx<File?>(null);
+
+  Future<void> updateProfileImageLocally(File imageFile) async {
+    localProfileImage.value = imageFile;
+    update();
+  }
+
 
   /* notification */
   late final RxList<Map<String, String>> _notificationList = <Map<String, String>>[].obs;
@@ -109,6 +118,7 @@ class MateViewModel extends GetxController {
 
   Future<void> updateProfileImageUrl(String newProfileImageUrl) async {
     profileImageUrl.value = newProfileImageUrl;
+    localProfileImage.value = null;
     update();
   }
 

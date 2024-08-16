@@ -3,13 +3,11 @@ import 'dart:io';
 import 'package:aws_s3_api/s3-2006-03-01.dart' as AWS;
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 
 Future<void> requestPermissions(BuildContext context) async {
@@ -88,45 +86,49 @@ Future<String?> uploadImage(BuildContext context) async {
   }
 
   if (hasPermission) {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await _pickImage();
     if (pickedFile != null) {
-      final file = File(pickedFile.path);
-
-
-      final credentials = AWS.AwsClientCredentials(
-          accessKey: dotenv.get("AWS_S3_ACCESS_KEY"),
-          secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
-      final s3 =
-          AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
-
-      try {
-        final sanitizedFileName = sanitizeFileName(file.path.split('/').last);
-        final key = 'user-profile/$sanitizedFileName';
-        final response = await s3.putObject(
-          bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
-          key: key,
-          body: file.readAsBytesSync(),
-        );
-
-        if (response.eTag != null) {
-          print('업로드 성공');
-          // S3 객체의 URL 생성
-          final url =
-              'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
-          return url;
-        } else {
-          print('업로드 실패: ${response.eTag}');
-        }
-      } catch (e) {
-        print('오류 발생: $e');
-      }
+      return await _uploadToS3(File(pickedFile.path));
     }
   } else {
     CustomSnackbar.show(
         title: '권한 설정', message: '이미지 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.');
-    final permission = _requestPermission(Permission.photos);
+    final permission = await _requestPermission(Permission.photos);
     debugPrint('permission : $permission');
+  }
+  return null;
+}
+
+Future<XFile?> _pickImage() async {
+  final picker = ImagePicker();
+  return await picker.pickImage(source: ImageSource.gallery);
+}
+
+Future<String?> _uploadToS3(File file) async {
+  final credentials = AWS.AwsClientCredentials(
+      accessKey: dotenv.get("AWS_S3_ACCESS_KEY"),
+      secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
+  final s3 = AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
+
+  try {
+    final sanitizedFileName = sanitizeFileName(file.path.split('/').last);
+    final key = 'user-profile/$sanitizedFileName';
+    final response = await s3.putObject(
+      bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
+      key: key,
+      body: file.readAsBytesSync(),
+    );
+
+    if (response.eTag != null) {
+      print('업로드 성공');
+      // S3 객체의 URL 생성
+      final url = 'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
+      return url;
+    } else {
+      print('업로드 실패: ${response.eTag}');
+    }
+  } catch (e) {
+    print('오류 발생: $e');
   }
   return null;
 }

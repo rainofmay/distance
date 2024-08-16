@@ -5,6 +5,7 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:mobile/provider/user/user_provider.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
@@ -64,9 +65,16 @@ class ProfileEdit extends StatelessWidget {
             alignment: Alignment.bottomRight,
             fit: StackFit.loose,
             children: [
-               ClipRRect(
+              ClipRRect(
                 borderRadius: BorderRadius.circular(50.0),
-                child: viewModel.profileImageUrl.value == null
+                child: viewModel.localProfileImage.value != null
+                    ? Image.file(
+                  viewModel.localProfileImage.value!,
+                  fit: BoxFit.cover,
+                  width: 100,
+                  height: 100,
+                )
+                    : viewModel.profileImageUrl.value == null
                     ? Image.asset(
                   'assets/images/themes/gomzy_theme.jpg',
                   fit: BoxFit.cover,
@@ -74,21 +82,18 @@ class ProfileEdit extends StatelessWidget {
                   height: 100,
                 )
                     : CachedNetworkImage(
-                  // CachedNetworkImage 사용
                   key: ValueKey(viewModel.profileImageUrl.value),
                   imageUrl: viewModel.profileImageUrl.value,
                   fit: BoxFit.cover,
                   width: 100,
                   height: 100,
-                  placeholder: (context, url) =>
-                      CustomCircularIndicator(size: 30.0),
-                  // 로딩 표시
+                  placeholder: (context, url) => CustomCircularIndicator(size: 30.0),
                   errorWidget: (context, url, error) => Image.asset(
                     'assets/images/themes/gomzy_theme.jpg',
                     fit: BoxFit.cover,
                     width: 100,
                     height: 100,
-                  ), // 에러 시 기본 이미지
+                  ),
                 ),
               ),
               Container(

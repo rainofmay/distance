@@ -9,8 +9,6 @@ import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/schedule/widget/schedule/schedule_form.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
-import 'package:mobile/widgets/custom_snackbar.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class CreateScheduleScreen extends StatelessWidget {
   CreateScheduleScreen({super.key});
@@ -53,7 +51,6 @@ class CreateScheduleScreen extends StatelessWidget {
                   onPressed: () {
                     if (!context.mounted) return;
                     viewModel.isFormValid ? _onSavePressed(context) : null;
-                    CustomSnackbar.show(title: '테스트', message: '메세지');
                   },
                   child: Text(
                     '저장',

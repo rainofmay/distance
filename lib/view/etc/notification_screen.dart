@@ -36,7 +36,7 @@ class NotificationScreen extends GetView<ScheduleViewModel> {
                     iconColor: BLACK,
                     collapsedIconColor: BLACK,
                     expandedAlignment: Alignment.centerLeft,
-                    leading: Icon(CupertinoIcons.clock, color: BLACK, size: 18),
+                    leading: const Icon(CupertinoIcons.clock, color: BLACK, size: 18),
                     title: Transform.translate(
                       offset: Offset(-16, 0),
                       child: const Text('일정 알림 설정',

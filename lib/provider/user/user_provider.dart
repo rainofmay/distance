@@ -1,5 +1,7 @@
 
 
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:mobile/model/online_status.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
@@ -71,7 +73,7 @@ class UserProvider {
           .from('user')
           .update({'profile_url': url}).eq('id', myId);
 
-      if (response.error != null) {
+      if (response != null && response.error != null) {
         throw response.error!;
       }
 
