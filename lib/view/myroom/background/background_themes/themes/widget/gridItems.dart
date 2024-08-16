@@ -59,8 +59,8 @@ Widget _buildImageDialog(BuildContext context, ThemePicture picture,
       actionWidget: OkCancelButtons(
         okText: '변경',
         okTextColor: PRIMARY_COLOR,
-        onPressed: () {
-          myroomViewModel.setSelectedImageUrl(
+        onPressed: () async{
+          await myroomViewModel.setSelectedImageUrl(
               picture.highQualityUrl, picture.thumbnailUrl);
           Navigator.pop(context);
           print("InterstitialAd 발동");
