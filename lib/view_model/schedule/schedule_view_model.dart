@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
@@ -38,6 +37,9 @@ class ScheduleViewModel extends GetxController {
   late final RxList<ScheduleModel> _allSchedules = <ScheduleModel>[].obs;
   List<ScheduleModel> get allSchedules => _allSchedules;
 
+  late final RxList<ScheduleModel> _mateAllSchedules = <ScheduleModel>[].obs;
+  List<ScheduleModel> get mateAllSchedule => _mateAllSchedules;
+
   final RxList<ScheduleModel> _selectedDateSchedules = <ScheduleModel>[].obs;
   List get selectedDateSchedules => _selectedDateSchedules;
 
@@ -67,6 +69,10 @@ class ScheduleViewModel extends GetxController {
 
   /* Notification */
   final NotificationService _notificationService = Get.put(NotificationService());
+
+  late final RxList<ScheduleModel> _mateTodaySchedules = <ScheduleModel>[].obs;
+  List<ScheduleModel> get mateTodaySchedules => _mateTodaySchedules;
+
 
   Future<void> resetSchedule() async{
     _allSchedules.value = [];
@@ -543,6 +549,23 @@ class ScheduleViewModel extends GetxController {
       return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);
     }).toList();
     print('Today schedules updated: ${_todaySchedules.length}');
+    update();
+  }
+
+  void loadMateTodaySchedule(String mateId) async{
+    final today = DateTime.now();
+    final todayStart = DateTime(today.year, today.month, today.day);
+    final todayEnd = todayStart.add(Duration(days: 1));
+    _mateAllSchedules.value = await _repository.fetchAllMateScheduleData(mateId);
+    _mateTodaySchedules.value = _mateAllSchedules.where((schedule) {
+      // 날짜만 비교
+      final scheduleStart = DateTime(schedule.startDate.year, schedule.startDate.month, schedule.startDate.day);
+      final scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
+
+      // 일반 일정 처리
+      return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);
+    }).toList();
+    print('Today Mate schedules updated: ${_todaySchedules.length}');
     update();
   }
 

@@ -44,4 +44,19 @@ class MyroomBackgroundRepository {
 
     return themeVideos;
   }
+
+  Future<void> setBackgroundImage(String imageUrl) async {
+    try {
+      await _backgroundProvider.setBackgroundImage(imageUrl);
+    } catch (e) {
+      // 여기서 오류를 다시 던지거나 로깅할 수 있습니다.
+      print('Repository error: $e');
+      throw Exception('Failed to set background image: $e');
+    }
+  }
+
+
+  Future<void> setBackgroundVideo(String videoUrl) async{
+    await _backgroundProvider.setBackgroundVideo(videoUrl);
+  }
 }

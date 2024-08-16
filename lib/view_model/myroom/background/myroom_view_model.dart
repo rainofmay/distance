@@ -16,21 +16,24 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/model/quote_model.dart';
 
 class MyroomViewModel extends GetxController {
-
-  final MyroomBackgroundRepository myroomBackgroundRepository = MyroomBackgroundRepository(backgroundProvider: MyroomBackgroundProvider());
+  final MyroomBackgroundRepository myroomBackgroundRepository =
+      MyroomBackgroundRepository(
+          backgroundProvider: MyroomBackgroundProvider());
 
   final RxBool isImage = true.obs;
   final Rxn<CachedVideoPlayerController> videoController =
-  Rxn<CachedVideoPlayerController>();
+      Rxn<CachedVideoPlayerController>();
   final RxString selectedItemUrl = ''.obs;
   final RxString selectedItemThumbnail = ''.obs;
 
   final RxBool isSimpleWindowEnabled = false.obs;
+
   // final RxBool isAudioSpectrumEnabled = false.obs;
   final RxBool isBackdropWordEnabled = false.obs;
   final RxBool isVideoLoading = true.obs;
 
   final Rx<Quote> _currentQuote = quotes[Random().nextInt(quotes.length)].obs;
+
   Quote get currentQuote => _currentQuote.value;
   final Rx<Color> quoteBackdropColor = Color(0x80000000).obs;
   final RxDouble quoteBackdropOpacity = 0.5.obs;
@@ -46,15 +49,17 @@ class MyroomViewModel extends GetxController {
 
   RxBool isThemeLoading = true.obs; // 로딩 상태 변수 추가
   late final RxList<dynamic> _themeContents = [].obs;
+
   List<dynamic> get themeContents => _themeContents;
 
   late final RxString _currentThemeName = ''.obs;
+
   String get currentThemeName => _currentThemeName.value;
   late final io.File? imgFromGallery;
 
   late final RxBool _isSettingDialogOpen = false.obs;
-  bool get isSettingDialogOpen => _isSettingDialogOpen.value;
 
+  bool get isSettingDialogOpen => _isSettingDialogOpen.value;
 
   @override
   void onInit() {
@@ -104,7 +109,6 @@ class MyroomViewModel extends GetxController {
   //   return await themeCacheManager.getImageFile(url, currentThemeName);
   // }
 
-
   Future<void> getGalleryImage() async {
     try {
       // 권한 확인
@@ -132,17 +136,17 @@ class MyroomViewModel extends GetxController {
         print("Storage permission is denied");
       } else if (status.isPermanentlyDenied) {
         // 사용자가 권한을 영구적으로 거부한 경우, 앱 설정으로 이동하도록 안내
-        openAppSettings();
+        print("Storage permission is Permanently denied");
       }
     } catch (e) {
       print("Error in getGalleryImage: $e");
     }
   }
 
-
   Future<io.File> compressAndSaveImage(io.File file, String theme) async {
     final dir = await getTemporaryDirectory();
-    final targetPath = path.join(dir.path, 'compressed_${path.basename(file.path)}');
+    final targetPath =
+        path.join(dir.path, 'compressed_${path.basename(file.path)}');
 
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -159,18 +163,26 @@ class MyroomViewModel extends GetxController {
     }
   }
 
-  void setSelectedImageUrl(String url, String thumbnailUrl) async {
-    videoController.value?.dispose();
-    videoController.value = null;
-    selectedItemUrl.value = url;
-    // final compressedFile = await themeCacheManager.getImageFile(url, currentThemeName);
-    // selectedItemThumbnail.value = compressedFile.path;
-    selectedItemThumbnail.value = thumbnailUrl;
-    isImage.value = true;
-    isVideoLoading.value = true;
-    saveItemUrl(url);
-    saveThumbnailUrl(thumbnailUrl); // selectedItemThumbnail
-    saveIsImage(true);
+  Future<void> setSelectedImageUrl(String imageUrl, String thumbnailUrl) async {
+    try {
+      videoController.value?.dispose();
+      videoController.value = null;
+      selectedItemUrl.value = imageUrl;
+      // final compressedFile = await themeCacheManager.getImageFile(url, currentThemeName);
+      // selectedItemThumbnail.value = compressedFile.path;
+      selectedItemThumbnail.value = thumbnailUrl;
+      isImage.value = true;
+      isVideoLoading.value = true;
+      await myroomBackgroundRepository.setBackgroundImage(imageUrl);
+      saveItemUrl(imageUrl);
+      saveThumbnailUrl(thumbnailUrl); // selectedItemThumbnail
+      saveIsImage(true);
+    } catch (e) {
+      print('Error setting background image: $e');
+      // 오류 처리 로직
+      // 예: 사용자에게 오류 메시지 표시
+      Get.snackbar('오류', '배경 이미지 설정 중 문제가 발생했습니다.');
+    }
   }
 
   void setSelectedVideoUrl(String videoUrl, String thumbnailUrl) {
@@ -180,6 +192,7 @@ class MyroomViewModel extends GetxController {
     selectedItemThumbnail.value = thumbnailUrl;
     isImage.value = false;
     isVideoLoading.value = true;
+    myroomBackgroundRepository.setBackgroundVideo(videoUrl);
     saveItemUrl(videoUrl);
     saveThumbnailUrl(thumbnailUrl);
     saveIsImage(false);
@@ -189,8 +202,10 @@ class MyroomViewModel extends GetxController {
   Future<void> setTheme(String category) async {
     // _themeContents.clear();
     isThemeLoading.value = true; // 로딩 시작
-    List<ThemePicture> themePictures = await myroomBackgroundRepository.fetchThemePictures(category);
-    List<ThemeVideo> themeVideos =  await myroomBackgroundRepository.fetchThemeVideos(category);
+    List<ThemePicture> themePictures =
+        await myroomBackgroundRepository.fetchThemePictures(category);
+    List<ThemeVideo> themeVideos =
+        await myroomBackgroundRepository.fetchThemeVideos(category);
     _themeContents.value = [...themePictures, ...themeVideos];
     isThemeLoading.value = true; // 로딩 시작
   }
@@ -201,13 +216,15 @@ class MyroomViewModel extends GetxController {
   }
 
   void loadPreferences() async {
-    List<ThemePicture> firstPicture = await myroomBackgroundRepository.fetchFirstPicture();
+    List<ThemePicture> firstPicture =
+        await myroomBackgroundRepository.fetchFirstPicture();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isImage.value = prefs.getBool('isImage') ?? true;
     selectedItemUrl.value =
         prefs.getString('selectedItemUrl') ?? firstPicture[0].highQualityUrl;
-    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ?? firstPicture[0].thumbnailUrl;
+    selectedItemThumbnail.value = prefs.getString('selectedItemThumbnail') ??
+        firstPicture[0].thumbnailUrl;
     isSimpleWindowEnabled.value =
         prefs.getBool('isSimpleWindowEnabled') ?? false;
     // isAudioSpectrumEnabled.value =
@@ -215,7 +232,8 @@ class MyroomViewModel extends GetxController {
     isBackdropWordEnabled.value =
         prefs.getBool('isBackdropWordEnabled') ?? false;
 
-    quoteBackdropColor.value = Color(prefs.getInt('quoteBackdropColor') ?? 0xFFFFFFFF);
+    quoteBackdropColor.value =
+        Color(prefs.getInt('quoteBackdropColor') ?? 0xFFFFFFFF);
     quoteBackdropOpacity.value = prefs.getDouble('quoteBackdropOpacity') ?? 0.5;
     quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFMedium';
     quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 18.0;
@@ -298,13 +316,14 @@ class MyroomViewModel extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setDouble('quoteFontSize', size);
   }
-  void updateQuoteFontColor(Color color) async{
+
+  void updateQuoteFontColor(Color color) async {
     quoteFontColor.value = color;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setInt('quoteFontColor', color.value);
   }
 
-  void updateQuote() async{
+  void updateQuote() async {
     // 현재 custom quote가 표시중이라면 랜덤 quote로 변경
     final random = Random();
     Quote newQuote;

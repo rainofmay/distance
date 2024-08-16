@@ -24,6 +24,21 @@ class ScheduleRepository {
     }
   }
 
+  Future<List<ScheduleModel>> fetchAllMateScheduleData(String mateId) async {
+    try {
+      var response = await _scheduleProvider.getMateSchedule(mateId);
+      final mateScheduleData = response.map((e) {
+        return ScheduleModel.fromJson(json: e);
+      }).toList();
+      print('mateScheduleData $mateScheduleData');
+      return mateScheduleData;
+    } catch (e, stackTrace) {
+      print('Error in fetchAllMateScheduleData: $e');
+      print('StackTrace: $stackTrace');
+      return [];
+    }
+  }
+
 // Future<List<ScheduleModel>> fetchScehduleData(DateTime day) async {
 //   var response = await _scheduleProvider.getScheduleData(day);
 //   print('repository response $response');
