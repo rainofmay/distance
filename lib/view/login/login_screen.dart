@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/user/login_provider.dart';
-import 'package:mobile/view/login/password_reset_screen.dart';
+import 'package:mobile/view/login/password_reset_request_screen.dart';
 import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
