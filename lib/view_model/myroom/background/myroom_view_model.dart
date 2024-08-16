@@ -11,6 +11,7 @@ import 'package:mobile/provider/myroom/background/myroom_background_provider.dar
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/model/quote_model.dart';
 
@@ -106,20 +107,38 @@ class MyroomViewModel extends GetxController {
 
   Future<void> getGalleryImage() async {
     try {
-      var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        selectedItemUrl.value = image.path;
-        selectedItemThumbnail.value = image.path;
-        isImage.value = true;
-        await saveItemUrl(image.path);
-        await saveThumbnailUrl(image.path);
-        await saveIsImage(true);
-        update(); // UI 업데이트
+      // 권한 확인
+      PermissionStatus status;
+      if (await Permission.storage.isGranted) {
+        status = PermissionStatus.granted;
+      } else {
+        status = await Permission.storage.request();
+      }
+
+      if (status.isGranted) {
+        var image = await ImagePicker().pickImage(source: ImageSource.gallery);
+        if (image != null) {
+          selectedItemUrl.value = image.path;
+          selectedItemThumbnail.value = image.path;
+          isImage.value = true;
+          await saveItemUrl(image.path);
+          await saveThumbnailUrl(image.path);
+          await saveIsImage(true);
+          update(); // UI 업데이트
+        }
+      } else if (status.isDenied) {
+        // 사용자에게 권한이 필요한 이유를 설명하고 앱 설정으로 이동하도록 안내
+        // 예: 다이얼로그를 표시하여 설정으로 이동하는 옵션 제공
+        print("Storage permission is denied");
+      } else if (status.isPermanentlyDenied) {
+        // 사용자가 권한을 영구적으로 거부한 경우, 앱 설정으로 이동하도록 안내
+        openAppSettings();
       }
     } catch (e) {
       print("Error in getGalleryImage: $e");
     }
   }
+
 
   Future<io.File> compressAndSaveImage(io.File file, String theme) async {
     final dir = await getTemporaryDirectory();
