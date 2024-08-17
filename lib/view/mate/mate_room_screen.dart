@@ -62,8 +62,8 @@ class _MateRoomScreenState extends State<MateRoomScreen> {
       return CachedNetworkImage(
         imageUrl: widget.backgroundUrl,
         fit: BoxFit.cover,
-        placeholder: (context, url) => CustomCircularIndicator(size: 1),
-        errorWidget: (context, url, error) => CustomCircularIndicator(size: 1),
+        placeholder: (context, url) => Center(child: CustomCircularIndicator(size: 1)),
+        errorWidget: (context, url, error) => Center(child: CustomCircularIndicator(size: 1)),
       );
     } else {
       return _videoController != null && _videoController!.value.isInitialized
@@ -75,7 +75,7 @@ class _MateRoomScreenState extends State<MateRoomScreen> {
                 child: CachedVideoPlayer(_videoController!),
               ),
             )
-          : CustomCircularIndicator(size: 30);
+          : Center(child: CustomCircularIndicator(size: 30));
     }
   }
 

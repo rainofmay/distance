@@ -9,6 +9,7 @@ import 'package:mobile/view/login/register_screen.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/custom_text_form_field.dart';
+import 'package:mobile/widgets/circle_divider.dart';
 import '../../widgets/functions/custom_login.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -20,217 +21,154 @@ class LoginScreen extends StatelessWidget {
     double widthOfLog = MediaQuery.of(context).size.width * 0.8;
     double heightOfLog = 48;
     return Scaffold(
-      backgroundColor: DARK_BACKGROUND,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 24, bottom: 8),
-                child: const Text('DISTANCE',
-                    style: TextStyle(color: PRIMARY_LIGHT, fontSize: 16, fontWeight: FontWeight.bold)),
+      body: Stack(
+        children: [
+          ColorFiltered(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.1), // 0.5는 어둡기의 정도
+              BlendMode.darken,
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("assets/images/login_background.jpg"),
+                  fit: BoxFit.cover,
+                ),
               ),
-              Padding(
-                  padding: const EdgeInsets.only(left: 20.0),
-                  child: Container(
-                      width: 90,
-                      decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                                width: 1.0, color: Colors.grey.withOpacity(0)),
-                          )))),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, top: 8, bottom: 10),
-                child: const Text(
-                    'Log in and experience Distance.',
-                    style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
-                    textAlign: TextAlign.start),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: const Text(
-                    'You can listen to music from your own background.',
-                    style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
-                    textAlign: TextAlign.start),
-              ),
-              const SizedBox(height: 100),
-              Center(
-                child: Column(
-                  children: [
-                    Form(
-                      key: loginViewModel.formKey,
-                      child: Padding(
-                        padding: EdgeInsets.all(20.0),
+            ),
+          ),
+          SafeArea(
+            child: CustomScrollView(
+                slivers: [SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 32, bottom: 8),
+                        child: const Text('DISTANCE',
+                            style: TextStyle(color: PRIMARY_LIGHT, fontSize: 16, fontWeight: FontWeight.bold)),
+                      ),
+                      Padding(
+                          padding: const EdgeInsets.only(left: 20.0),
+                          child: Container(
+                              width: 90,
+                              decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                        width: 1.0, color: Colors.grey.withOpacity(0)),
+                                  )))),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 8, bottom: 10),
+                        child: const Text(
+                            'Log in and experience Distance.',
+                            style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
+                            textAlign: TextAlign.start),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 20),
+                        child: const Text(
+                            'You can listen to music from your own background.',
+                            style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
+                            textAlign: TextAlign.start),
+                      ),
+                      const SizedBox(height: 130),
+                      const Center(child: Text('LOGIN', style: TextStyle(letterSpacing: 22, color: WHITE, fontSize: 22))),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: CircleDivider(
+                          width: 300,
+                          color: PRIMARY_LIGHT,
+                          thickness: 1.0,
+                          circleRadius: 3.0,
+                        ),
+                      ),
+                      const SizedBox(height: 40),
+                      Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Obx(() => CustomTextFormField(
-                              textColor: WHITE,
-                              prefixIcon: const Icon(CupertinoIcons.mail),
-                              prefixIconColor: PRIMARY_LIGHT,
-                              labelText: 'E-mail',
-                              maxLines: 1,
-                              fieldWidth: MediaQuery.of(context).size.width * 0.8,
-                              isPasswordField: false,
-                              isReadOnly: false,
-                              keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.next,
-                              controller: loginViewModel.emailController,
-                              validator: (value) => inputEmailValidator(value),
-                            )),
-
-                            const SizedBox(height: 20),
-
-                            Obx(() => CustomTextFormField(
-                              textColor: WHITE,
-                              prefixIcon: const Icon(Icons.key_rounded),
-                              prefixIconColor: PRIMARY_LIGHT,
-                              labelText: 'Password',
-                              maxLines: 1,
-                              fieldWidth: MediaQuery.of(context).size.width * 0.8,
-                              isPasswordField: true,
-                              isReadOnly: false,
-                              keyboardType: TextInputType.visiblePassword,
-                              textInputAction: TextInputAction.done,
-                              controller: loginViewModel.passwordController,
-                              validator: (value) =>
-                                  inputPasswordValidator(value),
-                            )),
-
-                            const SizedBox(height: 20.0),
+                          children: [
+                            //Google로 로그인
                             ElevatedButton(
                               style: ElevatedButton.styleFrom(
-                                side: BorderSide(color: PRIMARY_COLOR),
                                 shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.all(Radius.circular(8))),
-                                backgroundColor: DARK_BACKGROUND,
-                                foregroundColor: TRANSPARENT,
+                                  borderRadius: BorderRadius.all(Radius.circular(8)),
+                                ),
                                 overlayColor: TRANSPARENT,
-                                fixedSize: Size(MediaQuery.of(context).size.width * 0.8, 48),
+                                foregroundColor: TRANSPARENT,
+                                fixedSize: Size(widthOfLog, heightOfLog),
+                                backgroundColor: WHITE,
                               ),
                               onPressed: () async {
-                                await loginViewModel.signIn(context);
+                                await loginViewModel.signInWithGoogle(context);
                                 await mateViewModel.updateMyProfile();
 
                                 if (!context.mounted) return;
                                 Navigator.of(context).pop();
                               },
-                              child: const Text('로그인',
-                                  style: TextStyle(
-                                      color: PRIMARY_LIGHT, fontSize: 16)),
-                            ),
-                            const SizedBox(height: 10.0), // 버튼과 버튼 사이에 간격 추가
-                            Padding(
-                              padding: const EdgeInsets.only(right: 20),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                              child: Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.to(() => RegisterScreen(), preventDuplicates: true);
-                                    },
-                                    child: const Text('회원가입',
-                                        style: TextStyle(
-                                            color: WHITE, fontSize: 12)),
+                                  const Text(
+                                    '구글로 시작하기',
+                                    style: TextStyle(color: BLACK, fontSize: 16),
                                   ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Get.to(()=> PasswordResetScreen());
-                                    },
-                                    child: const Text('비밀번호 찾기',
-                                        style: TextStyle(
-                                            color: WHITE, fontSize: 12)),
+                                  Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Image.asset(
+                                      'assets/images/google.png',
+                                      width: 24,
+                                      height: 24,
+                                    ),
                                   ),
                                 ],
                               ),
                             ),
+
+                            const SizedBox(height: 24),
+
+                            // KAKAO 로그인
+                            ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                        BorderRadius.all(Radius.circular(8))),
+                                    overlayColor: TRANSPARENT,
+                                    foregroundColor: TRANSPARENT,
+                                    fixedSize: Size(widthOfLog, heightOfLog),
+                                    backgroundColor: Color(0xffFFE812)),
+                                onPressed: () async {
+                                  await loginViewModel.signInWithKakao();
+                                  await mateViewModel.updateMyProfile();
+
+                                  if (!context.mounted) return;
+                                  Navigator.of(context).pop();
+                                },
+                                child: Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    const Text(
+                                      '카카오로 시작하기',
+                                      style: TextStyle(color: BLACK, fontSize: 16),
+                                    ),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Image.asset(
+                                        'assets/images/kakao.png',
+                                        width: 21,
+                                        height: 21,
+                                      ),
+                                    ),
+                                  ],
+                                )),
                           ],
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 35),
-
-                    //Google로 로그인
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(8)),
-                        ),
-                        overlayColor: TRANSPARENT,
-                        foregroundColor: TRANSPARENT,
-                        fixedSize: Size(widthOfLog, heightOfLog),
-                        backgroundColor: WHITE,
-                      ),
-                      onPressed: () async {
-                        await loginViewModel.signInWithGoogle(context);
-                        await mateViewModel.updateMyProfile();
-
-                        if (!context.mounted) return;
-                        Navigator.of(context).pop();
-                      },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          const Text(
-                            '구글로 시작하기',
-                            style: TextStyle(color: BLACK, fontSize: 16),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Image.asset(
-                              'assets/images/google.png',
-                              width: 24,
-                              height: 24,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 16),
-
-                    // KAKAO 로그인
-                    ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8))),
-                            overlayColor: TRANSPARENT,
-                            foregroundColor: TRANSPARENT,
-                            fixedSize: Size(widthOfLog, heightOfLog),
-                            backgroundColor: Color(0xffFFE812)),
-                        onPressed: () async {
-                          await loginViewModel.signInWithKakao();
-                          await mateViewModel.updateMyProfile();
-
-                          if (!context.mounted) return;
-                          Navigator.of(context).pop();
-                        },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Text(
-                              '카카오로 시작하기',
-                              style: TextStyle(color: BLACK, fontSize: 16),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Image.asset(
-                                'assets/images/kakao.png',
-                                width: 21,
-                                height: 21,
-                              ),
-                            ),
-                          ],
-                        )),
-                  ],
-                ),
-              ),
-            ],
+                    ],
+                  ),
+                ),]
+            ),
           ),
-        ),
+        ]
       ),
     );
   }

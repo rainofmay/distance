@@ -18,7 +18,7 @@ class CreateScheduleScreen extends StatelessWidget {
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
 
-  // final _formKey = GlobalKey<FormState>();
+
   bool _isFormValid() {
     return viewModel.formKey.currentState?.validate() ?? false;
   }

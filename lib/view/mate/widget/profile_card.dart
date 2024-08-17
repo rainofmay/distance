@@ -38,7 +38,7 @@ class ProfileCard extends StatelessWidget {
               onTap: () {},
               child: Row(
                 children: [
-                  Text('Mate방 들어가기', style: TextStyle(color: WHITE)),
+                  const Text('Mate방 들어가기', style: TextStyle(color: WHITE)),
                 ],
               ),
             ),
@@ -51,7 +51,7 @@ class ProfileCard extends StatelessWidget {
               },
               child: Row(
                 children: [
-                  Text('Mate 삭제하기', style: TextStyle(color: WHITE)),
+                  const Text('Mate 삭제하기', style: TextStyle(color: WHITE)),
                 ],
               ),
             ),
@@ -106,7 +106,7 @@ class ProfileCard extends StatelessWidget {
                               ? profile.introduction!
                               : '소개가 없습니다.',
                           style:
-                              TextStyle(fontSize: 11, color: DARK_UNSELECTED),
+                              const TextStyle(fontSize: 11, color: DARK_UNSELECTED),
                         ),
                       ],
                     ),
@@ -115,7 +115,7 @@ class ProfileCard extends StatelessWidget {
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 20),
+                  padding: const EdgeInsets.only(right: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -123,7 +123,7 @@ class ProfileCard extends StatelessWidget {
                         profile.statusEmoji?.isEmpty == false
                             ? profile.statusEmoji!
                             : '🫥', // null 처리
-                        style: TextStyle(fontSize: 11, color: BLACK),
+                        style: const TextStyle(fontSize: 11, color: BLACK),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
@@ -131,7 +131,7 @@ class ProfileCard extends StatelessWidget {
                         profile.statusText?.isEmpty == false
                             ? profile.statusText!
                             : '상태가 없습니다.', // null 처리
-                        style: TextStyle(fontSize: 11, color: DARK_UNSELECTED),
+                        style: const TextStyle(fontSize: 11, color: DARK_UNSELECTED),
                         overflow: TextOverflow.ellipsis,
                         maxLines: 1,
                       ),
