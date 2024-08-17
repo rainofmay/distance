@@ -174,8 +174,8 @@ class MateViewModel extends GetxController {
   void validateName(String value) {
     if (value.isEmpty) {
       nameError.value = "이름을 입력해 주세요.";
-    } else if (value.length > 7) {
-      nameError.value = "7자 이내로 입력해 주세요.";
+    } else if (value.length > 8) {
+      nameError.value = "8자 이내로 입력해 주세요.";
     } else {
       nameError.value = '';
     }

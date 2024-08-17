@@ -81,8 +81,7 @@ class MateScreen extends StatelessWidget {
                             child: Stack(children: [
                               ClipRRect(
                                 borderRadius: BorderRadius.circular(50.0),
-                                child: viewModel.profileImageUrl.value ==
-                                        null
+                                child: viewModel.profileImageUrl.value == null
                                     ? Image.asset(
                                         'assets/images/themes/gomzy_theme.jpg',
                                         fit: BoxFit.cover,
@@ -91,7 +90,8 @@ class MateScreen extends StatelessWidget {
                                       )
                                     : CachedNetworkImage(
                                         // CachedNetworkImage 사용
-                                        imageUrl: viewModel.profileImageUrl.value,
+                                        imageUrl:
+                                            viewModel.profileImageUrl.value,
                                         fit: BoxFit.cover,
                                         width: 60,
                                         height: 60,
@@ -131,18 +131,20 @@ class MateScreen extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                      viewModel.name.value.isEmpty
-                                          ? ""
-                                          : viewModel.name.value,
-                                      style: const TextStyle(fontSize: 15)),
+                                  viewModel.name.value.isEmpty
+                                      ? Text('로그인 해주세요.',
+                                          style: const TextStyle(
+                                              fontSize: 14, color: GREY))
+                                      : Text(viewModel.name.value,
+                                          style: const TextStyle(
+                                              fontSize: 14, color: GREY)),
                                   const SizedBox(height: 6),
                                   Text(
-                                    viewModel.introduction.value
-                                        .isEmpty
+                                    viewModel.introduction.value.isEmpty
                                         ? "소개를 작성해 보세요."
                                         : viewModel.introduction.value,
-                                    style: const TextStyle(fontSize: 11, color: GREY),
+                                    style: const TextStyle(
+                                        fontSize: 11, color: GREY),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                   )
@@ -160,29 +162,19 @@ class MateScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                              viewModel
-                                  .userCurrentActivityText
-                                  .value
-                                  .isEmpty
+                              viewModel.userCurrentActivityText.value.isEmpty
                                   ? ""
-                                  : viewModel
-                                  .userCurrentActivityEmoji
-                                  .value,
-                              style: const TextStyle(
-                                  fontSize: 15, color: BLACK)),
+                                  : viewModel.userCurrentActivityEmoji.value,
+                              style:
+                                  const TextStyle(fontSize: 15, color: BLACK)),
                           const SizedBox(width: 8),
                           Flexible(
                             child: Text(
-                              viewModel
-                                  .userCurrentActivityText
-                                  .value
-                                  .isEmpty
+                              viewModel.userCurrentActivityText.value.isEmpty
                                   ? ""
-                                  : viewModel
-                                  .userCurrentActivityText
-                                  .value,
-                              style: const TextStyle(
-                                  fontSize: 14, color: BLACK),
+                                  : viewModel.userCurrentActivityText.value,
+                              style:
+                                  const TextStyle(fontSize: 14, color: BLACK),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),
@@ -275,7 +267,8 @@ class MateScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: ProfileCard(
-                profile: profile.value, viewModel: viewModel,
+                profile: profile.value,
+                viewModel: viewModel,
               ),
             );
           }).toList(),

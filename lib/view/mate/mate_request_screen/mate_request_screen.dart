@@ -51,7 +51,7 @@ class MateRequestsScreen extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             userEmail != null ? "내 E-mail: $userEmail" : "로그인 후 이용해주세요!",
-            style: const TextStyle(fontSize: 11, color: DARK_UNSELECTED),
+            style: const TextStyle(fontSize: 11, color: GREY),
           ),
           const SizedBox(height: 16),
           Row(

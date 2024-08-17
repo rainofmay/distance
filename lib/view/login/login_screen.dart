@@ -83,8 +83,8 @@ class LoginScreen extends StatelessWidget {
                               textAlign: TextAlign.start),
                         ),
                         const SizedBox(height: 130),
-                        const Center(child: Text('LOGIN', style: TextStyle(letterSpacing: 22, color: WHITE, fontSize: 22))),
-                        const SizedBox(height: 16),
+                        const Center(child: Text('LOGIN', style: TextStyle(letterSpacing: 22, color: WHITE, fontSize: 19))),
+                        const SizedBox(height: 24),
                         Center(
                           child: CircleDivider(
                             width: 300,

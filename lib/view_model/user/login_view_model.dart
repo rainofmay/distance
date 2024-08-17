@@ -57,7 +57,7 @@ class LoginViewModel extends GetxController {
     try {
       await _provider.signInWithKakao();
       update();
-      update();
+
     } catch (e) {
       CustomSnackbar.showLoginError();
     }
@@ -78,6 +78,7 @@ class LoginViewModel extends GetxController {
     try {
       await _provider.signOut(context);
       viewModel.logout();
+      // CustomSnackbar.show(title: '로그아웃', message: '로그아웃 되었습니다.');
       update();
     } catch (e) {
       print('$e');
@@ -98,15 +99,11 @@ class LoginViewModel extends GetxController {
       await _provider.deleteAccount(context, currentUserId);
 
       // 성공 메시지 표시
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('계정이 성공적으로 삭제되었습니다.')),
-      );
+      CustomSnackbar.show(title: '탈퇴', message: '계정이 성공적으로 삭제되었습니다.');
 
     } catch (e) {
-      print('계정 삭제 중 오류 발생: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('계정 삭제에 실패했습니다. 다시 시도해주세요.')),
-      );
+      print('뷰모델 계정 삭제 중 오류 발생: $e');
+      CustomSnackbar.show(title: '탈퇴 오류', message: '계정 삭제에 실패했습니다. 다시 시도해 주세요.');
     }
   }
 

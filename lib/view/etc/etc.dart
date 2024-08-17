@@ -93,9 +93,11 @@ class Etc extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 10),
-                          Obx(() => Text(mateViewModel.name.value.isEmpty
-                              ? "로그인 후 이용하실 수 있습니다."
-                              : mateViewModel.name.value)),
+                          Obx(() => mateViewModel.name.value.isEmpty
+                              ? const Text("로그인 후 이용하실 수 있습니다.",
+                                  style: TextStyle(color: GREY))
+                              : Text(mateViewModel.name.value,
+                                  style: const TextStyle(color: BLACK)))
                         ],
                       ),
                     ],
@@ -224,8 +226,10 @@ class Etc extends StatelessWidget {
                     ? Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: TapableRow(
-                          widget: const Icon(Icons.logout),
+                          widget: const Icon(Icons.login, color: PRIMARY_COLOR),
                           title: "로그인",
+                          fontWeight: FontWeight.bold,
+                          fontColor: PRIMARY_COLOR,
                           onTap: () async {
                             Get.to(LoginScreen());
                           },

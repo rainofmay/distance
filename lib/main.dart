@@ -11,6 +11,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/notification_service.dart';
+import 'package:mobile/view/login/login_screen.dart';
   import 'package:mobile/view/login/password_reset_request_screen.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
@@ -160,13 +161,9 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
         // routingCallback: (routing) {
         //   RouteObserver.to.handleDeepLink(routing);
         // },
-        // getPages: [
-        //   GetPage(
-        //     name: '/resetPassword',
-        //     page: () => PasswordResetScreen(),
-        //   ),
-        //   // 다른 라우트들...
-        // ],
+        getPages: [
+          GetPage(name: '/Login', page: () => LoginScreen()),
+        ],
 
         debugShowCheckedModeBanner: false,
         theme: mainstyle.theme,

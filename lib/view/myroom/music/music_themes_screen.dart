@@ -18,7 +18,7 @@ class MusicThemesScreen extends StatelessWidget {
 
   final MusicViewModel musicViewModel = Get.put(MusicViewModel(
       repository:
-          MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
+      MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider())));
   final MyRoomMusicRepository _repository = Get.put(
       MyRoomMusicRepository(myRoomMusicProvider: MyRoomMusicProvider()));
   final adController = Get.put(AdController());
@@ -37,37 +37,39 @@ class MusicThemesScreen extends StatelessWidget {
           Navigator.of(context).pop();
         },
       ),
-      body: Padding(
-        padding: const EdgeInsets.only(left: 16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
-                child: Obx(() => Column(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16, bottom: 50), // Added bottom padding for ad space
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16.0),
+                    child: Obx(() => Column(
                       children: [
                         SectionTitle(onTap: () {}, title: '지금 내 플레이리스트'),
                         const SizedBox(height: 16),
                         PlayListItem(
                             thumbnailUrl:
-                                musicViewModel.currentPlayList.thumbnailUrl,
+                            musicViewModel.currentPlayList.thumbnailUrl,
                             title: musicViewModel.currentPlayList.bigTitle,
                             info: musicViewModel.currentPlayList.info,
                             numberOfSongs:
-                                musicViewModel.currentPlayList.numberOfSong,
+                            musicViewModel.currentPlayList.numberOfSong,
                             textColor: PRIMARY_LIGHT),
                         const SizedBox(height: 40),
                         SectionTitle(onTap: () {}, title: '전 체'),
                         const SizedBox(height: 32),
-                        ListView.builder(
-                            shrinkWrap: true,
-                            itemCount: _repository.playListTheme.length,
-                            itemBuilder: (context, index) {
-                              CurrentPlayList item =
-                                  _repository.playListTheme[index];
-                              return SingleChildScrollView(
-                                child: Column(
+                        Expanded(
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: _repository.playListTheme.length,
+                              itemBuilder: (context, index) {
+                                CurrentPlayList item =
+                                _repository.playListTheme[index];
+                                return Column(
                                   children: [
                                     PlayListItem(
                                         onTap: () {
@@ -76,18 +78,18 @@ class MusicThemesScreen extends StatelessWidget {
                                               context,
                                               60,
                                               '플레이리스트 추가',
-                                              Padding(
-                                                padding: const EdgeInsets.only(left:8.0, top:4.0),
+                                              const Padding(
+                                                padding: EdgeInsets.only(left:8.0, top:4.0),
                                                 child: Text('이 음악을 내 플레이리스트로 바꿀까요?', style: TextStyle(color: WHITE)),
                                               ),
                                               OkCancelButtons(
-                                                okTextColor: PRIMARY_LIGHT,
+                                                  okTextColor: PRIMARY_LIGHT,
                                                   okText: '확인', onPressed: () async {
                                                 await musicViewModel.setCurrentPlayList(item);
                                                 if (!context.mounted) return;
                                                 Navigator.of(context).pop();
                                               }, cancelText: '취소', onCancelPressed: () {
-                                                    Navigator.of(context).pop();
+                                                Navigator.of(context).pop();
                                               }));
                                         },
                                         thumbnailUrl: item.thumbnailUrl,
@@ -95,24 +97,34 @@ class MusicThemesScreen extends StatelessWidget {
                                         info: item.info,
                                         numberOfSongs: item.numberOfSong,
                                         textColor: WHITE),
-                                    const SizedBox(height: 40),
+                                    const SizedBox(height: 32),
                                   ],
-                                ),
-                              );
-                            }),
-                        if (adController.isAdLoaded.value)
-                          SizedBox(
-                            height: adController.bannerAd.value!.size.height
-                                .toDouble(),
-                            child:
-                            AdWidget(ad: adController.bannerAd.value!),
-                          ),
+                                );
+                              }),
+                        ),
                       ],
                     )),
-              ),
-            )
-          ],
-        ),
+                  ),
+                )
+              ],
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Obx(() {
+              if (adController.isAdLoaded.value) {
+                return SizedBox(
+                  height: adController.bannerAd.value!.size.height.toDouble(),
+                  child: AdWidget(ad: adController.bannerAd.value!),
+                );
+              } else {
+                return const SizedBox.shrink();
+              }
+            }),
+          ),
+        ],
       ),
     );
   }

@@ -9,6 +9,7 @@ class TapableRow extends StatelessWidget {
   final String title;
   final double? fontSize;
   final Color? fontColor;
+  final FontWeight? fontWeight;
   final void Function() onTap;
 
   const TapableRow({
@@ -16,6 +17,7 @@ class TapableRow extends StatelessWidget {
     required this.widget,
     this.fontSize,
     this.fontColor,
+    this.fontWeight,
     required this.title,
     required this.onTap,
   });
@@ -31,7 +33,7 @@ class TapableRow extends StatelessWidget {
             const SizedBox(width: 12),
             Text(title,
                 style: TextStyle(
-                    fontSize: fontSize ?? 16, color: fontColor ?? BLACK)),
+                    fontSize: fontSize ?? 16, color: fontColor ?? BLACK, fontWeight: fontWeight ?? FontWeight.normal)),
           ],
         ));
   }

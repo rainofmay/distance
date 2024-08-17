@@ -134,14 +134,13 @@ class LoginProvider {
   Future<void> signInWithKakao() async {
     try {
       OAuthToken token = await UserApi.instance.loginWithKakaoAccount();
-      print('카카오 로그인 성공 ${token.accessToken}');
+      print('Kakao 로그인 성공 ${token.accessToken}');
 
       final user = await UserApi.instance.me();
       String? email = user.kakaoAccount?.email;
       String? nickname = user.kakaoAccount?.profile?.nickname;
       String? profileUrl = user.kakaoAccount?.profile?.profileImageUrl;
       if (email == null) {
-        CustomSnackbar.show(title: '오류', message: '이메일 정보를 가져올 수 없습니다.');
         return;
       }
 
@@ -156,8 +155,8 @@ class LoginProvider {
       }
 
     } catch (error) {
-      print('카카오 로그인 실패 $error');
-      // CustomSnackbar.show(title: '오류', message: '로그인을 다시 시도해 주세요.');
+      print('Kakao 로그인 실패 $error');
+      CustomSnackbar.show(title: 'Kakao 로그인 오류', message: '로그인을 다시 시도해 주세요.');
     }
   }
 
@@ -249,10 +248,10 @@ class LoginProvider {
   Future<void> signOut(BuildContext context) async {
     try {
       await supabase.auth.signOut();
-      CustomSnackbar.show(title: '로그아웃', message: '로그아웃 되었습니다.');
+      // CustomSnackbar.show(title: '로그아웃', message: '로그아웃 되었습니다.');
     } catch (error) {
       print(error);
-      CustomSnackbar.show(title: '오류', message: '로그아웃에 실패했습니다.');
+      // CustomSnackbar.show(title: '오류', message: '로그아웃에 실패했습니다.');
     }
   }
   // 사용자 탈퇴 기능
@@ -267,13 +266,10 @@ class LoginProvider {
       // user 테이블에서 사용자 데이터 삭제
       await supabase.from('user').delete().eq('id', currentUserId);
 
-
-      CustomSnackbar.show(title: '계정 삭제', message: '계정이 성공적으로 삭제되었습니다.');
       // 로그인 화면으로 이동
       Navigator.pop(context);
     } catch (error) {
       print('계정 삭제 중 오류 발생: $error');
-      CustomSnackbar.show(title: '오류', message: '계정 삭제에 실패했습니다. 다시 시도해주세요.');
     }
   }
 

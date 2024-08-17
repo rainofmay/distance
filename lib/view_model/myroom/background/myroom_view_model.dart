@@ -235,7 +235,7 @@ class MyroomViewModel extends GetxController {
     quoteBackdropColor.value =
         Color(prefs.getInt('quoteBackdropColor') ?? 0xFFFFFFFF);
     quoteBackdropOpacity.value = prefs.getDouble('quoteBackdropOpacity') ?? 0.5;
-    quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFMedium';
+    quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFLight';
     quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 18.0;
     quoteFontColor.value = Color(prefs.getInt('quoteFontColor') ?? 0xFF000000);
     customQuote.value = prefs.getString('customQuote') ?? '';

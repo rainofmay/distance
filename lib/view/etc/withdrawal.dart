@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile/main.dart';
+import 'package:mobile/view/login/login_screen.dart';
 import 'package:mobile/view/mate/widget/custom_dialog.dart';
+import 'package:mobile/view/myroom/myroom_screen.dart';
 import 'package:mobile/view_model/user/login_view_model.dart';
 import 'package:mobile/widgets/app_bar/custom_back_appbar.dart';
 
@@ -16,9 +19,9 @@ class Withdrawal extends StatefulWidget {
 }
 
 class _WithdrawalState extends State<Withdrawal> {
-
   final LoginViewModel loginViewModel = Get.find<LoginViewModel>();
   bool _isChecked = false;
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -55,7 +58,6 @@ class _WithdrawalState extends State<Withdrawal> {
                       '1. 사용자가 설정한 배경, 음악, 프로필, 메이트 등에 관한 모든 정보는 사라지며 복구할 수 없습니다.',
                       style: TextStyle(fontSize: 16),
                       softWrap: true),
-
                   SizedBox(height: 32),
                   Text('2. 본 애플리케이션 서비스는 귀하의 개인정보 저장, 활용 등의 행위를 일체 하지 않습니다.',
                       style: TextStyle(fontSize: 16), softWrap: true),
@@ -96,12 +98,19 @@ class _WithdrawalState extends State<Withdrawal> {
                   _isChecked
                       ? customDialog(
                           context,
-                          40,
+                          30,
                           '정말 탈퇴하시겠습니까?',
-                          Text('탈퇴하면 모든 정보가 삭제됩니다.', style: TextStyle(color: TRANSPARENT_WHITE)),
-                          OkCancelButtons(okText: '확인', onPressed: () {
-                            loginViewModel.deleteAccount(context);
-                          }, cancelText: '취소',))
+                          const Text('탈퇴하면 모든 정보가 삭제됩니다.',
+                              style: TextStyle(color: TRANSPARENT_WHITE)),
+                          OkCancelButtons(
+                            okTextColor: PRIMARY_LIGHT,
+                            okText: '확인',
+                            onPressed: () async {
+                              await loginViewModel.deleteAccount(context);
+                              Get.offAll(() => LoginScreen());
+                            },
+                            cancelText: '취소',
+                          ))
                       : null;
                 },
               )
@@ -109,33 +118,6 @@ class _WithdrawalState extends State<Withdrawal> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _customDialog(BuildContext context) {
-    // 현재 화면 위에 보여줄 다이얼로그 생성
-    return showDialog<void>(
-      context: context,
-      builder: (context) {
-        // 빌더로 AlertDialog 위젯을 생성
-        return AlertDialog(
-          backgroundColor: WHITE,
-          title: const Text('탈퇴하시겠습니까?',
-              style: TextStyle(color: Colors.black, fontSize: 17)),
-          content: const Text(
-            '탈퇴하면 모든 정보가 사라집니다.',
-            style: TextStyle(color: Colors.grey, fontSize: 11),
-          ),
-          actions: [
-            OkCancelButtons(
-                okText: '확인',
-                cancelText: '취소',
-                okTextColor: BLACK,
-                cancelTextColor: BLACK,
-                onPressed: () {})
-          ],
-        );
-      },
     );
   }
 }

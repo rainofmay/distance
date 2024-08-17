@@ -246,7 +246,7 @@ class ProfileEdit extends StatelessWidget {
                 emojiViewConfig: EmojiViewConfig(
                     recentsLimit: 10,
                     replaceEmojiOnLimitExceed: true,
-                    noRecents: const Text('최근 사용하신 이모티콘이 없습니다.', style: TextStyle(fontSize: 20, color: Colors.black26), textAlign: TextAlign.center)
+                    noRecents: const Text('최근 사용하신 이모티콘이 없습니다.', style: TextStyle(fontSize: 14, color: Colors.black26), textAlign: TextAlign.center)
                 ),
                 categoryViewConfig: const CategoryViewConfig(
                   initCategory: Category.RECENT,
