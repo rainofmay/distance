@@ -7,6 +7,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:mobile/model/current_play_list.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/repository/myroom/music/myroom_music_repository.dart';
+import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:path_provider/path_provider.dart';
 
 class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
@@ -22,9 +23,7 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
 
   int get tabIndex => _tabIndex.value;
 
-  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList
-      .first()
-      .obs;
+  late final Rx<CurrentPlayList> _currentPlayList = CurrentPlayList.first().obs;
 
   CurrentPlayList get currentPlayList => _currentPlayList.value;
 
@@ -75,23 +74,19 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
     _setupAudioPlayer();
   }
 
-
   void _setupAudioPlayer() {
     _audioPlayer.playerStateStream.listen((playerState) {
+      print("AudioPlayer state changed: ${playerState.playing}");
       _isMusicPlaying.value = playerState.playing;
-      if (playerState.processingState == ProcessingState.completed) {
-        nextTrack();
-      }
+      update();
+      print("_isMusicPlaying updated to: ${_isMusicPlaying.value}");
     });
-
     _audioPlayer.positionStream.listen((position) {
       _currentMusicPosition.value = position;
     });
-
     _audioPlayer.durationStream.listen((duration) {
       _currentMusicDuration.value = duration ?? Duration.zero;
     });
-
     // Listen to changes in current playing track
     _audioPlayer.currentIndexStream.listen((index) {
       if (index != null && index != _currentIndex.value) {
@@ -105,25 +100,22 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
     ever(_musicInfoList, (_) => _setupBackgroundPlayback());
   }
 
-
   Future<void> _setupBackgroundPlayback() async {
     if (_musicInfoList.isEmpty) return;
 
-    final audioSources = await Future.wait(
-        _musicInfoList.map((music) async {
-          final artUri = await _getAssetUri(currentPlayList.thumbnailUrl);
-          return AudioSource.uri(
-            Uri.parse(music.audioURL),
-            tag: MediaItem(
-              id: music.audioURL,
-              album: music.theme,
-              title: music.musicName,
-              artist: "Distance",
-              artUri: artUri,
-            ),
-          );
-        })
-    );
+    final audioSources = await Future.wait(_musicInfoList.map((music) async {
+      final artUri = await _getAssetUri(currentPlayList.thumbnailUrl);
+      return AudioSource.uri(
+        Uri.parse(music.audioURL),
+        tag: MediaItem(
+          id: music.audioURL,
+          album: music.theme,
+          title: music.musicName,
+          artist: "Distance",
+          artUri: artUri,
+        ),
+      );
+    }));
 
     await _audioPlayer.setAudioSource(
       ConcatenatingAudioSource(children: audioSources),
@@ -131,9 +123,6 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
       preload: false,
     );
   }
-
-
-
 
   @override
   void onInit() {
@@ -169,14 +158,14 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
       _currentIndex.value = 0;
     }
     _isLoading.value = false;
+    update();
   }
 
   Future<void> loadCurrentPlayList() async {
     final theme = await _repository.loadCurrentPlayListIndex();
     if (theme != null) {
-      _currentPlayList.value =
-          _repository.playListTheme.firstWhere((playList) => playList.theme ==
-              theme);
+      _currentPlayList.value = _repository.playListTheme
+          .firstWhere((playList) => playList.theme == theme);
     } else {
       _currentPlayList.value = _repository.playListTheme[0];
     }
@@ -203,7 +192,6 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
     await _audioPlayer.seek(Duration.zero, index: _currentIndex.value);
     _updateCurrentMediaItem();
   }
-
 
   void setInitMusicState() {
     setVolume(0.5);
@@ -232,17 +220,32 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   Future<void> musicPlayPause() async {
-    if (_audioPlayer.playing) {
+    final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
+    final bool isPlaying = isMusicPlaying;
+    print("isPlaying : $isPlaying");
+    if (isPlaying) {
       await _audioPlayer.pause();
-    } else {
-      if (_musicInfoList.isEmpty) return;
+      // await soundViewModel.pauseAllByBackgroundEvent();
+
+    } else{
+      if (_musicInfoList.isEmpty) {
+        print("Music list is empty, cannot play");
+        return;
+      }
       await _audioPlayer.play();
+      // await soundViewModel.resumeAllByBackgroundEvent();
     }
+
+    print("musicPlayPause completed. New state: ${_audioPlayer.playing}");
+    print("------------------------------------------------------");
+
+    update(); // Trigger UI update
   }
 
 
   Future<void> _updateMediaItem() async {
-    if (_musicInfoList.isNotEmpty && _currentIndex.value < _musicInfoList.length) {
+    if (_musicInfoList.isNotEmpty &&
+        _currentIndex.value < _musicInfoList.length) {
       final currentMusic = _musicInfoList[_currentIndex.value];
       final mediaItem = MediaItem(
         id: currentMusic.audioURL,
@@ -262,36 +265,45 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
     }
   }
 
-
-
-  Future<void> playCurrentTrack() async {
-    if (_musicInfoList.isEmpty) {
-      print("musicInfoList is Empty");
-      return;
-    }
-    try {
-      await _updateMediaItem();
-      await _audioPlayer.play();
-    } catch (e) {
-      print('Failed to play music: $e');
-    }
-  }
+  // Future<void> playCurrentTrack() async {
+  //   if (_musicInfoList.isEmpty) {
+  //     print("musicInfoList is Empty");
+  //     return;
+  //   }
+  //   try {
+  //     await _updateMediaItem();
+  //     await _audioPlayer.play();
+  //   } catch (e) {
+  //     print('Failed to play music: $e');
+  //   }
+  // }
 
   Future<void> nextTrack() async {
     if (_musicInfoList.isEmpty) return;
     if (isRepeated) {
       await _audioPlayer.seek(Duration.zero);
     } else {
-      await _audioPlayer.seekToNext();
+      if (_currentIndex.value == _musicInfoList.length - 1) {
+        // If it's the last track, go to the first track
+        await _audioPlayer.seek(Duration.zero, index: 0);
+      } else {
+        await _audioPlayer.seekToNext();
+      }
     }
     await _audioPlayer.play();
   }
 
   Future<void> previousTrack() async {
     if (_musicInfoList.isEmpty) return;
-    await _audioPlayer.seekToPrevious();
+    if (_currentIndex.value == 0) {
+      // If it's the first track, go to the last track
+      await _audioPlayer.seek(Duration.zero, index: _musicInfoList.length - 1);
+    } else {
+      await _audioPlayer.seekToPrevious();
+    }
     await _audioPlayer.play();
   }
+
   //assetPath에서 추출 후에, Uri 형태로 사용하기 위해서 만든 구조
   Future<Uri> _getAssetUri(String assetPath) async {
     final byteData = await rootBundle.load(assetPath);
@@ -304,7 +316,8 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
   }
 
   void _updateCurrentMediaItem() async {
-    if (_musicInfoList.isNotEmpty && _currentIndex.value < _musicInfoList.length) {
+    if (_musicInfoList.isNotEmpty &&
+        _currentIndex.value < _musicInfoList.length) {
       final currentMusic = _musicInfoList[_currentIndex.value];
       final artUri = await _getAssetUri(currentPlayList.thumbnailUrl);
       _currentMediaItem.value = MediaItem(
@@ -317,8 +330,6 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
       );
     }
   }
-
-
 
   int _getRandomIndex() {
     if (_musicInfoList.length <= 1) return 0;
