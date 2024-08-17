@@ -66,31 +66,31 @@ class ProfileEdit extends StatelessWidget {
                 borderRadius: BorderRadius.circular(50.0),
                 child: viewModel.localProfileImage.value != null
                     ? Image.file(
-                  viewModel.localProfileImage.value!,
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                )
+                        viewModel.localProfileImage.value!,
+                        fit: BoxFit.cover,
+                        width: 100,
+                        height: 100,
+                      )
                     : viewModel.profileImageUrl.value == null
-                    ? Image.asset(
-                  'assets/images/themes/gomzy_theme.jpg',
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                )
-                    : CachedNetworkImage(
-                  key: ValueKey(viewModel.profileImageUrl.value),
-                  imageUrl: viewModel.profileImageUrl.value,
-                  fit: BoxFit.cover,
-                  width: 100,
-                  height: 100,
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/themes/gomzy_theme.jpg',
-                    fit: BoxFit.cover,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
+                        ? Image.asset(
+                            'assets/images/themes/gomzy_theme.jpg',
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                          )
+                        : CachedNetworkImage(
+                            key: ValueKey(viewModel.profileImageUrl.value),
+                            imageUrl: viewModel.profileImageUrl.value,
+                            fit: BoxFit.cover,
+                            width: 100,
+                            height: 100,
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/themes/gomzy_theme.jpg',
+                              fit: BoxFit.cover,
+                              width: 100,
+                              height: 100,
+                            ),
+                          ),
               ),
               Container(
                   width: 29,
@@ -131,19 +131,19 @@ class ProfileEdit extends StatelessWidget {
         const Text('이름'),
         const SizedBox(width: 20),
         Obx(() => CustomTextFormField(
-          controller: viewModel.nameController,
-          fieldWidth: fieldWidth,
-          isPasswordField: false,
-          isReadOnly: false,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          maxLength: 8,
-          errorText: viewModel.nameError.value,
-          hasError: viewModel.nameError.isNotEmpty,
-          onChanged: (value) {
-            viewModel.validateName(value);
-          },
-        )),
+              controller: viewModel.nameController,
+              fieldWidth: fieldWidth,
+              isPasswordField: false,
+              isReadOnly: false,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              maxLength: 8,
+              errorText: viewModel.nameError.value,
+              hasError: viewModel.nameError.isNotEmpty,
+              onChanged: (value) {
+                viewModel.validateName(value);
+              },
+            )),
       ],
     );
   }
@@ -155,124 +155,128 @@ class ProfileEdit extends StatelessWidget {
         const Text('소개'),
         const SizedBox(width: 20),
         Obx(() => CustomTextFormField(
-          controller: viewModel.introduceController,
-          fieldWidth: fieldWidth,
-          isPasswordField: false,
-          isReadOnly: false,
-          keyboardType: TextInputType.name,
-          textInputAction: TextInputAction.next,
-          maxLength: 15,
-          hasError: viewModel.introductionError.isNotEmpty,
-          errorText: viewModel.introductionError.value,
-          onChanged: (value) {
-            viewModel.validateIntroduction(value);
-          },
-        )),
+              controller: viewModel.introduceController,
+              fieldWidth: fieldWidth,
+              isPasswordField: false,
+              isReadOnly: false,
+              keyboardType: TextInputType.name,
+              textInputAction: TextInputAction.next,
+              maxLength: 15,
+              hasError: viewModel.introductionError.isNotEmpty,
+              errorText: viewModel.introductionError.value,
+              onChanged: (value) {
+                viewModel.validateIntroduction(value);
+              },
+            )),
       ],
     );
   }
 
   Widget statusEdittor(final fieldWidth) {
     return Obx(() => Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(
-              child: Text('상태'),
-            ),
-            const SizedBox(width: 20),
-            SizedBox(
-              width: fieldWidth,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      viewModel.setEmojiShowing(!viewModel.emojiShowing);
-                    },
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Center(
-                        child: Text(
-                          viewModel.userCurrentActivityEmoji.value.isNotEmpty
-                              ? viewModel.userCurrentActivityEmoji.value
-                              : '😀',
-                          style: const TextStyle(fontSize: 24),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(
+                  child: Text('상태'),
+                ),
+                const SizedBox(width: 20),
+                SizedBox(
+                  width: fieldWidth,
+                  child: Row(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          viewModel.setEmojiShowing(!viewModel.emojiShowing);
+                        },
+                        child: Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.grey[100],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Center(
+                            child: Text(
+                              viewModel
+                                      .userCurrentActivityEmoji.value.isNotEmpty
+                                  ? viewModel.userCurrentActivityEmoji.value
+                                  : '😀',
+                              style: const TextStyle(fontSize: 24),
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: viewModel.statusController,
+                          fieldWidth: fieldWidth - 50,
+                          isPasswordField: false,
+                          isReadOnly: false,
+                          keyboardType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          maxLength: 20,
+                          hasError: viewModel.statusError.isNotEmpty,
+                          errorText: viewModel.statusError.value,
+                          onChanged: (value) {
+                            viewModel.validateStatus(value);
+                          },
+                        ),
+                      ),
+                    ],
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: CustomTextFormField(
-                      controller: viewModel.statusController,
-                      fieldWidth: fieldWidth - 50,
-                      isPasswordField: false,
-                      isReadOnly: false,
-                      keyboardType: TextInputType.text,
-                      textInputAction: TextInputAction.done,
-                      maxLength: 20,
-                      hasError: viewModel.statusError.isNotEmpty,
-                      errorText: viewModel.statusError.value,
-                      onChanged: (value) {
-                        viewModel.validateStatus(value);
-                      },
-
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
+            if (viewModel.emojiShowing)
+              Container(
+                height: 250,
+                margin: EdgeInsets.only(left: 70, top: 10),
+                child: EmojiPicker(
+                  onEmojiSelected: (category, emoji) {
+                    viewModel.updateCurrentActivityEmoji(emoji.emoji);
+                    viewModel.setEmojiShowing(false);
+                  },
+                  textEditingController: viewModel.emojiController,
+                  config: Config(
+                    swapCategoryAndBottomBar: true,
+                    emojiViewConfig: EmojiViewConfig(
+                        recentsLimit: 10,
+                        replaceEmojiOnLimitExceed: true,
+                        noRecents: const Text('최근 사용하신 이모티콘이 없습니다.',
+                            style:
+                                TextStyle(fontSize: 20, color: Colors.black26),
+                            textAlign: TextAlign.center)),
+                    categoryViewConfig: const CategoryViewConfig(
+                      initCategory: Category.RECENT,
+                      indicatorColor: PRIMARY_COLOR,
+                      iconColorSelected: PRIMARY_COLOR,
+                    ),
+                    bottomActionBarConfig: const BottomActionBarConfig(
+                        showSearchViewButton: false,
+                        showBackspaceButton: false),
+                    searchViewConfig: const SearchViewConfig(),
+                  ),
+                ),
+              ),
           ],
-        ),
-        if (viewModel.emojiShowing)
-          Container(
-            height: 250,
-            margin: EdgeInsets.only(left: 70, top: 10),
-            child: EmojiPicker(
-              onEmojiSelected: (category, emoji) {
-                viewModel.updateCurrentActivityEmoji(emoji.emoji);
-                viewModel.setEmojiShowing(false);
-              },
-              textEditingController: viewModel.emojiController,
-              config: Config(
-                swapCategoryAndBottomBar: true,
-                emojiViewConfig: EmojiViewConfig(
-                    recentsLimit: 10,
-                    replaceEmojiOnLimitExceed: true,
-                    noRecents: const Text('최근 사용하신 이모티콘이 없습니다.', style: TextStyle(fontSize: 20, color: Colors.black26), textAlign: TextAlign.center)
-                ),
-                categoryViewConfig: const CategoryViewConfig(
-                  initCategory: Category.RECENT,
-                  indicatorColor: PRIMARY_COLOR,
-                  iconColorSelected : PRIMARY_COLOR,
-                ),
-                bottomActionBarConfig:
-                const BottomActionBarConfig(showSearchViewButton: false, showBackspaceButton:false),
-                searchViewConfig: const SearchViewConfig(),
-              ),
-            ),
-          ),
-      ],
-    ));
+        ));
   }
 
   Widget buildSettingsToggle() {
     return Column(
       children: [
-    SwitchListTile(
-          title: const Text('Schedule 공개'),
-          value: viewModel.isScheduleOpen.value,
-          onChanged: (bool value) {
-            viewModel.setScheduleOpen(!viewModel.isScheduleOpen.value);
-          },
-        ),
+        Obx(() => SwitchListTile(
+              title: const Text('Schedule 공개'),
+              value: viewModel.isScheduleOpen.value,
+              onChanged: (bool value) {
+                viewModel.isScheduleOpen.value = value;
+                print("onChanged 실행 $value");
+              },
+            )),
       ],
     );
   }

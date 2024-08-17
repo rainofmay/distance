@@ -86,6 +86,36 @@ class UserProvider {
     }
   }
 
+  Future<String?> editCustomBackgroundUrl(BuildContext context) async {
+    try {
+      final url = await uploadImage(context);
+      if (url == null) {
+        print("Failed to upload image");
+        return null;
+      }
+
+      final myId = await AuthHelper.getMyId();
+      if (myId == null) {
+        throw Exception('User not logged in');
+      }
+
+      final response = await supabase
+          .from('user')
+          .update({'background': url}).eq('id', myId);
+
+      if (response != null && response.error != null) {
+        throw response.error!;
+      }
+
+      print("Updated Background to $url");
+      return url;
+    } catch (e) {
+      print("[Updated Background Url Error] $e");
+      // 여기서 사용자에게 에러 메시지를 표시할 수 있습니다.
+      return null;
+    }
+  }
+
   Future<void> editName(String newName) async {
     try {
       final myId = await AuthHelper.getMyId();
@@ -193,5 +223,6 @@ class UserProvider {
           .update({'is_schedule_open': isScheduleOpen}).eq(
           'id', userId); // uid를 기준으로 업데이트
   }
-}
+  }
+
 }

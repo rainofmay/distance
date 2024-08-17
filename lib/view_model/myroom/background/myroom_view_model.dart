@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'dart:io';
 import 'dart:math';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +10,15 @@ import 'package:mobile/common/const/quotes.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:mobile/util/user/uploadProfileImage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mobile/model/quote_model.dart';
+
+import '../../../widgets/custom_snackbar.dart';
 
 class MyroomViewModel extends GetxController {
   final MyroomBackgroundRepository myroomBackgroundRepository =
@@ -109,39 +114,59 @@ class MyroomViewModel extends GetxController {
   //   return await themeCacheManager.getImageFile(url, currentThemeName);
   // }
 
-  Future<void> getGalleryImage() async {
+  Future<String?> getGalleryImage(BuildContext context) async {
     try {
-      // 권한 확인
-      PermissionStatus status;
-      if (await Permission.storage.isGranted) {
-        status = PermissionStatus.granted;
-      } else {
-        status = await Permission.storage.request();
+      // 권한 확인 및 요청
+      PermissionStatus status = await Permission.photos.status;
+      if (!status.isGranted) {
+        status = await Permission.photos.request();
+        if (!status.isGranted) {
+          CustomSnackbar.show(
+            title: '권한 설정',
+            message: '이미지 접근 권한이 필요합니다. 설정에서 권한을 허용해주세요.',
+          );
+          return null;
+        }
       }
 
-      if (status.isGranted) {
-        var image = await ImagePicker().pickImage(source: ImageSource.gallery);
-        if (image != null) {
-          selectedItemUrl.value = image.path;
-          selectedItemThumbnail.value = image.path;
-          isImage.value = true;
-          await saveItemUrl(image.path);
-          await saveThumbnailUrl(image.path);
-          await saveIsImage(true);
-          update(); // UI 업데이트
-        }
-      } else if (status.isDenied) {
-        // 사용자에게 권한이 필요한 이유를 설명하고 앱 설정으로 이동하도록 안내
-        // 예: 다이얼로그를 표시하여 설정으로 이동하는 옵션 제공
-        print("Storage permission is denied");
-      } else if (status.isPermanentlyDenied) {
-        // 사용자가 권한을 영구적으로 거부한 경우, 앱 설정으로 이동하도록 안내
-        print("Storage permission is Permanently denied");
+      // 이미지 선택
+      final ImagePicker picker = ImagePicker();
+      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
+      if (image == null) return null;
+
+      // S3에 업로드
+      final String? url = await uploadToS3CustomBackground(File(image.path));
+
+      if (url == null) {
+        print("Failed to upload image to S3");
+        return null;
       }
+
+      myroomBackgroundRepository.setBackgroundImage(url);
+
+      // 로컬 상태 업데이트
+      selectedItemUrl.value = url;
+      selectedItemThumbnail.value = url;
+      isImage.value = true;
+      await saveItemUrl(url);
+      await saveThumbnailUrl(url);
+      await saveIsImage(true);
+
+      update(); // UI 업데이트
+
+      print("Updated profile image to $url");
+      return url;
     } catch (e) {
       print("Error in getGalleryImage: $e");
+      CustomSnackbar.show(
+        title: '오류',
+        message: '이미지 업로드 중 문제가 발생했습니다. 다시 시도해 주세요.',
+      );
+      return null;
     }
   }
+
 
   Future<io.File> compressAndSaveImage(io.File file, String theme) async {
     final dir = await getTemporaryDirectory();
