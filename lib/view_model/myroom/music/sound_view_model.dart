@@ -30,6 +30,9 @@ class SoundViewModel extends GetxController {
   final _isAnyPlaying = false.obs;
   bool get isAnyPlaying => _isAnyPlaying.value;
 
+  final RxBool _isPausedByBackgroundEvent = false.obs;
+  List<int> _pausedPlayerIndices = [];
+
   @override
   void onInit() async {
     await _loadSounds();
@@ -231,7 +234,36 @@ class SoundViewModel extends GetxController {
     }
   }
 
-  void musicPlay(int index) async {
+  // Future<void> pauseAllByBackgroundEvent() async{
+  //   _pausedPlayerIndices = [];
+  //   for (int i = 0; i < _soundPlayersList.length; i++) {
+  //     if (_soundPlayersList[i].isPlaying.value) {
+  //       _pausedPlayerIndices.add(i);
+  //       await musicPause(i);
+  //     }
+  //   }
+  //   print("배경음악 모두 멈춰!");
+  //   print(_pausedPlayerIndices);
+  //   _isPausedByBackgroundEvent.value = true;
+  // }
+  //
+  // Future<void> resumeAllByBackgroundEvent() async{
+  //
+  //     for (int index in _pausedPlayerIndices) {
+  //       await musicPlay(index);
+  //     }
+  //     print("배경음악 모두 실행!");
+  //     _pausedPlayerIndices = [];
+  // }
+
+  Future<void> musicPause(int index) async {
+    await _soundPlayersList[index].audioPlayer.pause();
+    _soundPlayersList[index].isPlaying.value = false;
+    _updateOverallPlayingState();
+    update();
+  }
+
+  Future<void> musicPlay(int index) async {
     try {
       final player = _soundPlayersList[index];
       final audioSource = _soundInfoList[index].audioURL;
@@ -246,12 +278,6 @@ class SoundViewModel extends GetxController {
     }
   }
 
-  void musicPause(int index) async {
-    await _soundPlayersList[index].audioPlayer.pause();
-    _soundPlayersList[index].isPlaying.value = false;
-    _isAnyPlaying.value = !areAllPlayersStopped();
-    update();
-  }
 
   Future<void> musicStop(int index) async {
     if (index >= 0 && index < _soundPlayersList.length) {

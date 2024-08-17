@@ -93,7 +93,7 @@ class MyroomBackgroundScreen extends StatelessWidget {
             GestureDetector(
               behavior: HitTestBehavior.opaque,
               onTap: () async {
-                await myroomViewModel.getGalleryImage();
+                await myroomViewModel.getGalleryImage(context);
                 Future.delayed(Duration(seconds: 1), () {
                   Navigator.pop(context);
                 });

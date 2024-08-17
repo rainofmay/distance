@@ -87,7 +87,7 @@ Future<String?> uploadImage(BuildContext context) async {
   if (hasPermission) {
     final pickedFile = await _pickImage();
     if (pickedFile != null) {
-      return await _uploadToS3(File(pickedFile.path));
+      return await uploadToS3Profile(File(pickedFile.path));
     }
   } else {
     CustomSnackbar.show(
@@ -103,7 +103,7 @@ Future<XFile?> _pickImage() async {
   return await picker.pickImage(source: ImageSource.gallery);
 }
 
-Future<String?> _uploadToS3(File file) async {
+Future<String?> uploadToS3Profile(File file) async {
   final credentials = AWS.AwsClientCredentials(
       accessKey: dotenv.get("AWS_S3_ACCESS_KEY"),
       secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
@@ -112,6 +112,35 @@ Future<String?> _uploadToS3(File file) async {
   try {
     final sanitizedFileName = sanitizeFileName(file.path.split('/').last);
     final key = 'user-profile/$sanitizedFileName';
+    final response = await s3.putObject(
+      bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
+      key: key,
+      body: file.readAsBytesSync(),
+    );
+
+    if (response.eTag != null) {
+      print('업로드 성공');
+      // S3 객체의 URL 생성
+      final url = 'https://${dotenv.get("AWS_S3_BUCKET_NAME")}.s3.${dotenv.get("AWS_S3_REGION")}.amazonaws.com/$key';
+      return url;
+    } else {
+      print('업로드 실패: ${response.eTag}');
+    }
+  } catch (e) {
+    print('오류 발생: $e');
+  }
+  return null;
+}
+
+Future<String?> uploadToS3CustomBackground(File file) async {
+  final credentials = AWS.AwsClientCredentials(
+      accessKey: dotenv.get("AWS_S3_ACCESS_KEY"),
+      secretKey: dotenv.get("AWS_S3_SECRET_KEY"));
+  final s3 = AWS.S3(region: dotenv.get("AWS_S3_REGION"), credentials: credentials);
+
+  try {
+    final sanitizedFileName = sanitizeFileName(file.path.split('/').last);
+    final key = 'custom-background/$sanitizedFileName';
     final response = await s3.putObject(
       bucket: dotenv.get("AWS_S3_BUCKET_NAME"),
       key: key,

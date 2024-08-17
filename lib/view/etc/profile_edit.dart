@@ -25,7 +25,7 @@ class ProfileEdit extends StatelessWidget {
         isLeading: true,
         isCenterTitle: true,
         backFunction: () async {
-            viewModel.onSavePressed();
+          viewModel.onSavePressed();
         },
         backgroundColor: WHITE,
         contentColor: BLACK,
@@ -56,7 +56,7 @@ class ProfileEdit extends StatelessWidget {
         await viewModel.updateMyProfile();
       }
     }, child: Obx(
-      () {
+          () {
         return Center(
           child: Stack(
             alignment: Alignment.bottomRight,
@@ -200,7 +200,8 @@ class ProfileEdit extends StatelessWidget {
                       ),
                       child: Center(
                         child: Text(
-                          viewModel.userCurrentActivityEmoji.value.isNotEmpty
+                          viewModel
+                              .userCurrentActivityEmoji.value.isNotEmpty
                               ? viewModel.userCurrentActivityEmoji.value
                               : '😀',
                           style: const TextStyle(fontSize: 24),
@@ -223,7 +224,6 @@ class ProfileEdit extends StatelessWidget {
                       onChanged: (value) {
                         viewModel.validateStatus(value);
                       },
-
                     ),
                   ),
                 ],
@@ -246,15 +246,18 @@ class ProfileEdit extends StatelessWidget {
                 emojiViewConfig: EmojiViewConfig(
                     recentsLimit: 10,
                     replaceEmojiOnLimitExceed: true,
-                    noRecents: const Text('최근 사용하신 이모티콘이 없습니다.', style: TextStyle(fontSize: 14, color: Colors.black26), textAlign: TextAlign.center)
-                ),
+                    noRecents: const Text('최근 사용하신 이모티콘이 없습니다.',
+                        style:
+                        TextStyle(fontSize: 20, color: Colors.black26),
+                        textAlign: TextAlign.center)),
                 categoryViewConfig: const CategoryViewConfig(
                   initCategory: Category.RECENT,
                   indicatorColor: PRIMARY_COLOR,
-                  iconColorSelected : PRIMARY_COLOR,
+                  iconColorSelected: PRIMARY_COLOR,
                 ),
-                bottomActionBarConfig:
-                const BottomActionBarConfig(showSearchViewButton: false, showBackspaceButton:false),
+                bottomActionBarConfig: const BottomActionBarConfig(
+                    showSearchViewButton: false,
+                    showBackspaceButton: false),
                 searchViewConfig: const SearchViewConfig(),
               ),
             ),
@@ -266,13 +269,14 @@ class ProfileEdit extends StatelessWidget {
   Widget buildSettingsToggle() {
     return Column(
       children: [
-    SwitchListTile(
+        Obx(() => SwitchListTile(
           title: const Text('Schedule 공개'),
           value: viewModel.isScheduleOpen.value,
           onChanged: (bool value) {
-            viewModel.setScheduleOpen(!viewModel.isScheduleOpen.value);
+            viewModel.isScheduleOpen.value = value;
+            print("onChanged 실행 $value");
           },
-        ),
+        )),
       ],
     );
   }

@@ -136,7 +136,7 @@ class _MateFloatingTodoState extends State<MateFloatingTodo> {
                                     decoration: BoxDecoration(
                                         color: sectionColors[
                                         scheduleViewModel
-                                            .todaySchedules[index]
+                                            .mateTodaySchedules[index]
                                             .sectionColor],
                                         borderRadius:
                                         BorderRadius.circular(5)),
@@ -149,32 +149,32 @@ class _MateFloatingTodoState extends State<MateFloatingTodo> {
                                   children: [
                                     Text(
                                       scheduleViewModel
-                                          .todaySchedules[index]
+                                          .mateTodaySchedules[index]
                                           .scheduleName,
                                       style: scheduleViewModel
-                                          .todaySchedules[index].isDone ? TextStyle(
+                                          .mateTodaySchedules[index].isDone ? TextStyle(
                                           color: sectionColors[
                                           scheduleViewModel
-                                              .todaySchedules[index]
+                                              .mateTodaySchedules[index]
                                               .sectionColor],
                                           fontSize: 17,
                                           overflow: TextOverflow.ellipsis,
                                           decoration: TextDecoration.lineThrough,
                                           decorationColor: sectionColors[
                                           scheduleViewModel
-                                              .todaySchedules[index]
+                                              .mateTodaySchedules[index]
                                               .sectionColor]
                                       ) : TextStyle(
                                           color: sectionColors[
                                           scheduleViewModel
-                                              .todaySchedules[index]
+                                              .mateTodaySchedules[index]
                                               .sectionColor],
                                           fontSize: 17,
                                           overflow: TextOverflow.ellipsis),
                                     ),
                                     const SizedBox(height: 6),
-                                    scheduleViewModel.todaySchedules[index].memo != '' ? Text(
-                                        '# ${scheduleViewModel.todaySchedules[index].memo}',
+                                    scheduleViewModel.mateTodaySchedules[index].memo != '' ? Text(
+                                        '# ${scheduleViewModel.mateTodaySchedules[index].memo}',
                                         style: const TextStyle(
                                             color: BLACK,
                                             fontSize: 13,

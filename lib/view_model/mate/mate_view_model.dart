@@ -167,10 +167,6 @@ class MateViewModel extends GetxController {
     _emojiShowing.value = newValue;
   }
 
-  void setScheduleOpen(newValue) {
-    isScheduleOpen.value = newValue;
-  }
-
   void validateName(String value) {
     if (value.isEmpty) {
       nameError.value = "이름을 입력해 주세요.";
