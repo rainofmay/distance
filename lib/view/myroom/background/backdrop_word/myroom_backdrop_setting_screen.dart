@@ -63,7 +63,7 @@ class QuoteSettingsDialog extends StatelessWidget {
                       },
                       onPressed: () {
                         Navigator.pop(context);
-                        if (viewModel.isBackdropWordEnabled.value == false) {
+                        if (viewModel.isBackdropWordEnabled == false) {
                           _optionDialog(context);
                         }
                       },
@@ -249,7 +249,7 @@ class QuoteSettingsDialog extends StatelessWidget {
                 onPressed: () {
                   viewModel.updateBackdropWordChange(
                       !viewModel
-                          .isBackdropWordEnabled.value);
+                          .isBackdropWordEnabled);
                   Navigator.of(context).pop();
                 },
               onCancelPressed: () {

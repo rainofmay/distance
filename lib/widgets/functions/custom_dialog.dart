@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
 
-Future<void> customDialog(BuildContext context, double height, String title,
+Future<void>  customDialog(BuildContext context, double height, String title,
     Widget contents, Widget? actionWidget) async {
   // 현재 화면 위에 보여줄 다이얼로그 생성
   await showDialog<void>(
     context: context,
+    barrierColor: BLACK.withOpacity(0.5),
     builder: (context) {
+
       return AlertDialog(
         backgroundColor: DARK,
         shape: RoundedRectangleBorder(

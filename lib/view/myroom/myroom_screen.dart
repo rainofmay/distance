@@ -95,7 +95,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
                   ),
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
-            if (widget.backgroundViewModel.isBackdropWordEnabled.value)
+            if (widget.backgroundViewModel.isBackdropWordEnabled)
               MotivationalQuote(),
           ],
         );
@@ -107,6 +107,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
             onPressed: () {
               showDialog(
                 context: context,
+                barrierColor: BLACK.withOpacity(0.2),
                 builder: (BuildContext context) {
                   return QuoteSettingsDialog();
                 },
@@ -118,8 +119,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
           ActionButton(
             onPressed: () {
               showDialog(
-                barrierColor: TRANSPARENT,
-                barrierDismissible: false,
+                barrierColor: BLACK.withOpacity(0.2),
                 context: context,
                 builder: (context) {
                   return MyroomMusicScreen();
@@ -131,8 +131,7 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
           ActionButton(
             onPressed: () {
               showDialog(
-                barrierColor: TRANSPARENT,
-                barrierDismissible: false,
+                barrierColor: BLACK.withOpacity(0.2),
                 context: context,
                 builder: (context) {
                   return MyroomBackgroundScreen();

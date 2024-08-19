@@ -317,7 +317,7 @@ class BackgroundThemes extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // Icon(Icons.copyright, color: PRIMARY_COLOR, size: 20),
-                      Text('Copyright 2024, (Distance) All right reserved.',
+                      Text('Copyright 2024, (Distance) All rights reserved.',
                           style:
                               TextStyle(color: TRANSPARENT_WHITE, fontSize: 11)),
                       const SizedBox(height: 16),

@@ -11,28 +11,66 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      return Positioned(
-        left: controller.quotePosition.value.dx,
-        top: controller.quotePosition.value.dy,
-        child: GestureDetector(
-          onTap: () {
-            _showConfirmationDialog(context);
-          },
-          child: Draggable(
-            feedback: _buildQuoteContainer(context),
-            childWhenDragging: Opacity(
-              opacity: 0.1,
-              child: _buildQuoteContainer(context),
+      if (!controller.isBackdropWordEnabled) return SizedBox.shrink();
+      return Stack(
+        children: [
+          Positioned(
+            left: controller.quotePosition.value.dx,
+            top: controller.quotePosition.value.dy,
+            child: GestureDetector(
+              onTap: () {
+                _showConfirmationDialog(context);
+              },
+              child: Draggable<String>(
+                data: 'quote',
+                feedback: _buildQuoteContainer(context),
+                childWhenDragging: Opacity(
+                  opacity: 0.1,
+                  child: _buildQuoteContainer(context),
+                ),
+                onDragStarted: () {
+                  controller.setTrash(true);
+                },
+                onDragEnd: (details) {
+                  controller.setTrash(false);
+                  controller.updateQuotePosition(details.offset);
+                },
+                child: _buildQuoteContainer(context),
+              ),
             ),
-            onDragEnd: (details) {
-              controller.updateQuotePosition(details.offset);
-            },
-            child: _buildQuoteContainer(context),
           ),
-        ),
+          if (controller.showTrash)
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: DragTarget<String>(
+                  builder: (context, candidateData, rejectedData) {
+                    return Container(
+                      width: 60,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: candidateData.isNotEmpty ? CUSTOMRED : GREY,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.delete, color: PRIMARY_COLOR, size: 24),
+                    );
+                  },
+
+                  // onWillAcceptWithDetails: (data) => data == 'quote',
+                  onAcceptWithDetails: (data) {
+                    controller.updateBackdropWordChange(false);
+                    controller.update();
+                  },
+                ),
+              ),
+            ),
+        ],
       );
     });
   }
+
 
   void _showConfirmationDialog(BuildContext context) {
     showDialog(

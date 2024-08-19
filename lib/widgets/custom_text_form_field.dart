@@ -83,15 +83,15 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             borderSide: BorderSide(color: GREY.withOpacity(0.5)),
           ),
           errorText: widget.hasError ? widget.errorText : null,
-          errorStyle: const TextStyle(color: Color(0xff790F07)),
+          errorStyle: const TextStyle(color: CUSTOMRED),
           errorBorder: widget.hasError
               ? const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff790F07)),
+            borderSide: BorderSide(color: CUSTOMRED),
           )
               : null,
           focusedErrorBorder: widget.hasError
               ? const UnderlineInputBorder(
-            borderSide: BorderSide(color: Color(0xff790F07), width: 1),
+            borderSide: BorderSide(color: CUSTOMRED, width: 1),
           )
               : null,
           isDense: true,

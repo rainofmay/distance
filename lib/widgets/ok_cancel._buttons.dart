@@ -8,6 +8,7 @@ class OkCancelButtons extends StatelessWidget {
   final Color? cancelTextColor;
   final VoidCallback? onCancelPressed;
   final VoidCallback onPressed;
+  final FontWeight? fontWeight;
 
   const OkCancelButtons(
       {super.key,
@@ -16,7 +17,9 @@ class OkCancelButtons extends StatelessWidget {
       this.cancelText,
       this.cancelTextColor = WHITE,
       required this.onPressed,
-      this.onCancelPressed});
+      this.onCancelPressed,
+      this.fontWeight,
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +31,7 @@ class OkCancelButtons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           TextButton(
-            child: Text(cancelText ?? '', style: TextStyle(color: cancelTextColor ?? BLACK)),
+            child: Text(cancelText ?? '', style: TextStyle(color: cancelTextColor ?? BLACK, fontWeight: fontWeight ?? FontWeight.normal)),
             onPressed: () {
               Navigator.of(context).pop(); // 닫히는 버튼
               onCancelPressed;
@@ -38,7 +41,7 @@ class OkCancelButtons extends StatelessWidget {
             onPressed: onPressed,
             child: Text(
               okText,
-              style: TextStyle(color: okTextColor ?? BLACK),
+              style: TextStyle(color: okTextColor ?? BLACK, fontWeight: fontWeight ?? FontWeight.normal),
             ),
           ),
         ],

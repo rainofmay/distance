@@ -145,26 +145,16 @@ Widget _buildVideoPreview(ThemeVideo video) {
           right: 5,
           bottom: 5,
           child: Container(
-              padding: EdgeInsets.all(4),
+              padding: const EdgeInsets.all(4),
               decoration: BoxDecoration(
                 color: BLACK.withOpacity(0.7),
                 borderRadius: BorderRadius.circular(4),
               ),
-              child: Icon(
+              child: const Icon(
                 CupertinoIcons.videocam_fill,
                 color: PRIMARY_COLOR,
                 size: 16,
               ))),
-        if (video.isPaid) // 유료 비디오 표시
-          Positioned(
-            right: 10,
-            top: 10,
-            child: Icon(
-              Icons.lock,
-              color: Colors.yellow,
-              size: 20,
-            ),
-          ),
       ],
     ),
   );
@@ -184,41 +174,32 @@ class CustomVideoDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      backgroundColor: Colors.black,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            constraints: BoxConstraints(
-              maxHeight: MediaQuery.of(context).size.height *
-                  0.6, // Set the maximum height you want
+    return CustomAlertDialog(
+        title: '배경 변경',
+        width: 300,
+        height: MediaQuery.of(context).size.height *
+            0.52,
+        contents: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              constraints: BoxConstraints(
+                maxHeight: MediaQuery.of(context).size.height *
+                    0.5, // Set the maximum height you want
+              ),
+              child: Center(
+                  child: videoController.value.isInitialized
+                      ? AspectRatio(
+                    aspectRatio: videoController.value.aspectRatio,
+                    child: CachedVideoPlayer(videoController),
+                  )
+                      : Center(
+                    child: CustomCircularIndicator(size: 30),
+                  )),
             ),
-            child: Center(
-                child: videoController.value.isInitialized
-                    ? AspectRatio(
-                        aspectRatio: videoController.value.aspectRatio,
-                        child: CachedVideoPlayer(videoController),
-                      )
-                    : Center(
-                        child: CustomCircularIndicator(size: 30),
-                      )),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              TextButton(
-                onPressed: onCancel,
-                child: Text('취소', style: TextStyle(color: Colors.white)),
-              ),
-              TextButton(
-                onPressed: onChange,
-                child: Text('변경', style: TextStyle(color: Colors.white)),
-              ),
-            ],
-          ),
-        ],
-      ),
+          ],
+        ),
+        actionWidget: OkCancelButtons(okText: '변경', onPressed: onChange, okTextColor : PRIMARY_LIGHT, cancelText: '취소', onCancelPressed: onCancel)
     );
   }
 }

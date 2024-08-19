@@ -34,7 +34,6 @@ class _FloatingTodoState extends State<FloatingTodo> {
   ScheduleViewModel scheduleViewModel = Get.find<ScheduleViewModel>();
 
   bool isEmojiVisible = false;
-
   // 상단 바 드래그 여부를 설정하는 함수
   void _setDraggingAppBar(bool value) {
     setState(() {
@@ -56,170 +55,180 @@ class _FloatingTodoState extends State<FloatingTodo> {
               border: Border(
                 top: BorderSide(
                   color: BLACK.withOpacity(0.9), // 테두리 색상
-                  width: 10.0, // 테두리 굵기
+                  width: 12.0, // 테두리 굵기
                 ),
               ),
             ),
             width: width,
             height: height,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                GestureDetector(
-                  onPanStart: (details) {
-                    // 상단 바 드래그 시작 시 초기화
-                    if (details.localPosition.dy <= 30) {
-                      _isDraggingAppBar = true;
-                      _startDragOffset = details.localPosition;
-                      print("Dragging..");
-                    }
-                  },
-                  onPanUpdate: (details) {
-                    if (_isDraggingAppBar) {
-                      setState(() {
-                        double dx =
-                            details.localPosition.dx - _startDragOffset.dx;
-                        double dy =
-                            details.localPosition.dy - _startDragOffset.dy;
-                        positionX += dx;
-                        positionY += dy;
+            child: Stack(
+              children: [Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onPanStart: (details) {
+                      // 상단 바 드래그 시작 시 초기화
+                      if (details.localPosition.dy <= 30) {
+                        _isDraggingAppBar = true;
                         _startDragOffset = details.localPosition;
-                      });
-                    }
-                  },
-                  onPanEnd: (details) {
-                    // 상단 바 드래그 종료 시 초기화
-                    _isDraggingAppBar = false;
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: 30,
-                    color: TRANSPARENT,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8.0, left: 8.0),
-                          child: Text(
-                            'TODAY',
-                            style: TextStyle(
-                                color: DARK,
-                                fontSize: 13,
-                                fontFamily: 'GmarketSansTTFMedium'),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Obx(() =>
-                  scheduleViewModel.todaySchedules.isNotEmpty ? ListView
-                      .builder(
-                    itemCount: scheduleViewModel.todaySchedules.length,
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        behavior: HitTestBehavior.opaque,
-                        onTap: () async {
-                          _optionsDialog(scheduleViewModel.todaySchedules[index]);
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 2.0),
-                                  child: Container(
-                                    width: 5,
-                                    height: 20,
-                                    decoration: BoxDecoration(
-                                        color: sectionColors[
-                                        scheduleViewModel
-                                            .todaySchedules[index]
-                                            .sectionColor],
-                                        borderRadius:
-                                        BorderRadius.circular(5)),
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      scheduleViewModel
-                                          .todaySchedules[index]
-                                          .scheduleName,
-                                      style: scheduleViewModel
-                                          .todaySchedules[index].isDone ? TextStyle(
-                                          color: sectionColors[
-                                          scheduleViewModel
-                                              .todaySchedules[index]
-                                              .sectionColor],
-                                          fontSize: 17,
-                                          overflow: TextOverflow.ellipsis,
-                                          decoration: TextDecoration.lineThrough,
-                                          decorationColor: sectionColors[
-                                          scheduleViewModel
-                                              .todaySchedules[index]
-                                              .sectionColor]
-                                      ) : TextStyle(
-                                          color: sectionColors[
-                                          scheduleViewModel
-                                              .todaySchedules[index]
-                                              .sectionColor],
-                                          fontSize: 17,
-                                          overflow: TextOverflow.ellipsis),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    scheduleViewModel.todaySchedules[index].memo != '' ? Text(
-                                      '# ${scheduleViewModel.todaySchedules[index].memo}',
-                                      style: const TextStyle(
-                                          color: BLACK,
-                                          fontSize: 13,
-                                          overflow: TextOverflow.ellipsis)) : const SizedBox(),
-                                    const SizedBox(height: 6),
-                                    scheduleViewModel
-                                        .todaySchedules[index].isTimeSet
-                                        ? Padding(
-                                      padding: const EdgeInsets.only(
-                                          top: 4.0, right: 8.0),
-                                      child: Text(
-                                        '${DateFormat('hh:mm a').format(
-                                            scheduleViewModel.todaySchedules[index]
-                                                .startDate)}~${DateFormat('hh:mm a')
-                                            .format(
-                                            scheduleViewModel.todaySchedules[index]
-                                                .endDate)}',
-                                        style: TextStyle(
-                                            fontSize: 8, color: GREY),
-                                      ),
-                                    )
-                                        : SizedBox(),
-                                    const SizedBox(height: 24),
-                                  ],
-                                ),
-                              ],
+                      }
+                    },
+                    onPanUpdate: (details) {
+                      if (_isDraggingAppBar) {
+                        setState(() {
+                          double dx =
+                              details.localPosition.dx - _startDragOffset.dx;
+                          double dy =
+                              details.localPosition.dy - _startDragOffset.dy;
+                          positionX += dx;
+                          positionY += dy;
+                          _startDragOffset = details.localPosition;
+                        });
+                      }
+                    },
+                    onPanEnd: (details) {
+                      // 상단 바 드래그 종료 시 초기화
+                      _isDraggingAppBar = false;
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: 30,
+                      color: TRANSPARENT,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.only(top: 8.0, left: 8.0),
+                            child: Text(
+                              'TODAY',
+                              style: TextStyle(
+                                  color: DARK,
+                                  fontSize: 13,
+                                  fontFamily: 'GmarketSansTTFMedium'),
                             ),
                           ),
-                        ),
-                      );
-                    },
-                  ) : Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: Text('오늘 일정이 없습니다.',
-                        style: TextStyle(fontSize: 13, color: DARK)),
-                  )),
-                ),
-              ],
+                        ],
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Obx(() =>
+                    scheduleViewModel.todaySchedules.isNotEmpty ? ListView
+                        .builder(
+                      itemCount: scheduleViewModel.todaySchedules.length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () async {
+                            _optionsDialog(scheduleViewModel.todaySchedules[index]);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 2.0),
+                                    child: Container(
+                                      width: 5,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                          color: sectionColors[
+                                          scheduleViewModel
+                                              .todaySchedules[index]
+                                              .sectionColor],
+                                          borderRadius:
+                                          BorderRadius.circular(5)),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        scheduleViewModel
+                                            .todaySchedules[index]
+                                            .scheduleName,
+                                        style: scheduleViewModel
+                                            .todaySchedules[index].isDone ? TextStyle(
+                                            color: sectionColors[
+                                            scheduleViewModel
+                                                .todaySchedules[index]
+                                                .sectionColor],
+                                            fontSize: 17,
+                                            overflow: TextOverflow.ellipsis,
+                                            decoration: TextDecoration.lineThrough,
+                                            decorationColor: sectionColors[
+                                            scheduleViewModel
+                                                .todaySchedules[index]
+                                                .sectionColor]
+                                        ) : TextStyle(
+                                            color: sectionColors[
+                                            scheduleViewModel
+                                                .todaySchedules[index]
+                                                .sectionColor],
+                                            fontSize: 17,
+                                            overflow: TextOverflow.ellipsis),
+                                      ),
+                                      const SizedBox(height: 6),
+                                      scheduleViewModel.todaySchedules[index].memo != '' ? Text(
+                                          '# ${scheduleViewModel.todaySchedules[index].memo}',
+                                          style: const TextStyle(
+                                              color: BLACK,
+                                              fontSize: 13,
+                                              overflow: TextOverflow.ellipsis)) : const SizedBox(),
+                                      const SizedBox(height: 6),
+                                      scheduleViewModel
+                                          .todaySchedules[index].isTimeSet
+                                          ? Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 4.0, right: 8.0),
+                                        child: Text(
+                                          '${DateFormat('hh:mm a').format(
+                                              scheduleViewModel.todaySchedules[index]
+                                                  .startDate)}~${DateFormat('hh:mm a')
+                                              .format(
+                                              scheduleViewModel.todaySchedules[index]
+                                                  .endDate)}',
+                                          style: TextStyle(
+                                              fontSize: 8, color: GREY),
+                                        ),
+                                      )
+                                          : SizedBox(),
+                                      const SizedBox(height: 24),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ) : Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: Text('오늘 일정이 없습니다.',
+                          style: TextStyle(fontSize: 13, color: DARK)),
+                    )),
+                  ),
+                ],
+              ), Positioned(
+                  top: 8,
+                  right: 4,
+                  child: GestureDetector(
+                      onTap: () {
+                        myroomViewModel.updateSimpleWindowChange(false);
+                      },
+                      child: const Icon(Icons.cancel_rounded, size: 16))),
+                    ],
             ),
           ),
         ),
         GestureDetector(
           onPanStart: (details) {
+            // myroomViewModel.setScheduleTrash(true);
             // 시작 시, 현재 위젯의 좌표와 크기를 계산합니다.
             double left = positionX;
             double top = positionY;

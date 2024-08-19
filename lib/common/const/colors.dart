@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 const PRIMARY_COLOR = Color(0xFFECB574);  //브랜드 컬러
 const PRIMARY_LIGHT = Color(0xffF7C667);  // 브랜드 컬러 밝은 버전
-const SECONDARY = Color(0xff853312);
-const THIRD = Color(0xff8FB8EE);
 
 const LIGHT_WHITE = Colors.white70;
 const DARK = Color(0xff282828);
@@ -14,6 +12,7 @@ const DARK_BACKGROUND = Color(0xff2B2828);
 const WHITE = Colors.white;
 const BLACK = Colors.black;
 const RED = Color(0xffC62828);
+const CUSTOMRED = Color(0xff790F07);
 const TRANSPARENT_WHITE = Color.fromRGBO(255, 255, 255, 0.8);
 const TRANSPARENT = Colors.transparent;
 

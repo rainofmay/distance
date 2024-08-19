@@ -34,9 +34,11 @@ class MyroomViewModel extends GetxController {
   final RxBool isSimpleWindowEnabled = false.obs;
 
   // final RxBool isAudioSpectrumEnabled = false.obs;
-  final RxBool isBackdropWordEnabled = false.obs;
-  final RxBool isVideoLoading = true.obs;
+  late final RxBool _isBackdropWordEnabled = false.obs;
+  bool get isBackdropWordEnabled => _isBackdropWordEnabled.value;
 
+  final RxBool isVideoLoading = true.obs;
+  
   final Rx<Quote> _currentQuote = quotes[Random().nextInt(quotes.length)].obs;
 
   Quote get currentQuote => _currentQuote.value;
@@ -44,9 +46,9 @@ class MyroomViewModel extends GetxController {
   final RxDouble quoteBackdropOpacity = 0.5.obs;
   final Rx<Color> quoteFontColor = Colors.white.obs;
   final RxString quoteFont = 'GmarketSansTTFLight'.obs;
-  final RxDouble quoteFontSize = 16.0.obs;
+  final RxDouble quoteFontSize = 14.0.obs;
   final Rx<Offset> quotePosition = Offset(20, 40).obs;
-
+  
   final RxBool isCustomQuote = false.obs;
 
   final RxString customQuote = ''.obs;
@@ -63,8 +65,22 @@ class MyroomViewModel extends GetxController {
   late final io.File? imgFromGallery;
 
   late final RxBool _isSettingDialogOpen = false.obs;
-
   bool get isSettingDialogOpen => _isSettingDialogOpen.value;
+
+  // 문구 삭제(휴지통) 구현
+  late final RxBool _showTrash = false.obs;
+  bool get showTrash => _showTrash.value;
+  void setTrash(bool newValue) {
+    _showTrash.value = newValue;
+  }
+
+  // late final RxBool _showScheduleTrash = false.obs;
+  // bool get showScheduleTrash => _showScheduleTrash.value;
+  // void setScheduleTrash(bool newValue) {
+  //   _showScheduleTrash.value = newValue;
+  //   update();
+  // }
+
 
   @override
   void onInit() {
@@ -254,14 +270,14 @@ class MyroomViewModel extends GetxController {
         prefs.getBool('isSimpleWindowEnabled') ?? false;
     // isAudioSpectrumEnabled.value =
     //     prefs.getBool('isAudioSpectrumEnabled') ?? false;
-    isBackdropWordEnabled.value =
-        prefs.getBool('isBackdropWordEnabled') ?? false;
+    _isBackdropWordEnabled.value =
+        prefs.getBool('_isBackdropWordEnabled') ?? false;
 
     quoteBackdropColor.value =
         Color(prefs.getInt('quoteBackdropColor') ?? 0xFFFFFFFF);
     quoteBackdropOpacity.value = prefs.getDouble('quoteBackdropOpacity') ?? 0.5;
     quoteFont.value = prefs.getString('quoteFont') ?? 'GmarketSansTTFLight';
-    quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 18.0;
+    quoteFontSize.value = prefs.getDouble('quoteFontSize') ?? 14.0;
     quoteFontColor.value = Color(prefs.getInt('quoteFontColor') ?? 0xFF000000);
     customQuote.value = prefs.getString('customQuote') ?? '';
     customQuoteAuthor.value = prefs.getString('customQuoteAuthor') ?? '';
@@ -308,10 +324,10 @@ class MyroomViewModel extends GetxController {
   //   prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
   // }
 
-  void updateBackdropWordChange(value) async {
-    isBackdropWordEnabled.value = value;
+    void updateBackdropWordChange(value) async {
+    _isBackdropWordEnabled.value = value;
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool('isBackdropWordEnabled', isBackdropWordEnabled.value);
+    prefs.setBool('_isBackdropWordEnabled', _isBackdropWordEnabled.value);
   }
 
   void updateQuotePosition(Offset newPosition) {

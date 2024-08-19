@@ -70,7 +70,9 @@ class MusicViewModel extends GetxController with GetTickerProviderStateMixin {
   bool get isShuffled => _isShuffled.value;
 
   void _initAudioPlayer() {
-    _audioPlayer = AudioPlayer();
+    _audioPlayer = AudioPlayer(
+      handleInterruptions: false, // 오디오 포커스 자동 관리 비활성화를 통해 소리, 음악 둘다 재생 가능하게.
+    );
     _setupAudioPlayer();
   }
 

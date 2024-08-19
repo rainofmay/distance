@@ -71,14 +71,14 @@ class LoginScreen extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.only(left: 20, top: 8, bottom: 10),
                           child: const Text(
-                              'Log in and experience Distance.',
+                              'Your own music, your own background.',
                               style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
                               textAlign: TextAlign.start),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
                           child: const Text(
-                              'You can listen to music from your own background.',
+                              'Log in and experience.',
                               style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
                               textAlign: TextAlign.start),
                         ),
