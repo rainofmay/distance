@@ -53,7 +53,7 @@ class PersonalInformationScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             TapableRow(
-              widget: const Icon(Icons.payment),
+              widget: const Icon(Icons.logout_rounded),
               title: '로그아웃',
               onTap: () async{
                 Get.back();
