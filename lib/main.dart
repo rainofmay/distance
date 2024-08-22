@@ -40,7 +40,9 @@ Future<void> main() async {
 
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
-  KakaoSdk.init(nativeAppKey: 'aec099113dc70792df78c1aa4a1ac2f4');
+  KakaoSdk.init(nativeAppKey: '96933fc28384cc02f4de9ba6c2b649cd',
+    javaScriptAppKey: '07b059afa573f1d1e4c61cb5896c2749',
+  );
   _initGoogleMobileAds();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.distance.cled24.channel.audio',

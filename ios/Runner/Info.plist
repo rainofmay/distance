@@ -33,9 +33,11 @@
 			</array>
 		</dict>
 		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
+				<string>kakao96933fc28384cc02f4de9ba6c2b649cd</string>
 			</array>
 		</dict>
 		<dict>
@@ -50,15 +52,15 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-		<string>$(FLUTTER_BUILD_NUMBER)</string>
-		<key>GADApplicationIdentifier</key>
-		<string>ca-app-pub-8938897655433496~4777452135</string>
-		<key>KAKAO_APP_KEY</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-8938897655433496~4777452135</string>
+	<key>KAKAO_APP_KEY</key>
+	<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
 		<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
-		<key>LSApplicationQueriesSchemes</key>
-		<array>
-			<string>https</string>
-			<string>kakaoaec099113dc70792df78c1aa4a1ac2f4</string>
 		<string>kakaokompassauth</string>
 		<string>storykompassauth</string>
 		<string>kakaolink</string>
