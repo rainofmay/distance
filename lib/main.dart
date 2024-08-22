@@ -37,7 +37,7 @@ Future<void> main() async {
   //await OnlineStatusManager.initializeBackgroundFetch();
   await initializeDateFormatting();
   await dotenv.load();
-
+  print(await KakaoSdk.origin);
   await Supabase.initialize(
       url: dotenv.get("PROJECT_URL"), anonKey: dotenv.get("PROJECT_API_KEY"));
   KakaoSdk.init(nativeAppKey: '96933fc28384cc02f4de9ba6c2b649cd',

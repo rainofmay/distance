@@ -4,6 +4,7 @@ import 'package:mobile/provider/user/login_provider.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view_model/mate/mate_view_model.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginViewModel extends GetxController {
   final LoginProvider _provider;
@@ -91,6 +92,12 @@ class LoginViewModel extends GetxController {
       if (currentUserId == null) {
         throw Exception('사용자 ID를 가져올 수 없습니다.');
       }
+
+      // Edge Function 호출
+      final response = await Supabase.instance.client.functions.invoke(
+        'deleteUser',
+        body: {'userId': currentUserId},
+      );
 
       // 로그아웃 처리
       await signOut(context);
