@@ -15,8 +15,19 @@ class UpdateScreen extends StatelessWidget {
           isCenterTitle: true,
           backgroundColor: WHITE,
           contentColor: BLACK),
-      body: const Column(
-        children: [Text('v1.0.0.'), Text('앱 출시 및 업데이트 관련 공지')],
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: const Column(
+          children: [
+            SizedBox(height: 16),
+            Row(
+            children: [
+              Text('v 1.0.0.'),
+              SizedBox(width: 16),
+              Text('Distance 모바일 앱 출시')
+            ],
+          ),],
+        ),
       ),
     );
   }
