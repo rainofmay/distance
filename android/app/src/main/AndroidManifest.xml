@@ -4,7 +4,6 @@
     <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
-
     <!-- 갤러리 접근을 위한 권한 추가 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -61,10 +60,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+            <intent-filter>
+                <!-- kakao login -->
                 <data
                     android:host="oauth"
                     android:scheme="kakaoaec099113dc70792df78c1aa4a1ac2f4" />
-
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -77,8 +78,8 @@
             </intent-filter>
         </activity>
         <activity
-                android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
-                android:exported="true">
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true">
             <intent-filter android:label="flutter_web_auth">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />

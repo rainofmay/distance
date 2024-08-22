@@ -220,58 +220,54 @@ class MateScreen extends StatelessWidget {
               await viewModel.updateMyProfile();
               await viewModel.getMyMate();
             },
-            child: friendsWidget(context),
+            child: friendsWidget(context, viewModel),
           )),
     );
   }
 
-  Widget friendsWidget(BuildContext context) {
-    return ListView(
-      controller: viewModel.scrollController,
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        if (viewModel.mateProfiles.value.isEmpty)
-          SizedBox(
-            height:
-                MediaQuery.of(context).size.height - 600, // Adjust as needed
+  Widget friendsWidget(BuildContext context, MateViewModel vm) {
+    return CustomScrollView(
+      slivers: [
+        if (vm.mateProfiles.isEmpty)
+          SliverFillRemaining(
             child: Center(
               child: GestureDetector(
                 onTap: () {
-                  pressed() {
+                  AuthHelper.navigateToLoginScreen(context, () {
                     Get.to(() => MateRequestsScreen(), preventDuplicates: true);
-                  }
-
-                  AuthHelper.navigateToLoginScreen(context, pressed);
+                  });
                 },
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 0),
-                  child: Container(
-                    width: 120,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      color: DARK,
-                    ),
-                    child: const Center(
-                      child: Text('메이트 찾기',
-                          style: TextStyle(color: PRIMARY_LIGHT),
-                          textAlign: TextAlign.center),
-                    ),
+                child: Container(
+                  width: 120,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: DARK,
+                  ),
+                  child: const Center(
+                    child: Text('메이트 찾기',
+                        style: TextStyle(color: PRIMARY_LIGHT),
+                        textAlign: TextAlign.center),
                   ),
                 ),
               ),
             ),
           )
         else
-          ...viewModel.mateProfiles.value.map((profile) {
-            return Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: ProfileCard(
-                profile: profile.value,
-                viewModel: viewModel,
-              ),
-            );
-          }).toList(),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: ProfileCard(
+                    profile: vm.mateProfiles[index].value,
+                    viewModel: vm,
+                  ),
+                );
+              },
+              childCount: vm.mateProfiles.length,
+            ),
+          ),
       ],
     );
   }

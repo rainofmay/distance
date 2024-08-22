@@ -110,7 +110,7 @@ class LoginViewModel extends GetxController {
 
     } catch (e) {
       print('뷰모델 계정 삭제 중 오류 발생: $e');
-      CustomSnackbar.show(title: '탈퇴 오류', message: '계정 삭제에 실패했습니다. 다시 시도해 주세요.');
+      // CustomSnackbar.show(title: '탈퇴 오류', message: '계정 삭제에 실패했습니다. 다시 시도해 주세요.');
     }
   }
 

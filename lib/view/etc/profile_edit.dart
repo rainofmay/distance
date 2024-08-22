@@ -267,17 +267,25 @@ class ProfileEdit extends StatelessWidget {
   }
 
   Widget buildSettingsToggle() {
-    return Column(
-      children: [
-        Obx(() => SwitchListTile(
-          title: const Text('Schedule 공개'),
-          value: viewModel.isScheduleOpen.value,
-          onChanged: (bool value) {
-            viewModel.isScheduleOpen.value = value;
-            print("onChanged 실행 $value");
-          },
-        )),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          const Text('Today Schedule 공개'),
+          const SizedBox(width: 30),
+          Obx(() =>
+          CupertinoSwitch(
+            thumbColor: WHITE,
+            activeColor: PRIMARY_COLOR,
+            value: viewModel.isScheduleOpen.value,
+            //Color(0xffC8D8FA)
+            onChanged: (bool value) {
+              viewModel.isScheduleOpen.value = value;
+            },
+          )),
+        ],
+      ),
     );
   }
 }

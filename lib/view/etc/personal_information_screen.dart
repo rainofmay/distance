@@ -44,15 +44,6 @@ class PersonalInformationScreen extends StatelessWidget {
             const SizedBox(height: 20),
 
             TapableRow(
-              widget: const Icon(Icons.key),
-              title: '비밀번호 변경',
-              onTap: () {},
-            ),
-            const SizedBox(height: 20),
-            BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-            const SizedBox(height: 20),
-
-            TapableRow(
               widget: const Icon(Icons.logout_rounded),
               title: '로그아웃',
               onTap: () async{

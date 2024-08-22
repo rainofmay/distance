@@ -22,14 +22,11 @@ import 'package:url_launcher/url_launcher.dart';
 class Etc extends StatelessWidget {
   Etc({super.key});
 
-  final MateViewModel mateViewModel =
-      Get.find<MateViewModel>(); // Get the ViewModel instance
-  final LoginViewModel loginViewModel =
-      Get.put(LoginViewModel(provider: LoginProvider()));
+  final MateViewModel mateViewModel = Get.find<MateViewModel>();
+  final LoginViewModel loginViewModel = Get.put(LoginViewModel(provider: LoginProvider()));
   final adController = Get.put(AdController());
 
-  final Uri surveyUrl = Uri.parse(
-      'https://docs.google.com/forms/d/1S5UknqwWtZLJZzctmjYqqTxzHSqbrNEUrcjL2fjzjhQ/edit');
+  final Uri surveyUrl = Uri.parse('https://docs.google.com/forms/d/1S5UknqwWtZLJZzctmjYqqTxzHSqbrNEUrcjL2fjzjhQ/edit');
 
   Future<void> _launchUrl() async {
     if (!await launchUrl(surveyUrl)) {
@@ -46,205 +43,138 @@ class Etc extends StatelessWidget {
           backgroundColor: DARK_BACKGROUND,
           contentColor: PRIMARY_LIGHT,
           isCenterTitle: false,
-          titleSpacing: 20),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          titleSpacing: 20
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Obx(
+                      Obx(
                             () => ClipRRect(
-                              borderRadius: BorderRadius.circular(50.0),
-                              child: mateViewModel.profileImageUrl.value == ''
-                                  ? Image.asset(
-                                      'assets/images/themes/gomzy_theme.jpg',
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                    )
-                                  : CachedNetworkImage(
-                                      // CachedNetworkImage 사용
-                                      imageUrl:
-                                          mateViewModel.profileImageUrl.value,
-                                      fit: BoxFit.cover,
-                                      width: 40,
-                                      height: 40,
-                                      placeholder: (context, url) =>
-                                          CustomCircularIndicator(size: 30.0),
-                                      // 로딩 표시
-                                      errorWidget: (context, url, error) =>
-                                          Image.asset(
-                                        'assets/images/themes/gomzy_theme.jpg',
-                                        fit: BoxFit.cover,
-                                        width: 40,
-                                        height: 40,
-                                      ), // 에러 시 기본 이미지
-                                    ),
+                          borderRadius: BorderRadius.circular(50.0),
+                          child: mateViewModel.profileImageUrl.value == ''
+                              ? Image.asset(
+                            'assets/images/themes/gomzy_theme.jpg',
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                          )
+                              : CachedNetworkImage(
+                            imageUrl: mateViewModel.profileImageUrl.value,
+                            fit: BoxFit.cover,
+                            width: 40,
+                            height: 40,
+                            placeholder: (context, url) => CustomCircularIndicator(size: 30.0),
+                            errorWidget: (context, url, error) => Image.asset(
+                              'assets/images/themes/gomzy_theme.jpg',
+                              fit: BoxFit.cover,
+                              width: 40,
+                              height: 40,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Obx(() => mateViewModel.name.value.isEmpty
-                              ? const Text("로그인 후 이용하실 수 있습니다.",
-                                  style: TextStyle(color: GREY))
-                              : Text(mateViewModel.name.value,
-                                  style: const TextStyle(color: BLACK)))
-                        ],
+                        ),
                       ),
+                      const SizedBox(width: 10),
+                      Obx(() => mateViewModel.name.value.isEmpty
+                          ? const Text("로그인 후 이용하실 수 있습니다.", style: TextStyle(color: GREY))
+                          : Text(mateViewModel.name.value, style: const TextStyle(color: BLACK))
+                      )
                     ],
                   ),
-                ),
-
-                // 구독 프리미엄
-                // GestureDetector(
-                //     behavior: HitTestBehavior.opaque,
-                //     onTap: () {
-                //       pressed() {
-                //         Get.to(() => PaymentScreen(), preventDuplicates: true);
-                //       }
-                //
-                //       AuthHelper.navigateToLoginScreen(context, pressed);
-                //     },
-                //     child: Container(
-                //       width: double.infinity,
-                //       height: 70,
-                //       decoration: BoxDecoration(color: BLACK),
-                //       child: Padding(
-                //         padding: const EdgeInsets.all(8.0),
-                //         child: Row(
-                //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //           children: [
-                //             Column(
-                //               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                //               crossAxisAlignment: CrossAxisAlignment.start,
-                //               children: [
-                //                 const Text('「프리미엄 Distance」 이용하기',
-                //                     style: TextStyle(color: WHITE)),
-                //                 const Text('1개월 무료 체험',
-                //                     style: TextStyle(color: WHITE)),
-                //               ],
-                //             ),
-                //             const Icon(
-                //               Icons.arrow_forward_ios,
-                //               size: 20,
-                //               color: WHITE,
-                //             )
-                //           ],
-                //         ),
-                //       ),
-                //     )),
-                const SizedBox(height: 16),
-                BorderLine(
-                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-                const SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: TapableRow(
-                    widget: const Icon(CupertinoIcons.lock),
-                    title: '내 정보 관리',
-                    onTap: () {
-                      pressed() {
-                        Get.to(() => PersonalInformationScreen(),
-                            preventDuplicates: true);
-                      }
-
-                      AuthHelper.navigateToLoginScreen(context, pressed);
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                BorderLine(
-                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-                const SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: TapableRow(
-                    widget: const Icon(CupertinoIcons.speaker_1),
-                    title: '앱 업데이트 공지',
-                    onTap: () {
-                      Get.to(() => UpdateScreen(), preventDuplicates: true);
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                BorderLine(
-                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-                const SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: TapableRow(
-                    widget: const Icon(Icons.notifications_none_rounded),
-                    title: '알 림',
-                    onTap: () {
-                      pressed() {
-                        Get.to(() => NotificationScreen(),
-                            preventDuplicates: true);
-                      }
-
-                      AuthHelper.navigateToLoginScreen(context, pressed);
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                BorderLine(
-                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-                const SizedBox(height: 16),
-
-                Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: TapableRow(
-                    widget: const Icon(Icons.sticky_note_2_outlined),
-                    title: 'Distance에 제안하기',
-                    onTap: () {
-                      pressed() => _launchUrl();
-                      AuthHelper.navigateToLoginScreen(context, pressed);
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 16),
-                BorderLine(
-                    lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
-                const SizedBox(height: 16),
-
-                Obx(() => mateViewModel.name.value.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: TapableRow(
-                          widget: const Icon(Icons.login, color: PRIMARY_COLOR),
-                          title: "로그인",
-                          fontWeight: FontWeight.bold,
-                          fontColor: PRIMARY_COLOR,
-                          onTap: () async {
-                            Get.to(LoginScreen());
-                          },
-                        ))
-                    : const SizedBox()),
-              ],
+                ],
+              ),
             ),
-          ),
-          if (adController.isAdLoaded.value)
-            SizedBox(
-              height: adController.bannerAd.value!.size.height.toDouble(),
-              child: AdWidget(ad: adController.bannerAd.value!),
+            const SizedBox(height: 16),
+            BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+            const SizedBox(height: 16),
+
+            _buildTapableRow(
+              icon: const Icon(CupertinoIcons.lock),
+              title: '내 정보 관리',
+              onTap: () => AuthHelper.navigateToLoginScreen(context, () => Get.to(() => PersonalInformationScreen(), preventDuplicates: true)),
             ),
-        ],
+
+            _buildSeparator(),
+
+            _buildTapableRow(
+              icon: const Icon(CupertinoIcons.speaker_1),
+              title: '앱 업데이트 공지',
+              onTap: () => Get.to(() => UpdateScreen(), preventDuplicates: true),
+            ),
+
+            _buildSeparator(),
+
+            _buildTapableRow(
+              icon: const Icon(Icons.notifications_none_rounded),
+              title: '알 림',
+              onTap: () => AuthHelper.navigateToLoginScreen(context, () => Get.to(() => NotificationScreen(), preventDuplicates: true)),
+            ),
+
+            _buildSeparator(),
+
+            _buildTapableRow(
+              icon: const Icon(Icons.sticky_note_2_outlined),
+              title: 'Distance에 제안하기',
+              onTap: () => AuthHelper.navigateToLoginScreen(context, _launchUrl),
+            ),
+
+            _buildSeparator(),
+
+            Obx(() => mateViewModel.name.value.isEmpty
+                ? _buildTapableRow(
+              icon: const Icon(Icons.login, color: PRIMARY_COLOR),
+              title: "로그인",
+              fontWeight: FontWeight.bold,
+              fontColor: PRIMARY_COLOR,
+              onTap: () async => Get.to(LoginScreen()),
+            )
+                : const SizedBox()),
+          ],
+        ),
       ),
+      bottomNavigationBar: Obx(() => adController.isAdLoaded.value
+          ? Container(
+        height: adController.bannerAd.value!.size.height.toDouble(),
+        child: AdWidget(ad: adController.bannerAd.value!),
+      )
+          : const SizedBox.shrink()
+      ),
+    );
+  }
+
+  Widget _buildTapableRow({
+    required Icon icon,
+    required String title,
+    required VoidCallback onTap,
+    FontWeight fontWeight = FontWeight.normal,
+    Color fontColor = BLACK,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 16.0),
+      child: TapableRow(
+        widget: icon,
+        title: title,
+        onTap: onTap,
+        fontWeight: fontWeight,
+        fontColor: fontColor,
+      ),
+    );
+  }
+
+  Widget _buildSeparator() {
+    return Column(
+      children: [
+        const SizedBox(height: 16),
+        BorderLine(lineHeight: 1, lineColor: Colors.grey.withOpacity(0.1)),
+        const SizedBox(height: 16),
+      ],
     );
   }
 }
