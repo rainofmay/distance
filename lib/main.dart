@@ -23,6 +23,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 
 Future<InitializationStatus> _initGoogleMobileAds() {
   // TODO: Initialize Google Mobile Ads SDK
@@ -100,9 +101,26 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   final notificationService = NotificationService();
   final supabase = Supabase.instance.client;
 
+  String _authStatus = 'Unknown';
+  Future<void> initPlugin() async {
+    final TrackingStatus status =
+    await AppTrackingTransparency.trackingAuthorizationStatus;
+    setState(() => _authStatus = '$status');
+    // If the system can show an authorization request dialog
+    if (status == TrackingStatus.notDetermined) {
+      // Request system's tracking authorization dialog
+      final TrackingStatus status =
+      await AppTrackingTransparency.requestTrackingAuthorization();
+      setState(() => _authStatus = '$status');
+    }
+
+    final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+  }
+
   @override
   void initState() {
     super.initState();
+    initPlugin();
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
     notificationService.init();

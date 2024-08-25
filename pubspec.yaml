@@ -1,5 +1,5 @@
 name: mobile
-description: "A new Flutter project."
+description: "Distance"
 version: 0.0.1+1
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
@@ -54,6 +54,7 @@ dependencies:
   just_audio_background: ^0.0.1-beta.13
   path_provider: ^2.1.4
   url_launcher: ^6.3.0
+  app_tracking_transparency: ^2.0.6
 
 flutter_native_splash:
   color: "#282828"
