@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/music_info.dart';
 import 'package:mobile/provider/myroom/music/myroom_sound_provider.dart';
-import 'package:mobile/util/ads/adController.dart';
+// import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view/myroom/music/sound_copyright.dart';
 import 'package:mobile/view_model/myroom/music/sound_view_model.dart';
 import 'package:mobile/view_model/myroom/music/store_sound_view_model.dart';
@@ -19,7 +19,8 @@ class SoundThemesScreen extends StatelessWidget {
   Get.put(StoreSoundViewModel(provider: Get.put(MyRoomSoundProvider())));
 
   final SoundViewModel soundViewModel = Get.find<SoundViewModel>();
-  final adController = Get.put(AdController());
+  //TODO- googleAds 배포 후 넣기
+  // final adController = Get.put(AdController());
   SoundThemesScreen({super.key});
 
   @override
@@ -182,13 +183,14 @@ class SoundThemesScreen extends StatelessWidget {
                           ),
                         );
                       }),
-                  if (adController.isAdLoaded.value)
-                    SizedBox(
-                      height: adController.bannerAd.value!.size.height
-                          .toDouble(),
-                      child:
-                      AdWidget(ad: adController.bannerAd.value!),
-                    ),
+                  //TODO- googleAds 배포 후 넣기
+                  // if (adController.isAdLoaded.value)
+                    // SizedBox(
+                    //   height: adController.bannerAd.value!.size.height
+                    //       .toDouble(),
+                    //   child:
+                    //   AdWidget(ad: adController.bannerAd.value!),
+                    // ),
                 ],
               )),
         ));

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/common/const/colors.dart';
@@ -24,11 +24,11 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-
-Future<InitializationStatus> _initGoogleMobileAds() {
-  // TODO: Initialize Google Mobile Ads SDK
-  return MobileAds.instance.initialize();
-}
+//
+// Future<InitializationStatus> _initGoogleMobileAds() {
+//   // TODO: Initialize Google Mobile Ads SDK
+//   return MobileAds.instance.initialize();
+// }
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -44,7 +44,7 @@ Future<void> main() async {
   KakaoSdk.init(nativeAppKey: '96933fc28384cc02f4de9ba6c2b649cd',
     javaScriptAppKey: '07b059afa573f1d1e4c61cb5896c2749',
   );
-  _initGoogleMobileAds();
+  // _initGoogleMobileAds();
   await JustAudioBackground.init(
     androidNotificationChannelId: 'com.distance.cled24.channel.audio',
     androidNotificationChannelName: 'Audio playback',

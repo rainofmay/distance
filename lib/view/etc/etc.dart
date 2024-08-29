@@ -2,8 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:mobile/util/ads/adController.dart';
+// import 'package:google_mobile_ads/google_mobile_ads.dart';
+// import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/view/etc/notification_screen.dart';
 import 'package:mobile/view/etc/personal_information_screen.dart';
@@ -24,7 +24,7 @@ class Etc extends StatelessWidget {
 
   final MateViewModel mateViewModel = Get.find<MateViewModel>();
   final LoginViewModel loginViewModel = Get.put(LoginViewModel(provider: LoginProvider()));
-  final adController = Get.put(AdController());
+  // final adController = Get.put(AdController());
 
   final Uri surveyUrl = Uri.parse('https://docs.google.com/forms/d/1S5UknqwWtZLJZzctmjYqqTxzHSqbrNEUrcjL2fjzjhQ/edit');
 
@@ -139,13 +139,13 @@ class Etc extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Obx(() => adController.isAdLoaded.value
-          ? Container(
-        height: adController.bannerAd.value!.size.height.toDouble(),
-        child: AdWidget(ad: adController.bannerAd.value!),
-      )
-          : const SizedBox.shrink()
-      ),
+      // bottomNavigationBar: Obx(() => adController.isAdLoaded.value
+      //     ? Container(
+      //   height: adController.bannerAd.value!.size.height.toDouble(),
+      //   child: AdWidget(ad: adController.bannerAd.value!),
+      // )
+      //     : const SizedBox.shrink()
+      // ),
     );
   }
 

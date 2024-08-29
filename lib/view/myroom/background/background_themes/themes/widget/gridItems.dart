@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/background_model.dart';
-import 'package:mobile/util/ads/adController.dart';
+// import 'package:mobile/util/ads/adController.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_alert_dialog.dart';
 import 'package:mobile/widgets/custom_circular_indicator.dart';
@@ -47,8 +47,9 @@ Widget gridPictures(BuildContext context, ThemePicture picture) {
 // 이미지 다이얼로그 빌더 함수
 Widget _buildImageDialog(BuildContext context, ThemePicture picture,
     MyroomViewModel myroomViewModel) {
-  final adController = Get.put(AdController());
-  adController.loadInterstitialAd();
+  //TODO- googleAds 배포 후 넣기
+  // final adController = Get.put(AdController());
+  // adController.loadInterstitialAd();
   return CustomAlertDialog(
       title: '배경 변경',
       width: 300,
@@ -61,10 +62,10 @@ Widget _buildImageDialog(BuildContext context, ThemePicture picture,
           await myroomViewModel.setSelectedImageUrl(
               picture.highQualityUrl, picture.thumbnailUrl);
           Navigator.pop(context);
-          print("InterstitialAd 발동");
-          if (adController.interstitialAd.value != null) {
-            adController.interstitialAd.value?.show();
-          }
+          // print("InterstitialAd 발동");
+          // if (adController.interstitialAd.value != null) {
+          //   adController.interstitialAd.value?.show();
+          // }
         },
         cancelText: '취소',
         onCancelPressed: () {
