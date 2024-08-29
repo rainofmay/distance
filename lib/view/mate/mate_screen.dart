@@ -124,27 +124,28 @@ class MateScreen extends StatelessWidget {
                           ),
                         ),
                         Obx(
-                          () => Expanded(
+                              () => Expanded(
                             child: Padding(
                               padding: const EdgeInsets.only(left: 16.0),
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  viewModel.name.value.isEmpty
-                                      ? Text('로그인 해주세요.',
-                                          style: const TextStyle(
-                                              fontSize: 14, color: GREY))
-                                      : Text(viewModel.name.value,
-                                          style: const TextStyle(
-                                              fontSize: 14, color: GREY)),
+                                  if (viewModel.name.value.isEmpty)
+                                    const Text('로그인 해주세요.',
+                                        style: TextStyle(fontSize: 14, color: GREY))
+                                  else if (viewModel.name.value.trim().isEmpty)
+                                    const Text('이름을 설정해주세요!',
+                                        style: TextStyle(fontSize: 14, color: GREY))
+                                  else
+                                    Text(viewModel.name.value.trim(),
+                                        style: const TextStyle(fontSize: 14, color: GREY)),
                                   const SizedBox(height: 6),
                                   Text(
                                     viewModel.introduction.value.isEmpty
                                         ? "소개를 작성해 보세요."
                                         : viewModel.introduction.value,
-                                    style: const TextStyle(
-                                        fontSize: 11, color: GREY),
+                                    style: const TextStyle(fontSize: 11, color: GREY),
                                     overflow: TextOverflow.ellipsis,
                                     maxLines: 2,
                                   )
@@ -152,8 +153,7 @@ class MateScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ),                      ],
                     ),
                   ),
                   Obx(
