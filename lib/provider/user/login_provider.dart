@@ -28,10 +28,19 @@ class LoginProvider {
           .select()
           .eq('email', email)
           .single();
-      return response['uid'] != null;
+      // 사용자가 존재하면 response가 null이 아님
+      return true;
     } catch (error) {
-      print('사용자 확인 중 오류 발생: $error');
-      return false;
+      // PostgrestException을 확인하여 사용자가 없는 경우를 구분
+      if (error is PostgrestException && error.code == 'PGRST116') {
+        // 사용자를 찾을 수 없음 (정상적인 상황)
+        return false;
+      } else {
+        // 다른 종류의 오류 발생
+        print('사용자 확인 중 오류 발생: $error');
+        // 오류 발생 시 false를 반환하거나, 필요에 따라 예외를 다시 throw할 수 있습니다.
+        return false;
+      }
     }
   }
 
@@ -120,7 +129,7 @@ class LoginProvider {
         'email': email,
         'nickname': name,
         'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
-        'backgroun_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
+        'background_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -215,7 +224,7 @@ class LoginProvider {
         'email': email,
         'nickname': nickname,
         'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
-        'backgroun_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
+        'background_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
