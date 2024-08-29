@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
@@ -121,6 +120,7 @@ class LoginProvider {
         'email': email,
         'nickname': name,
         'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
+        'backgroun_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
@@ -215,6 +215,7 @@ class LoginProvider {
         'email': email,
         'nickname': nickname,
         'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
+        'backgroun_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
         'created_at': DateTime.now().toIso8601String(),
       });
 
