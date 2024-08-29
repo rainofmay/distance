@@ -119,7 +119,7 @@ class LoginScreen extends StatelessWidget {
                                   alignment: Alignment.center,
                                   children: [
                                     const Text(
-                                      '구글로 시작하기',
+                                      'Google로 시작하기',
                                       style: TextStyle(color: BLACK, fontSize: 16),
                                     ),
                                     Align(
@@ -133,9 +133,42 @@ class LoginScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-      
+
                               const SizedBox(height: 24),
-      
+                              // 애플 로그인
+                              ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                      overlayColor: TRANSPARENT,
+                                      foregroundColor: TRANSPARENT,
+                                      fixedSize: Size(widthOfLog, heightOfLog),
+                                      backgroundColor: Color(0xffFFE812)),
+                                  onPressed: () async {
+                                    await loginViewModel.signInWithKakao();
+                                    await mateViewModel.updateMyProfile();
+
+                                    if (!context.mounted) return;
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      const Text(
+                                        'Apple로 시작하기',
+                                        style: TextStyle(color: BLACK, fontSize: 16),
+                                      ),
+                                      Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Image.asset(
+                                          'assets/images/kakao.png',
+                                          width: 21,
+                                          height: 21,
+                                        ),
+                                      ),
+                                    ],
+                                  )),
                               // KAKAO 로그인
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
