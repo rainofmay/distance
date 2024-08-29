@@ -9,7 +9,7 @@
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>To use music and sound functions</string>
+	<string>Access to the microphones of your device is required to use music and sound features.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
