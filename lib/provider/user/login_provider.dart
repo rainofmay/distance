@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mobile/util/auth/auth_helper.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:mobile/widgets/custom_snackbar.dart';
@@ -138,6 +140,60 @@ class LoginProvider {
       rethrow;
     }
   }
+
+  /* 애플 로그인 */
+  Future<void> signInWithApple(BuildContext context) async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      // 애플에서 받은 정보로 Supabase 인증
+      final AuthResponse response = await supabase.auth.signInWithIdToken(
+        provider: OAuthProvider.apple,
+        idToken: credential.identityToken!,
+        accessToken: credential.authorizationCode,
+      );
+
+      if (response.user == null) {
+        throw Exception('애플 로그인 실패');
+      }
+
+      // JWT 토큰에 커스텀 클레임 추가
+      await supabase.auth.updateUser(
+        UserAttributes(
+          data: {'is_apple_user': true},
+        ),
+      );
+
+      // 사용자 정보 확인 및 저장
+      String email = credential.email ?? response.user!.email!;
+      bool userExists = await checkUserExists(email);
+
+      if (!userExists) {
+        // 새 사용자 등록
+        await supabase.from('user').insert({
+          'id': response.user!.id,
+          'email': email,
+          'nickname': '${credential.givenName ?? ''} ${credential.familyName ?? ''}',
+          'profile_url': 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/user-profile/gomzy_theme.jpg',
+          'background_url' : 'https://24cled-distsance-bucket.s3.ap-northeast-2.amazonaws.com/background/ocean/image/sea_1.jpg',
+          'created_at': DateTime.now().toIso8601String(),
+        });
+        CustomSnackbar.show(title: '회원가입 완료', message: 'Apple 계정으로 회원가입 되었습니다.');
+      } else {
+        CustomSnackbar.show(title: 'Apple 로그인', message: 'Apple 계정으로 로그인 되었습니다.');
+      }
+
+    } catch (error) {
+      print('애플 로그인 실패: $error');
+      CustomSnackbar.show(title: 'Apple 로그인 오류', message: '로그인을 다시 시도해 주세요.');
+    }
+  }
+
 
   /* 카카오 로그인 */
   Future<void> signInWithKakao() async {

@@ -64,6 +64,16 @@ class LoginViewModel extends GetxController {
     }
   }
 
+  Future<void> signInWithApple(BuildContext context) async {
+    try {
+      await _provider.signInWithApple(context);
+      update();
+
+    } catch (e) {
+      CustomSnackbar.showLoginError();
+    }
+  }
+
   Future<void> signInWithGoogle(BuildContext context) async {
     try {
       await _provider.signInWithGoogle(context);

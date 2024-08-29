@@ -10,12 +10,15 @@ import 'package:mobile/widgets/circle_divider.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
-  final LoginViewModel loginViewModel = Get.put(LoginViewModel(provider: LoginProvider()));
+
+  final LoginViewModel loginViewModel =
+      Get.put(LoginViewModel(provider: LoginProvider()));
   final MateViewModel mateViewModel = Get.find<MateViewModel>();
 
   Future<bool> _precacheImage(BuildContext context) async {
     try {
-      await precacheImage(AssetImage("assets/images/login_background.jpg"), context);
+      await precacheImage(
+          AssetImage("assets/images/login_background.jpg"), context);
       return true;
     } catch (e) {
       print("Error precaching image: $e");
@@ -25,39 +28,42 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double widthOfLog = MediaQuery.of(context).size.width * 0.8;
+    double widthOfLog = 300;
     double heightOfLog = 48;
     return FutureBuilder<bool>(
         future: _precacheImage(context),
         builder: (context, snapshot) {
-      return Scaffold(
-        body: Stack(
-          children: [
-            ColorFiltered(
-              colorFilter: ColorFilter.mode(
-                Colors.black.withOpacity(0.1), // 0.5는 어둡기의 정도
-                BlendMode.darken,
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("assets/images/login_background.jpg"),
-                    fit: BoxFit.cover,
+          return Scaffold(
+            body: Stack(children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.1), // 0.5는 어둡기의 정도
+                  BlendMode.darken,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage("assets/images/login_background.jpg"),
+                      fit: BoxFit.cover,
+                    ),
                   ),
                 ),
               ),
-            ),
-            SafeArea(
-              child: CustomScrollView(
-                  slivers: [SliverFillRemaining(
+              SafeArea(
+                child: CustomScrollView(slivers: [
+                  SliverFillRemaining(
                     hasScrollBody: false,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 32, bottom: 8),
+                          padding: const EdgeInsets.only(
+                              left: 20, top: 32, bottom: 8),
                           child: const Text('DISTANCE',
-                              style: TextStyle(color: PRIMARY_LIGHT, fontSize: 16, fontWeight: FontWeight.bold)),
+                              style: TextStyle(
+                                  color: PRIMARY_LIGHT,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold)),
                         ),
                         Padding(
                             padding: const EdgeInsets.only(left: 20.0),
@@ -65,25 +71,33 @@ class LoginScreen extends StatelessWidget {
                                 width: 90,
                                 decoration: BoxDecoration(
                                     border: Border(
-                                      bottom: BorderSide(
-                                          width: 1.0, color: Colors.grey.withOpacity(0)),
-                                    )))),
+                                  bottom: BorderSide(
+                                      width: 1.0,
+                                      color: Colors.grey.withOpacity(0)),
+                                )))),
                         Padding(
-                          padding: const EdgeInsets.only(left: 20, top: 8, bottom: 10),
+                          padding: const EdgeInsets.only(
+                              left: 20, top: 8, bottom: 10),
                           child: const Text(
                               'Your own music, your own background.',
-                              style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
+                              style: TextStyle(
+                                  fontSize: 13, color: TRANSPARENT_WHITE),
                               textAlign: TextAlign.start),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 20),
-                          child: const Text(
-                              'Log in and experience.',
-                              style: TextStyle(fontSize: 13, color: TRANSPARENT_WHITE),
+                          child: const Text('Log in and experience.',
+                              style: TextStyle(
+                                  fontSize: 13, color: TRANSPARENT_WHITE),
                               textAlign: TextAlign.start),
                         ),
-                        const SizedBox(height: 130),
-                        const Center(child: Text('LOGIN', style: TextStyle(letterSpacing: 22, color: WHITE, fontSize: 19))),
+                        const SizedBox(height: 100),
+                        const Center(
+                            child: Text('LOGIN',
+                                style: TextStyle(
+                                    letterSpacing: 22,
+                                    color: WHITE,
+                                    fontSize: 19))),
                         const SizedBox(height: 24),
                         Center(
                           child: CircleDivider(
@@ -101,7 +115,8 @@ class LoginScreen extends StatelessWidget {
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                   ),
                                   overlayColor: TRANSPARENT,
                                   foregroundColor: TRANSPARENT,
@@ -109,38 +124,87 @@ class LoginScreen extends StatelessWidget {
                                   backgroundColor: WHITE,
                                 ),
                                 onPressed: () async {
-                                  await loginViewModel.signInWithGoogle(context);
+                                  await loginViewModel
+                                      .signInWithGoogle(context);
                                   await mateViewModel.updateMyProfile();
-      
+
                                   if (!context.mounted) return;
                                   Navigator.of(context).pop();
                                 },
-                                child: Stack(
-                                  alignment: Alignment.center,
+                                child: Row(
                                   children: [
-                                    const Text(
-                                      'Google로 시작하기',
-                                      style: TextStyle(color: BLACK, fontSize: 16),
+                                    const SizedBox(width: 14),
+                                    Image.asset(
+                                      'assets/images/google.png',
+                                      width: 21,
+                                      height: 21,
                                     ),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Image.asset(
-                                        'assets/images/google.png',
-                                        width: 24,
-                                        height: 24,
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Google로 로그인',
+                                          style: TextStyle(
+                                              color: BLACK, fontSize: 19),
+                                        ),
                                       ),
                                     ),
+                                    SizedBox(
+                                      width: 36,
+                                    )
                                   ],
                                 ),
                               ),
 
-                              const SizedBox(height: 24),
+                              const SizedBox(height: 32),
+
                               // 애플 로그인
+                              ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8))),
+                                    overlayColor: TRANSPARENT,
+                                    foregroundColor: TRANSPARENT,
+                                    fixedSize: Size(widthOfLog, heightOfLog),
+                                    backgroundColor: WHITE),
+                                onPressed: () async {
+                                  await loginViewModel.signInWithApple(context);
+                                  await mateViewModel.updateMyProfile();
+
+                                  if (!context.mounted) return;
+                                  Navigator.of(context).pop();
+                                },
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/images/apple.png',
+                                      width: 48,
+                                      height: 48,
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Text(
+                                          'Apple로 로그인',
+                                          style: TextStyle(
+                                              color: BLACK, fontSize: 19),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 36,
+                                    )
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+
+                              // KAKAO 로그인
                               ElevatedButton(
                                   style: ElevatedButton.styleFrom(
                                       shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(8))),
                                       overlayColor: TRANSPARENT,
                                       foregroundColor: TRANSPARENT,
                                       fixedSize: Size(widthOfLog, heightOfLog),
@@ -152,55 +216,26 @@ class LoginScreen extends StatelessWidget {
                                     if (!context.mounted) return;
                                     Navigator.of(context).pop();
                                   },
-                                  child: Stack(
-                                    alignment: Alignment.center,
+                                  child: Row(
                                     children: [
-                                      const Text(
-                                        'Apple로 시작하기',
-                                        style: TextStyle(color: BLACK, fontSize: 16),
+                                      const SizedBox(width: 14),
+                                      Image.asset(
+                                        'assets/images/kakao.png',
+                                        width: 20,
+                                        height: 20,
                                       ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Image.asset(
-                                          'assets/images/kakao.png',
-                                          width: 21,
-                                          height: 21,
+                                      Expanded(
+                                        child: Center(
+                                          child: Text(
+                                            '카카오로 로그인',
+                                            style: TextStyle(
+                                                color: BLACK, fontSize: 19),
+                                          ),
                                         ),
                                       ),
-                                    ],
-                                  )),
-                              // KAKAO 로그인
-                              ElevatedButton(
-                                  style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                      overlayColor: TRANSPARENT,
-                                      foregroundColor: TRANSPARENT,
-                                      fixedSize: Size(widthOfLog, heightOfLog),
-                                      backgroundColor: Color(0xffFFE812)),
-                                  onPressed: () async {
-                                    await loginViewModel.signInWithKakao();
-                                    await mateViewModel.updateMyProfile();
-      
-                                    if (!context.mounted) return;
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      const Text(
-                                        '카카오로 시작하기',
-                                        style: TextStyle(color: BLACK, fontSize: 16),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Image.asset(
-                                          'assets/images/kakao.png',
-                                          width: 21,
-                                          height: 21,
-                                        ),
-                                      ),
+                                      SizedBox(
+                                        width: 36,
+                                      )
                                     ],
                                   )),
                             ],
@@ -208,12 +243,11 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ),]
+                  ),
+                ]),
               ),
-            ),
-          ]
-        ),
-      );}
-    );
+            ]),
+          );
+        });
   }
 }
