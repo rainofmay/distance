@@ -64,14 +64,14 @@ class CreateScheduleScreen extends StatelessWidget {
           child: Obx(() => Column(
                 children: [
                   Form(key: viewModel.formKey, child: ScheduleForm()),
-                  const SizedBox(height: 16),
-                  if (adController.isAdLoaded.value &&
-                      viewModel.nowHandlingScheduleModel.repeatType == '반복없음')
-                    SizedBox(
-                      height:
-                          adController.bannerAd.value!.size.height.toDouble(),
-                      child: AdWidget(ad: adController.bannerAd.value!),
-                    ),
+                  // const SizedBox(height: 16),
+                  // if (adController.isAdLoaded.value &&
+                  //     viewModel.nowHandlingScheduleModel.repeatType == '반복없음')
+                  //   SizedBox(
+                  //     height:
+                  //         adController.bannerAd.value!.size.height.toDouble(),
+                  //     child: AdWidget(ad: adController.bannerAd.value!),
+                  //   ),
                 ],
               )),
         ));
