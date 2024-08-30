@@ -61,7 +61,7 @@ class CreateScheduleScreen extends StatelessWidget {
           ],
         ),
         body: SingleChildScrollView(
-          child: Obx(() => Column(
+          child: Column(
                 children: [
                   Form(key: viewModel.formKey, child: ScheduleForm()),
                   // const SizedBox(height: 16),
@@ -73,7 +73,7 @@ class CreateScheduleScreen extends StatelessWidget {
                   //     child: AdWidget(ad: adController.bannerAd.value!),
                   //   ),
                 ],
-              )),
+              ),
         ));
   }
 }
