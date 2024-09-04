@@ -33,6 +33,7 @@ class MateScreen extends StatelessWidget {
       backgroundColor: WHITE,
       appBar: CustomAppBar(
         appbarTitle: '메이트',
+        isCenterTitle: false,
         backgroundColor: DARK_BACKGROUND,
         contentColor: PRIMARY_LIGHT,
         titleSpacing: 20,
@@ -63,6 +64,7 @@ class MateScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Expanded(
+                    flex: 2,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,15 +141,18 @@ class MateScreen extends StatelessWidget {
                                         style: TextStyle(fontSize: 14, color: GREY))
                                   else
                                     Text(viewModel.name.value.trim(),
-                                        style: const TextStyle(fontSize: 14, color: GREY)),
+                                        style: const TextStyle(fontSize: 14, color: BLACK)),
                                   const SizedBox(height: 6),
-                                  Text(
-                                    viewModel.introduction.value.isEmpty
-                                        ? "소개를 작성해 보세요."
-                                        : viewModel.introduction.value,
-                                    style: const TextStyle(fontSize: 11, color: GREY),
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
+                                  Container(
+
+                                    child: Text(
+                                      viewModel.introduction.value.isEmpty
+                                          ? "소개를 작성해 보세요."
+                                          : viewModel.introduction.value,
+                                      style: const TextStyle(fontSize: 11, color: GREY),
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                    ),
                                   )
                                 ],
                               ),
@@ -158,6 +163,7 @@ class MateScreen extends StatelessWidget {
                   ),
                   Obx(
                     () => Expanded(
+                      flex: 1,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
@@ -166,7 +172,7 @@ class MateScreen extends StatelessWidget {
                                   ? ""
                                   : viewModel.userCurrentActivityEmoji.value,
                               style:
-                                  const TextStyle(fontSize: 15, color: BLACK)),
+                                  const TextStyle(fontSize: 16, color: BLACK)),
                           const SizedBox(width: 8),
                           Flexible(
                             child: Text(
@@ -174,7 +180,7 @@ class MateScreen extends StatelessWidget {
                                   ? ""
                                   : viewModel.userCurrentActivityText.value,
                               style:
-                                  const TextStyle(fontSize: 14, color: BLACK),
+                                  const TextStyle(fontSize: 10, color: BLACK),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),

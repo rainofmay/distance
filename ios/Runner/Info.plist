@@ -76,11 +76,9 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>프로필 사진 등록을 위해서 카메라의 권한이 필요합니다!</string>
+	<string>사용자 개인 프로필 사진 첨부, 사용을 위해 카메라 접근 권한이 필요합니다. 설정에서 이를 변경할 수 있습니다.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>프로필 사진 등록을 위해서 사진의 권한이 필요합니다</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>개인 맞춤 광고를 게재하는데 사용됩니다.</string>
+	<string>사용자 개인 프로필 사진 첨부, 사용을 위해 사진 라이브러리 접근 권한이 필요합니다. 설정에서 이를 변경할 수 있습니다.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UIBackgroundModes</key>

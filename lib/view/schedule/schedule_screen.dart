@@ -39,6 +39,7 @@ class ScheduleScreen extends StatelessWidget {
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(
         appbarTitle: '일 정',
+        isCenterTitle: false,
         backgroundColor: DARK_BACKGROUND,
         contentColor: PRIMARY_COLOR,
         titleSpacing: 20,

@@ -145,7 +145,7 @@ class LoginScreen extends StatelessWidget {
                                         child: Text(
                                           'Google로 로그인',
                                           style: TextStyle(
-                                              color: BLACK, fontSize: 19),
+                                              color: BLACK, fontSize: 18),
                                         ),
                                       ),
                                     ),
@@ -187,7 +187,7 @@ class LoginScreen extends StatelessWidget {
                                         child: Text(
                                           'Apple로 로그인',
                                           style: TextStyle(
-                                              color: BLACK, fontSize: 19),
+                                              color: BLACK, fontSize: 18),
                                         ),
                                       ),
                                     ),
@@ -229,7 +229,7 @@ class LoginScreen extends StatelessWidget {
                                           child: Text(
                                             '카카오로 로그인',
                                             style: TextStyle(
-                                                color: BLACK, fontSize: 19),
+                                                color: BLACK, fontSize: 18),
                                           ),
                                         ),
                                       ),

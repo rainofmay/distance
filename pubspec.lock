@@ -33,14 +33,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.1.1"
-  app_tracking_transparency:
-    dependency: "direct main"
-    description:
-      name: app_tracking_transparency
-      sha256: "64d9745931e565790abdea91b518ac8dc3cebe6d0d0aaf7119343271b983259a"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.6"
   archive:
     dependency: transitive
     description:
@@ -704,14 +696,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.3.1+1"
-  google_mobile_ads:
-    dependency: "direct main"
-    description:
-      name: google_mobile_ads
-      sha256: e2d18992d30b2be77cb6976b931112fc3c4612feffb5eb7a8b036bd7a64934da
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.0"
   google_sign_in:
     dependency: "direct main"
     description:
@@ -1084,10 +1068,10 @@ packages:
     dependency: "direct main"
     description:
       name: omni_datetime_picker
-      sha256: "3d42a649d7a03c7735fe4e24c396376f128f95fecd236e0bf1a2623fdf4618bd"
+      sha256: db3d92e23513a34655adf7706f258c1b6049984aed0b78f8f274a6222c71360e
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.3"
+    version: "2.0.4"
   path:
     dependency: transitive
     description:

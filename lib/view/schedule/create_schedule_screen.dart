@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
@@ -13,7 +12,7 @@ import 'package:mobile/view_model/schedule/schedule_view_model.dart';
 class CreateScheduleScreen extends StatelessWidget {
   CreateScheduleScreen({super.key});
 
-  final adController = Get.put(AdController());
+  // final adController = Get.put(AdController());
   final ScheduleViewModel viewModel = Get.put(ScheduleViewModel(
       repository: Get.put(
           ScheduleRepository(scheduleProvider: Get.put(ScheduleProvider())))));
