@@ -4,6 +4,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/widgets/custom_alert_dialog.dart';
 import 'package:mobile/widgets/ok_cancel._buttons.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MotivationalQuote extends GetView<MyroomViewModel> {
   MotivationalQuote({super.key});
@@ -34,6 +35,7 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
                 onDragEnd: (details) {
                   controller.setTrash(false);
                   controller.updateQuotePosition(details.offset);
+                  _saveQuotePosition(details.offset);
                 },
                 child: _buildQuoteContainer(context),
               ),
@@ -57,8 +59,6 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
                       child: const Icon(Icons.delete, color: PRIMARY_COLOR, size: 24),
                     );
                   },
-
-                  // onWillAcceptWithDetails: (data) => data == 'quote',
                   onAcceptWithDetails: (data) {
                     controller.updateBackdropWordChange(false);
                     controller.update();
@@ -70,7 +70,6 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
       );
     });
   }
-
 
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
@@ -108,38 +107,44 @@ class MotivationalQuote extends GetView<MyroomViewModel> {
             constraints: BoxConstraints(maxWidth: maxWidth),
             padding: EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: controller.quoteBackdropColor.value,
+              color: controller.quoteBackdropColor.value.withOpacity(controller.quoteBackdropOpacity.value),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Obx(() => Text(
-                      controller.currentQuote.quote,
-                      style: TextStyle(
-                        color: controller.quoteFontColor.value,
-                        fontSize: controller.quoteFontSize.value,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: controller.quoteFont.value,
-                      ),
-                      textAlign: TextAlign.center,
-                    )),
+                Text(
+                  controller.currentQuote.quote,
+                  style: TextStyle(
+                    color: controller.quoteFontColor.value,
+                    fontSize: controller.quoteFontSize.value,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: controller.quoteFont.value,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                 SizedBox(height: 8),
-                Obx(() => Text(
-                      "- ${controller.currentQuote.writer}",
-                      style: TextStyle(
-                        color: controller.quoteFontColor.value,
-                        fontSize: controller.quoteFontSize.value - 4,
-                        fontStyle: FontStyle.italic,
-                        fontFamily: controller.quoteFont.value,
-                      ),
-                      textAlign: TextAlign.right,
-                    )),
+                Text(
+                  "- ${controller.currentQuote.writer}",
+                  style: TextStyle(
+                    color: controller.quoteFontColor.value,
+                    fontSize: controller.quoteFontSize.value - 4,
+                    fontStyle: FontStyle.italic,
+                    fontFamily: controller.quoteFont.value,
+                  ),
+                  textAlign: TextAlign.right,
+                ),
               ],
             ),
           );
         });
       },
     );
+  }
+
+  void _saveQuotePosition(Offset position) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('quotePositionX', position.dx);
+    prefs.setDouble('quotePositionY', position.dy);
   }
 }

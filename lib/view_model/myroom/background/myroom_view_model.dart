@@ -291,6 +291,7 @@ class MyroomViewModel extends GetxController {
     } else {
       updateQuote();
     }
+    loadQuotePosition();
 
     if (!isImage.value) {
       initializeVideo();
@@ -330,9 +331,24 @@ class MyroomViewModel extends GetxController {
     prefs.setBool('_isBackdropWordEnabled', _isBackdropWordEnabled.value);
   }
 
+  void loadQuotePosition() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    double x = prefs.getDouble('quotePositionX') ?? 20;
+    double y = prefs.getDouble('quotePositionY') ?? 40;
+    quotePosition.value = Offset(x, y);
+  }
+
   void updateQuotePosition(Offset newPosition) {
     quotePosition.value = newPosition;
+    _saveQuotePosition(newPosition);
   }
+
+  void _saveQuotePosition(Offset position) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setDouble('quotePositionX', position.dx);
+    prefs.setDouble('quotePositionY', position.dy);
+  }
+
 
   void updateQuoteBackdropColor(Color color) async {
     quoteBackdropColor.value = color;

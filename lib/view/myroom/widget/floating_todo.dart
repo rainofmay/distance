@@ -5,6 +5,7 @@ import 'package:mobile/common/const/colors.dart';
 import 'package:mobile/model/schedule_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class FloatingTodo extends StatefulWidget {
   const FloatingTodo({super.key});
@@ -32,9 +33,34 @@ class _FloatingTodoState extends State<FloatingTodo> {
   double minHeight = 100; // 최소 높이
   MyroomViewModel myroomViewModel = Get.find<MyroomViewModel>();
   ScheduleViewModel scheduleViewModel = Get.find<ScheduleViewModel>();
-
   bool isEmojiVisible = false;
   // 상단 바 드래그 여부를 설정하는 함수
+
+  @override
+  void initState() {
+    super.initState();
+    _loadPositionAndSize();
+  }
+
+  Future<void> _loadPositionAndSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      positionX = prefs.getDouble('floatingTodoPositionX') ?? 100;
+      positionY = prefs.getDouble('floatingTodoPositionY') ?? 100;
+      width = prefs.getDouble('floatingTodoWidth') ?? 300;
+      height = prefs.getDouble('floatingTodoHeight') ?? 400;
+    });
+  }
+
+  Future<void> _savePositionAndSize() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble('floatingTodoPositionX', positionX);
+    await prefs.setDouble('floatingTodoPositionY', positionY);
+    await prefs.setDouble('floatingTodoWidth', width);
+    await prefs.setDouble('floatingTodoHeight', height);
+  }
+
+
   void _setDraggingAppBar(bool value) {
     setState(() {
       _isDraggingAppBar = value;
@@ -88,6 +114,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                     },
                     onPanEnd: (details) {
                       // 상단 바 드래그 종료 시 초기화
+                      _savePositionAndSize(); // 위치와 크기 저장
                       _isDraggingAppBar = false;
                     },
                     child: Container(
@@ -351,6 +378,8 @@ class _FloatingTodoState extends State<FloatingTodo> {
             _isResizingBottomLeft = false;
             _isResizingBottomRight = false;
             _setDraggingAppBar(false); // 상단 바를 드래그 중이 아니도록 설정합니다.
+            _savePositionAndSize(); // 위치와 크기 저장
+
           },
         ),
       ],

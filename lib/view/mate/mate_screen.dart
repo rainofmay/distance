@@ -162,6 +162,7 @@ class MateScreen extends StatelessWidget {
                     ),
                   ),
                   Obx(
+                  //규진 : 배경사진 로드, 플로팅 투두 스케줄 크기 상태관리
                     () => Expanded(
                       flex: 1,
                       child: Row(
