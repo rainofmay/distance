@@ -10,7 +10,6 @@ import 'package:mobile/util/mate/online_status_manager.dart';
 import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_setting_screen.dart';
 import 'package:mobile/view/myroom/background/backdrop_word/myroom_backdrop_word_screen.dart';
 import 'package:mobile/view/myroom/widget/floating_todo.dart';
-import 'package:mobile/view/myroom/widget/floating_todo_ver2.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view/myroom/music/myroom_music_screen.dart';
 import 'package:mobile/widgets/action_buttons.dart';
