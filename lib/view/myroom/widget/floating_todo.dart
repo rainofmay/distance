@@ -81,7 +81,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
               border: Border(
                 top: BorderSide(
                   color: BLACK.withOpacity(0.9), // 테두리 색상
-                  width: 12.0, // 테두리 굵기
+                  width: 8.0, // 테두리 굵기
                 ),
               ),
             ),
@@ -249,7 +249,7 @@ class _FloatingTodoState extends State<FloatingTodo> {
                         myroomViewModel.updateSimpleWindowChange(false);
                       },
                       child: const Icon(Icons.cancel_rounded, size: 16))),
-                    ],
+              ],
             ),
           ),
         ),
@@ -389,33 +389,33 @@ class _FloatingTodoState extends State<FloatingTodo> {
   _optionsDialog(ScheduleModel schedule) {
     return showDialog(context: context, builder: (context) {
       return Center(child: Container(
-        decoration: BoxDecoration(
-          color: DARK_BACKGROUND,
-          borderRadius: BorderRadius.circular(8),
-        ),
+          decoration: BoxDecoration(
+            color: DARK_BACKGROUND,
+            borderRadius: BorderRadius.circular(8),
+          ),
           width: 180,
           height: 120,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                  onTap: () async{
-                    await scheduleViewModel.toggleScheduleCompletion(schedule);
-                    if(!context.mounted) return;
-                    Navigator.of(context).pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: Text(schedule.isDone ? '진행으로 변경' : '완료로 변경', style: const TextStyle(color: WHITE))),
-              const SizedBox(height: 28),
-              GestureDetector(
-                  onTap: () async {
-                    await scheduleViewModel.deleteSchedule(schedule, false);
-                    if(!context.mounted) return;
-                    Navigator.of(context).pop();
-                  },
-                  behavior: HitTestBehavior.opaque,
-                  child: const Text('일정에서 완전 삭제', style: TextStyle(color: WHITE))),
-            ]
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                    onTap: () async{
+                      await scheduleViewModel.toggleScheduleCompletion(schedule);
+                      if(!context.mounted) return;
+                      Navigator.of(context).pop();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: Text(schedule.isDone ? '진행으로 변경' : '완료로 변경', style: const TextStyle(color: WHITE))),
+                const SizedBox(height: 28),
+                GestureDetector(
+                    onTap: () async {
+                      await scheduleViewModel.deleteSchedule(schedule, false);
+                      if(!context.mounted) return;
+                      Navigator.of(context).pop();
+                    },
+                    behavior: HitTestBehavior.opaque,
+                    child: const Text('일정에서 완전 삭제', style: TextStyle(color: WHITE))),
+              ]
           )));
     },);
   }

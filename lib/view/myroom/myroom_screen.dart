@@ -65,34 +65,47 @@ class _MyRoomState extends State<MyroomScreen> with WidgetsBindingObserver {
           children: [
             widget.backgroundViewModel.isImage.value
                 ? SizedBox.expand(
-                    child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: Obx(() {
-                        final imageUrl =
-                            widget.backgroundViewModel.selectedItemUrl.value;
-                        if (imageUrl.startsWith('http')) {
+              child: FittedBox(
+                fit: BoxFit.cover,
+                child: Obx(() {
+                  final imageUrl =
+                      widget.backgroundViewModel.selectedItemUrl.value;
+                  if (imageUrl.startsWith('http')) {
+                    return FutureBuilder(
+                      future: precacheImage(
+                        CachedNetworkImageProvider(imageUrl),
+                        context,
+                      ),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
                           return CachedNetworkImage(
                             imageUrl: imageUrl,
                             fit: BoxFit.cover,
                             placeholder: (context, url) => _progressing(),
-                            errorWidget: (context, url, error) => _progressing(),
+                            errorWidget: (context, url, error) =>
+                                Center(child: Text('이미지를 불러오는데 실패했습니다.')),
                           );
                         } else {
-                          return Image.file(
-                            io.File(imageUrl),
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) => _progressing(),
-                          );
+                          return _progressing();
                         }
-                      }),
-                    ),
-                  )
+                      },
+                    );
+                  } else {
+                    return Image.file(
+                      io.File(imageUrl),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) => _progressing(),
+                    );
+                  }
+                }),
+              ),
+            )
                 : VideoBackground(
-                    videoController:
-                        widget.backgroundViewModel.videoController.value,
-                    isVideoLoading:
-                        widget.backgroundViewModel.isVideoLoading.value,
-                  ),
+              videoController:
+              widget.backgroundViewModel.videoController.value,
+              isVideoLoading:
+              widget.backgroundViewModel.isVideoLoading.value,
+            ),
             if (widget.backgroundViewModel.isSimpleWindowEnabled.value)
               FloatingTodo(),
             if (widget.backgroundViewModel.isBackdropWordEnabled)
@@ -160,15 +173,15 @@ class VideoBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return videoController != null && videoController!.value.isInitialized
         ? SizedBox.expand(
-            child: FittedBox(
-              fit: BoxFit.cover,
-              child: SizedBox(
-                width: videoController!.value.size.width,
-                height: videoController!.value.size.height,
-                child: CachedVideoPlayer(videoController!),
-              ),
-            ),
-          )
+      child: FittedBox(
+        fit: BoxFit.cover,
+        child: SizedBox(
+          width: videoController!.value.size.width,
+          height: videoController!.value.size.height,
+          child: CachedVideoPlayer(videoController!),
+        ),
+      ),
+    )
         : Center(child: CustomCircularIndicator(size: 30.0));
   }
 }

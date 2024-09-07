@@ -536,18 +536,22 @@ class ScheduleViewModel extends GetxController {
   void updateTodaySchedules() {
     if (!_isScheduleListLoaded.value) return;
 
-    final today = DateTime.now();
-    final todayStart = DateTime(today.year, today.month, today.day);
+    final now = DateTime.now();
+    final todayStart = DateTime(now.year, now.month, now.day);
     final todayEnd = todayStart.add(Duration(days: 1));
 
     _todaySchedules.value = _allSchedules.where((schedule) {
-      // 날짜만 비교
-      final scheduleStart = DateTime(schedule.startDate.year, schedule.startDate.month, schedule.startDate.day);
-      final scheduleEnd = DateTime(schedule.endDate.year, schedule.endDate.month, schedule.endDate.day);
-
-      // 일반 일정 처리
-      return !scheduleEnd.isBefore(todayStart) && !scheduleStart.isAfter(todayEnd);
+      if (schedule.repeatType == '지정') {
+        // 반복 일정 처리
+        return schedule.repeatDays[now.weekday - 1] &&
+            !schedule.repeatEndDate.isBefore(todayStart);
+      } else {
+        // 일반 일정 처리
+        return (schedule.startDate.isBefore(todayEnd) || schedule.startDate.isAtSameMomentAs(todayEnd)) &&
+            (schedule.endDate.isAfter(todayStart) || schedule.endDate.isAtSameMomentAs(todayStart));
+      }
     }).toList();
+
     print('Today schedules updated: ${_todaySchedules.length}');
     update();
   }

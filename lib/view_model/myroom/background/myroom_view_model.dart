@@ -10,7 +10,6 @@ import 'package:mobile/common/const/quotes.dart';
 import 'package:mobile/model/background_model.dart';
 import 'package:mobile/provider/myroom/background/myroom_background_provider.dart';
 import 'package:mobile/repository/myroom/background/myroom_background_repository.dart';
-import 'package:mobile/util/auth/auth_helper.dart';
 import 'package:mobile/util/user/uploadProfileImage.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as path;
@@ -22,12 +21,12 @@ import '../../../widgets/custom_snackbar.dart';
 
 class MyroomViewModel extends GetxController {
   final MyroomBackgroundRepository myroomBackgroundRepository =
-      MyroomBackgroundRepository(
-          backgroundProvider: MyroomBackgroundProvider());
+  MyroomBackgroundRepository(
+      backgroundProvider: MyroomBackgroundProvider());
 
   final RxBool isImage = true.obs;
   final Rxn<CachedVideoPlayerController> videoController =
-      Rxn<CachedVideoPlayerController>();
+  Rxn<CachedVideoPlayerController>();
   final RxString selectedItemUrl = ''.obs;
   final RxString selectedItemThumbnail = ''.obs;
 
@@ -38,7 +37,7 @@ class MyroomViewModel extends GetxController {
   bool get isBackdropWordEnabled => _isBackdropWordEnabled.value;
 
   final RxBool isVideoLoading = true.obs;
-  
+
   final Rx<Quote> _currentQuote = quotes[Random().nextInt(quotes.length)].obs;
 
   Quote get currentQuote => _currentQuote.value;
@@ -48,7 +47,7 @@ class MyroomViewModel extends GetxController {
   final RxString quoteFont = 'GmarketSansTTFLight'.obs;
   final RxDouble quoteFontSize = 14.0.obs;
   final Rx<Offset> quotePosition = Offset(20, 40).obs;
-  
+
   final RxBool isCustomQuote = false.obs;
 
   final RxString customQuote = ''.obs;
@@ -73,14 +72,6 @@ class MyroomViewModel extends GetxController {
   void setTrash(bool newValue) {
     _showTrash.value = newValue;
   }
-
-  // late final RxBool _showScheduleTrash = false.obs;
-  // bool get showScheduleTrash => _showScheduleTrash.value;
-  // void setScheduleTrash(bool newValue) {
-  //   _showScheduleTrash.value = newValue;
-  //   update();
-  // }
-
 
   @override
   void onInit() {
@@ -187,7 +178,7 @@ class MyroomViewModel extends GetxController {
   Future<io.File> compressAndSaveImage(io.File file, String theme) async {
     final dir = await getTemporaryDirectory();
     final targetPath =
-        path.join(dir.path, 'compressed_${path.basename(file.path)}');
+    path.join(dir.path, 'compressed_${path.basename(file.path)}');
 
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -244,9 +235,9 @@ class MyroomViewModel extends GetxController {
     // _themeContents.clear();
     isThemeLoading.value = true; // 로딩 시작
     List<ThemePicture> themePictures =
-        await myroomBackgroundRepository.fetchThemePictures(category);
+    await myroomBackgroundRepository.fetchThemePictures(category);
     List<ThemeVideo> themeVideos =
-        await myroomBackgroundRepository.fetchThemeVideos(category);
+    await myroomBackgroundRepository.fetchThemeVideos(category);
     _themeContents.value = [...themePictures, ...themeVideos];
     isThemeLoading.value = true; // 로딩 시작
   }
@@ -258,7 +249,7 @@ class MyroomViewModel extends GetxController {
 
   void loadPreferences() async {
     List<ThemePicture> firstPicture =
-        await myroomBackgroundRepository.fetchFirstPicture();
+    await myroomBackgroundRepository.fetchFirstPicture();
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isImage.value = prefs.getBool('isImage') ?? true;
@@ -325,7 +316,7 @@ class MyroomViewModel extends GetxController {
   //   prefs.setBool('isAudioSpectrumEnabled', isAudioSpectrumEnabled.value);
   // }
 
-    void updateBackdropWordChange(value) async {
+  void updateBackdropWordChange(value) async {
     _isBackdropWordEnabled.value = value;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setBool('_isBackdropWordEnabled', _isBackdropWordEnabled.value);

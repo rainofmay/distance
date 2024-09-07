@@ -8,7 +8,7 @@ import 'package:mobile/widgets/app_bar/custom_appbar.dart';
 import 'package:mobile/widgets/theme_box.dart';
 
 class BackgroundThemes extends StatelessWidget {
-  BackgroundThemes({Key? key}) : super(key: key);
+  BackgroundThemes({super.key});
 
   final viewModel = Get.put(MyroomViewModel());
 
