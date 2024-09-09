@@ -1,3 +1,4 @@
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -101,26 +102,38 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   final supabase = Supabase.instance.client;
 
   /* -- app_tracking_transparency -- */
-  // String _authStatus = 'Unknown';
-  // Future<void> initPlugin() async {
-  //   final TrackingStatus status =
-  //   await AppTrackingTransparency.trackingAuthorizationStatus;
-  //   setState(() => _authStatus = '$status');
-  //   // If the system can show an authorization request dialog
-  //   if (status == TrackingStatus.notDetermined) {
-  //     // Request system's tracking authorization dialog
-  //     final TrackingStatus status =
-  //     await AppTrackingTransparency.requestTrackingAuthorization();
-  //     setState(() => _authStatus = '$status');
-  //   }
-  //
-  //   final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-  // }
+  String _authStatus = 'Unknown';
+  Future initPlugin() async {
+    try {
+      final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      setState(() => _authStatus = '$status');
+
+      if (status == TrackingStatus.authorized) {
+        final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+        return uuid;
+      } else if (status == TrackingStatus.notDetermined) {
+        // // Show a custom explainer dialog before the system dialog
+        // await showCustomTrackingDialog(context);
+        // await Future.delayed(const Duration(milliseconds: 1000));
+        // Wait for dialog popping animation
+        // await Future.delayed(const Duration(milliseconds: 200));
+        final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+        // Request system's tracking authorization dialog
+        final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
+        setState(() => _authStatus = '$status');
+      }
+    } on PlatformException {
+      setState(() => _authStatus = 'PlatformException was thrown');
+    }
+    // final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
+  }
 
   @override
   void initState() {
     super.initState();
-    // initPlugin();
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      initPlugin();
+    });
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
     notificationService.init();
