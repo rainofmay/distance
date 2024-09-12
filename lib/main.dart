@@ -13,7 +13,7 @@ import 'package:mobile/provider/schedule/schedule_provider.dart';
 import 'package:mobile/repository/schedule/schedule_repository.dart';
 import 'package:mobile/util/notification_service.dart';
 import 'package:mobile/view/login/login_screen.dart';
-  import 'package:mobile/view/login/password_reset_request_screen.dart';
+import 'package:mobile/view/login/password_reset_request_screen.dart';
 import 'package:mobile/view_model/common/bottom_bar_view_model.dart';
 import 'package:mobile/view_model/myroom/background/myroom_view_model.dart';
 import 'package:mobile/view_model/schedule/schedule_view_model.dart';
@@ -101,6 +101,12 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   final notificationService = NotificationService();
   final supabase = Supabase.instance.client;
 
+
+  Future<void> _initializeApp() async {
+    await _trackingTransparencyRequest();
+    await notificationService.init();
+  }
+
   /* -- app_tracking_transparency -- */
   String _authStatus = 'Unknown';
   Future _trackingTransparencyRequest() async {
@@ -133,11 +139,11 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      _trackingTransparencyRequest();
+      _initializeApp();
     });
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
-    notificationService.init();
+    // notificationService.init();
 
     supabase.auth.onAuthStateChange.listen((event) async {
       if (event.event == AuthChangeEvent.signedIn) {
@@ -196,23 +202,23 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
         debugShowCheckedModeBanner: false,
         theme: mainstyle.theme,
         home: Obx(() => Scaffold(
-              // appBar: AppBar(),
-              body: bottomBarViewModel.setScreen(),
-              bottomNavigationBar: BottomNavigationBar(
-                  currentIndex: bottomBarViewModel.bottomIndex,
-                  onTap: (index) {
-                    bottomBarViewModel.setBottomIndex(index);
-                  },
-                  items: [
-                    const BottomNavigationBarItem(
-                        icon: Icon(Icons.home_rounded), label: '홈'),
-                    const BottomNavigationBarItem(
-                        icon: Icon(CupertinoIcons.time), label: '일 정'),
-                    const BottomNavigationBarItem(
-                        icon: Icon(Icons.person_3), label: '메이트'),
-                    const BottomNavigationBarItem(
-                        icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
-                  ]),
-            )));
+          // appBar: AppBar(),
+          body: bottomBarViewModel.setScreen(),
+          bottomNavigationBar: BottomNavigationBar(
+              currentIndex: bottomBarViewModel.bottomIndex,
+              onTap: (index) {
+                bottomBarViewModel.setBottomIndex(index);
+              },
+              items: [
+                const BottomNavigationBarItem(
+                    icon: Icon(Icons.home_rounded), label: '홈'),
+                const BottomNavigationBarItem(
+                    icon: Icon(CupertinoIcons.time), label: '일 정'),
+                const BottomNavigationBarItem(
+                    icon: Icon(Icons.person_3), label: '메이트'),
+                const BottomNavigationBarItem(
+                    icon: Icon(Icons.more_horiz_rounded), label: '더보기'),
+              ]),
+        )));
   }
 }
