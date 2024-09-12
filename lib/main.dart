@@ -103,7 +103,9 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
 
   /* -- app_tracking_transparency -- */
   String _authStatus = 'Unknown';
-  Future initPlugin() async {
+  Future _trackingTransparencyRequest() async {
+    await Future.delayed(const Duration(milliseconds: 1000));
+
     try {
       final TrackingStatus status = await AppTrackingTransparency.trackingAuthorizationStatus;
       setState(() => _authStatus = '$status');
@@ -117,10 +119,9 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
         // await Future.delayed(const Duration(milliseconds: 1000));
         // Wait for dialog popping animation
         // await Future.delayed(const Duration(milliseconds: 200));
+        await AppTrackingTransparency.requestTrackingAuthorization();
         final uuid = await AppTrackingTransparency.getAdvertisingIdentifier();
-        // Request system's tracking authorization dialog
-        final TrackingStatus status = await AppTrackingTransparency.requestTrackingAuthorization();
-        setState(() => _authStatus = '$status');
+        return uuid;
       }
     } on PlatformException {
       setState(() => _authStatus = 'PlatformException was thrown');
@@ -132,7 +133,7 @@ class _MyAppState extends State<MainPage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_){
-      initPlugin();
+      _trackingTransparencyRequest();
     });
     WidgetsBinding.instance.addObserver(this);
     myRoomViewModel.loadPreferences(); // Load preferences here
